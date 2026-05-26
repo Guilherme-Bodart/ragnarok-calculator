@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "siteName": "Nightmare",
+    "footer": "Ragnarok Online clan fan site"
+  },
+  "nav": {
+    "aria": "Main navigation",
+    "values": "Values",
+    "agenda": "WoE",
+    "calculator": "Calculator",
+    "discord": "Discord"
+  },
+  "language": {
+    "label": "Language",
+    "pt": "PT",
+    "en": "EN",
+    "es": "ES"
+  },
+  "hero": {
+    "eyebrow": "Ragnarok Online Clan · Nidhogg",
+    "imageAlt": "Pixel art reaper of the Nightmare clan",
+    "motto": "Death arrives in silence. The nightmare remains.",
+    "description": "A clan built for organized war, a strong Discord presence, and a dark theatrical identity that turns every castle into haunted territory.",
+    "primaryAction": "Join Discord",
+    "secondaryAction": "View values",
+    "calculatorAction": "Open calculator"
+  },
+  "values": {
+    "kicker": "About / Values",
+    "title": "A dark theater for players who move as one.",
+    "description": "Nightmare blends war discipline, Discord presence, and a visual identity designed to feel like an urban legend inside Rune-Midgard.",
+    "items": [
+      {
+        "title": "Cold war",
+        "description": "Clean calls, marked targets, and coordinated movement to control the map without chaos."
+      },
+      {
+        "title": "Present clan",
+        "description": "An active group for leveling, farming, parties, and talking even outside event time."
+      },
+      {
+        "title": "Dark style",
+        "description": "Necrotic blue identity, pixel art, and a visual presence made to be remembered."
+      },
+      {
+        "title": "Come together",
+        "description": "Anyone who joins with respect becomes part of the pack. No drama, no inflated ego."
+      },
+      {
+        "title": "Straight talk",
+        "description": "We speak clearly, improve together, and hold the line when the game gets rough."
+      },
+      {
+        "title": "As one",
+        "description": "MVP, farm, instance, or WoE: if it is on the list, Nightmare does it together."
+      }
+    ]
+  },
+  "agenda": {
+    "kicker": "Schedule",
+    "title": "Next chapter",
+    "description": "A guild panel to keep the crew ready before the castle opens.",
+    "badge": "Next chapter",
+    "eventTitle": "The War of Emperium has arrived",
+    "day": "Sunday",
+    "time": "8 PM to 10 PM BRT",
+    "copy": "A guild panel to remind the crew: review builds, prepare supplies, and join voice before the first recall.",
+    "status": "Recall ready"
+  },
+  "recruitment": {
+    "kicker": "Join us",
+    "title": "Join the nightmare",
+    "description": "Enter the Discord, meet the crew, and see if Nightmare fits the way you play Ragnarok.",
+    "action": "Message on Discord"
+  }
+}

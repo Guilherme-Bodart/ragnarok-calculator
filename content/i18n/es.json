@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "siteName": "Nightmare",
+    "footer": "Ragnarok Online clan fan site"
+  },
+  "nav": {
+    "aria": "Navegación principal",
+    "values": "Valores",
+    "agenda": "WoE",
+    "calculator": "Calculadora",
+    "discord": "Discord"
+  },
+  "language": {
+    "label": "Idioma",
+    "pt": "PT",
+    "en": "EN",
+    "es": "ES"
+  },
+  "hero": {
+    "eyebrow": "Ragnarok Online Clan · Nidhogg",
+    "imageAlt": "Segador en pixel art del clan Nightmare",
+    "motto": "La muerte llega en silencio. La pesadilla permanece.",
+    "description": "Un clan creado para la guerra organizada, una fuerte presencia en Discord y una identidad teatral oscura que convierte cada castillo en territorio embrujado.",
+    "primaryAction": "Entrar al Discord",
+    "secondaryAction": "Ver valores",
+    "calculatorAction": "Abrir calculadora"
+  },
+  "values": {
+    "kicker": "Sobre / Valores",
+    "title": "Un teatro sombrío para quienes juegan juntos.",
+    "description": "Nightmare mezcla disciplina de guerra, presencia en Discord y una identidad visual pensada para sentirse como una leyenda urbana dentro de Rune-Midgard.",
+    "items": [
+      {
+        "title": "Guerra fría",
+        "description": "Calls limpias, objetivos marcados y movimiento coordinado para dominar el mapa sin caos."
+      },
+      {
+        "title": "Clan presente",
+        "description": "Un grupo activo para subir nivel, farmear, armar party y conversar incluso fuera del horario de evento."
+      },
+      {
+        "title": "Estilo sombrío",
+        "description": "Identidad azul necrótica, pixel art y una presencia visual hecha para ser recordada."
+      },
+      {
+        "title": "Ven con nosotros",
+        "description": "Quien llega con respeto se vuelve parte del grupo. Sin drama, sin ego inflado."
+      },
+      {
+        "title": "Directo",
+        "description": "Hablamos claro, mejoramos juntos y aguantamos la presión cuando el juego se pone difícil."
+      },
+      {
+        "title": "En grupo",
+        "description": "MVP, farm, instancia o WoE: si está en la lista, Nightmare lo hace junto."
+      }
+    ]
+  },
+  "agenda": {
+    "kicker": "Agenda",
+    "title": "Próximo capítulo",
+    "description": "Un panel de guilda para mantener al grupo listo antes de que abra el castillo.",
+    "badge": "Próximo capítulo",
+    "eventTitle": "La Guerra del Emperium llegó",
+    "day": "Domingo",
+    "time": "20h a 22h BRT",
+    "copy": "Un panel de guilda para recordar al grupo: revisar builds, preparar consumibles y entrar a la llamada antes del primer recall.",
+    "status": "Recall preparado"
+  },
+  "recruitment": {
+    "kicker": "Join us",
+    "title": "Únete a la pesadilla",
+    "description": "Entra al Discord, conoce al grupo y descubre si Nightmare combina con tu forma de jugar Ragnarok.",
+    "action": "Enviar mensaje en Discord"
+  }
+}

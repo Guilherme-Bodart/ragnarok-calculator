@@ -1,0 +1,2310 @@
+[
+  {
+    "skillId": 80,
+    "name": "WZ_FIREPILLAR",
+    "description": "Fire Pillar",
+    "maxLevel": 10,
+    "type": "Magic",
+    "targetType": "Ground",
+    "hit": "Multi_Hit",
+    "element": "Fire",
+    "rawFlags": {
+      "IsAutoShadowSpell": true
+    },
+    "rawDamageFlags": {
+      "IgnoreDefense": true
+    },
+    "raw": {
+      "Id": 80,
+      "Name": "WZ_FIREPILLAR",
+      "Description": "Fire Pillar",
+      "MaxLevel": 10,
+      "Type": "Magic",
+      "TargetType": "Ground",
+      "DamageFlags": {
+        "IgnoreDefense": true
+      },
+      "Flags": {
+        "IsAutoShadowSpell": true
+      },
+      "Range": 9,
+      "Hit": "Multi_Hit",
+      "HitCount": [
+        {
+          "Level": 1,
+          "Count": 3
+        },
+        {
+          "Level": 2,
+          "Count": 4
+        },
+        {
+          "Level": 3,
+          "Count": 5
+        },
+        {
+          "Level": 4,
+          "Count": 6
+        },
+        {
+          "Level": 5,
+          "Count": 7
+        },
+        {
+          "Level": 6,
+          "Count": 8
+        },
+        {
+          "Level": 7,
+          "Count": 9
+        },
+        {
+          "Level": 8,
+          "Count": 10
+        },
+        {
+          "Level": 9,
+          "Count": 11
+        },
+        {
+          "Level": 10,
+          "Count": 12
+        }
+      ],
+      "Element": "Fire",
+      "SplashArea": [
+        {
+          "Level": 1,
+          "Area": 1
+        },
+        {
+          "Level": 2,
+          "Area": 1
+        },
+        {
+          "Level": 3,
+          "Area": 1
+        },
+        {
+          "Level": 4,
+          "Area": 1
+        },
+        {
+          "Level": 5,
+          "Area": 1
+        },
+        {
+          "Level": 6,
+          "Area": 2
+        },
+        {
+          "Level": 7,
+          "Area": 2
+        },
+        {
+          "Level": 8,
+          "Area": 2
+        },
+        {
+          "Level": 9,
+          "Area": 2
+        },
+        {
+          "Level": 10,
+          "Area": 2
+        },
+        {
+          "Level": 11,
+          "Area": 2
+        }
+      ],
+      "ActiveInstance": 5,
+      "CopyFlags": {
+        "Skill": {
+          "Plagiarism": true,
+          "Reproduce": true
+        }
+      },
+      "CastTime": [
+        {
+          "Level": 1,
+          "Time": 1920
+        },
+        {
+          "Level": 2,
+          "Time": 1728
+        },
+        {
+          "Level": 3,
+          "Time": 1536
+        },
+        {
+          "Level": 4,
+          "Time": 1344
+        },
+        {
+          "Level": 5,
+          "Time": 1152
+        },
+        {
+          "Level": 6,
+          "Time": 960
+        },
+        {
+          "Level": 7,
+          "Time": 768
+        },
+        {
+          "Level": 8,
+          "Time": 576
+        },
+        {
+          "Level": 9,
+          "Time": 384
+        },
+        {
+          "Level": 10,
+          "Time": 192
+        }
+      ],
+      "AfterCastActDelay": 1000,
+      "Duration1": 30000,
+      "Duration2": [
+        {
+          "Level": 1,
+          "Time": 600
+        },
+        {
+          "Level": 2,
+          "Time": 800
+        },
+        {
+          "Level": 3,
+          "Time": 1000
+        },
+        {
+          "Level": 4,
+          "Time": 1200
+        },
+        {
+          "Level": 5,
+          "Time": 1400
+        },
+        {
+          "Level": 6,
+          "Time": 1600
+        },
+        {
+          "Level": 7,
+          "Time": 1800
+        },
+        {
+          "Level": 8,
+          "Time": 2000
+        },
+        {
+          "Level": 9,
+          "Time": 2200
+        },
+        {
+          "Level": 10,
+          "Time": 2400
+        }
+      ],
+      "FixedCastTime": [
+        {
+          "Level": 1,
+          "Time": 480
+        },
+        {
+          "Level": 2,
+          "Time": 432
+        },
+        {
+          "Level": 3,
+          "Time": 384
+        },
+        {
+          "Level": 4,
+          "Time": 336
+        },
+        {
+          "Level": 5,
+          "Time": 288
+        },
+        {
+          "Level": 6,
+          "Time": 240
+        },
+        {
+          "Level": 7,
+          "Time": 192
+        },
+        {
+          "Level": 8,
+          "Time": 144
+        },
+        {
+          "Level": 9,
+          "Time": 96
+        },
+        {
+          "Level": 10,
+          "Time": 48
+        }
+      ],
+      "Requires": {
+        "SpCost": 75,
+        "ItemCost": [
+          {
+            "Item": "Blue_Gemstone",
+            "Amount": 1,
+            "Level": 6
+          },
+          {
+            "Item": "Blue_Gemstone",
+            "Amount": 1,
+            "Level": 7
+          },
+          {
+            "Item": "Blue_Gemstone",
+            "Amount": 1,
+            "Level": 8
+          },
+          {
+            "Item": "Blue_Gemstone",
+            "Amount": 1,
+            "Level": 9
+          },
+          {
+            "Item": "Blue_Gemstone",
+            "Amount": 1,
+            "Level": 10
+          }
+        ]
+      },
+      "Unit": {
+        "Id": "Firepillar_Waiting",
+        "AlternateId": "Firepillar_Active",
+        "Range": 1,
+        "Interval": 2000,
+        "Target": "Enemy",
+        "Flag": {
+          "NoReiteration": true,
+          "NoFootSet": true
+        }
+      }
+    },
+    "source": "rathena",
+    "complexityScore": 2111
+  },
+  {
+    "skillId": 83,
+    "name": "WZ_METEOR",
+    "description": "Meteor Storm",
+    "maxLevel": 10,
+    "type": "Magic",
+    "targetType": "Ground",
+    "hit": "Multi_Hit",
+    "element": "Fire",
+    "rawFlags": {
+      "IsAutoShadowSpell": true
+    },
+    "rawDamageFlags": null,
+    "raw": {
+      "Id": 83,
+      "Name": "WZ_METEOR",
+      "Description": "Meteor Storm",
+      "MaxLevel": 10,
+      "Type": "Magic",
+      "TargetType": "Ground",
+      "Flags": {
+        "IsAutoShadowSpell": true
+      },
+      "Range": 9,
+      "Hit": "Multi_Hit",
+      "HitCount": [
+        {
+          "Level": 1,
+          "Count": 2
+        },
+        {
+          "Level": 2,
+          "Count": 3
+        },
+        {
+          "Level": 3,
+          "Count": 3
+        },
+        {
+          "Level": 4,
+          "Count": 4
+        },
+        {
+          "Level": 5,
+          "Count": 4
+        },
+        {
+          "Level": 6,
+          "Count": 5
+        },
+        {
+          "Level": 7,
+          "Count": 5
+        },
+        {
+          "Level": 8,
+          "Count": 6
+        },
+        {
+          "Level": 9,
+          "Count": 6
+        },
+        {
+          "Level": 10,
+          "Count": 7
+        },
+        {
+          "Level": 11,
+          "Count": 15
+        }
+      ],
+      "Element": "Fire",
+      "SplashArea": [
+        {
+          "Level": 1,
+          "Area": 3
+        },
+        {
+          "Level": 2,
+          "Area": 3
+        },
+        {
+          "Level": 3,
+          "Area": 3
+        },
+        {
+          "Level": 4,
+          "Area": 3
+        },
+        {
+          "Level": 5,
+          "Area": 3
+        },
+        {
+          "Level": 6,
+          "Area": 3
+        },
+        {
+          "Level": 7,
+          "Area": 3
+        },
+        {
+          "Level": 8,
+          "Area": 3
+        },
+        {
+          "Level": 9,
+          "Area": 3
+        },
+        {
+          "Level": 10,
+          "Area": 3
+        },
+        {
+          "Level": 11,
+          "Area": 16
+        }
+      ],
+      "CopyFlags": {
+        "Skill": {
+          "Plagiarism": true,
+          "Reproduce": true
+        }
+      },
+      "CastTime": 6300,
+      "AfterCastActDelay": 1000,
+      "Duration1": [
+        {
+          "Level": 1,
+          "Time": 2000
+        },
+        {
+          "Level": 2,
+          "Time": 3000
+        },
+        {
+          "Level": 3,
+          "Time": 3000
+        },
+        {
+          "Level": 4,
+          "Time": 4000
+        },
+        {
+          "Level": 5,
+          "Time": 4000
+        },
+        {
+          "Level": 6,
+          "Time": 5000
+        },
+        {
+          "Level": 7,
+          "Time": 5000
+        },
+        {
+          "Level": 8,
+          "Time": 6000
+        },
+        {
+          "Level": 9,
+          "Time": 6000
+        },
+        {
+          "Level": 10,
+          "Time": 7000
+        },
+        {
+          "Level": 11,
+          "Time": 10000
+        }
+      ],
+      "Duration2": 4500,
+      "Cooldown": [
+        {
+          "Level": 1,
+          "Time": 2500
+        },
+        {
+          "Level": 2,
+          "Time": 3000
+        },
+        {
+          "Level": 3,
+          "Time": 3500
+        },
+        {
+          "Level": 4,
+          "Time": 4000
+        },
+        {
+          "Level": 5,
+          "Time": 4500
+        },
+        {
+          "Level": 6,
+          "Time": 5000
+        },
+        {
+          "Level": 7,
+          "Time": 5500
+        },
+        {
+          "Level": 8,
+          "Time": 6000
+        },
+        {
+          "Level": 9,
+          "Time": 6500
+        },
+        {
+          "Level": 10,
+          "Time": 7000
+        }
+      ],
+      "FixedCastTime": 1500,
+      "Requires": {
+        "SpCost": [
+          {
+            "Level": 1,
+            "Amount": 20
+          },
+          {
+            "Level": 2,
+            "Amount": 24
+          },
+          {
+            "Level": 3,
+            "Amount": 30
+          },
+          {
+            "Level": 4,
+            "Amount": 34
+          },
+          {
+            "Level": 5,
+            "Amount": 40
+          },
+          {
+            "Level": 6,
+            "Amount": 44
+          },
+          {
+            "Level": 7,
+            "Amount": 50
+          },
+          {
+            "Level": 8,
+            "Amount": 54
+          },
+          {
+            "Level": 9,
+            "Amount": 60
+          },
+          {
+            "Level": 10,
+            "Amount": 64
+          }
+        ]
+      },
+      "Unit": {
+        "Id": "Dummyskill",
+        "Range": 3,
+        "Interval": 1000,
+        "Target": "Enemy",
+        "Flag": {
+          "PathCheck": true
+        }
+      },
+      "Status": "Stun"
+    },
+    "source": "rathena",
+    "complexityScore": 1845
+  },
+  {
+    "skillId": 5459,
+    "name": "HN_GROUND_GRAVITATION",
+    "description": "Ground Gravitation",
+    "maxLevel": 10,
+    "type": "Magic",
+    "targetType": "Self",
+    "hit": "Multi_Hit",
+    "element": "Neutral",
+    "rawFlags": null,
+    "rawDamageFlags": {
+      "Splash": true
+    },
+    "raw": {
+      "Id": 5459,
+      "Name": "HN_GROUND_GRAVITATION",
+      "Description": "Ground Gravitation",
+      "MaxLevel": 10,
+      "Type": "Magic",
+      "TargetType": "Self",
+      "Range": -9,
+      "Hit": "Multi_Hit",
+      "HitCount": 1,
+      "Element": "Neutral",
+      "GiveAp": 5,
+      "DamageFlags": {
+        "Splash": true
+      },
+      "SplashArea": [
+        {
+          "Level": 1,
+          "Area": 2
+        },
+        {
+          "Level": 2,
+          "Area": 2
+        },
+        {
+          "Level": 3,
+          "Area": 2
+        },
+        {
+          "Level": 4,
+          "Area": 2
+        },
+        {
+          "Level": 5,
+          "Area": 3
+        },
+        {
+          "Level": 6,
+          "Area": 3
+        },
+        {
+          "Level": 7,
+          "Area": 3
+        },
+        {
+          "Level": 8,
+          "Area": 3
+        },
+        {
+          "Level": 9,
+          "Area": 4
+        },
+        {
+          "Level": 10,
+          "Area": 4
+        }
+      ],
+      "CastTime": [
+        {
+          "Level": 1,
+          "Time": 3000
+        },
+        {
+          "Level": 2,
+          "Time": 3000
+        },
+        {
+          "Level": 3,
+          "Time": 3000
+        },
+        {
+          "Level": 4,
+          "Time": 3200
+        },
+        {
+          "Level": 5,
+          "Time": 3500
+        },
+        {
+          "Level": 6,
+          "Time": 3800
+        },
+        {
+          "Level": 7,
+          "Time": 4100
+        },
+        {
+          "Level": 8,
+          "Time": 4400
+        },
+        {
+          "Level": 9,
+          "Time": 4700
+        },
+        {
+          "Level": 10,
+          "Time": 5000
+        }
+      ],
+      "AfterCastActDelay": [
+        {
+          "Level": 1,
+          "Time": 2000
+        },
+        {
+          "Level": 2,
+          "Time": 2000
+        },
+        {
+          "Level": 3,
+          "Time": 2000
+        },
+        {
+          "Level": 4,
+          "Time": 1800
+        },
+        {
+          "Level": 5,
+          "Time": 1800
+        },
+        {
+          "Level": 6,
+          "Time": 1800
+        },
+        {
+          "Level": 7,
+          "Time": 1600
+        },
+        {
+          "Level": 8,
+          "Time": 1400
+        },
+        {
+          "Level": 9,
+          "Time": 1200
+        },
+        {
+          "Level": 10,
+          "Time": 1000
+        }
+      ],
+      "Cooldown": 5000,
+      "FixedCastTime": 1500,
+      "Duration1": 5000,
+      "Duration2": 5000,
+      "Requires": {
+        "SpCost": [
+          {
+            "Level": 1,
+            "Amount": 93
+          },
+          {
+            "Level": 2,
+            "Amount": 96
+          },
+          {
+            "Level": 3,
+            "Amount": 99
+          },
+          {
+            "Level": 4,
+            "Amount": 102
+          },
+          {
+            "Level": 5,
+            "Amount": 105
+          },
+          {
+            "Level": 6,
+            "Amount": 108
+          },
+          {
+            "Level": 7,
+            "Amount": 111
+          },
+          {
+            "Level": 8,
+            "Amount": 114
+          },
+          {
+            "Level": 9,
+            "Amount": 117
+          },
+          {
+            "Level": 10,
+            "Amount": 120
+          }
+        ]
+      },
+      "Unit": {
+        "Id": "GROUND_GRAVITATION",
+        "Range": [
+          {
+            "Level": 1,
+            "Size": 2
+          },
+          {
+            "Level": 2,
+            "Size": 2
+          },
+          {
+            "Level": 3,
+            "Size": 2
+          },
+          {
+            "Level": 4,
+            "Size": 2
+          },
+          {
+            "Level": 5,
+            "Size": 3
+          },
+          {
+            "Level": 6,
+            "Size": 3
+          },
+          {
+            "Level": 7,
+            "Size": 3
+          },
+          {
+            "Level": 8,
+            "Size": 3
+          },
+          {
+            "Level": 9,
+            "Size": 4
+          },
+          {
+            "Level": 10,
+            "Size": 4
+          }
+        ],
+        "Interval": 500,
+        "Target": "Enemy",
+        "Flag": {
+          "PathCheck": true
+        }
+      },
+      "Status": "Groundgravity"
+    },
+    "source": "rathena",
+    "complexityScore": 1754
+  },
+  {
+    "skillId": 5457,
+    "name": "HN_JACK_FROST_NOVA",
+    "description": "Jack Frost Nova",
+    "maxLevel": 10,
+    "type": "Magic",
+    "targetType": "Ground",
+    "hit": "Multi_Hit",
+    "element": "Water",
+    "rawFlags": null,
+    "rawDamageFlags": {
+      "Splash": true
+    },
+    "raw": {
+      "Id": 5457,
+      "Name": "HN_JACK_FROST_NOVA",
+      "Description": "Jack Frost Nova",
+      "MaxLevel": 10,
+      "Type": "Magic",
+      "TargetType": "Ground",
+      "Range": -9,
+      "Hit": "Multi_Hit",
+      "HitCount": -2,
+      "Element": "Water",
+      "GiveAp": 3,
+      "DamageFlags": {
+        "Splash": true
+      },
+      "SplashArea": [
+        {
+          "Level": 1,
+          "Area": 3
+        },
+        {
+          "Level": 2,
+          "Area": 3
+        },
+        {
+          "Level": 3,
+          "Area": 3
+        },
+        {
+          "Level": 4,
+          "Area": 3
+        },
+        {
+          "Level": 5,
+          "Area": 3
+        },
+        {
+          "Level": 6,
+          "Area": 4
+        },
+        {
+          "Level": 7,
+          "Area": 4
+        },
+        {
+          "Level": 8,
+          "Area": 4
+        },
+        {
+          "Level": 9,
+          "Area": 4
+        },
+        {
+          "Level": 10,
+          "Area": 4
+        }
+      ],
+      "CastTime": [
+        {
+          "Level": 1,
+          "Time": 1600
+        },
+        {
+          "Level": 2,
+          "Time": 1700
+        },
+        {
+          "Level": 3,
+          "Time": 1800
+        },
+        {
+          "Level": 4,
+          "Time": 1900
+        },
+        {
+          "Level": 5,
+          "Time": 2000
+        },
+        {
+          "Level": 6,
+          "Time": 2100
+        },
+        {
+          "Level": 7,
+          "Time": 2200
+        },
+        {
+          "Level": 8,
+          "Time": 2300
+        },
+        {
+          "Level": 9,
+          "Time": 2400
+        },
+        {
+          "Level": 10,
+          "Time": 2500
+        }
+      ],
+      "AfterCastActDelay": 300,
+      "Cooldown": 3000,
+      "FixedCastTime": 1500,
+      "Duration1": [
+        {
+          "Level": 1,
+          "Time": 900
+        },
+        {
+          "Level": 2,
+          "Time": 1200
+        },
+        {
+          "Level": 3,
+          "Time": 1500
+        },
+        {
+          "Level": 4,
+          "Time": 1800
+        },
+        {
+          "Level": 5,
+          "Time": 2100
+        },
+        {
+          "Level": 6,
+          "Time": 2400
+        },
+        {
+          "Level": 7,
+          "Time": 2700
+        },
+        {
+          "Level": 8,
+          "Time": 3000
+        },
+        {
+          "Level": 9,
+          "Time": 3300
+        },
+        {
+          "Level": 10,
+          "Time": 3600
+        }
+      ],
+      "Duration2": 5000,
+      "Requires": {
+        "SpCost": [
+          {
+            "Level": 1,
+            "Amount": 68
+          },
+          {
+            "Level": 2,
+            "Amount": 71
+          },
+          {
+            "Level": 3,
+            "Amount": 74
+          },
+          {
+            "Level": 4,
+            "Amount": 77
+          },
+          {
+            "Level": 5,
+            "Amount": 80
+          },
+          {
+            "Level": 6,
+            "Amount": 83
+          },
+          {
+            "Level": 7,
+            "Amount": 86
+          },
+          {
+            "Level": 8,
+            "Amount": 89
+          },
+          {
+            "Level": 9,
+            "Amount": 92
+          },
+          {
+            "Level": 10,
+            "Amount": 95
+          }
+        ]
+      },
+      "Unit": {
+        "Id": "JACK_FROST_NOVA",
+        "Range": [
+          {
+            "Level": 1,
+            "Size": 3
+          },
+          {
+            "Level": 2,
+            "Size": 3
+          },
+          {
+            "Level": 3,
+            "Size": 3
+          },
+          {
+            "Level": 4,
+            "Size": 3
+          },
+          {
+            "Level": 5,
+            "Size": 3
+          },
+          {
+            "Level": 6,
+            "Size": 4
+          },
+          {
+            "Level": 7,
+            "Size": 4
+          },
+          {
+            "Level": 8,
+            "Size": 4
+          },
+          {
+            "Level": 9,
+            "Size": 4
+          },
+          {
+            "Level": 10,
+            "Size": 4
+          }
+        ],
+        "Interval": 300,
+        "Target": "Enemy",
+        "Flag": {
+          "PathCheck": true
+        }
+      },
+      "Status": "Mistyfrost"
+    },
+    "source": "rathena",
+    "complexityScore": 1734
+  },
+  {
+    "skillId": 2454,
+    "name": "SO_VARETYR_SPEAR",
+    "description": "Varetyr Spear",
+    "maxLevel": 10,
+    "type": "Magic",
+    "targetType": "Attack",
+    "hit": "Multi_Hit",
+    "element": "Wind",
+    "rawFlags": null,
+    "rawDamageFlags": {
+      "Splash": true
+    },
+    "raw": {
+      "Id": 2454,
+      "Name": "SO_VARETYR_SPEAR",
+      "Description": "Varetyr Spear",
+      "MaxLevel": 10,
+      "Type": "Magic",
+      "TargetType": "Attack",
+      "DamageFlags": {
+        "Splash": true
+      },
+      "Range": 9,
+      "Hit": "Multi_Hit",
+      "HitCount": 3,
+      "Element": "Wind",
+      "SplashArea": [
+        {
+          "Level": 1,
+          "Area": 1
+        },
+        {
+          "Level": 2,
+          "Area": 1
+        },
+        {
+          "Level": 3,
+          "Area": 1
+        },
+        {
+          "Level": 4,
+          "Area": 2
+        },
+        {
+          "Level": 5,
+          "Area": 2
+        },
+        {
+          "Level": 6,
+          "Area": 2
+        },
+        {
+          "Level": 7,
+          "Area": 3
+        },
+        {
+          "Level": 8,
+          "Area": 3
+        },
+        {
+          "Level": 9,
+          "Area": 3
+        },
+        {
+          "Level": 10,
+          "Area": 4
+        }
+      ],
+      "CopyFlags": {
+        "Skill": {
+          "Reproduce": true
+        }
+      },
+      "CastTime": [
+        {
+          "Level": 1,
+          "Time": 2200
+        },
+        {
+          "Level": 2,
+          "Time": 2400
+        },
+        {
+          "Level": 3,
+          "Time": 2600
+        },
+        {
+          "Level": 4,
+          "Time": 2800
+        },
+        {
+          "Level": 5,
+          "Time": 3000
+        },
+        {
+          "Level": 6,
+          "Time": 3200
+        },
+        {
+          "Level": 7,
+          "Time": 3400
+        },
+        {
+          "Level": 8,
+          "Time": 3600
+        },
+        {
+          "Level": 9,
+          "Time": 3800
+        },
+        {
+          "Level": 10,
+          "Time": 4000
+        }
+      ],
+      "AfterCastActDelay": 1000,
+      "Duration1": [
+        {
+          "Level": 1,
+          "Time": 1800
+        },
+        {
+          "Level": 2,
+          "Time": 2000
+        },
+        {
+          "Level": 3,
+          "Time": 2200
+        },
+        {
+          "Level": 4,
+          "Time": 2400
+        },
+        {
+          "Level": 5,
+          "Time": 2600
+        },
+        {
+          "Level": 6,
+          "Time": 2800
+        },
+        {
+          "Level": 7,
+          "Time": 3000
+        },
+        {
+          "Level": 8,
+          "Time": 3200
+        },
+        {
+          "Level": 9,
+          "Time": 3400
+        },
+        {
+          "Level": 10,
+          "Time": 3600
+        }
+      ],
+      "Cooldown": 5000,
+      "FixedCastTime": [
+        {
+          "Level": 1,
+          "Time": 1800
+        },
+        {
+          "Level": 2,
+          "Time": 1800
+        },
+        {
+          "Level": 3,
+          "Time": 1600
+        },
+        {
+          "Level": 4,
+          "Time": 1600
+        },
+        {
+          "Level": 5,
+          "Time": 1400
+        },
+        {
+          "Level": 6,
+          "Time": 1400
+        },
+        {
+          "Level": 7,
+          "Time": 1200
+        },
+        {
+          "Level": 8,
+          "Time": 1200
+        },
+        {
+          "Level": 9,
+          "Time": 1000
+        },
+        {
+          "Level": 10,
+          "Time": 1000
+        }
+      ],
+      "Requires": {
+        "SpCost": [
+          {
+            "Level": 1,
+            "Amount": 65
+          },
+          {
+            "Level": 2,
+            "Amount": 70
+          },
+          {
+            "Level": 3,
+            "Amount": 75
+          },
+          {
+            "Level": 4,
+            "Amount": 80
+          },
+          {
+            "Level": 5,
+            "Amount": 85
+          },
+          {
+            "Level": 6,
+            "Amount": 90
+          },
+          {
+            "Level": 7,
+            "Amount": 95
+          },
+          {
+            "Level": 8,
+            "Amount": 100
+          },
+          {
+            "Level": 9,
+            "Amount": 105
+          },
+          {
+            "Level": 10,
+            "Amount": 110
+          }
+        ]
+      }
+    },
+    "source": "rathena",
+    "complexityScore": 1650
+  },
+  {
+    "skillId": 79,
+    "name": "PR_MAGNUS",
+    "description": "Magnus Exorcismus",
+    "maxLevel": 10,
+    "type": "Magic",
+    "targetType": "Ground",
+    "hit": "Multi_Hit",
+    "element": "Holy",
+    "rawFlags": null,
+    "rawDamageFlags": null,
+    "raw": {
+      "Id": 79,
+      "Name": "PR_MAGNUS",
+      "Description": "Magnus Exorcismus",
+      "MaxLevel": 10,
+      "Type": "Magic",
+      "TargetType": "Ground",
+      "Range": 9,
+      "Hit": "Multi_Hit",
+      "HitCount": [
+        {
+          "Level": 1,
+          "Count": 1
+        },
+        {
+          "Level": 2,
+          "Count": 2
+        },
+        {
+          "Level": 3,
+          "Count": 3
+        },
+        {
+          "Level": 4,
+          "Count": 4
+        },
+        {
+          "Level": 5,
+          "Count": 5
+        },
+        {
+          "Level": 6,
+          "Count": 6
+        },
+        {
+          "Level": 7,
+          "Count": 7
+        },
+        {
+          "Level": 8,
+          "Count": 8
+        },
+        {
+          "Level": 9,
+          "Count": 9
+        },
+        {
+          "Level": 10,
+          "Count": 10
+        }
+      ],
+      "Element": "Holy",
+      "CopyFlags": {
+        "Skill": {
+          "Plagiarism": true,
+          "Reproduce": true
+        }
+      },
+      "CastTime": 4000,
+      "AfterCastActDelay": 1000,
+      "Duration1": [
+        {
+          "Level": 1,
+          "Time": 4000
+        },
+        {
+          "Level": 2,
+          "Time": 5000
+        },
+        {
+          "Level": 3,
+          "Time": 6000
+        },
+        {
+          "Level": 4,
+          "Time": 7000
+        },
+        {
+          "Level": 5,
+          "Time": 8000
+        },
+        {
+          "Level": 6,
+          "Time": 9000
+        },
+        {
+          "Level": 7,
+          "Time": 10000
+        },
+        {
+          "Level": 8,
+          "Time": 11000
+        },
+        {
+          "Level": 9,
+          "Time": 12000
+        },
+        {
+          "Level": 10,
+          "Time": 13000
+        }
+      ],
+      "Cooldown": 6000,
+      "FixedCastTime": 1000,
+      "Requires": {
+        "SpCost": [
+          {
+            "Level": 1,
+            "Amount": 40
+          },
+          {
+            "Level": 2,
+            "Amount": 42
+          },
+          {
+            "Level": 3,
+            "Amount": 44
+          },
+          {
+            "Level": 4,
+            "Amount": 46
+          },
+          {
+            "Level": 5,
+            "Amount": 48
+          },
+          {
+            "Level": 6,
+            "Amount": 50
+          },
+          {
+            "Level": 7,
+            "Amount": 52
+          },
+          {
+            "Level": 8,
+            "Amount": 54
+          },
+          {
+            "Level": 9,
+            "Amount": 56
+          },
+          {
+            "Level": 10,
+            "Amount": 58
+          }
+        ],
+        "ItemCost": [
+          {
+            "Item": "Blue_Gemstone",
+            "Amount": 1
+          }
+        ]
+      },
+      "Unit": {
+        "Id": "Magnus",
+        "Layout": -1,
+        "Range": 1,
+        "Interval": 3000,
+        "Target": "Enemy",
+        "Flag": {
+          "NoOverlap": true,
+          "PathCheck": true,
+          "RemovedByFireRain": true
+        }
+      }
+    },
+    "source": "rathena",
+    "complexityScore": 1349
+  },
+  {
+    "skillId": 3008,
+    "name": "KO_MUCHANAGE",
+    "description": "Rapid Throw",
+    "maxLevel": 10,
+    "type": "Misc",
+    "targetType": "Ground",
+    "hit": "Multi_Hit",
+    "element": null,
+    "rawFlags": {
+      "IgnoreNonCritAtkBonus": true
+    },
+    "rawDamageFlags": {
+      "Splash": true,
+      "SplashSplit": true,
+      "IgnoreElement": true,
+      "IgnoreFlee": true
+    },
+    "raw": {
+      "Id": 3008,
+      "Name": "KO_MUCHANAGE",
+      "Description": "Rapid Throw",
+      "MaxLevel": 10,
+      "Type": "Misc",
+      "TargetType": "Ground",
+      "DamageFlags": {
+        "Splash": true,
+        "SplashSplit": true,
+        "IgnoreElement": true,
+        "IgnoreFlee": true
+      },
+      "Flags": {
+        "IgnoreNonCritAtkBonus": true
+      },
+      "Range": 11,
+      "Hit": "Multi_Hit",
+      "HitCount": -10,
+      "SplashArea": [
+        {
+          "Level": 1,
+          "Area": 1
+        },
+        {
+          "Level": 2,
+          "Area": 1
+        },
+        {
+          "Level": 3,
+          "Area": 1
+        },
+        {
+          "Level": 4,
+          "Area": 1
+        },
+        {
+          "Level": 5,
+          "Area": 1
+        },
+        {
+          "Level": 6,
+          "Area": 1
+        },
+        {
+          "Level": 7,
+          "Area": 1
+        },
+        {
+          "Level": 8,
+          "Area": 1
+        },
+        {
+          "Level": 9,
+          "Area": 1
+        },
+        {
+          "Level": 10,
+          "Area": 2
+        }
+      ],
+      "CopyFlags": {
+        "Skill": {
+          "Plagiarism": true,
+          "Reproduce": true
+        }
+      },
+      "CastTime": 1000,
+      "Cooldown": 10000,
+      "Requires": {
+        "SpCost": 50,
+        "ZenyCost": [
+          {
+            "Level": 1,
+            "Amount": 10000
+          },
+          {
+            "Level": 2,
+            "Amount": 20000
+          },
+          {
+            "Level": 3,
+            "Amount": 30000
+          },
+          {
+            "Level": 4,
+            "Amount": 40000
+          },
+          {
+            "Level": 5,
+            "Amount": 50000
+          },
+          {
+            "Level": 6,
+            "Amount": 60000
+          },
+          {
+            "Level": 7,
+            "Amount": 70000
+          },
+          {
+            "Level": 8,
+            "Amount": 80000
+          },
+          {
+            "Level": 9,
+            "Amount": 90000
+          },
+          {
+            "Level": 10,
+            "Amount": 100000
+          }
+        ]
+      },
+      "Unit": {
+        "Id": "Dummyskill",
+        "Range": [
+          {
+            "Level": 1,
+            "Size": 1
+          },
+          {
+            "Level": 2,
+            "Size": 1
+          },
+          {
+            "Level": 3,
+            "Size": 1
+          },
+          {
+            "Level": 4,
+            "Size": 1
+          },
+          {
+            "Level": 5,
+            "Size": 1
+          },
+          {
+            "Level": 6,
+            "Size": 1
+          },
+          {
+            "Level": 7,
+            "Size": 1
+          },
+          {
+            "Level": 8,
+            "Size": 1
+          },
+          {
+            "Level": 9,
+            "Size": 1
+          },
+          {
+            "Level": 10,
+            "Size": 2
+          }
+        ],
+        "Interval": 1000,
+        "Target": "Enemy",
+        "Flag": {
+          "NoOverlap": true,
+          "PathCheck": true
+        }
+      }
+    },
+    "source": "rathena",
+    "complexityScore": 1334
+  },
+  {
+    "skillId": 534,
+    "name": "NJ_KOUENKA",
+    "description": "Crimson Fire Petal",
+    "maxLevel": 10,
+    "type": "Magic",
+    "targetType": "Attack",
+    "hit": "Multi_Hit",
+    "element": "Fire",
+    "rawFlags": null,
+    "rawDamageFlags": null,
+    "raw": {
+      "Id": 534,
+      "Name": "NJ_KOUENKA",
+      "Description": "Crimson Fire Petal",
+      "MaxLevel": 10,
+      "Type": "Magic",
+      "TargetType": "Attack",
+      "Range": 9,
+      "Hit": "Multi_Hit",
+      "HitCount": [
+        {
+          "Level": 1,
+          "Count": 1
+        },
+        {
+          "Level": 2,
+          "Count": 2
+        },
+        {
+          "Level": 3,
+          "Count": 3
+        },
+        {
+          "Level": 4,
+          "Count": 4
+        },
+        {
+          "Level": 5,
+          "Count": 5
+        },
+        {
+          "Level": 6,
+          "Count": 6
+        },
+        {
+          "Level": 7,
+          "Count": 7
+        },
+        {
+          "Level": 8,
+          "Count": 8
+        },
+        {
+          "Level": 9,
+          "Count": 9
+        },
+        {
+          "Level": 10,
+          "Count": 10
+        }
+      ],
+      "Element": "Fire",
+      "CopyFlags": {
+        "Skill": {
+          "Plagiarism": true,
+          "Reproduce": true
+        }
+      },
+      "CastTime": [
+        {
+          "Level": 1,
+          "Time": 560
+        },
+        {
+          "Level": 2,
+          "Time": 1120
+        },
+        {
+          "Level": 3,
+          "Time": 1680
+        },
+        {
+          "Level": 4,
+          "Time": 2240
+        },
+        {
+          "Level": 5,
+          "Time": 2800
+        },
+        {
+          "Level": 6,
+          "Time": 3360
+        },
+        {
+          "Level": 7,
+          "Time": 3840
+        },
+        {
+          "Level": 8,
+          "Time": 4480
+        },
+        {
+          "Level": 9,
+          "Time": 5040
+        },
+        {
+          "Level": 10,
+          "Time": 5600
+        }
+      ],
+      "FixedCastTime": [
+        {
+          "Level": 1,
+          "Time": 140
+        },
+        {
+          "Level": 2,
+          "Time": 280
+        },
+        {
+          "Level": 3,
+          "Time": 420
+        },
+        {
+          "Level": 4,
+          "Time": 560
+        },
+        {
+          "Level": 5,
+          "Time": 700
+        },
+        {
+          "Level": 6,
+          "Time": 840
+        },
+        {
+          "Level": 7,
+          "Time": 960
+        },
+        {
+          "Level": 8,
+          "Time": 1120
+        },
+        {
+          "Level": 9,
+          "Time": 1260
+        },
+        {
+          "Level": 10,
+          "Time": 1400
+        }
+      ],
+      "Requires": {
+        "SpCost": [
+          {
+            "Level": 1,
+            "Amount": 18
+          },
+          {
+            "Level": 2,
+            "Amount": 20
+          },
+          {
+            "Level": 3,
+            "Amount": 22
+          },
+          {
+            "Level": 4,
+            "Amount": 24
+          },
+          {
+            "Level": 5,
+            "Amount": 26
+          },
+          {
+            "Level": 6,
+            "Amount": 28
+          },
+          {
+            "Level": 7,
+            "Amount": 30
+          },
+          {
+            "Level": 8,
+            "Amount": 32
+          },
+          {
+            "Level": 9,
+            "Amount": 34
+          },
+          {
+            "Level": 10,
+            "Amount": 36
+          }
+        ]
+      }
+    },
+    "source": "rathena",
+    "complexityScore": 1325
+  },
+  {
+    "skillId": 537,
+    "name": "NJ_HYOUSENSOU",
+    "description": "Spear of Ice",
+    "maxLevel": 10,
+    "type": "Magic",
+    "targetType": "Attack",
+    "hit": "Multi_Hit",
+    "element": "Water",
+    "rawFlags": null,
+    "rawDamageFlags": null,
+    "raw": {
+      "Id": 537,
+      "Name": "NJ_HYOUSENSOU",
+      "Description": "Spear of Ice",
+      "MaxLevel": 10,
+      "Type": "Magic",
+      "TargetType": "Attack",
+      "Range": 9,
+      "Hit": "Multi_Hit",
+      "HitCount": [
+        {
+          "Level": 1,
+          "Count": 3
+        },
+        {
+          "Level": 2,
+          "Count": 4
+        },
+        {
+          "Level": 3,
+          "Count": 5
+        },
+        {
+          "Level": 4,
+          "Count": 6
+        },
+        {
+          "Level": 5,
+          "Count": 7
+        },
+        {
+          "Level": 6,
+          "Count": 8
+        },
+        {
+          "Level": 7,
+          "Count": 9
+        },
+        {
+          "Level": 8,
+          "Count": 10
+        },
+        {
+          "Level": 9,
+          "Count": 11
+        },
+        {
+          "Level": 10,
+          "Count": 12
+        }
+      ],
+      "Element": "Water",
+      "CopyFlags": {
+        "Skill": {
+          "Plagiarism": true,
+          "Reproduce": true
+        }
+      },
+      "CastTime": [
+        {
+          "Level": 1,
+          "Time": 560
+        },
+        {
+          "Level": 2,
+          "Time": 1120
+        },
+        {
+          "Level": 3,
+          "Time": 1680
+        },
+        {
+          "Level": 4,
+          "Time": 2240
+        },
+        {
+          "Level": 5,
+          "Time": 2800
+        },
+        {
+          "Level": 6,
+          "Time": 3360
+        },
+        {
+          "Level": 7,
+          "Time": 3840
+        },
+        {
+          "Level": 8,
+          "Time": 4480
+        },
+        {
+          "Level": 9,
+          "Time": 5040
+        },
+        {
+          "Level": 10,
+          "Time": 5600
+        }
+      ],
+      "FixedCastTime": [
+        {
+          "Level": 1,
+          "Time": 140
+        },
+        {
+          "Level": 2,
+          "Time": 280
+        },
+        {
+          "Level": 3,
+          "Time": 420
+        },
+        {
+          "Level": 4,
+          "Time": 560
+        },
+        {
+          "Level": 5,
+          "Time": 700
+        },
+        {
+          "Level": 6,
+          "Time": 840
+        },
+        {
+          "Level": 7,
+          "Time": 960
+        },
+        {
+          "Level": 8,
+          "Time": 1120
+        },
+        {
+          "Level": 9,
+          "Time": 1260
+        },
+        {
+          "Level": 10,
+          "Time": 1400
+        }
+      ],
+      "Requires": {
+        "SpCost": [
+          {
+            "Level": 1,
+            "Amount": 15
+          },
+          {
+            "Level": 2,
+            "Amount": 18
+          },
+          {
+            "Level": 3,
+            "Amount": 21
+          },
+          {
+            "Level": 4,
+            "Amount": 24
+          },
+          {
+            "Level": 5,
+            "Amount": 27
+          },
+          {
+            "Level": 6,
+            "Amount": 30
+          },
+          {
+            "Level": 7,
+            "Amount": 33
+          },
+          {
+            "Level": 8,
+            "Amount": 36
+          },
+          {
+            "Level": 9,
+            "Amount": 39
+          },
+          {
+            "Level": 10,
+            "Amount": 42
+          }
+        ]
+      }
+    },
+    "source": "rathena",
+    "complexityScore": 1325
+  },
+  {
+    "skillId": 2336,
+    "name": "SR_KNUCKLEARROW",
+    "description": "Knuckle Arrow",
+    "maxLevel": 10,
+    "type": "Weapon",
+    "targetType": "Attack",
+    "hit": "Single",
+    "element": "Weapon",
+    "rawFlags": null,
+    "rawDamageFlags": null,
+    "raw": {
+      "Id": 2336,
+      "Name": "SR_KNUCKLEARROW",
+      "Description": "Knuckle Arrow",
+      "MaxLevel": 10,
+      "Type": "Weapon",
+      "TargetType": "Attack",
+      "Range": [
+        {
+          "Level": 1,
+          "Size": 7
+        },
+        {
+          "Level": 2,
+          "Size": 7
+        },
+        {
+          "Level": 3,
+          "Size": 8
+        },
+        {
+          "Level": 4,
+          "Size": 8
+        },
+        {
+          "Level": 5,
+          "Size": 9
+        },
+        {
+          "Level": 6,
+          "Size": 9
+        },
+        {
+          "Level": 7,
+          "Size": 10
+        },
+        {
+          "Level": 8,
+          "Size": 10
+        },
+        {
+          "Level": 9,
+          "Size": 11
+        },
+        {
+          "Level": 10,
+          "Size": 11
+        }
+      ],
+      "Hit": "Single",
+      "HitCount": 1,
+      "Element": "Weapon",
+      "Knockback": [
+        {
+          "Level": 1,
+          "Amount": 2
+        },
+        {
+          "Level": 2,
+          "Amount": 2
+        },
+        {
+          "Level": 3,
+          "Amount": 3
+        },
+        {
+          "Level": 4,
+          "Amount": 3
+        },
+        {
+          "Level": 5,
+          "Amount": 4
+        },
+        {
+          "Level": 6,
+          "Amount": 4
+        },
+        {
+          "Level": 7,
+          "Amount": 5
+        },
+        {
+          "Level": 8,
+          "Amount": 5
+        },
+        {
+          "Level": 9,
+          "Amount": 6
+        },
+        {
+          "Level": 10,
+          "Amount": 6
+        }
+      ],
+      "CopyFlags": {
+        "Skill": {
+          "Reproduce": true
+        }
+      },
+      "AfterCastActDelay": 1000,
+      "Requires": {
+        "SpCost": [
+          {
+            "Level": 1,
+            "Amount": 12
+          },
+          {
+            "Level": 2,
+            "Amount": 14
+          },
+          {
+            "Level": 3,
+            "Amount": 16
+          },
+          {
+            "Level": 4,
+            "Amount": 18
+          },
+          {
+            "Level": 5,
+            "Amount": 20
+          },
+          {
+            "Level": 6,
+            "Amount": 22
+          },
+          {
+            "Level": 7,
+            "Amount": 24
+          },
+          {
+            "Level": 8,
+            "Amount": 26
+          },
+          {
+            "Level": 9,
+            "Amount": 28
+          },
+          {
+            "Level": 10,
+            "Amount": 30
+          }
+        ],
+        "SpiritSphereCost": [
+          {
+            "Level": 1,
+            "Amount": 1
+          },
+          {
+            "Level": 2,
+            "Amount": 1
+          },
+          {
+            "Level": 3,
+            "Amount": 1
+          },
+          {
+            "Level": 4,
+            "Amount": 1
+          },
+          {
+            "Level": 5,
+            "Amount": 1
+          },
+          {
+            "Level": 6,
+            "Amount": 0
+          },
+          {
+            "Level": 7,
+            "Amount": 0
+          },
+          {
+            "Level": 8,
+            "Amount": 0
+          },
+          {
+            "Level": 9,
+            "Amount": 0
+          },
+          {
+            "Level": 10,
+            "Amount": 0
+          }
+        ]
+      }
+    },
+    "source": "rathena",
+    "complexityScore": 1318
+  }
+]
