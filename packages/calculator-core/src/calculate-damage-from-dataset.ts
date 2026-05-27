@@ -1,6 +1,7 @@
 import { CalculatorModifierEffectsFactory } from "./calculator-modifier-effects";
 import { CharacterStatusEngine } from "./character-status-engine";
 import { DamageEngine } from "./damage-engine";
+import type { CalculateDamageResult } from "./calculation-result";
 import type { RulesetContext } from "./rulesets";
 import type { CalculatorCharacter, RoItem, RoMonster, RoSkill } from "./ro-types";
 
@@ -45,7 +46,7 @@ export class CalculatorInputError extends Error {
 export function calculateDamageFromDataset(
   input: CalculateDamageInput,
   dataset: CalculatorDataset,
-) {
+): CalculateDamageResult {
   const monster = findMonsterById(dataset.monsters, input.monsterId);
   const skill = findSkillById(dataset.skills, input.skillId);
 
@@ -87,6 +88,7 @@ export function calculateDamageFromDataset(
     meta: {
       precision: "prototype",
       note: "Initial calculator engine. Renewal/iRO rounding and skill exceptions will be added per class tree.",
+      warnings: createWarnings(modifierEffects.unsupportedStatements.length),
     },
     characterStatus,
     target: monster,
@@ -94,6 +96,16 @@ export function calculateDamageFromDataset(
     damage: result.damage,
     breakdown: result.breakdown,
   };
+}
+
+function createWarnings(unsupportedStatementCount: number) {
+  if (unsupportedStatementCount === 0) {
+    return [];
+  }
+
+  return [
+    `${unsupportedStatementCount} item modifier statement(s) were not applied.`,
+  ];
 }
 
 function createItemContextMap(itemContexts: CalculatorItemContext[]) {

@@ -94,6 +94,10 @@ describe("calculateDamageFromDataset", () => {
 
     expect(result.damage.average).toBe(500);
     expect(result.damage.total).toBe(500);
+    expect(result.meta).toMatchObject({
+      precision: "prototype",
+      warnings: [],
+    });
     expect(result.characterStatus).toMatchObject({
       statusAtk: 300,
       atk: 400,
@@ -166,5 +170,24 @@ describe("calculateDamageFromDataset", () => {
         dataset,
       ),
     ).toThrow(CalculatorDataError);
+  });
+
+  it("adds warnings when item script statements are unsupported", () => {
+    const result = calculateDamageFromDataset(
+      input,
+      {
+        ...dataset,
+        items: [
+          {
+            ...item,
+            rawScript: "autobonus \"{ bonus bAtkRate,10; }\",10,5000;",
+          },
+        ],
+      },
+    );
+
+    expect(result.meta.warnings).toEqual([
+      "1 item modifier statement(s) were not applied.",
+    ]);
   });
 });
