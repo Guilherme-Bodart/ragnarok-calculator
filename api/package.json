@@ -8,6 +8,7 @@
     "start": "node dist/api/src/main.js",
     "lint": "eslint \"src/**/*.ts\"",
     "prisma:generate": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy",
     "prisma:migrate": "prisma migrate dev",
     "test": "vitest run --root .. --config vitest.config.mts"
   },
