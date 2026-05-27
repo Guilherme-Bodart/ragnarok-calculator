@@ -28,6 +28,12 @@ describe("calculateDamageSchema", () => {
       mechanics: "renewal",
     });
     expect(parsed.learnedSkills).toEqual({});
+    expect(parsed.character).toMatchObject({
+      isTranscendent: false,
+      weaponType: "bareHand",
+      weaponLevel: 0,
+      weaponRefine: 0,
+    });
   });
 
   it("accepts an explicit ruleset context", () => {
@@ -54,5 +60,27 @@ describe("calculateDamageSchema", () => {
     });
 
     expect(parsed.skillLevel).toBe(15);
+  });
+
+  it("accepts optional weapon and base job metadata", () => {
+    const parsed = calculateDamageSchema.parse({
+      ...minimumPayload,
+      character: {
+        ...minimumPayload.character,
+        baseJob: "Swordman",
+        isTranscendent: true,
+        weaponType: "twoHandSword",
+        weaponLevel: 4,
+        weaponRefine: 12,
+      },
+    });
+
+    expect(parsed.character).toMatchObject({
+      baseJob: "Swordman",
+      isTranscendent: true,
+      weaponType: "twoHandSword",
+      weaponLevel: 4,
+      weaponRefine: 12,
+    });
   });
 });

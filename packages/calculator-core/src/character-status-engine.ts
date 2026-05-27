@@ -17,6 +17,11 @@ export type CharacterStatus = {
   baseLevel: number;
   jobLevel: number;
   classId?: string;
+  baseJob?: string;
+  isTranscendent: boolean;
+  weaponType: CalculatorCharacter["weaponType"];
+  weaponLevel: number;
+  weaponRefine: number;
   baseStats: StatBonus;
   jobStatBonuses: StatBonus;
   itemStatBonuses: Pick<StatBonus, BaseStat>;
@@ -89,6 +94,11 @@ export class CharacterStatusEngine {
       baseLevel: input.character.baseLevel,
       jobLevel: input.character.jobLevel,
       classId: input.character.classId,
+      baseJob: input.character.baseJob,
+      isTranscendent: input.character.isTranscendent ?? false,
+      weaponType: input.character.weaponType ?? "bareHand",
+      weaponLevel: input.character.weaponLevel ?? 0,
+      weaponRefine: input.character.weaponRefine ?? 0,
       baseStats,
       jobStatBonuses,
       itemStatBonuses,

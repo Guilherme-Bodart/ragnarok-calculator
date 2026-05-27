@@ -28,6 +28,31 @@ export type MonsterRace =
   | "angel"
   | "dragon";
 
+export type WeaponType =
+  | "bareHand"
+  | "dagger"
+  | "oneHandSword"
+  | "twoHandSword"
+  | "oneHandSpear"
+  | "twoHandSpear"
+  | "oneHandAxe"
+  | "twoHandAxe"
+  | "mace"
+  | "rod"
+  | "bow"
+  | "katar"
+  | "book"
+  | "knuckle"
+  | "musicalInstrument"
+  | "whip"
+  | "revolver"
+  | "rifle"
+  | "gatlingGun"
+  | "shotgun"
+  | "grenadeLauncher"
+  | "huuma"
+  | "twoHandRod";
+
 export type EquipmentSlot =
   | "headTop"
   | "headMid"
@@ -121,6 +146,11 @@ export type CharacterStats = {
 
 export type CalculatorCharacter = {
   classId?: string;
+  baseJob?: string;
+  isTranscendent?: boolean;
+  weaponType?: WeaponType;
+  weaponLevel?: number;
+  weaponRefine?: number;
   baseLevel: number;
   jobLevel: number;
   stats: CharacterStats;

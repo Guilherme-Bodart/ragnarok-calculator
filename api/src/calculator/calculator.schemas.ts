@@ -1,9 +1,40 @@
 import { z } from "zod";
 import { defaultRulesetContext, rulesetContextSchema } from "../../../packages/calculator-core/src";
 
+const weaponTypeSchema = z.enum([
+  "bareHand",
+  "dagger",
+  "oneHandSword",
+  "twoHandSword",
+  "oneHandSpear",
+  "twoHandSpear",
+  "oneHandAxe",
+  "twoHandAxe",
+  "mace",
+  "rod",
+  "bow",
+  "katar",
+  "book",
+  "knuckle",
+  "musicalInstrument",
+  "whip",
+  "revolver",
+  "rifle",
+  "gatlingGun",
+  "shotgun",
+  "grenadeLauncher",
+  "huuma",
+  "twoHandRod",
+]);
+
 export const calculateDamageSchema = z.object({
   character: z.object({
     classId: z.string().min(1).optional(),
+    baseJob: z.string().min(1).optional(),
+    isTranscendent: z.boolean().default(false),
+    weaponType: weaponTypeSchema.default("bareHand"),
+    weaponLevel: z.number().int().min(0).max(5).default(0),
+    weaponRefine: z.number().int().min(0).max(20).default(0),
     baseLevel: z.number().int().min(1).max(260),
     jobLevel: z.number().int().min(1).max(70),
     stats: z.object({
