@@ -2,6 +2,7 @@ import {
   CalculatorTraitEffectsFactory,
   type CalculatorTraitEffects,
 } from "./calculator-trait-effects";
+import { AspdEngine } from "./aspd";
 import type { CalculatorModifierEffects } from "./calculator-modifier-effects";
 import { JobBasepointsFactory, type JobBasepoints } from "./job-basepoints";
 import {
@@ -38,6 +39,7 @@ export type CharacterStatus = {
   hit: number;
   flee: number;
   crit: number;
+  aspd: number;
   traitEffects: CalculatorTraitEffects;
 };
 
@@ -53,6 +55,7 @@ export class CharacterStatusEngine {
     private readonly jobStatBonusFactory = new JobStatBonusFactory(),
     private readonly jobBasepointsFactory = new JobBasepointsFactory(),
     private readonly traitEffectsFactory = new CalculatorTraitEffectsFactory(),
+    private readonly aspdEngine = new AspdEngine(),
   ) {}
 
   calculate(input: CharacterStatusEngineInput): CharacterStatus {
@@ -89,6 +92,7 @@ export class CharacterStatusEngine {
     const equipmentMatk = this.sumEquipmentPower(input.items ?? [], "magicAttack");
     const flatAtk = input.modifierEffects?.flatAtk ?? 0;
     const flatMatk = input.modifierEffects?.flatMatk ?? 0;
+    const weaponType = input.character.weaponType ?? "bareHand";
 
     return {
       baseLevel: input.character.baseLevel,
@@ -96,7 +100,7 @@ export class CharacterStatusEngine {
       classId: input.character.classId,
       baseJob: input.character.baseJob,
       isTranscendent: input.character.isTranscendent ?? false,
-      weaponType: input.character.weaponType ?? "bareHand",
+      weaponType,
       weaponLevel: input.character.weaponLevel ?? 0,
       weaponRefine: input.character.weaponRefine ?? 0,
       baseStats,
@@ -132,6 +136,11 @@ export class CharacterStatusEngine {
           effectiveStats.con * 2,
       ),
       crit: Math.floor(effectiveStats.luk / 3 + traitEffects.criticalDamageRate),
+      aspd: this.aspdEngine.calculate({
+        classId: input.character.classId,
+        weaponType,
+        effectiveStats,
+      }),
       traitEffects,
     };
   }

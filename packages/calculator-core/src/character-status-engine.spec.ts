@@ -83,6 +83,7 @@ describe("CharacterStatusEngine", () => {
     expect(status.hit).toBe(153);
     expect(status.flee).toBe(130);
     expect(status.crit).toBe(4);
+    expect(status.aspd).toBe(167.67);
   });
 
   it("adds equipment power and flat modifiers to final attack values", () => {
