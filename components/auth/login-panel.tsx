@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   Crown,
+  Globe,
   Loader2,
   LockKeyhole,
   LogIn,
@@ -13,6 +14,13 @@ import {
   Sparkles,
   UserPlus,
 } from "lucide-react";
+import {
+  defaultLocale,
+  dictionaries,
+  isLocale,
+  type Locale,
+} from "@/content/i18n";
+import { LanguageSwitcher } from "@/components/site/language-switcher";
 
 type AuthMode = "login" | "register";
 
@@ -24,10 +32,12 @@ type AuthUser = {
 };
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+const localeStorageKey = "nightmare-locale";
 
 export function LoginPanel() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [locale, setLocale] = useState<Locale>(getInitialLocale);
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -37,7 +47,11 @@ export function LoginPanel() {
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
 
+  const dictionary = dictionaries[locale];
+  const t = dictionary.auth;
   const nextPath = getSafeNextPath(searchParams.get("next"));
+  const visibleMessage =
+    message || (searchParams.get("authError") === "google" ? t.googleError : "");
 
   useEffect(() => {
     let isMounted = true;
@@ -57,7 +71,7 @@ export function LoginPanel() {
         if (isMounted) {
           setUser(payload.user);
           if (payload.user) {
-            setMessage("Sessao ativa. Abrindo sua guilda...");
+            setMessage(t.sessionActive);
             window.setTimeout(() => {
               router.replace(nextPath);
             }, 420);
@@ -65,7 +79,7 @@ export function LoginPanel() {
         }
       } catch {
         if (isMounted) {
-          setMessage("API indisponivel no momento.");
+          setMessage(t.apiUnavailable);
         }
       } finally {
         if (isMounted) {
@@ -79,7 +93,13 @@ export function LoginPanel() {
     return () => {
       isMounted = false;
     };
-  }, [nextPath, router]);
+  }, [nextPath, router, t.apiUnavailable, t.sessionActive]);
+
+  function handleLocaleChange(nextLocale: Locale) {
+    setLocale(nextLocale);
+    window.localStorage.setItem(localeStorageKey, nextLocale);
+    document.documentElement.lang = nextLocale === "pt" ? "pt-BR" : nextLocale;
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -103,23 +123,24 @@ export function LoginPanel() {
       };
 
       if (!response.ok || !data.user) {
-        setMessage(getAuthErrorMessage(data.message));
+        setMessage(getAuthErrorMessage(data.message, t.authFailed));
         return;
       }
 
       setUser(data.user);
       setPassword("");
-      setMessage(
-        mode === "register"
-          ? "Conta criada. Abrindo sua guilda..."
-          : "Login efetuado. Abrindo sua guilda...",
-      );
+      setMessage(mode === "register" ? t.registered : t.loggedIn);
       router.replace(nextPath);
     } catch {
-      setMessage("API indisponivel no momento.");
+      setMessage(t.apiUnavailable);
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function handleGoogleSignIn() {
+    const params = new URLSearchParams({ next: nextPath });
+    window.location.assign(`${apiBaseUrl}/auth/google?${params.toString()}`);
   }
 
   async function handleLogout() {
@@ -132,9 +153,9 @@ export function LoginPanel() {
         credentials: "include",
       });
       setUser(null);
-      setMessage("Sessao encerrada.");
+      setMessage(t.loggedOut);
     } catch {
-      setMessage("API indisponivel no momento.");
+      setMessage(t.apiUnavailable);
     } finally {
       setIsLoading(false);
     }
@@ -142,40 +163,42 @@ export function LoginPanel() {
 
   return (
     <main className="guild-auth-page">
+      <LanguageSwitcher
+        locale={locale}
+        onLocaleChange={handleLocaleChange}
+        t={dictionary.language}
+      />
       <section className="guild-auth-shell">
         <div className="guild-auth-copy">
           <Link className="guild-auth-backlink" href="/">
-            Nightmare
+            {t.back}
           </Link>
           <span className="guild-auth-kicker">
             <Crown size={15} />
-            Guild Workspace
+            {t.kicker}
           </span>
-          <h1>Entre no centro de comando da guilda.</h1>
-          <p>
-            Login separado da calculadora, preparado para ferramentas de MVP,
-            agenda, membros, drops e operacao da guilda.
-          </p>
+          <h1>{t.title}</h1>
+          <p>{t.description}</p>
           <div className="guild-auth-feature-grid" aria-label="Guild tools">
             <span>
               <ShieldCheck size={16} />
-              Sessao segura
+              {t.features.session}
             </span>
             <span>
               <Sparkles size={16} />
-              Tools modulares
+              {t.features.tools}
             </span>
             <span>
               <LockKeyhole size={16} />
-              Permissoes por cargo
+              {t.features.permissions}
             </span>
           </div>
         </div>
 
         <div className="guild-auth-card">
           <div className="guild-auth-card-header">
-            <span>Nightmare SaaS</span>
-            <strong>{mode === "register" ? "Criar acesso" : "Acessar workspace"}</strong>
+            <span>{t.cardKicker}</span>
+            <strong>{mode === "register" ? t.registerTitle : t.loginTitle}</strong>
           </div>
 
           <div className="guild-auth-tabs" role="tablist" aria-label="Auth mode">
@@ -187,7 +210,7 @@ export function LoginPanel() {
               type="button"
             >
               <LogIn size={16} />
-              Entrar
+              {t.loginTab}
             </button>
             <button
               aria-selected={mode === "register"}
@@ -197,16 +220,27 @@ export function LoginPanel() {
               type="button"
             >
               <UserPlus size={16} />
-              Criar conta
+              {t.registerTab}
             </button>
           </div>
+
+          {!user && !isCheckingSession && (
+            <button
+              className="guild-auth-google"
+              onClick={handleGoogleSignIn}
+              type="button"
+            >
+              <Globe size={17} />
+              {t.googleAction}
+            </button>
+          )}
 
           {isCheckingSession ? (
             <div className="guild-auth-session" aria-live="polite">
               <Loader2 className="spin" size={34} />
               <div>
-                <strong>Verificando sessao</strong>
-                <span>Conectando ao backend da guilda.</span>
+                <strong>{t.checkingTitle}</strong>
+                <span>{t.checkingDescription}</span>
               </div>
             </div>
           ) : user ? (
@@ -217,19 +251,19 @@ export function LoginPanel() {
                 <span>{user.email}</span>
               </div>
               <Link className="guild-auth-continue" href={nextPath}>
-                Abrir guilda
+                {t.continueAction}
                 <ArrowRight size={16} />
               </Link>
               <button onClick={handleLogout} type="button" disabled={isLoading}>
                 {isLoading ? <Loader2 className="spin" size={16} /> : <LogIn size={16} />}
-                Sair
+                {t.logoutAction}
               </button>
             </div>
           ) : (
             <form className="guild-auth-form" onSubmit={handleSubmit}>
               {mode === "register" && (
                 <label>
-                  Nome
+                  {t.nameLabel}
                   <input
                     autoComplete="name"
                     minLength={2}
@@ -240,7 +274,7 @@ export function LoginPanel() {
                 </label>
               )}
               <label>
-                Email
+                {t.emailLabel}
                 <input
                   autoComplete="email"
                   maxLength={254}
@@ -251,7 +285,7 @@ export function LoginPanel() {
                 />
               </label>
               <label>
-                Senha
+                {t.passwordLabel}
                 <input
                   autoComplete={mode === "register" ? "new-password" : "current-password"}
                   maxLength={128}
@@ -270,16 +304,34 @@ export function LoginPanel() {
                 ) : (
                   <LogIn size={17} />
                 )}
-                {mode === "register" ? "Criar conta" : "Entrar"}
+                {mode === "register" ? t.registerAction : t.loginAction}
               </button>
             </form>
           )}
 
-          {message && <p className="guild-auth-message" aria-live="polite">{message}</p>}
+          {visibleMessage && (
+            <p className="guild-auth-message" aria-live="polite">
+              {visibleMessage}
+            </p>
+          )}
         </div>
       </section>
     </main>
   );
+}
+
+function getInitialLocale() {
+  if (typeof window === "undefined") {
+    return defaultLocale;
+  }
+
+  const savedLocale = window.localStorage.getItem(localeStorageKey);
+  if (savedLocale && isLocale(savedLocale)) {
+    return savedLocale;
+  }
+
+  const browserLocale = window.navigator.language.slice(0, 2);
+  return isLocale(browserLocale) ? browserLocale : defaultLocale;
 }
 
 async function readJson(response: Response) {
@@ -290,12 +342,15 @@ async function readJson(response: Response) {
   }
 }
 
-function getAuthErrorMessage(message: string | string[] | undefined) {
+function getAuthErrorMessage(
+  message: string | string[] | undefined,
+  fallback: string,
+) {
   if (Array.isArray(message)) {
-    return message[0] ?? "Nao foi possivel autenticar.";
+    return message[0] ?? fallback;
   }
 
-  return message ?? "Nao foi possivel autenticar.";
+  return message ?? fallback;
 }
 
 function getSafeNextPath(next: string | null) {

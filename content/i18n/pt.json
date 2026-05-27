@@ -52,7 +52,7 @@
         "description": "A gente fala claro, melhora junto e segura a bronca quando o jogo aperta."
       },
       {
-        "title": "Em bando",
+        "title": "Em grupo",
         "description": "MVP, farm, instância ou WoE: se entrou na lista, a Nightmare faz junto."
       }
     ]
@@ -73,5 +73,38 @@
     "title": "Junte-se ao pesadelo",
     "description": "Entre no Discord, conheça a tropa e veja se a Nightmare combina com seu jeito de jogar Ragnarok.",
     "action": "Chamar no Discord"
+  },
+  "auth": {
+    "back": "Nightmare",
+    "kicker": "Guild Workspace",
+    "title": "Entre no centro de comando da guilda.",
+    "description": "Login separado da calculadora, preparado para ferramentas de MVP, agenda, membros, drops e operação da guilda.",
+    "features": {
+      "session": "Sessão segura",
+      "tools": "Tools modulares",
+      "permissions": "Permissões por cargo"
+    },
+    "cardKicker": "Nightmare SaaS",
+    "loginTitle": "Acessar workspace",
+    "registerTitle": "Criar acesso",
+    "loginTab": "Entrar",
+    "registerTab": "Criar conta",
+    "googleAction": "Continuar com Google",
+    "googleError": "Não foi possível entrar com Google.",
+    "checkingTitle": "Verificando sessão",
+    "checkingDescription": "Conectando ao backend da guilda.",
+    "nameLabel": "Nome",
+    "emailLabel": "Email",
+    "passwordLabel": "Senha",
+    "loginAction": "Entrar",
+    "registerAction": "Criar conta",
+    "continueAction": "Abrir guilda",
+    "logoutAction": "Sair",
+    "sessionActive": "Sessão ativa. Abrindo sua guilda...",
+    "apiUnavailable": "API indisponível no momento.",
+    "authFailed": "Não foi possível autenticar.",
+    "registered": "Conta criada. Abrindo sua guilda...",
+    "loggedIn": "Login efetuado. Abrindo sua guilda...",
+    "loggedOut": "Sessão encerrada."
   }
 }

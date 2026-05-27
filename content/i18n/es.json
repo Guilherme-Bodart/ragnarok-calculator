@@ -73,5 +73,38 @@
     "title": "Únete a la pesadilla",
     "description": "Entra al Discord, conoce al grupo y descubre si Nightmare combina con tu forma de jugar Ragnarok.",
     "action": "Enviar mensaje en Discord"
+  },
+  "auth": {
+    "back": "Nightmare",
+    "kicker": "Guild Workspace",
+    "title": "Entra al centro de mando de la guilda.",
+    "description": "Login separado de la calculadora, preparado para herramientas de MVP, agenda, miembros, drops y operación de guilda.",
+    "features": {
+      "session": "Sesión segura",
+      "tools": "Tools modulares",
+      "permissions": "Permisos por cargo"
+    },
+    "cardKicker": "Nightmare SaaS",
+    "loginTitle": "Acceder al workspace",
+    "registerTitle": "Crear acceso",
+    "loginTab": "Entrar",
+    "registerTab": "Crear cuenta",
+    "googleAction": "Continuar con Google",
+    "googleError": "No fue posible entrar con Google.",
+    "checkingTitle": "Verificando sesión",
+    "checkingDescription": "Conectando al backend de guilda.",
+    "nameLabel": "Nombre",
+    "emailLabel": "Email",
+    "passwordLabel": "Contraseña",
+    "loginAction": "Entrar",
+    "registerAction": "Crear cuenta",
+    "continueAction": "Abrir guilda",
+    "logoutAction": "Salir",
+    "sessionActive": "Sesión activa. Abriendo tu guilda...",
+    "apiUnavailable": "API indisponible en este momento.",
+    "authFailed": "No fue posible autenticar.",
+    "registered": "Cuenta creada. Abriendo tu guilda...",
+    "loggedIn": "Login efectuado. Abriendo tu guilda...",
+    "loggedOut": "Sesión cerrada."
   }
 }

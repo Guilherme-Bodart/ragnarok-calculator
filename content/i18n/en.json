@@ -45,7 +45,7 @@
       },
       {
         "title": "Come together",
-        "description": "Anyone who joins with respect becomes part of the pack. No drama, no inflated ego."
+        "description": "Anyone who joins with respect becomes part of the group. No drama, no inflated ego."
       },
       {
         "title": "Straight talk",
@@ -73,5 +73,38 @@
     "title": "Join the nightmare",
     "description": "Enter the Discord, meet the crew, and see if Nightmare fits the way you play Ragnarok.",
     "action": "Message on Discord"
+  },
+  "auth": {
+    "back": "Nightmare",
+    "kicker": "Guild Workspace",
+    "title": "Enter the guild command center.",
+    "description": "A login flow separated from the calculator, ready for MVP tools, calendar, members, drops, and guild operations.",
+    "features": {
+      "session": "Secure session",
+      "tools": "Modular tools",
+      "permissions": "Role permissions"
+    },
+    "cardKicker": "Nightmare SaaS",
+    "loginTitle": "Access workspace",
+    "registerTitle": "Create access",
+    "loginTab": "Sign in",
+    "registerTab": "Create account",
+    "googleAction": "Continue with Google",
+    "googleError": "Google sign-in failed.",
+    "checkingTitle": "Checking session",
+    "checkingDescription": "Connecting to the guild backend.",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "loginAction": "Sign in",
+    "registerAction": "Create account",
+    "continueAction": "Open guild",
+    "logoutAction": "Sign out",
+    "sessionActive": "Session active. Opening your guild...",
+    "apiUnavailable": "API is unavailable right now.",
+    "authFailed": "Could not authenticate.",
+    "registered": "Account created. Opening your guild...",
+    "loggedIn": "Signed in. Opening your guild...",
+    "loggedOut": "Session closed."
   }
 }

@@ -1305,7 +1305,8 @@ a {
 .guild-auth-tabs button,
 .guild-auth-submit,
 .guild-auth-session button,
-.guild-auth-continue {
+.guild-auth-continue,
+.guild-auth-google {
   min-height: 42px;
   display: inline-flex;
   align-items: center;
@@ -1326,6 +1327,20 @@ a {
   color: #020612;
   border-color: #a7efff;
   background: #a7efff;
+}
+
+.guild-auth-google {
+  width: 100%;
+  margin-bottom: 14px;
+  color: #f2fbff;
+  border-color: rgb(242 251 255 / 0.18);
+  background: rgb(242 251 255 / 0.06);
+}
+
+.guild-auth-google:hover {
+  color: #020612;
+  border-color: #f2fbff;
+  background: #f2fbff;
 }
 
 .guild-auth-form {
