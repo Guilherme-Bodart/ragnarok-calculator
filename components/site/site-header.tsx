@@ -9,6 +9,7 @@ export function SiteHeader({ t }: SiteHeaderProps) {
     { label: t.values, href: "#valores" },
     { label: t.agenda, href: "#agenda" },
     { label: t.calculator, href: "/calculator" },
+    { label: t.guild, href: "/login" },
     { label: t.discord, href: "#recrutamento" },
   ];
 

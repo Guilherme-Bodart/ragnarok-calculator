@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { LoginPanel } from "@/components/auth/login-panel";
 
 export const metadata: Metadata = {
-  title: "Login da Guilda | Nightmare",
-  description: "Area de login para as ferramentas de guilda Nightmare.",
+  title: "Guild Login | Nightmare",
+  description: "Login para o workspace modular de guildas do Nightmare.",
 };
 
 export default function LoginPage() {
-  return <LoginPanel />;
+  return (
+    <Suspense>
+      <LoginPanel />
+    </Suspense>
+  );
 }

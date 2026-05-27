@@ -1,7 +1,18 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { Loader2, LogIn, ShieldCheck, UserPlus } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  ArrowRight,
+  Crown,
+  Loader2,
+  LockKeyhole,
+  LogIn,
+  ShieldCheck,
+  Sparkles,
+  UserPlus,
+} from "lucide-react";
 
 type AuthMode = "login" | "register";
 
@@ -15,6 +26,8 @@ type AuthUser = {
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 export function LoginPanel() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -22,6 +35,9 @@ export function LoginPanel() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+
+  const nextPath = getSafeNextPath(searchParams.get("next"));
 
   useEffect(() => {
     let isMounted = true;
@@ -40,10 +56,20 @@ export function LoginPanel() {
 
         if (isMounted) {
           setUser(payload.user);
+          if (payload.user) {
+            setMessage("Sessao ativa. Abrindo sua guilda...");
+            window.setTimeout(() => {
+              router.replace(nextPath);
+            }, 420);
+          }
         }
       } catch {
         if (isMounted) {
           setMessage("API indisponivel no momento.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsCheckingSession(false);
         }
       }
     }
@@ -53,7 +79,7 @@ export function LoginPanel() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [nextPath, router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -71,19 +97,24 @@ export function LoginPanel() {
         body: JSON.stringify(payload),
       });
 
-      const data = (await response.json()) as {
+      const data = (await readJson(response)) as {
         user?: AuthUser;
-        message?: string;
+        message?: string | string[];
       };
 
       if (!response.ok || !data.user) {
-        setMessage(data.message ?? "Nao foi possivel autenticar.");
+        setMessage(getAuthErrorMessage(data.message));
         return;
       }
 
       setUser(data.user);
       setPassword("");
-      setMessage(mode === "register" ? "Conta criada." : "Login efetuado.");
+      setMessage(
+        mode === "register"
+          ? "Conta criada. Abrindo sua guilda..."
+          : "Login efetuado. Abrindo sua guilda...",
+      );
+      router.replace(nextPath);
     } catch {
       setMessage("API indisponivel no momento.");
     } finally {
@@ -113,15 +144,40 @@ export function LoginPanel() {
     <main className="guild-auth-page">
       <section className="guild-auth-shell">
         <div className="guild-auth-copy">
-          <span className="guild-auth-kicker">Nightmare Guild Tools</span>
-          <h1>Login da guilda</h1>
+          <Link className="guild-auth-backlink" href="/">
+            Nightmare
+          </Link>
+          <span className="guild-auth-kicker">
+            <Crown size={15} />
+            Guild Workspace
+          </span>
+          <h1>Entre no centro de comando da guilda.</h1>
           <p>
-            A base da area SaaS: conta, sessao segura e um caminho separado da
-            calculadora para as proximas ferramentas.
+            Login separado da calculadora, preparado para ferramentas de MVP,
+            agenda, membros, drops e operacao da guilda.
           </p>
+          <div className="guild-auth-feature-grid" aria-label="Guild tools">
+            <span>
+              <ShieldCheck size={16} />
+              Sessao segura
+            </span>
+            <span>
+              <Sparkles size={16} />
+              Tools modulares
+            </span>
+            <span>
+              <LockKeyhole size={16} />
+              Permissoes por cargo
+            </span>
+          </div>
         </div>
 
         <div className="guild-auth-card">
+          <div className="guild-auth-card-header">
+            <span>Nightmare SaaS</span>
+            <strong>{mode === "register" ? "Criar acesso" : "Acessar workspace"}</strong>
+          </div>
+
           <div className="guild-auth-tabs" role="tablist" aria-label="Auth mode">
             <button
               aria-selected={mode === "login"}
@@ -145,13 +201,25 @@ export function LoginPanel() {
             </button>
           </div>
 
-          {user ? (
+          {isCheckingSession ? (
+            <div className="guild-auth-session" aria-live="polite">
+              <Loader2 className="spin" size={34} />
+              <div>
+                <strong>Verificando sessao</strong>
+                <span>Conectando ao backend da guilda.</span>
+              </div>
+            </div>
+          ) : user ? (
             <div className="guild-auth-session">
               <ShieldCheck size={38} />
               <div>
                 <strong>{user.name ?? user.email}</strong>
                 <span>{user.email}</span>
               </div>
+              <Link className="guild-auth-continue" href={nextPath}>
+                Abrir guilda
+                <ArrowRight size={16} />
+              </Link>
               <button onClick={handleLogout} type="button" disabled={isLoading}>
                 {isLoading ? <Loader2 className="spin" size={16} /> : <LogIn size={16} />}
                 Sair
@@ -207,9 +275,33 @@ export function LoginPanel() {
             </form>
           )}
 
-          {message && <p className="guild-auth-message">{message}</p>}
+          {message && <p className="guild-auth-message" aria-live="polite">{message}</p>}
         </div>
       </section>
     </main>
   );
+}
+
+async function readJson(response: Response) {
+  try {
+    return await response.json();
+  } catch {
+    return {};
+  }
+}
+
+function getAuthErrorMessage(message: string | string[] | undefined) {
+  if (Array.isArray(message)) {
+    return message[0] ?? "Nao foi possivel autenticar.";
+  }
+
+  return message ?? "Nao foi possivel autenticar.";
+}
+
+function getSafeNextPath(next: string | null) {
+  if (!next || !next.startsWith("/") || next.startsWith("//")) {
+    return "/guilds";
+  }
+
+  return next;
 }
