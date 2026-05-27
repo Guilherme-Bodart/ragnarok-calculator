@@ -12,7 +12,7 @@ type AuthUser = {
   createdAt: string;
 };
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 export function LoginPanel() {
   const [mode, setMode] = useState<AuthMode>("login");
