@@ -13,6 +13,8 @@ import {
   getPhysicalModifierFinalRate,
   getPhysicalModifierFlatPower,
   getPhysicalTraitFinalRate,
+  getWeaponRefineAtk,
+  getWeaponSizeMultiplier,
   getSkillMultiplier,
   sumMagicalEquipmentPower,
   sumPhysicalEquipmentPower,
@@ -63,6 +65,8 @@ type DamageFormulaContext = {
   traitFinalRate: number;
   modifierFinalRate: number;
   finalRateMultiplier: number;
+  weaponRefinePower: number;
+  weaponSizeMultiplier: number;
   elementMultiplier: number;
   defenseMultiplier: number;
   preDefenseDamage: number;
@@ -119,15 +123,22 @@ export class DamageFormulaPipeline {
         );
     const finalRateMultiplier =
       1 + (legacyBonusRate + traitFinalRate + modifierFinalRate) / 100;
+    const weaponRefinePower = magical
+      ? 0
+      : getWeaponRefineAtk(input.character.weaponLevel, input.character.weaponRefine);
+    const weaponSizeMultiplier = magical
+      ? 1
+      : getWeaponSizeMultiplier(input.character.weaponType, input.monster.size);
     const elementMultiplier = getElementMultiplier(input.skill, input.monster);
     const defenseMultiplier = getDefenseMultiplier(
       input.monster,
       input.skill.damageType,
     );
     const preDefenseDamage = Math.floor(
-      (basePower + equipmentPower + modifierFlatPower) *
+      (basePower + equipmentPower + modifierFlatPower + weaponRefinePower) *
         skillMultiplier *
         finalRateMultiplier *
+        weaponSizeMultiplier *
         elementMultiplier,
     );
     const singleHitDamage = Math.floor(preDefenseDamage * defenseMultiplier);
@@ -141,6 +152,8 @@ export class DamageFormulaPipeline {
       traitFinalRate,
       modifierFinalRate,
       finalRateMultiplier,
+      weaponRefinePower,
+      weaponSizeMultiplier,
       elementMultiplier,
       defenseMultiplier,
       preDefenseDamage,
@@ -207,6 +220,20 @@ export class DamageFormulaPipeline {
         label: "Final rate multiplier",
         value: context.finalRateMultiplier,
         group: "modifier",
+        unit: "multiplier",
+      },
+      {
+        key: "weaponRefinePower",
+        label: "Weapon refine power",
+        value: context.weaponRefinePower,
+        group: "item",
+        unit: "flat",
+      },
+      {
+        key: "weaponSizeMultiplier",
+        label: "Weapon size multiplier",
+        value: context.weaponSizeMultiplier,
+        group: "item",
         unit: "multiplier",
       },
       {

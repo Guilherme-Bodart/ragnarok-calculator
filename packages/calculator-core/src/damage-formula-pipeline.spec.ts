@@ -182,4 +182,66 @@ describe("DamageFormulaPipeline", () => {
       }),
     );
   });
+
+  it("applies physical weapon refine power and size penalty", () => {
+    const weapon: RoItem = {
+      id: 3,
+      name: "Refined Sword",
+      kind: "equipment",
+      attack: 100,
+      bonuses: [],
+      source: "manual",
+    };
+    const largeTarget: RoMonster = {
+      ...neutralTarget,
+      size: "large",
+    };
+    const swordCharacter = new EffectiveCharacterBuilder().build(
+      {
+        baseLevel: 100,
+        jobLevel: 50,
+        weaponType: "oneHandSword",
+        weaponLevel: 4,
+        weaponRefine: 7,
+        stats: {
+          str: 100,
+          agi: 1,
+          vit: 1,
+          int: 1,
+          dex: 50,
+          luk: 1,
+          pow: 0,
+          sta: 0,
+          wis: 0,
+          spl: 0,
+          con: 0,
+          crt: 0,
+        },
+      },
+      emptyModifierEffects.statBonuses,
+    );
+
+    const result = pipeline.calculate({
+      character: swordCharacter,
+      items: [weapon],
+      modifierEffects: emptyModifierEffects,
+      monster: largeTarget,
+      skill: physicalSkill,
+      skillLevel: 10,
+    });
+
+    expect(result.damage.average).toBe(344);
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "weaponRefinePower",
+        value: 49,
+      }),
+    );
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "weaponSizeMultiplier",
+        value: 0.75,
+      }),
+    );
+  });
 });
