@@ -2,7 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Crown, LayoutDashboard, Loader2, Mail, ShieldCheck, UserRound } from "lucide-react";
+import {
+  Crown,
+  Inbox,
+  LayoutDashboard,
+  Loader2,
+  Mail,
+  Plus,
+  ShieldCheck,
+  UserRound,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { GuildCreatePanel } from "./guild-create-panel";
@@ -18,6 +27,7 @@ export function GuildProfilePage() {
   const [context, setContext] = useState<CurrentGuildContext | null>(null);
   const [message, setMessage] = useState(t.loading);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -123,19 +133,39 @@ export function GuildProfilePage() {
                   <span>
                     <strong>{guild.name}</strong>
                     <small>
-                      {guild.server} · {formatGuildRole(guild.userRole)}
+                      {guild.server} - {formatGuildRole(guild.userRole)}
                     </small>
                   </span>
                   <LayoutDashboard size={16} />
                 </Link>
               </div>
             ) : (
-              <p className="guild-profile-empty">{t.emptyGuild}</p>
+              <div className="guild-profile-empty-stack">
+                <p className="guild-profile-empty">{t.emptyGuild}</p>
+                <button
+                  className="guild-secondary-button"
+                  onClick={() => setIsCreateOpen((current) => !current)}
+                  type="button"
+                >
+                  <Plus size={16} />
+                  {isCreateOpen ? t.hideCreateAction : t.showCreateAction}
+                </button>
+              </div>
             )}
           </article>
         </section>
 
-        {!guild && <GuildCreatePanel compact />}
+        <article className="guild-profile-card">
+          <div className="guild-panel-header">
+            <span>
+              <Inbox size={17} />
+              {t.invitesTitle}
+            </span>
+          </div>
+          <p className="guild-profile-empty">{t.emptyInvites}</p>
+        </article>
+
+        {!guild && isCreateOpen && <GuildCreatePanel compact />}
       </section>
     </main>
   );

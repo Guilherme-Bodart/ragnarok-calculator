@@ -1843,6 +1843,12 @@ a {
   gap: 10px;
 }
 
+.guild-profile-empty-stack {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+}
+
 .guild-profile-guild-row {
   min-height: 62px;
   display: flex;

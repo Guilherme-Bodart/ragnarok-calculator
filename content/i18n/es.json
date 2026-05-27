@@ -125,7 +125,11 @@
       "description": "Gestiona tu cuenta, mira tu guilda y crea un workspace cuando aún no tengas una.",
       "accountTitle": "Cuenta",
       "guildTitle": "Guilda",
-      "emptyGuild": "Aún no participas en una guilda."
+      "emptyGuild": "Aún no participas en una guilda.",
+      "showCreateAction": "Crear mi guilda",
+      "hideCreateAction": "Ocultar creación",
+      "invitesTitle": "Invitaciones",
+      "emptyInvites": "Cuando una guilda te invite, el mensaje aparecerá aquí."
     },
     "create": {
       "kicker": "Guild Workspace",

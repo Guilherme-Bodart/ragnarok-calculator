@@ -125,7 +125,11 @@
       "description": "Manage your account, view your guild, and create a workspace when you do not have one yet.",
       "accountTitle": "Account",
       "guildTitle": "Guild",
-      "emptyGuild": "You are not part of a guild yet."
+      "emptyGuild": "You are not part of a guild yet.",
+      "showCreateAction": "Create my guild",
+      "hideCreateAction": "Hide creation",
+      "invitesTitle": "Invites",
+      "emptyInvites": "When a guild invites you, the message will appear here."
     },
     "create": {
       "kicker": "Guild Workspace",
