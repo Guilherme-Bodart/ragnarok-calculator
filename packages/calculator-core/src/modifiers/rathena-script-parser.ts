@@ -62,6 +62,28 @@ const BONUS_MAPPERS: Record<
     createModifier("matkRate", "addPercent", command, conditions, variables),
   bBaseAtk: (command, conditions, variables) =>
     createModifier("baseAtk", "addFlat", command, conditions, variables),
+  bMaxHP: (command, conditions, variables) =>
+    createModifier("maxHp", "addFlat", command, conditions, variables),
+  bMaxHPrate: (command, conditions, variables) =>
+    createModifier("maxHpRate", "addPercent", command, conditions, variables),
+  bMaxSP: (command, conditions, variables) =>
+    createModifier("maxSp", "addFlat", command, conditions, variables),
+  bMaxSPrate: (command, conditions, variables) =>
+    createModifier("maxSpRate", "addPercent", command, conditions, variables),
+  bMaxAP: (command, conditions, variables) =>
+    createModifier("maxAp", "addFlat", command, conditions, variables),
+  bMaxAPrate: (command, conditions, variables) =>
+    createModifier("maxApRate", "addPercent", command, conditions, variables),
+  bHit: (command, conditions, variables) =>
+    createModifier("hit", "addFlat", command, conditions, variables),
+  bFlee: (command, conditions, variables) =>
+    createModifier("flee", "addFlat", command, conditions, variables),
+  bCritical: (command, conditions, variables) =>
+    createModifier("crit", "addFlat", command, conditions, variables),
+  bAspd: (command, conditions, variables) =>
+    createModifier("aspd", "addFlat", command, conditions, variables),
+  bAspdRate: (command, conditions, variables) =>
+    createModifier("aspdRate", "addPercent", command, conditions, variables),
 };
 
 const BONUS2_MAPPERS: Record<
@@ -689,7 +711,18 @@ function createModifier(
     | "smatk"
     | "atkRate"
     | "matkRate"
-    | "baseAtk",
+    | "baseAtk"
+    | "maxHp"
+    | "maxHpRate"
+    | "maxSp"
+    | "maxSpRate"
+    | "maxAp"
+    | "maxApRate"
+    | "hit"
+    | "flee"
+    | "crit"
+    | "aspd"
+    | "aspdRate",
   operator: "addFlat" | "addPercent",
   command: ParsedCommand,
   conditions: ModifierCondition[],

@@ -192,4 +192,41 @@ describe("CalculatorModifierEffectsFactory", () => {
       'autobonus "{ bonus bBaseAtk,100; }",10,5000;',
     ]);
   });
+
+  it("converts status modifiers used by the character status engine", () => {
+    const item: RoItem = {
+      id: 5,
+      name: "Status Modifier Armor",
+      kind: "equipment",
+      bonuses: [],
+      rawScript: `
+        bonus bMaxHP,500;
+        bonus bMaxHPrate,10;
+        bonus bMaxSP,100;
+        bonus bMaxSPrate,5;
+        bonus bMaxAP,25;
+        bonus bHit,15;
+        bonus bFlee,20;
+        bonus bCritical,7;
+        bonus bAspd,1;
+        bonus bAspdRate,10;
+      `,
+      source: "manual",
+    };
+
+    const effects = factory.fromItems([item]);
+
+    expect(effects).toMatchObject({
+      maxHp: 500,
+      maxHpRate: 10,
+      maxSp: 100,
+      maxSpRate: 5,
+      maxAp: 25,
+      hit: 15,
+      flee: 20,
+      crit: 7,
+      aspd: 1,
+      aspdRate: 10,
+    });
+  });
 });

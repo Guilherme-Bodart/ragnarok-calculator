@@ -116,30 +116,48 @@ export class CharacterStatusEngine {
         luk: effectiveStats.luk,
       },
       jobBasepoints,
-      maxHp: this.calculateMaxHp(jobBasepoints.baseHp, effectiveStats.vit),
-      maxSp: this.calculateMaxSp(jobBasepoints.baseSp, effectiveStats.int),
-      maxAp: jobBasepoints.baseAp,
+      maxHp: this.applyFlatAndRate(
+        this.calculateMaxHp(jobBasepoints.baseHp, effectiveStats.vit),
+        input.modifierEffects?.maxHp ?? 0,
+        input.modifierEffects?.maxHpRate ?? 0,
+      ),
+      maxSp: this.applyFlatAndRate(
+        this.calculateMaxSp(jobBasepoints.baseSp, effectiveStats.int),
+        input.modifierEffects?.maxSp ?? 0,
+        input.modifierEffects?.maxSpRate ?? 0,
+      ),
+      maxAp: this.applyFlatAndRate(
+        jobBasepoints.baseAp,
+        input.modifierEffects?.maxAp ?? 0,
+        input.modifierEffects?.maxApRate ?? 0,
+      ),
       statusAtk,
       statusMatk,
       atk: statusAtk + equipmentAtk + flatAtk,
       matk: statusMatk + equipmentMatk + flatMatk,
-      hit: Math.floor(
-        input.character.baseLevel +
-          effectiveStats.dex +
-          effectiveStats.luk / 3 +
-          effectiveStats.con,
-      ),
-      flee: Math.floor(
-        input.character.baseLevel +
-          effectiveStats.agi +
-          effectiveStats.luk / 5 +
-          effectiveStats.con * 2,
-      ),
-      crit: Math.floor(effectiveStats.luk / 3 + traitEffects.criticalDamageRate),
+      hit:
+        Math.floor(
+          input.character.baseLevel +
+            effectiveStats.dex +
+            effectiveStats.luk / 3 +
+            effectiveStats.con,
+        ) + (input.modifierEffects?.hit ?? 0),
+      flee:
+        Math.floor(
+          input.character.baseLevel +
+            effectiveStats.agi +
+            effectiveStats.luk / 5 +
+            effectiveStats.con * 2,
+        ) + (input.modifierEffects?.flee ?? 0),
+      crit:
+        Math.floor(effectiveStats.luk / 3 + traitEffects.criticalDamageRate) +
+        (input.modifierEffects?.crit ?? 0),
       aspd: this.aspdEngine.calculate({
         classId: input.character.classId,
         weaponType,
         effectiveStats,
+        flatAspd: input.modifierEffects?.aspd ?? 0,
+        aspdRate: input.modifierEffects?.aspdRate ?? 0,
       }),
       traitEffects,
     };
@@ -207,6 +225,10 @@ export class CharacterStatusEngine {
 
   private calculateMaxSp(baseSp: number, int: number) {
     return baseSp > 0 ? Math.floor(baseSp * (1 + int / 100)) : 0;
+  }
+
+  private applyFlatAndRate(baseValue: number, flatBonus: number, rateBonus: number) {
+    return Math.floor((baseValue + flatBonus) * (1 + rateBonus / 100));
   }
 }
 

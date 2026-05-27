@@ -17,6 +17,17 @@ export type CalculatorModifierEffects = {
   smatk: number;
   atkRate: number;
   matkRate: number;
+  maxHp: number;
+  maxHpRate: number;
+  maxSp: number;
+  maxSpRate: number;
+  maxAp: number;
+  maxApRate: number;
+  hit: number;
+  flee: number;
+  crit: number;
+  aspd: number;
+  aspdRate: number;
   raceDamageRate: Partial<Record<ModifierRaceId, number>>;
   elementDamageRate: Partial<Record<ModifierElementId, number>>;
   sizeDamageRate: Partial<Record<ModifierSizeId, number>>;
@@ -51,6 +62,17 @@ export class CalculatorModifierEffectsFactory {
       smatk: 0,
       atkRate: 0,
       matkRate: 0,
+      maxHp: 0,
+      maxHpRate: 0,
+      maxSp: 0,
+      maxSpRate: 0,
+      maxAp: 0,
+      maxApRate: 0,
+      hit: 0,
+      flee: 0,
+      crit: 0,
+      aspd: 0,
+      aspdRate: 0,
       raceDamageRate: {},
       elementDamageRate: {},
       sizeDamageRate: {},
@@ -120,6 +142,61 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "matkRate" && bucket.target.type === "self") {
           effects.matkRate += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "maxHp" && bucket.target.type === "self") {
+          effects.maxHp += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "maxHpRate" && bucket.target.type === "self") {
+          effects.maxHpRate += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "maxSp" && bucket.target.type === "self") {
+          effects.maxSp += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "maxSpRate" && bucket.target.type === "self") {
+          effects.maxSpRate += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "maxAp" && bucket.target.type === "self") {
+          effects.maxAp += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "maxApRate" && bucket.target.type === "self") {
+          effects.maxApRate += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "hit" && bucket.target.type === "self") {
+          effects.hit += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "flee" && bucket.target.type === "self") {
+          effects.flee += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "crit" && bucket.target.type === "self") {
+          effects.crit += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "aspd" && bucket.target.type === "self") {
+          effects.aspd += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "aspdRate" && bucket.target.type === "self") {
+          effects.aspdRate += bucket.value;
           continue;
         }
 

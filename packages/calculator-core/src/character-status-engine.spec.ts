@@ -18,6 +18,17 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   smatk: 0,
   atkRate: 0,
   matkRate: 0,
+  maxHp: 0,
+  maxHpRate: 0,
+  maxSp: 0,
+  maxSpRate: 0,
+  maxAp: 0,
+  maxApRate: 0,
+  hit: 0,
+  flee: 0,
+  crit: 0,
+  aspd: 0,
+  aspdRate: 0,
   raceDamageRate: {},
   elementDamageRate: {},
   sizeDamageRate: {},
@@ -64,6 +75,13 @@ describe("CharacterStatusEngine", () => {
           luk: 0,
         },
         flatAtk: 25,
+        maxHp: 100,
+        maxHpRate: 10,
+        maxSpRate: 5,
+        hit: 3,
+        flee: 4,
+        crit: 2,
+        aspd: 1,
       },
     });
 
@@ -75,15 +93,15 @@ describe("CharacterStatusEngine", () => {
       spl: 3,
       con: 5,
     });
-    expect(status.maxHp).toBe(6238);
-    expect(status.maxSp).toBe(270);
+    expect(status.maxHp).toBe(6971);
+    expect(status.maxSp).toBe(283);
     expect(status.statusAtk).toBe(345);
     expect(status.statusMatk).toBe(183);
     expect(status.atk).toBe(370);
-    expect(status.hit).toBe(153);
-    expect(status.flee).toBe(130);
-    expect(status.crit).toBe(4);
-    expect(status.aspd).toBe(167.67);
+    expect(status.hit).toBe(156);
+    expect(status.flee).toBe(134);
+    expect(status.crit).toBe(6);
+    expect(status.aspd).toBe(168.67);
   });
 
   it("adds equipment power and flat modifiers to final attack values", () => {
