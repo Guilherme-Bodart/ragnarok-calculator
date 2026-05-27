@@ -94,6 +94,12 @@ describe("calculateDamageFromDataset", () => {
 
     expect(result.damage.average).toBe(500);
     expect(result.damage.total).toBe(500);
+    expect(result.characterStatus).toMatchObject({
+      statusAtk: 300,
+      atk: 400,
+      maxHp: 0,
+      maxSp: 0,
+    });
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "unsupportedModifierStatements",

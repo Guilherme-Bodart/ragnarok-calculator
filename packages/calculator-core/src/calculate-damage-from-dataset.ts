@@ -1,6 +1,6 @@
 import { CalculatorModifierEffectsFactory } from "./calculator-modifier-effects";
+import { CharacterStatusEngine } from "./character-status-engine";
 import { DamageEngine } from "./damage-engine";
-import { EffectiveCharacterBuilder } from "./effective-character";
 import type { RulesetContext } from "./rulesets";
 import type { CalculatorCharacter, RoItem, RoMonster, RoSkill } from "./ro-types";
 
@@ -69,12 +69,13 @@ export function calculateDamageFromDataset(
       ruleset: input.ruleset,
     },
   );
-  const effectiveCharacter = new EffectiveCharacterBuilder().build(
-    input.character,
-    modifierEffects.statBonuses,
-  );
+  const characterStatus = new CharacterStatusEngine().calculate({
+    character: input.character,
+    items,
+    modifierEffects,
+  });
   const result = new DamageEngine().calculate({
-    character: effectiveCharacter,
+    character: characterStatus,
     items,
     modifierEffects,
     monster,
@@ -87,6 +88,7 @@ export function calculateDamageFromDataset(
       precision: "prototype",
       note: "Initial calculator engine. Renewal/iRO rounding and skill exceptions will be added per class tree.",
     },
+    characterStatus,
     target: monster,
     skill,
     damage: result.damage,
