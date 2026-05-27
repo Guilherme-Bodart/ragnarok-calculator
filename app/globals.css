@@ -15,9 +15,10 @@
 }
 
 :root {
-  --font-body: "Inter", "Segoe UI", Arial, sans-serif;
-  --font-display: Georgia, "Times New Roman", serif;
-  --font-rune: "Courier New", "Lucida Console", monospace;
+  --font-body: var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-title: var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-rune: var(--font-jetbrains-mono), "Courier New", monospace;
   --shell: 1120px;
   --narrow: 720px;
   --background: #020612;
@@ -237,11 +238,11 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px;
-  border: 1px solid rgb(167 239 255 / 0.16);
+  padding: 0;
+  border: 0;
   border-radius: 999px;
-  background: rgb(2 6 18 / 0.68);
-  box-shadow: 0 14px 44px rgb(0 0 0 / 0.28);
+  background: transparent;
+  box-shadow: none;
   backdrop-filter: blur(16px);
 }
 
@@ -257,16 +258,17 @@ a {
 .language-switcher select {
   min-width: 68px;
   border-radius: 999px;
-  padding: 8px 30px 8px 12px;
+  padding: 10px 34px 10px 16px;
   border-color: rgb(167 239 255 / 0.2);
   color: #f2fbff;
-  background-color: rgb(2 6 18 / 0.36);
-  font-family: var(--font-rune);
-  font-size: 11px;
+  background-color: rgb(2 6 18 / 0.62);
+  font-family: var(--font-body);
+  font-size: 12px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 0 24px rgb(85 199 255 / 0.28);
+  box-shadow: 0 14px 44px rgb(0 0 0 / 0.28);
   outline: none;
+  backdrop-filter: blur(16px);
 }
 
 .language-switcher select:focus-visible {
@@ -311,7 +313,7 @@ a {
 
   .language-switcher select {
     min-width: 62px;
-    padding-inline: 10px 26px;
+    padding-inline: 12px 30px;
   }
 }
 
