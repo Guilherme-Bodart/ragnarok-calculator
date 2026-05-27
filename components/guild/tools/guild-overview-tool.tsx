@@ -1,5 +1,5 @@
 import { Activity, Bell, CalendarClock, Radio, TimerReset, Users } from "lucide-react";
-import { getMvpStatus } from "../guild-mock-data";
+import { getMvpStatus } from "../guild-time";
 import type { GuildToolComponentProps } from "../guild-tool-types";
 
 export function GuildOverviewTool({ dashboard }: GuildToolComponentProps) {

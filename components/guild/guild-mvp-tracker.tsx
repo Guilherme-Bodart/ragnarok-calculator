@@ -3,7 +3,8 @@
 import { FormEvent, useMemo, useState } from "react";
 import { Clock3, MapPin, Plus, Skull, TimerReset } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { createLocalMvpEntry, getMvpStatus } from "./guild-mock-data";
+import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
+import { getMvpStatus } from "./guild-time";
 import type { MvpKillEntry, MvpSpawnStatus } from "./guild-types";
 
 type GuildMvpTrackerProps = {
@@ -27,6 +28,8 @@ export function GuildMvpTracker({
   onCreateEntry,
   slug,
 }: GuildMvpTrackerProps) {
+  const { dictionary } = useNightmareLocale();
+  const t = dictionary.guild.mvp;
   const [mvpName, setMvpName] = useState(commonMvps[0].name);
   const [map, setMap] = useState(commonMvps[0].map);
   const [killedAt, setKilledAt] = useState(() => toDatetimeLocal(new Date()));
@@ -85,6 +88,7 @@ export function GuildMvpTracker({
       const response = await fetch(`${apiBaseUrl}/guilds/${slug}/mvp-kills`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
 
@@ -95,10 +99,9 @@ export function GuildMvpTracker({
       const data = (await response.json()) as { entry: MvpKillEntry };
       onCreateEntry(data.entry);
       setNotes("");
-      setMessage("MVP registrado.");
+      setMessage(t.saved);
     } catch {
-      onCreateEntry(createLocalMvpEntry(payload));
-      setMessage("API offline: registro salvo localmente para preview.");
+      setMessage(t.saveError);
     } finally {
       setIsSaving(false);
     }
@@ -110,22 +113,22 @@ export function GuildMvpTracker({
         <div>
           <span className="guild-tool-eyebrow">
             <Skull size={16} />
-            MVP Tracker
+            {t.eyebrow}
           </span>
-          <h2>Respawn command board</h2>
-          <p>Registre mortes, acompanhe janelas e mantenha a guilda alinhada.</p>
+          <h2>{t.title}</h2>
+          <p>{t.description}</p>
         </div>
         <div className="guild-mvp-summary">
-          <SummaryCard label="Aguardando" value={statusSummary.waiting} tone="waiting" />
-          <SummaryCard label="Em breve" value={statusSummary.soon} tone="soon" />
-          <SummaryCard label="Nasceu" value={statusSummary.spawned} tone="spawned" />
+          <SummaryCard label={t.waiting} value={statusSummary.waiting} tone="waiting" />
+          <SummaryCard label={t.soon} value={statusSummary.soon} tone="soon" />
+          <SummaryCard label={t.spawned} value={statusSummary.spawned} tone="spawned" />
         </div>
       </header>
 
       <form className="guild-mvp-form" onSubmit={handleSubmit}>
         <div className="guild-mvp-form-grid">
           <label>
-            MVP
+            {t.mvpLabel}
             <select value={mvpName} onChange={(event) => handlePresetChange(event.target.value)}>
               {commonMvps.map((mvp) => (
                 <option key={mvp.name} value={mvp.name}>
@@ -135,11 +138,11 @@ export function GuildMvpTracker({
             </select>
           </label>
           <label>
-            Mapa
+            {t.mapLabel}
             <input value={map} onChange={(event) => setMap(event.target.value)} />
           </label>
           <label>
-            Horario da morte
+            {t.killedAtLabel}
             <input
               type="datetime-local"
               value={killedAt}
@@ -147,7 +150,7 @@ export function GuildMvpTracker({
             />
           </label>
           <label>
-            Cooldown
+            {t.cooldownLabel}
             <input
               min={1}
               max={1440}
@@ -157,13 +160,13 @@ export function GuildMvpTracker({
             />
           </label>
           <label className="guild-mvp-notes">
-            Nota
+            {t.notesLabel}
             <input value={notes} onChange={(event) => setNotes(event.target.value)} />
           </label>
         </div>
         <button className="guild-primary-button" disabled={isSaving} type="submit">
           <Plus size={16} />
-          Registrar morte
+          {t.submit}
         </button>
       </form>
 
@@ -173,19 +176,19 @@ export function GuildMvpTracker({
         <div className="guild-panel-header">
           <span>
             <TimerReset size={17} />
-            Timers ativos
+            {t.activeTimers}
           </span>
-          <small>{sortedEntries.length} registros</small>
+          <small>{sortedEntries.length} {t.records}</small>
         </div>
         <table className="guild-mvp-table">
           <thead>
             <tr>
               <th>MVP</th>
-              <th>Mapa</th>
-              <th>Morte</th>
-              <th>Respawn</th>
-              <th>Status</th>
-              <th>Por</th>
+              <th>{t.mapLabel}</th>
+              <th>{t.deathColumn}</th>
+              <th>{t.respawnColumn}</th>
+              <th>{t.statusColumn}</th>
+              <th>{t.recordedByColumn}</th>
             </tr>
           </thead>
           <tbody>
@@ -204,7 +207,14 @@ export function GuildMvpTracker({
                   </span>
                 </td>
                 <td>
-                  <StatusPill status={entry.status} />
+                  <StatusPill
+                    labels={{
+                      waiting: t.waiting,
+                      soon: t.soonStatus,
+                      spawned: t.spawnedStatus,
+                    }}
+                    status={entry.status}
+                  />
                 </td>
                 <td>{entry.recordedBy}</td>
               </tr>
@@ -234,17 +244,17 @@ function SummaryCard({
   );
 }
 
-function StatusPill({ status }: { status: MvpSpawnStatus }) {
-  const label = {
-    waiting: "Aguardando",
-    soon: "Nascendo em breve",
-    spawned: "Ja nasceu",
-  }[status];
-
+function StatusPill({
+  labels,
+  status,
+}: {
+  labels: Record<MvpSpawnStatus, string>;
+  status: MvpSpawnStatus;
+}) {
   return (
     <span className={cn("guild-status-pill", `status-${status}`)}>
       <TimerReset size={14} />
-      {label}
+      {labels[status]}
     </span>
   );
 }

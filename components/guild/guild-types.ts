@@ -71,7 +71,7 @@ export type CurrentGuildUser = {
 export type CurrentGuildContext = {
   user: CurrentGuildUser;
   guilds: GuildSummary[];
-  activeGuild: GuildSummary;
+  activeGuild: GuildSummary | null;
 };
 
 export type MvpKillEntry = {

@@ -106,5 +106,52 @@
     "registered": "Conta criada. Abrindo sua guilda...",
     "loggedIn": "Login efetuado. Abrindo sua guilda...",
     "loggedOut": "Sessão encerrada."
+  },
+  "guild": {
+    "loadingTitle": "Guild Command",
+    "loadingMessage": "Procurando sua guilda...",
+    "loadingDashboardTitle": "Carregando guilda",
+    "loadingDashboardMessage": "Validando seu acesso...",
+    "loginRequired": "Faça login para acessar sua guilda.",
+    "accessDenied": "Você não tem acesso a esta guilda.",
+    "loadError": "Não foi possível carregar a guilda.",
+    "connected": "API conectada",
+    "syncing": "Sincronizando",
+    "create": {
+      "title": "Crie sua primeira guilda",
+      "description": "Seu usuário já está autenticado. Agora crie um workspace para membros, convites, ferramentas e timers.",
+      "nameLabel": "Nome da guilda",
+      "slugLabel": "Slug",
+      "descriptionLabel": "Descrição",
+      "serverLabel": "Servidor",
+      "submit": "Criar guilda",
+      "creating": "Criando...",
+      "slugHint": "Usado na URL da guilda.",
+      "error": "Não foi possível criar a guilda."
+    },
+    "mvp": {
+      "eyebrow": "MVP Tracker",
+      "title": "Respawn command board",
+      "description": "Registre mortes, acompanhe janelas e mantenha a guilda alinhada.",
+      "waiting": "Aguardando",
+      "soon": "Em breve",
+      "spawned": "Nasceu",
+      "mvpLabel": "MVP",
+      "mapLabel": "Mapa",
+      "killedAtLabel": "Horário da morte",
+      "cooldownLabel": "Cooldown",
+      "notesLabel": "Nota",
+      "submit": "Registrar morte",
+      "activeTimers": "Timers ativos",
+      "records": "registros",
+      "deathColumn": "Morte",
+      "respawnColumn": "Respawn",
+      "statusColumn": "Status",
+      "recordedByColumn": "Por",
+      "soonStatus": "Nascendo em breve",
+      "spawnedStatus": "Já nasceu",
+      "saved": "MVP registrado.",
+      "saveError": "Não foi possível registrar o MVP."
+    }
   }
 }

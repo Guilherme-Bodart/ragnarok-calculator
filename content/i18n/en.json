@@ -106,5 +106,52 @@
     "registered": "Account created. Opening your guild...",
     "loggedIn": "Signed in. Opening your guild...",
     "loggedOut": "Session closed."
+  },
+  "guild": {
+    "loadingTitle": "Guild Command",
+    "loadingMessage": "Looking for your guild...",
+    "loadingDashboardTitle": "Loading guild",
+    "loadingDashboardMessage": "Validating your access...",
+    "loginRequired": "Sign in to access your guild.",
+    "accessDenied": "You do not have access to this guild.",
+    "loadError": "Could not load the guild.",
+    "connected": "API connected",
+    "syncing": "Syncing",
+    "create": {
+      "title": "Create your first guild",
+      "description": "Your user is authenticated. Now create a workspace for members, invites, tools, and timers.",
+      "nameLabel": "Guild name",
+      "slugLabel": "Slug",
+      "descriptionLabel": "Description",
+      "serverLabel": "Server",
+      "submit": "Create guild",
+      "creating": "Creating...",
+      "slugHint": "Used in the guild URL.",
+      "error": "Could not create the guild."
+    },
+    "mvp": {
+      "eyebrow": "MVP Tracker",
+      "title": "Respawn command board",
+      "description": "Register kills, track windows, and keep the guild aligned.",
+      "waiting": "Waiting",
+      "soon": "Soon",
+      "spawned": "Spawned",
+      "mvpLabel": "MVP",
+      "mapLabel": "Map",
+      "killedAtLabel": "Death time",
+      "cooldownLabel": "Cooldown",
+      "notesLabel": "Note",
+      "submit": "Register kill",
+      "activeTimers": "Active timers",
+      "records": "records",
+      "deathColumn": "Death",
+      "respawnColumn": "Respawn",
+      "statusColumn": "Status",
+      "recordedByColumn": "By",
+      "soonStatus": "Spawning soon",
+      "spawnedStatus": "Already spawned",
+      "saved": "MVP registered.",
+      "saveError": "Could not register the MVP."
+    }
   }
 }

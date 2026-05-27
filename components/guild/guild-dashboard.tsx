@@ -3,27 +3,36 @@
 import { useEffect, useState } from "react";
 import { LayoutDashboard } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { GuildAppShell } from "./guild-app-shell";
-import { fallbackDashboard } from "./guild-mock-data";
 import type { GuildDashboard as GuildDashboardData, MvpKillEntry } from "./guild-types";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 export function GuildDashboard({ slug }: { slug: string }) {
   const router = useRouter();
+  const { dictionary } = useNightmareLocale();
+  const t = dictionary.guild;
   const [dashboard, setDashboard] = useState<GuildDashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [notice, setNotice] = useState("Carregando guilda mockada...");
+  const [notice, setNotice] = useState(t.loadingDashboardMessage);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadDashboard() {
       try {
-        const response = await fetch(`${apiBaseUrl}/guilds/${slug}/dashboard`);
+        const response = await fetch(`${apiBaseUrl}/guilds/${slug}/dashboard`, {
+          credentials: "include",
+        });
+
+        if (response.status === 401) {
+          router.replace(`/login?next=/guilds/${slug}`);
+          return;
+        }
 
         if (response.status === 403 || response.status === 404) {
-          router.replace("/");
+          router.replace("/guilds");
           return;
         }
 
@@ -35,16 +44,11 @@ export function GuildDashboard({ slug }: { slug: string }) {
 
         if (isMounted) {
           setDashboard(payload);
-          setNotice("Mock API conectada.");
+          setNotice(t.connected);
         }
       } catch {
         if (isMounted) {
-          if (slug === fallbackDashboard.guild.slug) {
-            setDashboard(fallbackDashboard);
-            setNotice("API offline: usando dados locais de preview.");
-          } else {
-            router.replace("/");
-          }
+          setNotice(t.loadError);
         }
       } finally {
         if (isMounted) {
@@ -58,17 +62,17 @@ export function GuildDashboard({ slug }: { slug: string }) {
     return () => {
       isMounted = false;
     };
-  }, [router, slug]);
+  }, [router, slug, t.connected, t.loadError]);
 
   function handleCreateMvpEntry(entry: MvpKillEntry) {
-    setDashboard((current) => {
-      const baseDashboard = current ?? fallbackDashboard;
-
-      return {
-        ...baseDashboard,
-        mvpEntries: [entry, ...baseDashboard.mvpEntries],
-      };
-    });
+    setDashboard((current) =>
+      current
+        ? {
+            ...current,
+            mvpEntries: [entry, ...current.mvpEntries],
+          }
+        : current,
+    );
   }
 
   if (!dashboard) {
@@ -77,8 +81,8 @@ export function GuildDashboard({ slug }: { slug: string }) {
         <div className="guild-grid-bg" />
         <section className="guild-loading-panel" aria-live="polite">
           <LayoutDashboard size={22} />
-          <strong>Carregando guilda</strong>
-          <span>Validando acesso do usuario mockado...</span>
+          <strong>{t.loadingDashboardTitle}</strong>
+          <span>{notice}</span>
         </section>
       </main>
     );
@@ -87,7 +91,7 @@ export function GuildDashboard({ slug }: { slug: string }) {
   return (
     <GuildAppShell
       dashboard={dashboard}
-      notice={isLoading ? "Syncing" : notice}
+      notice={isLoading ? t.syncing : notice}
       onCreateMvpEntry={handleCreateMvpEntry}
     />
   );
