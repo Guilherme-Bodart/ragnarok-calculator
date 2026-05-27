@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { Clock3, Plus, Skull, TimerReset } from "lucide-react";
+import { Clock3, MapPin, Plus, Skull, TimerReset } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createLocalMvpEntry, getMvpStatus } from "./guild-mock-data";
 import type { MvpKillEntry, MvpSpawnStatus } from "./guild-types";
@@ -47,6 +47,14 @@ export function GuildMvpTracker({
             new Date(first.respawnAt).getTime() - new Date(second.respawnAt).getTime(),
         ),
     [entries],
+  );
+  const statusSummary = useMemo(
+    () => ({
+      waiting: sortedEntries.filter((entry) => entry.status === "waiting").length,
+      soon: sortedEntries.filter((entry) => entry.status === "soon").length,
+      spawned: sortedEntries.filter((entry) => entry.status === "spawned").length,
+    }),
+    [sortedEntries],
   );
 
   function handlePresetChange(value: string) {
@@ -98,60 +106,77 @@ export function GuildMvpTracker({
 
   return (
     <section className="guild-mvp-panel" aria-label="MVP tracker">
-      <div className="guild-panel-header">
-        <span>
-          <Skull size={17} />
-          MVP Tracker
-        </span>
-        <small>{sortedEntries.length} timers ativos</small>
-      </div>
+      <header className="guild-mvp-hero">
+        <div>
+          <span className="guild-tool-eyebrow">
+            <Skull size={16} />
+            MVP Tracker
+          </span>
+          <h2>Respawn command board</h2>
+          <p>Registre mortes, acompanhe janelas e mantenha a guilda alinhada.</p>
+        </div>
+        <div className="guild-mvp-summary">
+          <SummaryCard label="Aguardando" value={statusSummary.waiting} tone="waiting" />
+          <SummaryCard label="Em breve" value={statusSummary.soon} tone="soon" />
+          <SummaryCard label="Nasceu" value={statusSummary.spawned} tone="spawned" />
+        </div>
+      </header>
 
       <form className="guild-mvp-form" onSubmit={handleSubmit}>
-        <label>
-          MVP
-          <select value={mvpName} onChange={(event) => handlePresetChange(event.target.value)}>
-            {commonMvps.map((mvp) => (
-              <option key={mvp.name} value={mvp.name}>
-                {mvp.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Mapa
-          <input value={map} onChange={(event) => setMap(event.target.value)} />
-        </label>
-        <label>
-          Horario da morte
-          <input
-            type="datetime-local"
-            value={killedAt}
-            onChange={(event) => setKilledAt(event.target.value)}
-          />
-        </label>
-        <label>
-          Cooldown
-          <input
-            min={1}
-            max={1440}
-            type="number"
-            value={respawnMinutes}
-            onChange={(event) => setRespawnMinutes(Number(event.target.value))}
-          />
-        </label>
-        <label className="guild-mvp-notes">
-          Nota
-          <input value={notes} onChange={(event) => setNotes(event.target.value)} />
-        </label>
+        <div className="guild-mvp-form-grid">
+          <label>
+            MVP
+            <select value={mvpName} onChange={(event) => handlePresetChange(event.target.value)}>
+              {commonMvps.map((mvp) => (
+                <option key={mvp.name} value={mvp.name}>
+                  {mvp.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Mapa
+            <input value={map} onChange={(event) => setMap(event.target.value)} />
+          </label>
+          <label>
+            Horario da morte
+            <input
+              type="datetime-local"
+              value={killedAt}
+              onChange={(event) => setKilledAt(event.target.value)}
+            />
+          </label>
+          <label>
+            Cooldown
+            <input
+              min={1}
+              max={1440}
+              type="number"
+              value={respawnMinutes}
+              onChange={(event) => setRespawnMinutes(Number(event.target.value))}
+            />
+          </label>
+          <label className="guild-mvp-notes">
+            Nota
+            <input value={notes} onChange={(event) => setNotes(event.target.value)} />
+          </label>
+        </div>
         <button className="guild-primary-button" disabled={isSaving} type="submit">
           <Plus size={16} />
-          Registrar
+          Registrar morte
         </button>
       </form>
 
       {message && <p className="guild-inline-message">{message}</p>}
 
-      <div className="guild-mvp-table-wrap">
+      <div className="guild-mvp-board">
+        <div className="guild-panel-header">
+          <span>
+            <TimerReset size={17} />
+            Timers ativos
+          </span>
+          <small>{sortedEntries.length} registros</small>
+        </div>
         <table className="guild-mvp-table">
           <thead>
             <tr>
@@ -188,6 +213,24 @@ export function GuildMvpTracker({
         </table>
       </div>
     </section>
+  );
+}
+
+function SummaryCard({
+  label,
+  tone,
+  value,
+}: {
+  label: string;
+  tone: MvpSpawnStatus;
+  value: number;
+}) {
+  return (
+    <div className={cn("guild-mvp-summary-card", `tone-${tone}`)}>
+      <MapPin size={15} />
+      <strong>{value}</strong>
+      <span>{label}</span>
+    </div>
   );
 }
 
