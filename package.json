@@ -9,7 +9,7 @@
     "sprite:costume": "node scripts/generate-costume-walker.mjs",
     "build": "next build",
     "build:api": "npm --prefix api run build",
-    "render:api:build": "npm --prefix api ci && npm --prefix api run prisma:generate && npm --prefix api run build",
+    "render:api:build": "npm --prefix api install && npm --prefix api run prisma:generate && npm --prefix api run build",
     "render:api:start": "npm --prefix api run start",
     "start": "next start",
     "lint": "eslint",
