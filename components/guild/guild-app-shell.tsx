@@ -13,6 +13,7 @@ type GuildAppShellProps = {
   dashboard: GuildDashboard;
   notice: string;
   onCreateMvpEntry: (entry: MvpKillEntry) => void;
+  onRefreshDashboard: () => Promise<void>;
 };
 
 const categoryLabels: Record<GuildToolDefinition["category"], string> = {
@@ -26,20 +27,22 @@ export function GuildAppShell({
   dashboard,
   notice,
   onCreateMvpEntry,
+  onRefreshDashboard,
 }: GuildAppShellProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeToolId = searchParams.get("tool");
   const activeTool = getGuildTool(activeToolId);
-  const canUseActiveTool = canUseGuildTool(
-    dashboard.guild.userRole,
-    activeTool.permissions,
-  );
+  const activeAccess = getDashboardTool(dashboard, activeTool.id);
+  const canUseActiveTool = canUseGuildTool(dashboard.guild.userRole, activeAccess?.minimumRole ?? null);
   const renderableTool = canUseActiveTool && activeTool.status === "ready" ? activeTool : guildTools[0];
   const ActiveComponent = renderableTool.component;
   const unreadCount = dashboard.notifications.filter((item) => !item.read).length;
   const visibleTools = guildTools.filter((tool) =>
-    canUseGuildTool(dashboard.guild.userRole, tool.permissions),
+    canUseGuildTool(
+      dashboard.guild.userRole,
+      getDashboardTool(dashboard, tool.id)?.minimumRole ?? null,
+    ),
   );
 
   function activateTool(tool: GuildToolDefinition) {
@@ -156,7 +159,11 @@ export function GuildAppShell({
 
         <div className="guild-workspace-shell">
           <section className="guild-workspace-content">
-            <ActiveComponent dashboard={dashboard} onCreateMvpEntry={onCreateMvpEntry} />
+            <ActiveComponent
+              dashboard={dashboard}
+              onCreateMvpEntry={onCreateMvpEntry}
+              onRefreshDashboard={onRefreshDashboard}
+            />
           </section>
 
           <aside className="guild-notification-center" aria-label="Notification center">
@@ -180,4 +187,8 @@ export function GuildAppShell({
       </section>
     </main>
   );
+}
+
+function getDashboardTool(dashboard: GuildDashboard, toolId: string) {
+  return dashboard.tools.find((tool) => tool.id === toolId) ?? null;
 }

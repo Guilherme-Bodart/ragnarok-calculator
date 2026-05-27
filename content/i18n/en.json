@@ -167,6 +167,28 @@
       "spawnedStatus": "Already spawned",
       "saved": "MVP registered.",
       "saveError": "Could not register the MVP."
+    },
+    "management": {
+      "membersTitle": "Members",
+      "rolesTitle": "Roles",
+      "toolsTitle": "Tool access",
+      "invitesTitle": "Invites",
+      "leadershipTitle": "Leadership",
+      "rankLabel": "Order",
+      "moveUp": "Move role up",
+      "moveDown": "Move role down",
+      "roleNameLabel": "Role name",
+      "roleColorLabel": "Role color",
+      "createRoleAction": "Create role",
+      "minimumRoleLabel": "Minimum role",
+      "memberRoleLabel": "Member role",
+      "transferAction": "Transfer leadership",
+      "deleteGuildAction": "Delete guild",
+      "deleteConfirm": "Are you sure? This deletes the guild and removes every member link.",
+      "leadershipTransferred": "Leadership transferred.",
+      "roleSaved": "Role saved.",
+      "actionError": "Could not complete the action.",
+      "noClass": "No class set"
     }
   }
 }

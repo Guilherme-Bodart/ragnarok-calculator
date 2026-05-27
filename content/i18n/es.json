@@ -167,6 +167,28 @@
       "spawnedStatus": "Ya nació",
       "saved": "MVP registrado.",
       "saveError": "No fue posible registrar el MVP."
+    },
+    "management": {
+      "membersTitle": "Miembros",
+      "rolesTitle": "Cargos",
+      "toolsTitle": "Acceso de herramientas",
+      "invitesTitle": "Invitaciones",
+      "leadershipTitle": "Liderazgo",
+      "rankLabel": "Orden",
+      "moveUp": "Subir cargo",
+      "moveDown": "Bajar cargo",
+      "roleNameLabel": "Nombre del cargo",
+      "roleColorLabel": "Color del cargo",
+      "createRoleAction": "Crear cargo",
+      "minimumRoleLabel": "Cargo minimo",
+      "memberRoleLabel": "Cargo del miembro",
+      "transferAction": "Transferir liderazgo",
+      "deleteGuildAction": "Eliminar guilda",
+      "deleteConfirm": "Seguro? Esto elimina la guilda y desvincula a todos los miembros.",
+      "leadershipTransferred": "Liderazgo transferido.",
+      "roleSaved": "Cargo guardado.",
+      "actionError": "No fue posible completar la accion.",
+      "noClass": "Clase no definida"
     }
   }
 }

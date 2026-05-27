@@ -2834,6 +2834,159 @@ a {
   color: rgb(242 251 255 / 0.58);
 }
 
+.guild-management-grid {
+  align-items: start;
+}
+
+.guild-member-row strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.guild-member-row select,
+.guild-role-create input,
+.guild-role-create button,
+.guild-tool-access-list select,
+.guild-owner-actions select {
+  min-height: 38px;
+  border: 1px solid rgb(167 239 255 / 0.14);
+  border-radius: 8px;
+  padding: 0 10px;
+  color: #f2fbff;
+  background: rgb(2 6 18 / 0.54);
+  font: inherit;
+}
+
+.guild-member-row select {
+  margin-left: auto;
+  max-width: 150px;
+}
+
+.guild-role-list,
+.guild-tool-access-list,
+.guild-owner-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.guild-role-edit {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  gap: 8px;
+}
+
+.guild-role-edit input {
+  min-height: 34px;
+  border: 1px solid rgb(167 239 255 / 0.12);
+  border-radius: 8px;
+  padding: 0 9px;
+  color: #f2fbff;
+  background: rgb(2 6 18 / 0.42);
+  font: inherit;
+}
+
+.guild-role-edit input[type="color"] {
+  padding: 4px;
+}
+
+.guild-role-row,
+.guild-tool-access-list label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgb(167 239 255 / 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  background: rgb(2 6 18 / 0.34);
+}
+
+.guild-tool-access-list label span {
+  display: grid;
+  gap: 4px;
+}
+
+.guild-tool-access-list label strong {
+  color: #f2fbff;
+  font-size: 0.9rem;
+}
+
+.guild-role-row small,
+.guild-tool-access-list label small {
+  color: rgb(242 251 255 / 0.56);
+  font-size: 0.74rem;
+}
+
+.guild-role-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  width: fit-content;
+  border: 1px solid color-mix(in srgb, var(--role-color) 48%, transparent);
+  border-radius: 999px;
+  padding: 3px 9px;
+  color: #f2fbff;
+  background: color-mix(in srgb, var(--role-color) 18%, transparent);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.guild-role-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.guild-role-actions button {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(167 239 255 / 0.12);
+  border-radius: 8px;
+  color: #a7efff;
+  background: rgb(85 199 255 / 0.08);
+}
+
+.guild-role-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.guild-role-create {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 52px auto;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.guild-role-create input[type="color"] {
+  padding: 4px;
+}
+
+.guild-danger-panel {
+  border-color: rgb(248 113 113 / 0.24);
+}
+
+.guild-owner-actions {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.guild-danger-button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgb(248 113 113 / 0.3);
+  border-radius: 8px;
+  padding: 0 14px;
+  color: #fecaca;
+  background: rgb(127 29 29 / 0.24);
+  font-weight: 900;
+}
+
 @media (max-width: 1280px) {
   .guild-workspace-shell {
     grid-template-columns: 1fr;
@@ -2880,6 +3033,8 @@ a {
   .guild-sidebar-nav,
   .guild-overview-metrics,
   .guild-profile-grid,
+  .guild-role-create,
+  .guild-owner-actions,
   .guild-tool-grid {
     grid-template-columns: 1fr;
   }

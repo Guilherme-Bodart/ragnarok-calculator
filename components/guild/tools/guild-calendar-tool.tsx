@@ -17,7 +17,7 @@ export function GuildCalendarTool({ dashboard }: GuildToolComponentProps) {
             <div>
               <strong>{event.title}</strong>
               <small>
-                {event.type} / {event.requiredRole}
+                {event.type} / {event.requiredRole.name}
               </small>
             </div>
             <time>{formatDateTime(event.startsAt)}</time>
