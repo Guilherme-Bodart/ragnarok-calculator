@@ -53,7 +53,14 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   AuthAccount: 'AuthAccount',
-  Session: 'Session'
+  Session: 'Session',
+  Guild: 'Guild',
+  GuildMember: 'GuildMember',
+  GuildInvite: 'GuildInvite',
+  GuildNotification: 'GuildNotification',
+  GuildFeedItem: 'GuildFeedItem',
+  GuildEvent: 'GuildEvent',
+  MvpKill: 'MvpKill'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -106,6 +113,104 @@ export const SessionScalarFieldEnum = {
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const GuildScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  emblemUrl: 'emblemUrl',
+  description: 'description',
+  server: 'server',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GuildScalarFieldEnum = (typeof GuildScalarFieldEnum)[keyof typeof GuildScalarFieldEnum]
+
+
+export const GuildMemberScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  userId: 'userId',
+  displayName: 'displayName',
+  role: 'role',
+  mainClass: 'mainClass',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GuildMemberScalarFieldEnum = (typeof GuildMemberScalarFieldEnum)[keyof typeof GuildMemberScalarFieldEnum]
+
+
+export const GuildInviteScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  email: 'email',
+  role: 'role',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GuildInviteScalarFieldEnum = (typeof GuildInviteScalarFieldEnum)[keyof typeof GuildInviteScalarFieldEnum]
+
+
+export const GuildNotificationScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  title: 'title',
+  body: 'body',
+  tone: 'tone',
+  read: 'read',
+  createdAt: 'createdAt'
+} as const
+
+export type GuildNotificationScalarFieldEnum = (typeof GuildNotificationScalarFieldEnum)[keyof typeof GuildNotificationScalarFieldEnum]
+
+
+export const GuildFeedItemScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  author: 'author',
+  title: 'title',
+  body: 'body',
+  type: 'type',
+  createdAt: 'createdAt'
+} as const
+
+export type GuildFeedItemScalarFieldEnum = (typeof GuildFeedItemScalarFieldEnum)[keyof typeof GuildFeedItemScalarFieldEnum]
+
+
+export const GuildEventScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  title: 'title',
+  startsAt: 'startsAt',
+  type: 'type',
+  requiredRole: 'requiredRole',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GuildEventScalarFieldEnum = (typeof GuildEventScalarFieldEnum)[keyof typeof GuildEventScalarFieldEnum]
+
+
+export const MvpKillScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  mvpName: 'mvpName',
+  map: 'map',
+  killedAt: 'killedAt',
+  respawnMinutes: 'respawnMinutes',
+  respawnAt: 'respawnAt',
+  notes: 'notes',
+  recordedById: 'recordedById',
+  createdAt: 'createdAt'
+} as const
+
+export type MvpKillScalarFieldEnum = (typeof MvpKillScalarFieldEnum)[keyof typeof MvpKillScalarFieldEnum]
 
 
 export const SortOrder = {

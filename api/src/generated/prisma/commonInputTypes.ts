@@ -110,6 +110,148 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type EnumGuildMemberRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildMemberRole | Prisma.EnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildMemberRole[] | Prisma.ListEnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildMemberRole[] | Prisma.ListEnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildMemberRoleFilter<$PrismaModel> | $Enums.GuildMemberRole
+}
+
+export type EnumGuildPresenceFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildPresence | Prisma.EnumGuildPresenceFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildPresence[] | Prisma.ListEnumGuildPresenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildPresence[] | Prisma.ListEnumGuildPresenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildPresenceFilter<$PrismaModel> | $Enums.GuildPresence
+}
+
+export type EnumGuildMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildMemberRole | Prisma.EnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildMemberRole[] | Prisma.ListEnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildMemberRole[] | Prisma.ListEnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildMemberRoleWithAggregatesFilter<$PrismaModel> | $Enums.GuildMemberRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildMemberRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildMemberRoleFilter<$PrismaModel>
+}
+
+export type EnumGuildPresenceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildPresence | Prisma.EnumGuildPresenceFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildPresence[] | Prisma.ListEnumGuildPresenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildPresence[] | Prisma.ListEnumGuildPresenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildPresenceWithAggregatesFilter<$PrismaModel> | $Enums.GuildPresence
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildPresenceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildPresenceFilter<$PrismaModel>
+}
+
+export type EnumGuildInviteStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildInviteStatus | Prisma.EnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildInviteStatus[] | Prisma.ListEnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildInviteStatus[] | Prisma.ListEnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildInviteStatusFilter<$PrismaModel> | $Enums.GuildInviteStatus
+}
+
+export type EnumGuildInviteStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildInviteStatus | Prisma.EnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildInviteStatus[] | Prisma.ListEnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildInviteStatus[] | Prisma.ListEnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildInviteStatusWithAggregatesFilter<$PrismaModel> | $Enums.GuildInviteStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildInviteStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildInviteStatusFilter<$PrismaModel>
+}
+
+export type EnumGuildNotificationToneFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildNotificationTone | Prisma.EnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildNotificationTone[] | Prisma.ListEnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildNotificationTone[] | Prisma.ListEnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildNotificationToneFilter<$PrismaModel> | $Enums.GuildNotificationTone
+}
+
+export type BoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type EnumGuildNotificationToneWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildNotificationTone | Prisma.EnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildNotificationTone[] | Prisma.ListEnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildNotificationTone[] | Prisma.ListEnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildNotificationToneWithAggregatesFilter<$PrismaModel> | $Enums.GuildNotificationTone
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildNotificationToneFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildNotificationToneFilter<$PrismaModel>
+}
+
+export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type EnumGuildFeedItemTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildFeedItemType | Prisma.EnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildFeedItemType[] | Prisma.ListEnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildFeedItemType[] | Prisma.ListEnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildFeedItemTypeFilter<$PrismaModel> | $Enums.GuildFeedItemType
+}
+
+export type EnumGuildFeedItemTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildFeedItemType | Prisma.EnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildFeedItemType[] | Prisma.ListEnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildFeedItemType[] | Prisma.ListEnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildFeedItemTypeWithAggregatesFilter<$PrismaModel> | $Enums.GuildFeedItemType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildFeedItemTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildFeedItemTypeFilter<$PrismaModel>
+}
+
+export type EnumGuildEventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildEventType | Prisma.EnumGuildEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildEventType[] | Prisma.ListEnumGuildEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildEventType[] | Prisma.ListEnumGuildEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildEventTypeFilter<$PrismaModel> | $Enums.GuildEventType
+}
+
+export type EnumGuildEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildEventType | Prisma.EnumGuildEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildEventType[] | Prisma.ListEnumGuildEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildEventType[] | Prisma.ListEnumGuildEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.GuildEventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildEventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildEventTypeFilter<$PrismaModel>
+}
+
+export type IntFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntFilter<$PrismaModel> | number
+}
+
+export type IntWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntWithAggregatesFilter<$PrismaModel> | number
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedIntFilter<$PrismaModel>
+  _max?: Prisma.NestedIntFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -217,6 +359,148 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
+}
+
+export type NestedEnumGuildMemberRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildMemberRole | Prisma.EnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildMemberRole[] | Prisma.ListEnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildMemberRole[] | Prisma.ListEnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildMemberRoleFilter<$PrismaModel> | $Enums.GuildMemberRole
+}
+
+export type NestedEnumGuildPresenceFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildPresence | Prisma.EnumGuildPresenceFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildPresence[] | Prisma.ListEnumGuildPresenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildPresence[] | Prisma.ListEnumGuildPresenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildPresenceFilter<$PrismaModel> | $Enums.GuildPresence
+}
+
+export type NestedEnumGuildMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildMemberRole | Prisma.EnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildMemberRole[] | Prisma.ListEnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildMemberRole[] | Prisma.ListEnumGuildMemberRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildMemberRoleWithAggregatesFilter<$PrismaModel> | $Enums.GuildMemberRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildMemberRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildMemberRoleFilter<$PrismaModel>
+}
+
+export type NestedEnumGuildPresenceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildPresence | Prisma.EnumGuildPresenceFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildPresence[] | Prisma.ListEnumGuildPresenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildPresence[] | Prisma.ListEnumGuildPresenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildPresenceWithAggregatesFilter<$PrismaModel> | $Enums.GuildPresence
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildPresenceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildPresenceFilter<$PrismaModel>
+}
+
+export type NestedEnumGuildInviteStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildInviteStatus | Prisma.EnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildInviteStatus[] | Prisma.ListEnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildInviteStatus[] | Prisma.ListEnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildInviteStatusFilter<$PrismaModel> | $Enums.GuildInviteStatus
+}
+
+export type NestedEnumGuildInviteStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildInviteStatus | Prisma.EnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildInviteStatus[] | Prisma.ListEnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildInviteStatus[] | Prisma.ListEnumGuildInviteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildInviteStatusWithAggregatesFilter<$PrismaModel> | $Enums.GuildInviteStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildInviteStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildInviteStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumGuildNotificationToneFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildNotificationTone | Prisma.EnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildNotificationTone[] | Prisma.ListEnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildNotificationTone[] | Prisma.ListEnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildNotificationToneFilter<$PrismaModel> | $Enums.GuildNotificationTone
+}
+
+export type NestedBoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type NestedEnumGuildNotificationToneWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildNotificationTone | Prisma.EnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildNotificationTone[] | Prisma.ListEnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildNotificationTone[] | Prisma.ListEnumGuildNotificationToneFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildNotificationToneWithAggregatesFilter<$PrismaModel> | $Enums.GuildNotificationTone
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildNotificationToneFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildNotificationToneFilter<$PrismaModel>
+}
+
+export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type NestedEnumGuildFeedItemTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildFeedItemType | Prisma.EnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildFeedItemType[] | Prisma.ListEnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildFeedItemType[] | Prisma.ListEnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildFeedItemTypeFilter<$PrismaModel> | $Enums.GuildFeedItemType
+}
+
+export type NestedEnumGuildFeedItemTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildFeedItemType | Prisma.EnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildFeedItemType[] | Prisma.ListEnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildFeedItemType[] | Prisma.ListEnumGuildFeedItemTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildFeedItemTypeWithAggregatesFilter<$PrismaModel> | $Enums.GuildFeedItemType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildFeedItemTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildFeedItemTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumGuildEventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildEventType | Prisma.EnumGuildEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildEventType[] | Prisma.ListEnumGuildEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildEventType[] | Prisma.ListEnumGuildEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildEventTypeFilter<$PrismaModel> | $Enums.GuildEventType
+}
+
+export type NestedEnumGuildEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GuildEventType | Prisma.EnumGuildEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.GuildEventType[] | Prisma.ListEnumGuildEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GuildEventType[] | Prisma.ListEnumGuildEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGuildEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.GuildEventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGuildEventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGuildEventTypeFilter<$PrismaModel>
+}
+
+export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntWithAggregatesFilter<$PrismaModel> | number
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedIntFilter<$PrismaModel>
+  _max?: Prisma.NestedIntFilter<$PrismaModel>
+}
+
+export type NestedFloatFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatFilter<$PrismaModel> | number
 }
 
 

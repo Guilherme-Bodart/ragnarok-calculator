@@ -9,7 +9,54 @@
 * 🟢 You can import this file directly.
 */
 
+export const GuildMemberRole = {
+  member: 'member',
+  officer: 'officer',
+  leader: 'leader',
+  admin: 'admin'
+} as const
+
+export type GuildMemberRole = (typeof GuildMemberRole)[keyof typeof GuildMemberRole]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const GuildPresence = {
+  online: 'online',
+  offline: 'offline'
+} as const
+
+export type GuildPresence = (typeof GuildPresence)[keyof typeof GuildPresence]
+
+
+export const GuildInviteStatus = {
+  pending: 'pending',
+  accepted: 'accepted'
+} as const
+
+export type GuildInviteStatus = (typeof GuildInviteStatus)[keyof typeof GuildInviteStatus]
+
+
+export const GuildNotificationTone = {
+  info: 'info',
+  warning: 'warning',
+  success: 'success'
+} as const
+
+export type GuildNotificationTone = (typeof GuildNotificationTone)[keyof typeof GuildNotificationTone]
+
+
+export const GuildFeedItemType = {
+  announcement: 'announcement',
+  activity: 'activity',
+  system: 'system'
+} as const
+
+export type GuildFeedItemType = (typeof GuildFeedItemType)[keyof typeof GuildFeedItemType]
+
+
+export const GuildEventType = {
+  woe: 'woe',
+  farm: 'farm',
+  meeting: 'meeting'
+} as const
+
+export type GuildEventType = (typeof GuildEventType)[keyof typeof GuildEventType]

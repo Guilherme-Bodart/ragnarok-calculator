@@ -14,6 +14,8 @@ model User {
   passwordHash String?
   accounts     AuthAccount[]
   sessions     Session[]
+  guildMembers GuildMember[]
+  recordedMvpKills MvpKill[] @relation("RecordedMvpKills")
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
@@ -42,4 +44,145 @@ model Session {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model Guild {
+  id            String              @id @default(cuid())
+  slug          String              @unique
+  name          String
+  emblemUrl     String              @default("/nightmare-reaper.png")
+  description   String              @default("")
+  server        String              @default("Ragnarok Online")
+  members       GuildMember[]
+  invites       GuildInvite[]
+  notifications GuildNotification[]
+  feedItems     GuildFeedItem[]
+  events        GuildEvent[]
+  mvpKills      MvpKill[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+}
+
+model GuildMember {
+  id          String          @id @default(cuid())
+  guildId     String
+  guild       Guild           @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName String
+  role        GuildMemberRole @default(member)
+  mainClass   String          @default("")
+  status      GuildPresence   @default(offline)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@unique([guildId, userId])
+  @@index([userId])
+}
+
+model GuildInvite {
+  id        String          @id @default(cuid())
+  guildId   String
+  guild     Guild           @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  email     String
+  role      GuildMemberRole @default(member)
+  status    GuildInviteStatus @default(pending)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([guildId])
+  @@index([email])
+}
+
+model GuildNotification {
+  id        String                @id @default(cuid())
+  guildId   String
+  guild     Guild                 @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  tone      GuildNotificationTone @default(info)
+  read      Boolean               @default(false)
+  createdAt DateTime              @default(now())
+
+  @@index([guildId, createdAt])
+}
+
+model GuildFeedItem {
+  id        String            @id @default(cuid())
+  guildId   String
+  guild     Guild             @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  author    String
+  title     String
+  body      String
+  type      GuildFeedItemType @default(activity)
+  createdAt DateTime          @default(now())
+
+  @@index([guildId, createdAt])
+}
+
+model GuildEvent {
+  id           String          @id @default(cuid())
+  guildId      String
+  guild        Guild           @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  title        String
+  startsAt     DateTime
+  type         GuildEventType  @default(farm)
+  requiredRole GuildMemberRole @default(member)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([guildId, startsAt])
+}
+
+model MvpKill {
+  id             String   @id @default(cuid())
+  guildId        String
+  guild          Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  mvpName        String
+  map            String
+  killedAt       DateTime
+  respawnMinutes Int
+  respawnAt      DateTime
+  notes          String?
+  recordedById   String
+  recordedBy     User     @relation("RecordedMvpKills", fields: [recordedById], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+
+  @@index([guildId, respawnAt])
+  @@index([recordedById])
+}
+
+enum GuildMemberRole {
+  member
+  officer
+  leader
+  admin
+}
+
+enum GuildPresence {
+  online
+  offline
+}
+
+enum GuildInviteStatus {
+  pending
+  accepted
+}
+
+enum GuildNotificationTone {
+  info
+  warning
+  success
+}
+
+enum GuildFeedItemType {
+  announcement
+  activity
+  system
+}
+
+enum GuildEventType {
+  woe
+  farm
+  meeting
 }

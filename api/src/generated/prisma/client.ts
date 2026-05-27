@@ -54,3 +54,38 @@ export type AuthAccount = Prisma.AuthAccountModel
  * 
  */
 export type Session = Prisma.SessionModel
+/**
+ * Model Guild
+ * 
+ */
+export type Guild = Prisma.GuildModel
+/**
+ * Model GuildMember
+ * 
+ */
+export type GuildMember = Prisma.GuildMemberModel
+/**
+ * Model GuildInvite
+ * 
+ */
+export type GuildInvite = Prisma.GuildInviteModel
+/**
+ * Model GuildNotification
+ * 
+ */
+export type GuildNotification = Prisma.GuildNotificationModel
+/**
+ * Model GuildFeedItem
+ * 
+ */
+export type GuildFeedItem = Prisma.GuildFeedItemModel
+/**
+ * Model GuildEvent
+ * 
+ */
+export type GuildEvent = Prisma.GuildEventModel
+/**
+ * Model MvpKill
+ * 
+ */
+export type MvpKill = Prisma.MvpKillModel
