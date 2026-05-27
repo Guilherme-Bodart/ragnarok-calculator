@@ -1,6 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Dictionary } from "@/content/i18n";
+import { discordInviteUrl } from "./site-links";
 
 type RecruitmentProps = {
   t: Dictionary["recruitment"];
@@ -14,7 +15,12 @@ export function Recruitment({ t }: RecruitmentProps) {
         <h2 className="section-title">{t.title}</h2>
         <p className="section-copy">{t.description}</p>
         <div className="cta-row">
-          <Button href="#" icon={<MessageCircle aria-hidden className="size-4" />}>
+          <Button
+            href={discordInviteUrl}
+            icon={<MessageCircle aria-hidden className="size-4" />}
+            rel="noreferrer"
+            target="_blank"
+          >
             {t.action}
           </Button>
         </div>

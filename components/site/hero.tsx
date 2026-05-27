@@ -3,6 +3,7 @@ import { Calculator, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Dictionary } from "@/content/i18n";
 import { ParticleField } from "./particle-field";
+import { discordInviteUrl } from "./site-links";
 
 type HeroProps = {
   siteName: string;
@@ -32,8 +33,10 @@ export function Hero({ siteName, t }: HeroProps) {
 
         <div className="cta-row reveal reveal-delay-3">
           <Button
-            href="#recrutamento"
+            href={discordInviteUrl}
             icon={<MessageCircle aria-hidden className="size-4" />}
+            rel="noreferrer"
+            target="_blank"
           >
             {t.primaryAction}
           </Button>

@@ -59,6 +59,72 @@ a {
   background: #a7efff;
 }
 
+.nightmare-page select,
+.calculator-page select,
+.guild-page select,
+.guild-saas-page select,
+.guild-auth-page select {
+  border: 1px solid rgb(167 239 255 / 0.16);
+  border-radius: 8px;
+  color: #f2fbff;
+  background-color: rgb(2 6 18 / 0.34);
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgb(167 239 255 / 0.9) 50%),
+    linear-gradient(135deg, rgb(167 239 255 / 0.9) 50%, transparent 50%),
+    linear-gradient(180deg, rgb(167 239 255 / 0.08), rgb(2 6 18 / 0.08));
+  background-position:
+    calc(100% - 17px) 50%,
+    calc(100% - 12px) 50%,
+    100% 0;
+  background-size:
+    5px 5px,
+    5px 5px,
+    38px 100%;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.045),
+    0 12px 26px rgb(0 0 0 / 0.12);
+  appearance: none;
+  transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.calculator-page select,
+.guild-page select,
+.guild-saas-page select,
+.guild-auth-page select {
+  padding-right: 42px;
+}
+
+.nightmare-page select:hover,
+.calculator-page select:hover,
+.guild-page select:hover,
+.guild-saas-page select:hover,
+.guild-auth-page select:hover {
+  border-color: rgb(167 239 255 / 0.34);
+  background-color: rgb(7 23 40 / 0.52);
+}
+
+.nightmare-page select:focus,
+.calculator-page select:focus,
+.guild-page select:focus,
+.guild-saas-page select:focus,
+.guild-auth-page select:focus {
+  border-color: rgb(167 239 255 / 0.58);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 0 0 3px rgb(85 199 255 / 0.12);
+  outline: none;
+}
+
+.nightmare-page select option,
+.calculator-page select option,
+.guild-page select option,
+.guild-saas-page select option,
+.guild-auth-page select option {
+  color: #f2fbff;
+  background: #020612;
+}
+
 .pixelated {
   image-rendering: pixelated;
 }
@@ -190,30 +256,17 @@ a {
 
 .language-switcher select {
   min-width: 68px;
-  border: 0;
   border-radius: 999px;
   padding: 8px 30px 8px 12px;
-  color: #020612;
-  background: #a7efff;
+  border-color: rgb(167 239 255 / 0.2);
+  color: #f2fbff;
+  background-color: rgb(2 6 18 / 0.36);
   font-family: var(--font-rune);
   font-size: 11px;
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 0 24px rgb(85 199 255 / 0.28);
   outline: none;
-  appearance: none;
-}
-
-.language-switcher::after {
-  content: "";
-  position: absolute;
-  right: 16px;
-  width: 7px;
-  height: 7px;
-  pointer-events: none;
-  border-right: 2px solid #020612;
-  border-bottom: 2px solid #020612;
-  transform: translateY(-2px) rotate(45deg);
 }
 
 .language-switcher select:focus-visible {
@@ -1086,10 +1139,13 @@ a {
   min-height: 40px;
   border: 1px solid rgb(125 211 252 / 0.2);
   border-radius: 8px;
-  background: rgb(2 6 23 / 0.62);
   color: var(--ice);
   padding: 0 10px;
   font: inherit;
+}
+
+.calc-panel input {
+  background: rgb(2 6 23 / 0.62);
 }
 
 .stat-grid {
@@ -1806,14 +1862,7 @@ a {
 }
 
 .guild-create-form select {
-  appearance: none;
-  background-color: rgb(2 7 16 / 0.86);
   cursor: pointer;
-}
-
-.guild-create-form select option {
-  color: #f2fbff;
-  background: #020710;
 }
 
 .guild-create-form input:focus,
@@ -2204,8 +2253,11 @@ a {
   border-radius: 8px;
   padding: 0 10px;
   color: #f2fbff;
-  background: rgb(2 6 18 / 0.64);
   font: inherit;
+}
+
+.guild-mvp-form input {
+  background: rgb(2 6 18 / 0.64);
 }
 
 .guild-mvp-form input:focus,
@@ -2924,8 +2976,12 @@ a {
   border-radius: 8px;
   padding: 0 10px;
   color: #f2fbff;
-  background: rgb(2 6 18 / 0.54);
   font: inherit;
+}
+
+.guild-role-create input,
+.guild-role-create button {
+  background: rgb(2 6 18 / 0.54);
 }
 
 .guild-member-row select {
