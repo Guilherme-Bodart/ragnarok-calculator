@@ -193,6 +193,7 @@ export type UserWhereInput = {
   accounts?: Prisma.AuthAccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   guildMembers?: Prisma.GuildMemberListRelationFilter
+  ownedGuilds?: Prisma.GuildListRelationFilter
   recordedMvpKills?: Prisma.MvpKillListRelationFilter
 }
 
@@ -206,6 +207,7 @@ export type UserOrderByWithRelationInput = {
   accounts?: Prisma.AuthAccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   guildMembers?: Prisma.GuildMemberOrderByRelationAggregateInput
+  ownedGuilds?: Prisma.GuildOrderByRelationAggregateInput
   recordedMvpKills?: Prisma.MvpKillOrderByRelationAggregateInput
 }
 
@@ -222,6 +224,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   accounts?: Prisma.AuthAccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   guildMembers?: Prisma.GuildMemberListRelationFilter
+  ownedGuilds?: Prisma.GuildListRelationFilter
   recordedMvpKills?: Prisma.MvpKillListRelationFilter
 }, "id" | "email">
 
@@ -259,6 +262,7 @@ export type UserCreateInput = {
   accounts?: Prisma.AuthAccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
 }
 
@@ -272,6 +276,7 @@ export type UserUncheckedCreateInput = {
   accounts?: Prisma.AuthAccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
 }
 
@@ -285,6 +290,7 @@ export type UserUpdateInput = {
   accounts?: Prisma.AuthAccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
 }
 
@@ -298,6 +304,7 @@ export type UserUncheckedUpdateInput = {
   accounts?: Prisma.AuthAccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
 }
 
@@ -400,6 +407,20 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
+export type UserCreateNestedOneWithoutOwnedGuildsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedGuildsInput, Prisma.UserUncheckedCreateWithoutOwnedGuildsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedGuildsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOwnedGuildsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedGuildsInput, Prisma.UserUncheckedCreateWithoutOwnedGuildsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedGuildsInput
+  upsert?: Prisma.UserUpsertWithoutOwnedGuildsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOwnedGuildsInput, Prisma.UserUpdateWithoutOwnedGuildsInput>, Prisma.UserUncheckedUpdateWithoutOwnedGuildsInput>
+}
+
 export type UserCreateNestedOneWithoutGuildMembersInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutGuildMembersInput, Prisma.UserUncheckedCreateWithoutGuildMembersInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutGuildMembersInput
@@ -437,6 +458,7 @@ export type UserCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
 }
 
@@ -449,6 +471,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
 }
 
@@ -477,6 +500,7 @@ export type UserUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
 }
 
@@ -489,6 +513,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
 }
 
@@ -501,6 +526,7 @@ export type UserCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   accounts?: Prisma.AuthAccountCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
 }
 
@@ -513,6 +539,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   accounts?: Prisma.AuthAccountUncheckedCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
 }
 
@@ -541,6 +568,7 @@ export type UserUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AuthAccountUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
 }
 
@@ -552,6 +580,75 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AuthAccountUncheckedUpdateManyWithoutUserNestedInput
+  guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
+  recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
+}
+
+export type UserCreateWithoutOwnedGuildsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AuthAccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
+  recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
+}
+
+export type UserUncheckedCreateWithoutOwnedGuildsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AuthAccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
+  recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
+}
+
+export type UserCreateOrConnectWithoutOwnedGuildsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedGuildsInput, Prisma.UserUncheckedCreateWithoutOwnedGuildsInput>
+}
+
+export type UserUpsertWithoutOwnedGuildsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOwnedGuildsInput, Prisma.UserUncheckedUpdateWithoutOwnedGuildsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedGuildsInput, Prisma.UserUncheckedCreateWithoutOwnedGuildsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOwnedGuildsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOwnedGuildsInput, Prisma.UserUncheckedUpdateWithoutOwnedGuildsInput>
+}
+
+export type UserUpdateWithoutOwnedGuildsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AuthAccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
+  recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOwnedGuildsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AuthAccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
 }
@@ -565,6 +662,7 @@ export type UserCreateWithoutGuildMembersInput = {
   updatedAt?: Date | string
   accounts?: Prisma.AuthAccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
 }
 
@@ -577,6 +675,7 @@ export type UserUncheckedCreateWithoutGuildMembersInput = {
   updatedAt?: Date | string
   accounts?: Prisma.AuthAccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
 }
 
@@ -605,6 +704,7 @@ export type UserUpdateWithoutGuildMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AuthAccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
 }
 
@@ -617,6 +717,7 @@ export type UserUncheckedUpdateWithoutGuildMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AuthAccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
 }
 
@@ -630,6 +731,7 @@ export type UserCreateWithoutRecordedMvpKillsInput = {
   accounts?: Prisma.AuthAccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutRecordedMvpKillsInput = {
@@ -642,6 +744,7 @@ export type UserUncheckedCreateWithoutRecordedMvpKillsInput = {
   accounts?: Prisma.AuthAccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutRecordedMvpKillsInput = {
@@ -670,6 +773,7 @@ export type UserUpdateWithoutRecordedMvpKillsInput = {
   accounts?: Prisma.AuthAccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRecordedMvpKillsInput = {
@@ -682,6 +786,7 @@ export type UserUncheckedUpdateWithoutRecordedMvpKillsInput = {
   accounts?: Prisma.AuthAccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 
@@ -693,6 +798,7 @@ export type UserCountOutputType = {
   accounts: number
   sessions: number
   guildMembers: number
+  ownedGuilds: number
   recordedMvpKills: number
 }
 
@@ -700,6 +806,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   guildMembers?: boolean | UserCountOutputTypeCountGuildMembersArgs
+  ownedGuilds?: boolean | UserCountOutputTypeCountOwnedGuildsArgs
   recordedMvpKills?: boolean | UserCountOutputTypeCountRecordedMvpKillsArgs
 }
 
@@ -737,6 +844,13 @@ export type UserCountOutputTypeCountGuildMembersArgs<ExtArgs extends runtime.Typ
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountOwnedGuildsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuildWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountRecordedMvpKillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.MvpKillWhereInput
 }
@@ -752,6 +866,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   guildMembers?: boolean | Prisma.User$guildMembersArgs<ExtArgs>
+  ownedGuilds?: boolean | Prisma.User$ownedGuildsArgs<ExtArgs>
   recordedMvpKills?: boolean | Prisma.User$recordedMvpKillsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -788,6 +903,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   guildMembers?: boolean | Prisma.User$guildMembersArgs<ExtArgs>
+  ownedGuilds?: boolean | Prisma.User$ownedGuildsArgs<ExtArgs>
   recordedMvpKills?: boolean | Prisma.User$recordedMvpKillsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -800,6 +916,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     accounts: Prisma.$AuthAccountPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     guildMembers: Prisma.$GuildMemberPayload<ExtArgs>[]
+    ownedGuilds: Prisma.$GuildPayload<ExtArgs>[]
     recordedMvpKills: Prisma.$MvpKillPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1206,6 +1323,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   guildMembers<T extends Prisma.User$guildMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$guildMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownedGuilds<T extends Prisma.User$ownedGuildsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedGuildsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recordedMvpKills<T extends Prisma.User$recordedMvpKillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recordedMvpKillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MvpKillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1704,6 +1822,30 @@ export type User$guildMembersArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.GuildMemberScalarFieldEnum | Prisma.GuildMemberScalarFieldEnum[]
+}
+
+/**
+ * User.ownedGuilds
+ */
+export type User$ownedGuildsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Guild
+   */
+  select?: Prisma.GuildSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Guild
+   */
+  omit?: Prisma.GuildOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuildInclude<ExtArgs> | null
+  where?: Prisma.GuildWhereInput
+  orderBy?: Prisma.GuildOrderByWithRelationInput | Prisma.GuildOrderByWithRelationInput[]
+  cursor?: Prisma.GuildWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuildScalarFieldEnum | Prisma.GuildScalarFieldEnum[]
 }
 
 /**

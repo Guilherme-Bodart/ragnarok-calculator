@@ -388,11 +388,13 @@ export const ModelName = {
   AuthAccount: 'AuthAccount',
   Session: 'Session',
   Guild: 'Guild',
+  GuildRole: 'GuildRole',
   GuildMember: 'GuildMember',
   GuildInvite: 'GuildInvite',
   GuildNotification: 'GuildNotification',
   GuildFeedItem: 'GuildFeedItem',
   GuildEvent: 'GuildEvent',
+  GuildToolAccess: 'GuildToolAccess',
   MvpKill: 'MvpKill'
 } as const
 
@@ -409,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "authAccount" | "session" | "guild" | "guildMember" | "guildInvite" | "guildNotification" | "guildFeedItem" | "guildEvent" | "mvpKill"
+    modelProps: "user" | "authAccount" | "session" | "guild" | "guildRole" | "guildMember" | "guildInvite" | "guildNotification" | "guildFeedItem" | "guildEvent" | "guildToolAccess" | "mvpKill"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -706,6 +708,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.GuildCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.GuildCountAggregateOutputType> | number
+        }
+      }
+    }
+    GuildRole: {
+      payload: Prisma.$GuildRolePayload<ExtArgs>
+      fields: Prisma.GuildRoleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GuildRoleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GuildRoleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>
+        }
+        findFirst: {
+          args: Prisma.GuildRoleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GuildRoleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>
+        }
+        findMany: {
+          args: Prisma.GuildRoleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>[]
+        }
+        create: {
+          args: Prisma.GuildRoleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>
+        }
+        createMany: {
+          args: Prisma.GuildRoleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GuildRoleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>[]
+        }
+        delete: {
+          args: Prisma.GuildRoleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>
+        }
+        update: {
+          args: Prisma.GuildRoleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>
+        }
+        deleteMany: {
+          args: Prisma.GuildRoleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GuildRoleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GuildRoleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>[]
+        }
+        upsert: {
+          args: Prisma.GuildRoleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildRolePayload>
+        }
+        aggregate: {
+          args: Prisma.GuildRoleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGuildRole>
+        }
+        groupBy: {
+          args: Prisma.GuildRoleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GuildRoleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GuildRoleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GuildRoleCountAggregateOutputType> | number
         }
       }
     }
@@ -1079,6 +1155,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GuildToolAccess: {
+      payload: Prisma.$GuildToolAccessPayload<ExtArgs>
+      fields: Prisma.GuildToolAccessFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GuildToolAccessFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GuildToolAccessFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>
+        }
+        findFirst: {
+          args: Prisma.GuildToolAccessFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GuildToolAccessFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>
+        }
+        findMany: {
+          args: Prisma.GuildToolAccessFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>[]
+        }
+        create: {
+          args: Prisma.GuildToolAccessCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>
+        }
+        createMany: {
+          args: Prisma.GuildToolAccessCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GuildToolAccessCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>[]
+        }
+        delete: {
+          args: Prisma.GuildToolAccessDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>
+        }
+        update: {
+          args: Prisma.GuildToolAccessUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>
+        }
+        deleteMany: {
+          args: Prisma.GuildToolAccessDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GuildToolAccessUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GuildToolAccessUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>[]
+        }
+        upsert: {
+          args: Prisma.GuildToolAccessUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuildToolAccessPayload>
+        }
+        aggregate: {
+          args: Prisma.GuildToolAccessAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGuildToolAccess>
+        }
+        groupBy: {
+          args: Prisma.GuildToolAccessGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GuildToolAccessGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GuildToolAccessCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GuildToolAccessCountAggregateOutputType> | number
+        }
+      }
+    }
     MvpKill: {
       payload: Prisma.$MvpKillPayload<ExtArgs>
       fields: Prisma.MvpKillFieldRefs
@@ -1232,6 +1382,7 @@ export const GuildScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
   name: 'name',
+  ownerUserId: 'ownerUserId',
   emblemUrl: 'emblemUrl',
   description: 'description',
   server: 'server',
@@ -1242,12 +1393,25 @@ export const GuildScalarFieldEnum = {
 export type GuildScalarFieldEnum = (typeof GuildScalarFieldEnum)[keyof typeof GuildScalarFieldEnum]
 
 
+export const GuildRoleScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  name: 'name',
+  color: 'color',
+  rank: 'rank',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GuildRoleScalarFieldEnum = (typeof GuildRoleScalarFieldEnum)[keyof typeof GuildRoleScalarFieldEnum]
+
+
 export const GuildMemberScalarFieldEnum = {
   id: 'id',
   guildId: 'guildId',
   userId: 'userId',
   displayName: 'displayName',
-  role: 'role',
+  roleId: 'roleId',
   mainClass: 'mainClass',
   status: 'status',
   createdAt: 'createdAt',
@@ -1261,7 +1425,7 @@ export const GuildInviteScalarFieldEnum = {
   id: 'id',
   guildId: 'guildId',
   email: 'email',
-  role: 'role',
+  roleId: 'roleId',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1302,12 +1466,24 @@ export const GuildEventScalarFieldEnum = {
   title: 'title',
   startsAt: 'startsAt',
   type: 'type',
-  requiredRole: 'requiredRole',
+  requiredRoleId: 'requiredRoleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type GuildEventScalarFieldEnum = (typeof GuildEventScalarFieldEnum)[keyof typeof GuildEventScalarFieldEnum]
+
+
+export const GuildToolAccessScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  toolId: 'toolId',
+  minimumRoleId: 'minimumRoleId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GuildToolAccessScalarFieldEnum = (typeof GuildToolAccessScalarFieldEnum)[keyof typeof GuildToolAccessScalarFieldEnum]
 
 
 export const MvpKillScalarFieldEnum = {
@@ -1385,16 +1561,16 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'GuildMemberRole'
+ * Reference to a field of type 'Int'
  */
-export type EnumGuildMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GuildMemberRole'>
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
 /**
- * Reference to a field of type 'GuildMemberRole[]'
+ * Reference to a field of type 'Int[]'
  */
-export type ListEnumGuildMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GuildMemberRole[]'>
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -1472,20 +1648,6 @@ export type EnumGuildEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'GuildEventType[]'
  */
 export type ListEnumGuildEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GuildEventType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -1616,11 +1778,13 @@ export type GlobalOmitConfig = {
   authAccount?: Prisma.AuthAccountOmit
   session?: Prisma.SessionOmit
   guild?: Prisma.GuildOmit
+  guildRole?: Prisma.GuildRoleOmit
   guildMember?: Prisma.GuildMemberOmit
   guildInvite?: Prisma.GuildInviteOmit
   guildNotification?: Prisma.GuildNotificationOmit
   guildFeedItem?: Prisma.GuildFeedItemOmit
   guildEvent?: Prisma.GuildEventOmit
+  guildToolAccess?: Prisma.GuildToolAccessOmit
   mvpKill?: Prisma.MvpKillOmit
 }
 

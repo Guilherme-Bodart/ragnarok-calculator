@@ -15,6 +15,7 @@ model User {
   accounts     AuthAccount[]
   sessions     Session[]
   guildMembers GuildMember[]
+  ownedGuilds  Guild[]   @relation("GuildOwner")
   recordedMvpKills MvpKill[] @relation("RecordedMvpKills")
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
@@ -50,27 +51,52 @@ model Guild {
   id            String              @id @default(cuid())
   slug          String              @unique
   name          String
+  ownerUserId   String
+  owner         User                @relation("GuildOwner", fields: [ownerUserId], references: [id])
   emblemUrl     String              @default("/nightmare-reaper.png")
   description   String              @default("")
   server        String              @default("Ragnarok Online")
+  roles         GuildRole[]
   members       GuildMember[]
   invites       GuildInvite[]
+  toolAccess    GuildToolAccess[]
   notifications GuildNotification[]
   feedItems     GuildFeedItem[]
   events        GuildEvent[]
   mvpKills      MvpKill[]
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
+
+  @@index([ownerUserId])
+}
+
+model GuildRole {
+  id         String            @id @default(cuid())
+  guildId    String
+  guild      Guild             @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  name       String
+  color      String            @default("#7dd3fc")
+  rank       Int
+  members    GuildMember[]
+  invites    GuildInvite[]
+  events     GuildEvent[]
+  toolAccess GuildToolAccess[]
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  @@unique([guildId, rank])
+  @@index([guildId])
 }
 
 model GuildMember {
-  id          String          @id @default(cuid())
+  id          String        @id @default(cuid())
   guildId     String
-  guild       Guild           @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guild       Guild         @relation(fields: [guildId], references: [id], onDelete: Cascade)
   userId      String
-  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   displayName String
-  role        GuildMemberRole @default(member)
+  roleId      String
+  role        GuildRole     @relation(fields: [roleId], references: [id])
   mainClass   String          @default("")
   status      GuildPresence   @default(offline)
   createdAt   DateTime        @default(now())
@@ -81,14 +107,15 @@ model GuildMember {
 }
 
 model GuildInvite {
-  id        String          @id @default(cuid())
+  id        String            @id @default(cuid())
   guildId   String
-  guild     Guild           @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guild     Guild             @relation(fields: [guildId], references: [id], onDelete: Cascade)
   email     String
-  role      GuildMemberRole @default(member)
+  roleId    String
+  role      GuildRole         @relation(fields: [roleId], references: [id])
   status    GuildInviteStatus @default(pending)
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
   @@index([guildId])
   @@index([email])
@@ -127,11 +154,26 @@ model GuildEvent {
   title        String
   startsAt     DateTime
   type         GuildEventType  @default(farm)
-  requiredRole GuildMemberRole @default(member)
+  requiredRoleId String
+  requiredRole GuildRole       @relation(fields: [requiredRoleId], references: [id])
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
 
   @@index([guildId, startsAt])
+}
+
+model GuildToolAccess {
+  id            String    @id @default(cuid())
+  guildId       String
+  guild         Guild     @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  toolId        String
+  minimumRoleId String
+  minimumRole   GuildRole @relation(fields: [minimumRoleId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([guildId, toolId])
+  @@index([guildId])
 }
 
 model MvpKill {
@@ -150,13 +192,6 @@ model MvpKill {
 
   @@index([guildId, respawnAt])
   @@index([recordedById])
-}
-
-enum GuildMemberRole {
-  member
-  officer
-  leader
-  admin
 }
 
 enum GuildPresence {

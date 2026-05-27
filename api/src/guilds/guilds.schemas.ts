@@ -52,8 +52,42 @@ export const createMvpKillSchema = z.object({
   }
 });
 
+const hexColorSchema = z
+  .string()
+  .trim()
+  .regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/);
+
+export const createGuildRoleSchema = z.object({
+  name: z.string().trim().min(1).max(40),
+  color: hexColorSchema,
+  rank: z.number().int().min(1).max(10).optional(),
+});
+
+export const updateGuildRoleSchema = z.object({
+  name: z.string().trim().min(1).max(40).optional(),
+  color: hexColorSchema.optional(),
+  rank: z.number().int().min(1).max(10).optional(),
+});
+
+export const updateGuildMemberRoleSchema = z.object({
+  roleId: z.string().trim().min(1),
+});
+
+export const updateGuildToolAccessSchema = z.object({
+  minimumRoleId: z.string().trim().min(1),
+});
+
+export const transferGuildLeadershipSchema = z.object({
+  memberId: z.string().trim().min(1),
+});
+
 export type CreateGuildRequest = z.infer<typeof createGuildSchema>;
 export type CreateMvpKillRequest = z.infer<typeof createMvpKillSchema>;
+export type CreateGuildRoleRequest = z.infer<typeof createGuildRoleSchema>;
+export type UpdateGuildRoleRequest = z.infer<typeof updateGuildRoleSchema>;
+export type UpdateGuildMemberRoleRequest = z.infer<typeof updateGuildMemberRoleSchema>;
+export type UpdateGuildToolAccessRequest = z.infer<typeof updateGuildToolAccessSchema>;
+export type TransferGuildLeadershipRequest = z.infer<typeof transferGuildLeadershipSchema>;
 
 export type MvpSpawnStatus = "waiting" | "soon" | "spawned";
 

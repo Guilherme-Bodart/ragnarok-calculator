@@ -55,11 +55,13 @@ export const ModelName = {
   AuthAccount: 'AuthAccount',
   Session: 'Session',
   Guild: 'Guild',
+  GuildRole: 'GuildRole',
   GuildMember: 'GuildMember',
   GuildInvite: 'GuildInvite',
   GuildNotification: 'GuildNotification',
   GuildFeedItem: 'GuildFeedItem',
   GuildEvent: 'GuildEvent',
+  GuildToolAccess: 'GuildToolAccess',
   MvpKill: 'MvpKill'
 } as const
 
@@ -119,6 +121,7 @@ export const GuildScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
   name: 'name',
+  ownerUserId: 'ownerUserId',
   emblemUrl: 'emblemUrl',
   description: 'description',
   server: 'server',
@@ -129,12 +132,25 @@ export const GuildScalarFieldEnum = {
 export type GuildScalarFieldEnum = (typeof GuildScalarFieldEnum)[keyof typeof GuildScalarFieldEnum]
 
 
+export const GuildRoleScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  name: 'name',
+  color: 'color',
+  rank: 'rank',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GuildRoleScalarFieldEnum = (typeof GuildRoleScalarFieldEnum)[keyof typeof GuildRoleScalarFieldEnum]
+
+
 export const GuildMemberScalarFieldEnum = {
   id: 'id',
   guildId: 'guildId',
   userId: 'userId',
   displayName: 'displayName',
-  role: 'role',
+  roleId: 'roleId',
   mainClass: 'mainClass',
   status: 'status',
   createdAt: 'createdAt',
@@ -148,7 +164,7 @@ export const GuildInviteScalarFieldEnum = {
   id: 'id',
   guildId: 'guildId',
   email: 'email',
-  role: 'role',
+  roleId: 'roleId',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -189,12 +205,24 @@ export const GuildEventScalarFieldEnum = {
   title: 'title',
   startsAt: 'startsAt',
   type: 'type',
-  requiredRole: 'requiredRole',
+  requiredRoleId: 'requiredRoleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type GuildEventScalarFieldEnum = (typeof GuildEventScalarFieldEnum)[keyof typeof GuildEventScalarFieldEnum]
+
+
+export const GuildToolAccessScalarFieldEnum = {
+  id: 'id',
+  guildId: 'guildId',
+  toolId: 'toolId',
+  minimumRoleId: 'minimumRoleId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GuildToolAccessScalarFieldEnum = (typeof GuildToolAccessScalarFieldEnum)[keyof typeof GuildToolAccessScalarFieldEnum]
 
 
 export const MvpKillScalarFieldEnum = {

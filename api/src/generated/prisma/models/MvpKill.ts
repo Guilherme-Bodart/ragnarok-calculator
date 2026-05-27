@@ -557,14 +557,6 @@ export type MvpKillUncheckedUpdateManyWithoutGuildNestedInput = {
   deleteMany?: Prisma.MvpKillScalarWhereInput | Prisma.MvpKillScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type MvpKillCreateWithoutRecordedByInput = {
   id?: string
   mvpName: string

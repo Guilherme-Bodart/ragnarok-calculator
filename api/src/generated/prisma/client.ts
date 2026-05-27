@@ -60,6 +60,11 @@ export type Session = Prisma.SessionModel
  */
 export type Guild = Prisma.GuildModel
 /**
+ * Model GuildRole
+ * 
+ */
+export type GuildRole = Prisma.GuildRoleModel
+/**
  * Model GuildMember
  * 
  */
@@ -84,6 +89,11 @@ export type GuildFeedItem = Prisma.GuildFeedItemModel
  * 
  */
 export type GuildEvent = Prisma.GuildEventModel
+/**
+ * Model GuildToolAccess
+ * 
+ */
+export type GuildToolAccess = Prisma.GuildToolAccessModel
 /**
  * Model MvpKill
  * 

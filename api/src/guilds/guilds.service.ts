@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import {
   BadRequestException,
   ConflictException,
@@ -13,7 +14,12 @@ import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import {
   type CreateGuildRequest,
+  type CreateGuildRoleRequest,
   type CreateMvpKillRequest,
+  type TransferGuildLeadershipRequest,
+  type UpdateGuildMemberRoleRequest,
+  type UpdateGuildRoleRequest,
+  type UpdateGuildToolAccessRequest,
   getMvpSpawnStatus,
 } from "./guilds.schemas";
 import type {
@@ -24,6 +30,7 @@ import type {
   GuildInvite,
   GuildMember,
   GuildNotification,
+  GuildRole,
   GuildSummary,
   GuildTool,
   MvpKillEntry,
@@ -37,20 +44,32 @@ type AuthenticatedUser = {
 };
 
 type GuildMembership = Prisma.GuildMemberGetPayload<{
-  include: { guild: true };
+  include: { guild: true; role: true };
 }>;
 
-const guildTools: GuildTool[] = [
-  { id: "mvp-tracker", name: "MVP Tracker", status: "ready" },
-  { id: "guild-feed", name: "Guild Feed", status: "ready" },
-  { id: "notifications", name: "Notificações", status: "ready" },
-  { id: "guild-calendar", name: "Agenda", status: "ready" },
-  { id: "member-management", name: "Membros", status: "ready" },
-  { id: "woe-tracker", name: "WoE Tracker", status: "planned" },
-  { id: "economy", name: "Economia", status: "planned" },
-  { id: "drops", name: "Drops", status: "planned" },
-  { id: "builds", name: "Builds", status: "planned" },
-  { id: "analytics", name: "Analytics", status: "planned" },
+type ToolAccessLevel = "member" | "officer" | "leader";
+
+const maxGuildRoles = 10;
+
+const guildToolDefinitions: Array<{
+  id: string;
+  name: string;
+  status: GuildTool["status"];
+  defaultAccess: ToolAccessLevel;
+}> = [
+  { id: "dashboard", name: "Dashboard", status: "ready", defaultAccess: "member" },
+  { id: "guild-feed", name: "Guild Feed", status: "ready", defaultAccess: "member" },
+  { id: "notifications", name: "Notificacoes", status: "ready", defaultAccess: "member" },
+  { id: "guild-calendar", name: "Agenda", status: "ready", defaultAccess: "officer" },
+  { id: "mvp-tracker", name: "MVP Tracker", status: "ready", defaultAccess: "member" },
+  { id: "member-management", name: "Membros", status: "ready", defaultAccess: "officer" },
+  { id: "woe-tracker", name: "WoE Tracker", status: "planned", defaultAccess: "officer" },
+  { id: "economy", name: "Economia", status: "planned", defaultAccess: "officer" },
+  { id: "drops", name: "Drops", status: "planned", defaultAccess: "member" },
+  { id: "builds", name: "Builds", status: "planned", defaultAccess: "member" },
+  { id: "calculator-tools", name: "Calculadoras", status: "planned", defaultAccess: "member" },
+  { id: "analytics", name: "Analytics", status: "planned", defaultAccess: "leader" },
+  { id: "logs", name: "Logs", status: "planned", defaultAccess: "leader" },
 ];
 
 @Injectable()
@@ -61,6 +80,7 @@ export class GuildsService {
     const memberships = await this.prisma.guildMember.findMany({
       where: { userId: user.id },
       include: {
+        role: true,
         guild: {
           include: {
             _count: { select: { members: true } },
@@ -97,59 +117,86 @@ export class GuildsService {
       throw new ConflictException("User already belongs to a guild");
     }
 
+    const leaderRoleId = randomUUID();
+    const officerRoleId = randomUUID();
+    const memberRoleId = randomUUID();
+
     try {
-      const guild = await this.prisma.guild.create({
-        data: {
-          slug,
-          name: payload.name,
-          description:
-            payload.description ??
-            "Workspace da guilda para timers, eventos, membros e operações.",
-          server: payload.server ?? "Ragnarok Online",
-          members: {
-            create: {
-              userId: user.id,
-              displayName: getDisplayName(user),
-              role: "admin",
-              status: "online",
+      const membership = await this.prisma.$transaction(async (tx) => {
+        const guild = await tx.guild.create({
+          data: {
+            slug,
+            name: payload.name,
+            ownerUserId: user.id,
+            description:
+              payload.description ??
+              "Workspace da guilda para timers, eventos, membros e operacoes.",
+            server: payload.server ?? "Ragnarok Online",
+            roles: {
+              create: [
+                {
+                  id: leaderRoleId,
+                  name: "Lider",
+                  color: "#f4c95d",
+                  rank: 1,
+                },
+                {
+                  id: officerRoleId,
+                  name: "Oficial",
+                  color: "#67e8f9",
+                  rank: 2,
+                },
+                {
+                  id: memberRoleId,
+                  name: "Membro",
+                  color: "#a7b0c0",
+                  rank: 3,
+                },
+              ],
+            },
+            notifications: {
+              create: {
+                title: "Guilda criada",
+                body: "Seu workspace esta pronto para receber ferramentas.",
+                tone: "success",
+              },
+            },
+            feedItems: {
+              create: {
+                author: "System",
+                title: "Workspace iniciado",
+                body: `${payload.name} foi criada no Nightmare Guild Tools.`,
+                type: "system",
+              },
             },
           },
-          notifications: {
-            create: {
-              title: "Guilda criada",
-              body: "Seu workspace está pronto para receber ferramentas.",
-              tone: "success",
+        });
+
+        await tx.guildMember.create({
+          data: {
+            guildId: guild.id,
+            userId: user.id,
+            displayName: getDisplayName(user),
+            roleId: leaderRoleId,
+            status: "online",
+          },
+        });
+
+        return tx.guildMember.findUniqueOrThrow({
+          where: { userId: user.id },
+          include: {
+            role: true,
+            guild: {
+              include: {
+                _count: { select: { members: true } },
+              },
             },
           },
-          feedItems: {
-            create: {
-              author: "System",
-              title: "Workspace iniciado",
-              body: `${payload.name} foi criada no Nightmare Guild Tools.`,
-              type: "system",
-            },
-          },
-        },
-        include: {
-          members: { where: { userId: user.id }, take: 1 },
-          _count: { select: { members: true } },
-        },
+        });
       });
 
-      const member = guild.members[0];
-
       return {
-        guild: {
-          id: guild.id,
-          slug: guild.slug,
-          name: guild.name,
-          emblemUrl: guild.emblemUrl,
-          description: guild.description,
-          server: guild.server,
-          memberCount: guild._count.members,
-          onlineCount: 1,
-          userRole: member.role,
-        } satisfies GuildSummary,
+        guild: await this.toGuildSummary(membership),
       };
     } catch (error) {
       if (isUniqueConstraintError(error)) {
@@ -162,21 +209,26 @@ export class GuildsService {
 
   async getDashboard(user: AuthenticatedUser, slug: string): Promise<GuildDashboard> {
     const membership = await this.assertMembership(user.id, slug);
-    const [members, invites, notifications, feed, events, mvpEntries] =
+    const [roles, members, invites, notifications, feed, events, canUseMvpTracker] =
       await Promise.all([
-        this.getMembers(membership.guildId),
+        this.getRoles(membership.guildId),
+        this.getMembers(membership.guildId, membership.guild.ownerUserId),
         this.getInvites(membership.guildId),
         this.getNotifications(membership.guildId),
         this.getFeed(membership.guildId),
         this.getEvents(membership.guildId),
-        this.getMvpEntryList(membership.guildId),
+        this.canUseTool(membership, "mvp-tracker"),
       ]);
+    const mvpEntries = canUseMvpTracker
+      ? await this.getMvpEntryList(membership.guildId)
+      : [];
 
     return {
       guild: await this.toGuildSummary(membership),
+      roles,
       members,
       invites,
-      tools: guildTools,
+      tools: await this.getTools(membership.guildId, roles),
       notifications,
       feed,
       events,
@@ -184,8 +236,179 @@ export class GuildsService {
     };
   }
 
+  async deleteGuild(user: AuthenticatedUser, slug: string) {
+    const membership = await this.assertOwner(user.id, slug);
+
+    await this.prisma.guild.delete({
+      where: { id: membership.guildId },
+    });
+
+    return { deleted: true };
+  }
+
+  async createRole(
+    user: AuthenticatedUser,
+    slug: string,
+    payload: CreateGuildRoleRequest,
+  ) {
+    const membership = await this.assertGuildManager(user.id, slug);
+    const roles = await this.getRoles(membership.guildId);
+
+    if (roles.length >= maxGuildRoles) {
+      throw new ConflictException("Guild roles limit reached");
+    }
+
+    const rank = clampRank(payload.rank ?? roles.length + 1, roles.length + 1);
+
+    const role = await this.prisma.$transaction(async (tx) => {
+      await this.moveRanksToTemporaryRange(tx, membership.guildId);
+
+      const created = await tx.guildRole.create({
+        data: {
+          guildId: membership.guildId,
+          name: payload.name,
+          color: payload.color,
+          rank: 99,
+        },
+      });
+
+      const ordered = [...roles.map((item) => item.id)];
+      ordered.splice(rank - 1, 0, created.id);
+      await this.applyRoleOrder(tx, membership.guildId, ordered);
+
+      return tx.guildRole.findUniqueOrThrow({ where: { id: created.id } });
+    });
+
+    return { role: this.toRole(role) };
+  }
+
+  async updateRole(
+    user: AuthenticatedUser,
+    slug: string,
+    roleId: string,
+    payload: UpdateGuildRoleRequest,
+  ) {
+    const membership = await this.assertGuildManager(user.id, slug);
+    const roles = await this.getRoles(membership.guildId);
+    const role = roles.find((item) => item.id === roleId);
+
+    if (!role) {
+      throw new NotFoundException("Role not found");
+    }
+
+    const updated = await this.prisma.$transaction(async (tx) => {
+      await tx.guildRole.update({
+        where: { id: roleId },
+        data: {
+          name: payload.name,
+          color: payload.color,
+        },
+      });
+
+      if (payload.rank) {
+        const ordered = roles.map((item) => item.id).filter((id) => id !== roleId);
+        ordered.splice(clampRank(payload.rank, roles.length) - 1, 0, roleId);
+        await this.moveRanksToTemporaryRange(tx, membership.guildId);
+        await this.applyRoleOrder(tx, membership.guildId, ordered);
+      }
+
+      return tx.guildRole.findUniqueOrThrow({ where: { id: roleId } });
+    });
+
+    return { role: this.toRole(updated) };
+  }
+
+  async updateMemberRole(
+    user: AuthenticatedUser,
+    slug: string,
+    memberId: string,
+    payload: UpdateGuildMemberRoleRequest,
+  ) {
+    const membership = await this.assertGuildManager(user.id, slug);
+    const role = await this.assertRole(membership.guildId, payload.roleId);
+
+    const member = await this.prisma.guildMember.findFirst({
+      where: { id: memberId, guildId: membership.guildId },
+    });
+
+    if (!member) {
+      throw new NotFoundException("Member not found");
+    }
+
+    await this.prisma.guildMember.update({
+      where: { id: member.id },
+      data: { roleId: role.id },
+    });
+
+    return { updated: true };
+  }
+
+  async updateToolAccess(
+    user: AuthenticatedUser,
+    slug: string,
+    toolId: string,
+    payload: UpdateGuildToolAccessRequest,
+  ) {
+    const membership = await this.assertGuildManager(user.id, slug);
+    const tool = guildToolDefinitions.find((item) => item.id === toolId);
+
+    if (!tool) {
+      throw new NotFoundException("Tool not found");
+    }
+
+    const role = await this.assertRole(membership.guildId, payload.minimumRoleId);
+
+    await this.prisma.guildToolAccess.upsert({
+      where: {
+        guildId_toolId: {
+          guildId: membership.guildId,
+          toolId,
+        },
+      },
+      create: {
+        guildId: membership.guildId,
+        toolId,
+        minimumRoleId: role.id,
+      },
+      update: {
+        minimumRoleId: role.id,
+      },
+    });
+
+    return { updated: true };
+  }
+
+  async transferLeadership(
+    user: AuthenticatedUser,
+    slug: string,
+    payload: TransferGuildLeadershipRequest,
+  ) {
+    const membership = await this.assertOwner(user.id, slug);
+    const target = await this.prisma.guildMember.findFirst({
+      where: {
+        id: payload.memberId,
+        guildId: membership.guildId,
+      },
+    });
+
+    if (!target) {
+      throw new NotFoundException("Member not found");
+    }
+
+    await this.prisma.guild.update({
+      where: { id: membership.guildId },
+      data: { ownerUserId: target.userId },
+    });
+
+    return { transferred: true };
+  }
+
   async getMvpEntries(user: AuthenticatedUser, slug: string) {
     const membership = await this.assertMembership(user.id, slug);
+
+    if (!(await this.canUseTool(membership, "mvp-tracker"))) {
+      throw new ForbiddenException("User cannot access this tool");
+    }
 
     return { entries: await this.getMvpEntryList(membership.guildId) };
   }
@@ -196,6 +419,11 @@ export class GuildsService {
     payload: CreateMvpKillRequest,
   ) {
     const membership = await this.assertMembership(user.id, slug);
+
+    if (!(await this.canUseTool(membership, "mvp-tracker"))) {
+      throw new ForbiddenException("User cannot access this tool");
+    }
+
     const catalogEntry = payload.catalogEntryId
       ? getMvpCatalogEntry(payload.catalogEntryId)
       : null;
@@ -263,7 +491,7 @@ export class GuildsService {
           userId,
         },
       },
-      include: { guild: true },
+      include: { guild: true, role: true },
     });
 
     if (!membership) {
@@ -273,8 +501,116 @@ export class GuildsService {
     return membership;
   }
 
+  private async assertOwner(userId: string, slug: string) {
+    const membership = await this.assertMembership(userId, slug);
+
+    if (membership.guild.ownerUserId !== userId) {
+      throw new ForbiddenException("Only the guild leader can do this");
+    }
+
+    return membership;
+  }
+
+  private async assertGuildManager(userId: string, slug: string) {
+    const membership = await this.assertMembership(userId, slug);
+
+    if (membership.guild.ownerUserId !== userId && membership.role.rank !== 1) {
+      throw new ForbiddenException("User cannot manage guild settings");
+    }
+
+    return membership;
+  }
+
+  private async assertRole(guildId: string, roleId: string) {
+    const role = await this.prisma.guildRole.findFirst({
+      where: { id: roleId, guildId },
+    });
+
+    if (!role) {
+      throw new NotFoundException("Role not found");
+    }
+
+    return role;
+  }
+
+  private async canUseTool(membership: GuildMembership, toolId: string) {
+    const roles = await this.getRoles(membership.guildId);
+    const tool = await this.getTool(membership.guildId, roles, toolId);
+
+    if (!tool) {
+      return false;
+    }
+
+    return !tool.minimumRole || membership.role.rank <= tool.minimumRole.rank;
+  }
+
+  private async getTool(guildId: string, roles: GuildRole[], toolId: string) {
+    const tool = guildToolDefinitions.find((definition) => definition.id === toolId);
+
+    if (!tool) {
+      return null;
+    }
+
+    const access = await this.prisma.guildToolAccess.findUnique({
+      where: {
+        guildId_toolId: {
+          guildId,
+          toolId,
+        },
+      },
+      include: { minimumRole: true },
+    });
+
+    return {
+      id: tool.id,
+      name: tool.name,
+      status: tool.status,
+      minimumRole: access
+        ? this.toRole(access.minimumRole)
+        : this.getDefaultAccessRole(roles, tool.defaultAccess),
+    } satisfies GuildTool;
+  }
+
+  private async getTools(guildId: string, roles: GuildRole[]): Promise<GuildTool[]> {
+    const accessList = await this.prisma.guildToolAccess.findMany({
+      where: { guildId },
+      include: { minimumRole: true },
+    });
+
+    return guildToolDefinitions.map((tool) => {
+      const access = accessList.find((item) => item.toolId === tool.id);
+
+      return {
+        id: tool.id,
+        name: tool.name,
+        status: tool.status,
+        minimumRole: access
+          ? this.toRole(access.minimumRole)
+          : this.getDefaultAccessRole(roles, tool.defaultAccess),
+      };
+    });
+  }
+
+  private getDefaultAccessRole(roles: GuildRole[], level: ToolAccessLevel) {
+    if (roles.length === 0) {
+      return null;
+    }
+
+    const sorted = [...roles].sort((a, b) => a.rank - b.rank);
+
+    if (level === "leader") {
+      return sorted[0];
+    }
+
+    if (level === "officer") {
+      return sorted[Math.min(1, sorted.length - 1)];
+    }
+
+    return sorted[sorted.length - 1];
+  }
+
   private async toGuildSummary(
-    membership: GuildMembership | (GuildMembership & { guild: { _count?: { members: number } } }),
+    membership: GuildMembership & { guild: { _count?: { members: number } } },
   ): Promise<GuildSummary> {
     const memberCount =
       "_count" in membership.guild && membership.guild._count
@@ -295,35 +631,52 @@ export class GuildsService {
       server: membership.guild.server,
       memberCount,
       onlineCount,
-      userRole: membership.role,
+      userRole: this.toRole(membership.role),
+      isOwner: membership.guild.ownerUserId === membership.userId,
     };
   }
 
-  private async getMembers(guildId: string): Promise<GuildMember[]> {
+  private async getRoles(guildId: string): Promise<GuildRole[]> {
+    const roles = await this.prisma.guildRole.findMany({
+      where: { guildId },
+      orderBy: { rank: "asc" },
+    });
+
+    return roles.map((role) => this.toRole(role));
+  }
+
+  private async getMembers(
+    guildId: string,
+    ownerUserId: string,
+  ): Promise<GuildMember[]> {
     const members = await this.prisma.guildMember.findMany({
       where: { guildId },
-      orderBy: [{ role: "desc" }, { createdAt: "asc" }],
+      include: { role: true },
+      orderBy: [{ role: { rank: "asc" } }, { createdAt: "asc" }],
     });
 
     return members.map((member) => ({
       id: member.id,
+      userId: member.userId,
       displayName: member.displayName,
-      role: member.role,
+      role: this.toRole(member.role),
       mainClass: member.mainClass,
       status: member.status,
+      isOwner: member.userId === ownerUserId,
     }));
   }
 
   private async getInvites(guildId: string): Promise<GuildInvite[]> {
     const invites = await this.prisma.guildInvite.findMany({
       where: { guildId },
+      include: { role: true },
       orderBy: { createdAt: "desc" },
     });
 
     return invites.map((invite) => ({
       id: invite.id,
       email: invite.email,
-      role: invite.role,
+      role: this.toRole(invite.role),
       status: invite.status,
       createdAt: invite.createdAt.toISOString(),
     }));
@@ -366,6 +719,7 @@ export class GuildsService {
   private async getEvents(guildId: string): Promise<GuildEvent[]> {
     const events = await this.prisma.guildEvent.findMany({
       where: { guildId },
+      include: { requiredRole: true },
       orderBy: { startsAt: "asc" },
       take: 20,
     });
@@ -375,7 +729,7 @@ export class GuildsService {
       title: event.title,
       startsAt: event.startsAt.toISOString(),
       type: event.type,
-      requiredRole: event.requiredRole,
+      requiredRole: this.toRole(event.requiredRole),
     }));
   }
 
@@ -400,6 +754,15 @@ export class GuildsService {
     };
   }
 
+  private toRole(role: { id: string; name: string; color: string; rank: number }) {
+    return {
+      id: role.id,
+      name: role.name,
+      color: role.color,
+      rank: role.rank,
+    } satisfies GuildRole;
+  }
+
   private toMvpEntry(
     entry: Prisma.MvpKillGetPayload<{
       include: { recordedBy: { select: { email: true; name: true } } };
@@ -420,6 +783,30 @@ export class GuildsService {
       recordedBy: entry.recordedBy.name ?? entry.recordedBy.email,
       createdAt: entry.createdAt.toISOString(),
     };
+  }
+
+  private async moveRanksToTemporaryRange(
+    tx: Prisma.TransactionClient,
+    guildId: string,
+  ) {
+    await tx.$executeRaw`
+      UPDATE "GuildRole"
+      SET "rank" = "rank" + 100
+      WHERE "guildId" = ${guildId}
+    `;
+  }
+
+  private async applyRoleOrder(
+    tx: Prisma.TransactionClient,
+    guildId: string,
+    orderedRoleIds: string[],
+  ) {
+    for (const [index, roleId] of orderedRoleIds.entries()) {
+      await tx.guildRole.updateMany({
+        where: { id: roleId, guildId },
+        data: { rank: index + 1 },
+      });
+    }
   }
 }
 
@@ -444,4 +831,8 @@ function isUniqueConstraintError(error: unknown) {
     "code" in error &&
     error.code === "P2002"
   );
+}
+
+function clampRank(rank: number, max: number) {
+  return Math.min(Math.max(rank, 1), max);
 }

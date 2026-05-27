@@ -28,6 +28,7 @@ export type GuildMinAggregateOutputType = {
   id: string | null
   slug: string | null
   name: string | null
+  ownerUserId: string | null
   emblemUrl: string | null
   description: string | null
   server: string | null
@@ -39,6 +40,7 @@ export type GuildMaxAggregateOutputType = {
   id: string | null
   slug: string | null
   name: string | null
+  ownerUserId: string | null
   emblemUrl: string | null
   description: string | null
   server: string | null
@@ -50,6 +52,7 @@ export type GuildCountAggregateOutputType = {
   id: number
   slug: number
   name: number
+  ownerUserId: number
   emblemUrl: number
   description: number
   server: number
@@ -63,6 +66,7 @@ export type GuildMinAggregateInputType = {
   id?: true
   slug?: true
   name?: true
+  ownerUserId?: true
   emblemUrl?: true
   description?: true
   server?: true
@@ -74,6 +78,7 @@ export type GuildMaxAggregateInputType = {
   id?: true
   slug?: true
   name?: true
+  ownerUserId?: true
   emblemUrl?: true
   description?: true
   server?: true
@@ -85,6 +90,7 @@ export type GuildCountAggregateInputType = {
   id?: true
   slug?: true
   name?: true
+  ownerUserId?: true
   emblemUrl?: true
   description?: true
   server?: true
@@ -169,6 +175,7 @@ export type GuildGroupByOutputType = {
   id: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl: string
   description: string
   server: string
@@ -201,13 +208,17 @@ export type GuildWhereInput = {
   id?: Prisma.StringFilter<"Guild"> | string
   slug?: Prisma.StringFilter<"Guild"> | string
   name?: Prisma.StringFilter<"Guild"> | string
+  ownerUserId?: Prisma.StringFilter<"Guild"> | string
   emblemUrl?: Prisma.StringFilter<"Guild"> | string
   description?: Prisma.StringFilter<"Guild"> | string
   server?: Prisma.StringFilter<"Guild"> | string
   createdAt?: Prisma.DateTimeFilter<"Guild"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Guild"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  roles?: Prisma.GuildRoleListRelationFilter
   members?: Prisma.GuildMemberListRelationFilter
   invites?: Prisma.GuildInviteListRelationFilter
+  toolAccess?: Prisma.GuildToolAccessListRelationFilter
   notifications?: Prisma.GuildNotificationListRelationFilter
   feedItems?: Prisma.GuildFeedItemListRelationFilter
   events?: Prisma.GuildEventListRelationFilter
@@ -218,13 +229,17 @@ export type GuildOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  ownerUserId?: Prisma.SortOrder
   emblemUrl?: Prisma.SortOrder
   description?: Prisma.SortOrder
   server?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  owner?: Prisma.UserOrderByWithRelationInput
+  roles?: Prisma.GuildRoleOrderByRelationAggregateInput
   members?: Prisma.GuildMemberOrderByRelationAggregateInput
   invites?: Prisma.GuildInviteOrderByRelationAggregateInput
+  toolAccess?: Prisma.GuildToolAccessOrderByRelationAggregateInput
   notifications?: Prisma.GuildNotificationOrderByRelationAggregateInput
   feedItems?: Prisma.GuildFeedItemOrderByRelationAggregateInput
   events?: Prisma.GuildEventOrderByRelationAggregateInput
@@ -238,13 +253,17 @@ export type GuildWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.GuildWhereInput[]
   NOT?: Prisma.GuildWhereInput | Prisma.GuildWhereInput[]
   name?: Prisma.StringFilter<"Guild"> | string
+  ownerUserId?: Prisma.StringFilter<"Guild"> | string
   emblemUrl?: Prisma.StringFilter<"Guild"> | string
   description?: Prisma.StringFilter<"Guild"> | string
   server?: Prisma.StringFilter<"Guild"> | string
   createdAt?: Prisma.DateTimeFilter<"Guild"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Guild"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  roles?: Prisma.GuildRoleListRelationFilter
   members?: Prisma.GuildMemberListRelationFilter
   invites?: Prisma.GuildInviteListRelationFilter
+  toolAccess?: Prisma.GuildToolAccessListRelationFilter
   notifications?: Prisma.GuildNotificationListRelationFilter
   feedItems?: Prisma.GuildFeedItemListRelationFilter
   events?: Prisma.GuildEventListRelationFilter
@@ -255,6 +274,7 @@ export type GuildOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  ownerUserId?: Prisma.SortOrder
   emblemUrl?: Prisma.SortOrder
   description?: Prisma.SortOrder
   server?: Prisma.SortOrder
@@ -272,6 +292,7 @@ export type GuildScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Guild"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Guild"> | string
   name?: Prisma.StringWithAggregatesFilter<"Guild"> | string
+  ownerUserId?: Prisma.StringWithAggregatesFilter<"Guild"> | string
   emblemUrl?: Prisma.StringWithAggregatesFilter<"Guild"> | string
   description?: Prisma.StringWithAggregatesFilter<"Guild"> | string
   server?: Prisma.StringWithAggregatesFilter<"Guild"> | string
@@ -288,8 +309,11 @@ export type GuildCreateInput = {
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
@@ -300,13 +324,16 @@ export type GuildUncheckedCreateInput = {
   id?: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl?: string
   description?: string
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
@@ -322,8 +349,11 @@ export type GuildUpdateInput = {
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
@@ -334,13 +364,16 @@ export type GuildUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
@@ -351,6 +384,7 @@ export type GuildCreateManyInput = {
   id?: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl?: string
   description?: string
   server?: string
@@ -373,6 +407,7 @@ export type GuildUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   server?: Prisma.StringFieldUpdateOperationsInput | string
@@ -380,10 +415,21 @@ export type GuildUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type GuildListRelationFilter = {
+  every?: Prisma.GuildWhereInput
+  some?: Prisma.GuildWhereInput
+  none?: Prisma.GuildWhereInput
+}
+
+export type GuildOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type GuildCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  ownerUserId?: Prisma.SortOrder
   emblemUrl?: Prisma.SortOrder
   description?: Prisma.SortOrder
   server?: Prisma.SortOrder
@@ -395,6 +441,7 @@ export type GuildMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  ownerUserId?: Prisma.SortOrder
   emblemUrl?: Prisma.SortOrder
   description?: Prisma.SortOrder
   server?: Prisma.SortOrder
@@ -406,6 +453,7 @@ export type GuildMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  ownerUserId?: Prisma.SortOrder
   emblemUrl?: Prisma.SortOrder
   description?: Prisma.SortOrder
   server?: Prisma.SortOrder
@@ -416,6 +464,62 @@ export type GuildMinOrderByAggregateInput = {
 export type GuildScalarRelationFilter = {
   is?: Prisma.GuildWhereInput
   isNot?: Prisma.GuildWhereInput
+}
+
+export type GuildCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.GuildCreateWithoutOwnerInput, Prisma.GuildUncheckedCreateWithoutOwnerInput> | Prisma.GuildCreateWithoutOwnerInput[] | Prisma.GuildUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.GuildCreateOrConnectWithoutOwnerInput | Prisma.GuildCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.GuildCreateManyOwnerInputEnvelope
+  connect?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+}
+
+export type GuildUncheckedCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.GuildCreateWithoutOwnerInput, Prisma.GuildUncheckedCreateWithoutOwnerInput> | Prisma.GuildCreateWithoutOwnerInput[] | Prisma.GuildUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.GuildCreateOrConnectWithoutOwnerInput | Prisma.GuildCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.GuildCreateManyOwnerInputEnvelope
+  connect?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+}
+
+export type GuildUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.GuildCreateWithoutOwnerInput, Prisma.GuildUncheckedCreateWithoutOwnerInput> | Prisma.GuildCreateWithoutOwnerInput[] | Prisma.GuildUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.GuildCreateOrConnectWithoutOwnerInput | Prisma.GuildCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.GuildUpsertWithWhereUniqueWithoutOwnerInput | Prisma.GuildUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.GuildCreateManyOwnerInputEnvelope
+  set?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+  disconnect?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+  delete?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+  connect?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+  update?: Prisma.GuildUpdateWithWhereUniqueWithoutOwnerInput | Prisma.GuildUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.GuildUpdateManyWithWhereWithoutOwnerInput | Prisma.GuildUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.GuildScalarWhereInput | Prisma.GuildScalarWhereInput[]
+}
+
+export type GuildUncheckedUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.GuildCreateWithoutOwnerInput, Prisma.GuildUncheckedCreateWithoutOwnerInput> | Prisma.GuildCreateWithoutOwnerInput[] | Prisma.GuildUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.GuildCreateOrConnectWithoutOwnerInput | Prisma.GuildCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.GuildUpsertWithWhereUniqueWithoutOwnerInput | Prisma.GuildUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.GuildCreateManyOwnerInputEnvelope
+  set?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+  disconnect?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+  delete?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+  connect?: Prisma.GuildWhereUniqueInput | Prisma.GuildWhereUniqueInput[]
+  update?: Prisma.GuildUpdateWithWhereUniqueWithoutOwnerInput | Prisma.GuildUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.GuildUpdateManyWithWhereWithoutOwnerInput | Prisma.GuildUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.GuildScalarWhereInput | Prisma.GuildScalarWhereInput[]
+}
+
+export type GuildCreateNestedOneWithoutRolesInput = {
+  create?: Prisma.XOR<Prisma.GuildCreateWithoutRolesInput, Prisma.GuildUncheckedCreateWithoutRolesInput>
+  connectOrCreate?: Prisma.GuildCreateOrConnectWithoutRolesInput
+  connect?: Prisma.GuildWhereUniqueInput
+}
+
+export type GuildUpdateOneRequiredWithoutRolesNestedInput = {
+  create?: Prisma.XOR<Prisma.GuildCreateWithoutRolesInput, Prisma.GuildUncheckedCreateWithoutRolesInput>
+  connectOrCreate?: Prisma.GuildCreateOrConnectWithoutRolesInput
+  upsert?: Prisma.GuildUpsertWithoutRolesInput
+  connect?: Prisma.GuildWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GuildUpdateToOneWithWhereWithoutRolesInput, Prisma.GuildUpdateWithoutRolesInput>, Prisma.GuildUncheckedUpdateWithoutRolesInput>
 }
 
 export type GuildCreateNestedOneWithoutMembersInput = {
@@ -488,6 +592,20 @@ export type GuildUpdateOneRequiredWithoutEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GuildUpdateToOneWithWhereWithoutEventsInput, Prisma.GuildUpdateWithoutEventsInput>, Prisma.GuildUncheckedUpdateWithoutEventsInput>
 }
 
+export type GuildCreateNestedOneWithoutToolAccessInput = {
+  create?: Prisma.XOR<Prisma.GuildCreateWithoutToolAccessInput, Prisma.GuildUncheckedCreateWithoutToolAccessInput>
+  connectOrCreate?: Prisma.GuildCreateOrConnectWithoutToolAccessInput
+  connect?: Prisma.GuildWhereUniqueInput
+}
+
+export type GuildUpdateOneRequiredWithoutToolAccessNestedInput = {
+  create?: Prisma.XOR<Prisma.GuildCreateWithoutToolAccessInput, Prisma.GuildUncheckedCreateWithoutToolAccessInput>
+  connectOrCreate?: Prisma.GuildCreateOrConnectWithoutToolAccessInput
+  upsert?: Prisma.GuildUpsertWithoutToolAccessInput
+  connect?: Prisma.GuildWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GuildUpdateToOneWithWhereWithoutToolAccessInput, Prisma.GuildUpdateWithoutToolAccessInput>, Prisma.GuildUncheckedUpdateWithoutToolAccessInput>
+}
+
 export type GuildCreateNestedOneWithoutMvpKillsInput = {
   create?: Prisma.XOR<Prisma.GuildCreateWithoutMvpKillsInput, Prisma.GuildUncheckedCreateWithoutMvpKillsInput>
   connectOrCreate?: Prisma.GuildCreateOrConnectWithoutMvpKillsInput
@@ -502,6 +620,177 @@ export type GuildUpdateOneRequiredWithoutMvpKillsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GuildUpdateToOneWithWhereWithoutMvpKillsInput, Prisma.GuildUpdateWithoutMvpKillsInput>, Prisma.GuildUncheckedUpdateWithoutMvpKillsInput>
 }
 
+export type GuildCreateWithoutOwnerInput = {
+  id?: string
+  slug: string
+  name: string
+  emblemUrl?: string
+  description?: string
+  server?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
+  members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
+  invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
+  notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
+  feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
+  events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
+  mvpKills?: Prisma.MvpKillCreateNestedManyWithoutGuildInput
+}
+
+export type GuildUncheckedCreateWithoutOwnerInput = {
+  id?: string
+  slug: string
+  name: string
+  emblemUrl?: string
+  description?: string
+  server?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
+  members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
+  invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
+  notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
+  feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
+  events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
+  mvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutGuildInput
+}
+
+export type GuildCreateOrConnectWithoutOwnerInput = {
+  where: Prisma.GuildWhereUniqueInput
+  create: Prisma.XOR<Prisma.GuildCreateWithoutOwnerInput, Prisma.GuildUncheckedCreateWithoutOwnerInput>
+}
+
+export type GuildCreateManyOwnerInputEnvelope = {
+  data: Prisma.GuildCreateManyOwnerInput | Prisma.GuildCreateManyOwnerInput[]
+  skipDuplicates?: boolean
+}
+
+export type GuildUpsertWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.GuildWhereUniqueInput
+  update: Prisma.XOR<Prisma.GuildUpdateWithoutOwnerInput, Prisma.GuildUncheckedUpdateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.GuildCreateWithoutOwnerInput, Prisma.GuildUncheckedCreateWithoutOwnerInput>
+}
+
+export type GuildUpdateWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.GuildWhereUniqueInput
+  data: Prisma.XOR<Prisma.GuildUpdateWithoutOwnerInput, Prisma.GuildUncheckedUpdateWithoutOwnerInput>
+}
+
+export type GuildUpdateManyWithWhereWithoutOwnerInput = {
+  where: Prisma.GuildScalarWhereInput
+  data: Prisma.XOR<Prisma.GuildUpdateManyMutationInput, Prisma.GuildUncheckedUpdateManyWithoutOwnerInput>
+}
+
+export type GuildScalarWhereInput = {
+  AND?: Prisma.GuildScalarWhereInput | Prisma.GuildScalarWhereInput[]
+  OR?: Prisma.GuildScalarWhereInput[]
+  NOT?: Prisma.GuildScalarWhereInput | Prisma.GuildScalarWhereInput[]
+  id?: Prisma.StringFilter<"Guild"> | string
+  slug?: Prisma.StringFilter<"Guild"> | string
+  name?: Prisma.StringFilter<"Guild"> | string
+  ownerUserId?: Prisma.StringFilter<"Guild"> | string
+  emblemUrl?: Prisma.StringFilter<"Guild"> | string
+  description?: Prisma.StringFilter<"Guild"> | string
+  server?: Prisma.StringFilter<"Guild"> | string
+  createdAt?: Prisma.DateTimeFilter<"Guild"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Guild"> | Date | string
+}
+
+export type GuildCreateWithoutRolesInput = {
+  id?: string
+  slug: string
+  name: string
+  emblemUrl?: string
+  description?: string
+  server?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
+  invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
+  notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
+  feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
+  events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
+  mvpKills?: Prisma.MvpKillCreateNestedManyWithoutGuildInput
+}
+
+export type GuildUncheckedCreateWithoutRolesInput = {
+  id?: string
+  slug: string
+  name: string
+  ownerUserId: string
+  emblemUrl?: string
+  description?: string
+  server?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
+  invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
+  notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
+  feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
+  events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
+  mvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutGuildInput
+}
+
+export type GuildCreateOrConnectWithoutRolesInput = {
+  where: Prisma.GuildWhereUniqueInput
+  create: Prisma.XOR<Prisma.GuildCreateWithoutRolesInput, Prisma.GuildUncheckedCreateWithoutRolesInput>
+}
+
+export type GuildUpsertWithoutRolesInput = {
+  update: Prisma.XOR<Prisma.GuildUpdateWithoutRolesInput, Prisma.GuildUncheckedUpdateWithoutRolesInput>
+  create: Prisma.XOR<Prisma.GuildCreateWithoutRolesInput, Prisma.GuildUncheckedCreateWithoutRolesInput>
+  where?: Prisma.GuildWhereInput
+}
+
+export type GuildUpdateToOneWithWhereWithoutRolesInput = {
+  where?: Prisma.GuildWhereInput
+  data: Prisma.XOR<Prisma.GuildUpdateWithoutRolesInput, Prisma.GuildUncheckedUpdateWithoutRolesInput>
+}
+
+export type GuildUpdateWithoutRolesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  server?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
+  invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
+  notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
+  feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
+  events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
+  mvpKills?: Prisma.MvpKillUpdateManyWithoutGuildNestedInput
+}
+
+export type GuildUncheckedUpdateWithoutRolesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  server?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
+  invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
+  notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
+  feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
+  events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
+  mvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutGuildNestedInput
+}
+
 export type GuildCreateWithoutMembersInput = {
   id?: string
   slug: string
@@ -511,7 +800,10 @@ export type GuildCreateWithoutMembersInput = {
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
@@ -522,12 +814,15 @@ export type GuildUncheckedCreateWithoutMembersInput = {
   id?: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl?: string
   description?: string
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
@@ -559,7 +854,10 @@ export type GuildUpdateWithoutMembersInput = {
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
@@ -570,12 +868,15 @@ export type GuildUncheckedUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
@@ -591,7 +892,10 @@ export type GuildCreateWithoutInvitesInput = {
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
@@ -602,12 +906,15 @@ export type GuildUncheckedCreateWithoutInvitesInput = {
   id?: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl?: string
   description?: string
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
@@ -639,7 +946,10 @@ export type GuildUpdateWithoutInvitesInput = {
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
@@ -650,12 +960,15 @@ export type GuildUncheckedUpdateWithoutInvitesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
@@ -671,8 +984,11 @@ export type GuildCreateWithoutNotificationsInput = {
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
   mvpKills?: Prisma.MvpKillCreateNestedManyWithoutGuildInput
@@ -682,13 +998,16 @@ export type GuildUncheckedCreateWithoutNotificationsInput = {
   id?: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl?: string
   description?: string
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
   mvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutGuildInput
@@ -719,8 +1038,11 @@ export type GuildUpdateWithoutNotificationsInput = {
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
   mvpKills?: Prisma.MvpKillUpdateManyWithoutGuildNestedInput
@@ -730,13 +1052,16 @@ export type GuildUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
   mvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutGuildNestedInput
@@ -751,8 +1076,11 @@ export type GuildCreateWithoutFeedItemsInput = {
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
   mvpKills?: Prisma.MvpKillCreateNestedManyWithoutGuildInput
@@ -762,13 +1090,16 @@ export type GuildUncheckedCreateWithoutFeedItemsInput = {
   id?: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl?: string
   description?: string
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
   mvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutGuildInput
@@ -799,8 +1130,11 @@ export type GuildUpdateWithoutFeedItemsInput = {
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
   mvpKills?: Prisma.MvpKillUpdateManyWithoutGuildNestedInput
@@ -810,13 +1144,16 @@ export type GuildUncheckedUpdateWithoutFeedItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
   mvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutGuildNestedInput
@@ -831,8 +1168,11 @@ export type GuildCreateWithoutEventsInput = {
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
   mvpKills?: Prisma.MvpKillCreateNestedManyWithoutGuildInput
@@ -842,13 +1182,16 @@ export type GuildUncheckedCreateWithoutEventsInput = {
   id?: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl?: string
   description?: string
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
   mvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutGuildInput
@@ -879,8 +1222,11 @@ export type GuildUpdateWithoutEventsInput = {
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
   mvpKills?: Prisma.MvpKillUpdateManyWithoutGuildNestedInput
@@ -890,15 +1236,110 @@ export type GuildUncheckedUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
+  members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
+  invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
+  notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
+  feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
+  mvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutGuildNestedInput
+}
+
+export type GuildCreateWithoutToolAccessInput = {
+  id?: string
+  slug: string
+  name: string
+  emblemUrl?: string
+  description?: string
+  server?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
+  members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
+  invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
+  feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
+  events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
+  mvpKills?: Prisma.MvpKillCreateNestedManyWithoutGuildInput
+}
+
+export type GuildUncheckedCreateWithoutToolAccessInput = {
+  id?: string
+  slug: string
+  name: string
+  ownerUserId: string
+  emblemUrl?: string
+  description?: string
+  server?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
+  members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
+  invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
+  feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
+  events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
+  mvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutGuildInput
+}
+
+export type GuildCreateOrConnectWithoutToolAccessInput = {
+  where: Prisma.GuildWhereUniqueInput
+  create: Prisma.XOR<Prisma.GuildCreateWithoutToolAccessInput, Prisma.GuildUncheckedCreateWithoutToolAccessInput>
+}
+
+export type GuildUpsertWithoutToolAccessInput = {
+  update: Prisma.XOR<Prisma.GuildUpdateWithoutToolAccessInput, Prisma.GuildUncheckedUpdateWithoutToolAccessInput>
+  create: Prisma.XOR<Prisma.GuildCreateWithoutToolAccessInput, Prisma.GuildUncheckedCreateWithoutToolAccessInput>
+  where?: Prisma.GuildWhereInput
+}
+
+export type GuildUpdateToOneWithWhereWithoutToolAccessInput = {
+  where?: Prisma.GuildWhereInput
+  data: Prisma.XOR<Prisma.GuildUpdateWithoutToolAccessInput, Prisma.GuildUncheckedUpdateWithoutToolAccessInput>
+}
+
+export type GuildUpdateWithoutToolAccessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  server?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
+  members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
+  invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
+  feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
+  events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
+  mvpKills?: Prisma.MvpKillUpdateManyWithoutGuildNestedInput
+}
+
+export type GuildUncheckedUpdateWithoutToolAccessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  server?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
+  events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
   mvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutGuildNestedInput
 }
 
@@ -911,8 +1352,11 @@ export type GuildCreateWithoutMvpKillsInput = {
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedGuildsInput
+  roles?: Prisma.GuildRoleCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventCreateNestedManyWithoutGuildInput
@@ -922,13 +1366,16 @@ export type GuildUncheckedCreateWithoutMvpKillsInput = {
   id?: string
   slug: string
   name: string
+  ownerUserId: string
   emblemUrl?: string
   description?: string
   server?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  roles?: Prisma.GuildRoleUncheckedCreateNestedManyWithoutGuildInput
   members?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutGuildInput
   invites?: Prisma.GuildInviteUncheckedCreateNestedManyWithoutGuildInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedCreateNestedManyWithoutGuildInput
   notifications?: Prisma.GuildNotificationUncheckedCreateNestedManyWithoutGuildInput
   feedItems?: Prisma.GuildFeedItemUncheckedCreateNestedManyWithoutGuildInput
   events?: Prisma.GuildEventUncheckedCreateNestedManyWithoutGuildInput
@@ -959,8 +1406,11 @@ export type GuildUpdateWithoutMvpKillsInput = {
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedGuildsNestedInput
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
@@ -970,16 +1420,79 @@ export type GuildUncheckedUpdateWithoutMvpKillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   server?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
   members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
   invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
   notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
   feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
   events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
+}
+
+export type GuildCreateManyOwnerInput = {
+  id?: string
+  slug: string
+  name: string
+  emblemUrl?: string
+  description?: string
+  server?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type GuildUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  server?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUpdateManyWithoutGuildNestedInput
+  members?: Prisma.GuildMemberUpdateManyWithoutGuildNestedInput
+  invites?: Prisma.GuildInviteUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUpdateManyWithoutGuildNestedInput
+  notifications?: Prisma.GuildNotificationUpdateManyWithoutGuildNestedInput
+  feedItems?: Prisma.GuildFeedItemUpdateManyWithoutGuildNestedInput
+  events?: Prisma.GuildEventUpdateManyWithoutGuildNestedInput
+  mvpKills?: Prisma.MvpKillUpdateManyWithoutGuildNestedInput
+}
+
+export type GuildUncheckedUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  server?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.GuildRoleUncheckedUpdateManyWithoutGuildNestedInput
+  members?: Prisma.GuildMemberUncheckedUpdateManyWithoutGuildNestedInput
+  invites?: Prisma.GuildInviteUncheckedUpdateManyWithoutGuildNestedInput
+  toolAccess?: Prisma.GuildToolAccessUncheckedUpdateManyWithoutGuildNestedInput
+  notifications?: Prisma.GuildNotificationUncheckedUpdateManyWithoutGuildNestedInput
+  feedItems?: Prisma.GuildFeedItemUncheckedUpdateManyWithoutGuildNestedInput
+  events?: Prisma.GuildEventUncheckedUpdateManyWithoutGuildNestedInput
+  mvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutGuildNestedInput
+}
+
+export type GuildUncheckedUpdateManyWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emblemUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  server?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -988,8 +1501,10 @@ export type GuildUncheckedUpdateWithoutMvpKillsInput = {
  */
 
 export type GuildCountOutputType = {
+  roles: number
   members: number
   invites: number
+  toolAccess: number
   notifications: number
   feedItems: number
   events: number
@@ -997,8 +1512,10 @@ export type GuildCountOutputType = {
 }
 
 export type GuildCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  roles?: boolean | GuildCountOutputTypeCountRolesArgs
   members?: boolean | GuildCountOutputTypeCountMembersArgs
   invites?: boolean | GuildCountOutputTypeCountInvitesArgs
+  toolAccess?: boolean | GuildCountOutputTypeCountToolAccessArgs
   notifications?: boolean | GuildCountOutputTypeCountNotificationsArgs
   feedItems?: boolean | GuildCountOutputTypeCountFeedItemsArgs
   events?: boolean | GuildCountOutputTypeCountEventsArgs
@@ -1018,6 +1535,13 @@ export type GuildCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
 /**
  * GuildCountOutputType without action
  */
+export type GuildCountOutputTypeCountRolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuildRoleWhereInput
+}
+
+/**
+ * GuildCountOutputType without action
+ */
 export type GuildCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.GuildMemberWhereInput
 }
@@ -1027,6 +1551,13 @@ export type GuildCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.E
  */
 export type GuildCountOutputTypeCountInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.GuildInviteWhereInput
+}
+
+/**
+ * GuildCountOutputType without action
+ */
+export type GuildCountOutputTypeCountToolAccessArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuildToolAccessWhereInput
 }
 
 /**
@@ -1062,13 +1593,17 @@ export type GuildSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   slug?: boolean
   name?: boolean
+  ownerUserId?: boolean
   emblemUrl?: boolean
   description?: boolean
   server?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  roles?: boolean | Prisma.Guild$rolesArgs<ExtArgs>
   members?: boolean | Prisma.Guild$membersArgs<ExtArgs>
   invites?: boolean | Prisma.Guild$invitesArgs<ExtArgs>
+  toolAccess?: boolean | Prisma.Guild$toolAccessArgs<ExtArgs>
   notifications?: boolean | Prisma.Guild$notificationsArgs<ExtArgs>
   feedItems?: boolean | Prisma.Guild$feedItemsArgs<ExtArgs>
   events?: boolean | Prisma.Guild$eventsArgs<ExtArgs>
@@ -1080,28 +1615,33 @@ export type GuildSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   slug?: boolean
   name?: boolean
+  ownerUserId?: boolean
   emblemUrl?: boolean
   description?: boolean
   server?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["guild"]>
 
 export type GuildSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   slug?: boolean
   name?: boolean
+  ownerUserId?: boolean
   emblemUrl?: boolean
   description?: boolean
   server?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["guild"]>
 
 export type GuildSelectScalar = {
   id?: boolean
   slug?: boolean
   name?: boolean
+  ownerUserId?: boolean
   emblemUrl?: boolean
   description?: boolean
   server?: boolean
@@ -1109,24 +1649,34 @@ export type GuildSelectScalar = {
   updatedAt?: boolean
 }
 
-export type GuildOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "emblemUrl" | "description" | "server" | "createdAt" | "updatedAt", ExtArgs["result"]["guild"]>
+export type GuildOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "ownerUserId" | "emblemUrl" | "description" | "server" | "createdAt" | "updatedAt", ExtArgs["result"]["guild"]>
 export type GuildInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  roles?: boolean | Prisma.Guild$rolesArgs<ExtArgs>
   members?: boolean | Prisma.Guild$membersArgs<ExtArgs>
   invites?: boolean | Prisma.Guild$invitesArgs<ExtArgs>
+  toolAccess?: boolean | Prisma.Guild$toolAccessArgs<ExtArgs>
   notifications?: boolean | Prisma.Guild$notificationsArgs<ExtArgs>
   feedItems?: boolean | Prisma.Guild$feedItemsArgs<ExtArgs>
   events?: boolean | Prisma.Guild$eventsArgs<ExtArgs>
   mvpKills?: boolean | Prisma.Guild$mvpKillsArgs<ExtArgs>
   _count?: boolean | Prisma.GuildCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type GuildIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type GuildIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type GuildIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type GuildIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $GuildPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Guild"
   objects: {
+    owner: Prisma.$UserPayload<ExtArgs>
+    roles: Prisma.$GuildRolePayload<ExtArgs>[]
     members: Prisma.$GuildMemberPayload<ExtArgs>[]
     invites: Prisma.$GuildInvitePayload<ExtArgs>[]
+    toolAccess: Prisma.$GuildToolAccessPayload<ExtArgs>[]
     notifications: Prisma.$GuildNotificationPayload<ExtArgs>[]
     feedItems: Prisma.$GuildFeedItemPayload<ExtArgs>[]
     events: Prisma.$GuildEventPayload<ExtArgs>[]
@@ -1136,6 +1686,7 @@ export type $GuildPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     slug: string
     name: string
+    ownerUserId: string
     emblemUrl: string
     description: string
     server: string
@@ -1535,8 +2086,11 @@ readonly fields: GuildFieldRefs;
  */
 export interface Prisma__GuildClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  roles<T extends Prisma.Guild$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guild$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   members<T extends Prisma.Guild$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guild$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invites<T extends Prisma.Guild$invitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guild$invitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  toolAccess<T extends Prisma.Guild$toolAccessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guild$toolAccessArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildToolAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Guild$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guild$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildNotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   feedItems<T extends Prisma.Guild$feedItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guild$feedItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildFeedItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   events<T extends Prisma.Guild$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guild$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1573,6 +2127,7 @@ export interface GuildFieldRefs {
   readonly id: Prisma.FieldRef<"Guild", 'String'>
   readonly slug: Prisma.FieldRef<"Guild", 'String'>
   readonly name: Prisma.FieldRef<"Guild", 'String'>
+  readonly ownerUserId: Prisma.FieldRef<"Guild", 'String'>
   readonly emblemUrl: Prisma.FieldRef<"Guild", 'String'>
   readonly description: Prisma.FieldRef<"Guild", 'String'>
   readonly server: Prisma.FieldRef<"Guild", 'String'>
@@ -1832,6 +2387,10 @@ export type GuildCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.GuildCreateManyInput | Prisma.GuildCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuildIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1902,6 +2461,10 @@ export type GuildUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Guilds to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuildIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1971,6 +2534,30 @@ export type GuildDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * Guild.roles
+ */
+export type Guild$rolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuildRole
+   */
+  select?: Prisma.GuildRoleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GuildRole
+   */
+  omit?: Prisma.GuildRoleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuildRoleInclude<ExtArgs> | null
+  where?: Prisma.GuildRoleWhereInput
+  orderBy?: Prisma.GuildRoleOrderByWithRelationInput | Prisma.GuildRoleOrderByWithRelationInput[]
+  cursor?: Prisma.GuildRoleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuildRoleScalarFieldEnum | Prisma.GuildRoleScalarFieldEnum[]
+}
+
+/**
  * Guild.members
  */
 export type Guild$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2016,6 +2603,30 @@ export type Guild$invitesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.GuildInviteScalarFieldEnum | Prisma.GuildInviteScalarFieldEnum[]
+}
+
+/**
+ * Guild.toolAccess
+ */
+export type Guild$toolAccessArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuildToolAccess
+   */
+  select?: Prisma.GuildToolAccessSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GuildToolAccess
+   */
+  omit?: Prisma.GuildToolAccessOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuildToolAccessInclude<ExtArgs> | null
+  where?: Prisma.GuildToolAccessWhereInput
+  orderBy?: Prisma.GuildToolAccessOrderByWithRelationInput | Prisma.GuildToolAccessOrderByWithRelationInput[]
+  cursor?: Prisma.GuildToolAccessWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuildToolAccessScalarFieldEnum | Prisma.GuildToolAccessScalarFieldEnum[]
 }
 
 /**

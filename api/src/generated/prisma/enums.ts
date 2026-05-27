@@ -9,16 +9,6 @@
 * 🟢 You can import this file directly.
 */
 
-export const GuildMemberRole = {
-  member: 'member',
-  officer: 'officer',
-  leader: 'leader',
-  admin: 'admin'
-} as const
-
-export type GuildMemberRole = (typeof GuildMemberRole)[keyof typeof GuildMemberRole]
-
-
 export const GuildPresence = {
   online: 'online',
   offline: 'offline'

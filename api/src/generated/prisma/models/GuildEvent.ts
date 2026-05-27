@@ -30,7 +30,7 @@ export type GuildEventMinAggregateOutputType = {
   title: string | null
   startsAt: Date | null
   type: $Enums.GuildEventType | null
-  requiredRole: $Enums.GuildMemberRole | null
+  requiredRoleId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -41,7 +41,7 @@ export type GuildEventMaxAggregateOutputType = {
   title: string | null
   startsAt: Date | null
   type: $Enums.GuildEventType | null
-  requiredRole: $Enums.GuildMemberRole | null
+  requiredRoleId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,7 +52,7 @@ export type GuildEventCountAggregateOutputType = {
   title: number
   startsAt: number
   type: number
-  requiredRole: number
+  requiredRoleId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -65,7 +65,7 @@ export type GuildEventMinAggregateInputType = {
   title?: true
   startsAt?: true
   type?: true
-  requiredRole?: true
+  requiredRoleId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,7 +76,7 @@ export type GuildEventMaxAggregateInputType = {
   title?: true
   startsAt?: true
   type?: true
-  requiredRole?: true
+  requiredRoleId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,7 +87,7 @@ export type GuildEventCountAggregateInputType = {
   title?: true
   startsAt?: true
   type?: true
-  requiredRole?: true
+  requiredRoleId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -171,7 +171,7 @@ export type GuildEventGroupByOutputType = {
   title: string
   startsAt: Date
   type: $Enums.GuildEventType
-  requiredRole: $Enums.GuildMemberRole
+  requiredRoleId: string
   createdAt: Date
   updatedAt: Date
   _count: GuildEventCountAggregateOutputType | null
@@ -203,10 +203,11 @@ export type GuildEventWhereInput = {
   title?: Prisma.StringFilter<"GuildEvent"> | string
   startsAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
   type?: Prisma.EnumGuildEventTypeFilter<"GuildEvent"> | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFilter<"GuildEvent"> | $Enums.GuildMemberRole
+  requiredRoleId?: Prisma.StringFilter<"GuildEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
   guild?: Prisma.XOR<Prisma.GuildScalarRelationFilter, Prisma.GuildWhereInput>
+  requiredRole?: Prisma.XOR<Prisma.GuildRoleScalarRelationFilter, Prisma.GuildRoleWhereInput>
 }
 
 export type GuildEventOrderByWithRelationInput = {
@@ -215,10 +216,11 @@ export type GuildEventOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  requiredRole?: Prisma.SortOrder
+  requiredRoleId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   guild?: Prisma.GuildOrderByWithRelationInput
+  requiredRole?: Prisma.GuildRoleOrderByWithRelationInput
 }
 
 export type GuildEventWhereUniqueInput = Prisma.AtLeast<{
@@ -230,10 +232,11 @@ export type GuildEventWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"GuildEvent"> | string
   startsAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
   type?: Prisma.EnumGuildEventTypeFilter<"GuildEvent"> | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFilter<"GuildEvent"> | $Enums.GuildMemberRole
+  requiredRoleId?: Prisma.StringFilter<"GuildEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
   guild?: Prisma.XOR<Prisma.GuildScalarRelationFilter, Prisma.GuildWhereInput>
+  requiredRole?: Prisma.XOR<Prisma.GuildRoleScalarRelationFilter, Prisma.GuildRoleWhereInput>
 }, "id">
 
 export type GuildEventOrderByWithAggregationInput = {
@@ -242,7 +245,7 @@ export type GuildEventOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  requiredRole?: Prisma.SortOrder
+  requiredRoleId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.GuildEventCountOrderByAggregateInput
@@ -259,7 +262,7 @@ export type GuildEventScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"GuildEvent"> | string
   startsAt?: Prisma.DateTimeWithAggregatesFilter<"GuildEvent"> | Date | string
   type?: Prisma.EnumGuildEventTypeWithAggregatesFilter<"GuildEvent"> | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleWithAggregatesFilter<"GuildEvent"> | $Enums.GuildMemberRole
+  requiredRoleId?: Prisma.StringWithAggregatesFilter<"GuildEvent"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GuildEvent"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GuildEvent"> | Date | string
 }
@@ -269,10 +272,10 @@ export type GuildEventCreateInput = {
   title: string
   startsAt: Date | string
   type?: $Enums.GuildEventType
-  requiredRole?: $Enums.GuildMemberRole
   createdAt?: Date | string
   updatedAt?: Date | string
   guild: Prisma.GuildCreateNestedOneWithoutEventsInput
+  requiredRole: Prisma.GuildRoleCreateNestedOneWithoutEventsInput
 }
 
 export type GuildEventUncheckedCreateInput = {
@@ -281,7 +284,7 @@ export type GuildEventUncheckedCreateInput = {
   title: string
   startsAt: Date | string
   type?: $Enums.GuildEventType
-  requiredRole?: $Enums.GuildMemberRole
+  requiredRoleId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -291,10 +294,10 @@ export type GuildEventUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFieldUpdateOperationsInput | $Enums.GuildMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guild?: Prisma.GuildUpdateOneRequiredWithoutEventsNestedInput
+  requiredRole?: Prisma.GuildRoleUpdateOneRequiredWithoutEventsNestedInput
 }
 
 export type GuildEventUncheckedUpdateInput = {
@@ -303,7 +306,7 @@ export type GuildEventUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFieldUpdateOperationsInput | $Enums.GuildMemberRole
+  requiredRoleId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -314,7 +317,7 @@ export type GuildEventCreateManyInput = {
   title: string
   startsAt: Date | string
   type?: $Enums.GuildEventType
-  requiredRole?: $Enums.GuildMemberRole
+  requiredRoleId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -324,7 +327,6 @@ export type GuildEventUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFieldUpdateOperationsInput | $Enums.GuildMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -335,7 +337,7 @@ export type GuildEventUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFieldUpdateOperationsInput | $Enums.GuildMemberRole
+  requiredRoleId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -356,7 +358,7 @@ export type GuildEventCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  requiredRole?: Prisma.SortOrder
+  requiredRoleId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -367,7 +369,7 @@ export type GuildEventMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  requiredRole?: Prisma.SortOrder
+  requiredRoleId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -378,7 +380,7 @@ export type GuildEventMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  requiredRole?: Prisma.SortOrder
+  requiredRoleId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -425,6 +427,48 @@ export type GuildEventUncheckedUpdateManyWithoutGuildNestedInput = {
   deleteMany?: Prisma.GuildEventScalarWhereInput | Prisma.GuildEventScalarWhereInput[]
 }
 
+export type GuildEventCreateNestedManyWithoutRequiredRoleInput = {
+  create?: Prisma.XOR<Prisma.GuildEventCreateWithoutRequiredRoleInput, Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput> | Prisma.GuildEventCreateWithoutRequiredRoleInput[] | Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput[]
+  connectOrCreate?: Prisma.GuildEventCreateOrConnectWithoutRequiredRoleInput | Prisma.GuildEventCreateOrConnectWithoutRequiredRoleInput[]
+  createMany?: Prisma.GuildEventCreateManyRequiredRoleInputEnvelope
+  connect?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+}
+
+export type GuildEventUncheckedCreateNestedManyWithoutRequiredRoleInput = {
+  create?: Prisma.XOR<Prisma.GuildEventCreateWithoutRequiredRoleInput, Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput> | Prisma.GuildEventCreateWithoutRequiredRoleInput[] | Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput[]
+  connectOrCreate?: Prisma.GuildEventCreateOrConnectWithoutRequiredRoleInput | Prisma.GuildEventCreateOrConnectWithoutRequiredRoleInput[]
+  createMany?: Prisma.GuildEventCreateManyRequiredRoleInputEnvelope
+  connect?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+}
+
+export type GuildEventUpdateManyWithoutRequiredRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.GuildEventCreateWithoutRequiredRoleInput, Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput> | Prisma.GuildEventCreateWithoutRequiredRoleInput[] | Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput[]
+  connectOrCreate?: Prisma.GuildEventCreateOrConnectWithoutRequiredRoleInput | Prisma.GuildEventCreateOrConnectWithoutRequiredRoleInput[]
+  upsert?: Prisma.GuildEventUpsertWithWhereUniqueWithoutRequiredRoleInput | Prisma.GuildEventUpsertWithWhereUniqueWithoutRequiredRoleInput[]
+  createMany?: Prisma.GuildEventCreateManyRequiredRoleInputEnvelope
+  set?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+  disconnect?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+  delete?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+  connect?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+  update?: Prisma.GuildEventUpdateWithWhereUniqueWithoutRequiredRoleInput | Prisma.GuildEventUpdateWithWhereUniqueWithoutRequiredRoleInput[]
+  updateMany?: Prisma.GuildEventUpdateManyWithWhereWithoutRequiredRoleInput | Prisma.GuildEventUpdateManyWithWhereWithoutRequiredRoleInput[]
+  deleteMany?: Prisma.GuildEventScalarWhereInput | Prisma.GuildEventScalarWhereInput[]
+}
+
+export type GuildEventUncheckedUpdateManyWithoutRequiredRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.GuildEventCreateWithoutRequiredRoleInput, Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput> | Prisma.GuildEventCreateWithoutRequiredRoleInput[] | Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput[]
+  connectOrCreate?: Prisma.GuildEventCreateOrConnectWithoutRequiredRoleInput | Prisma.GuildEventCreateOrConnectWithoutRequiredRoleInput[]
+  upsert?: Prisma.GuildEventUpsertWithWhereUniqueWithoutRequiredRoleInput | Prisma.GuildEventUpsertWithWhereUniqueWithoutRequiredRoleInput[]
+  createMany?: Prisma.GuildEventCreateManyRequiredRoleInputEnvelope
+  set?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+  disconnect?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+  delete?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+  connect?: Prisma.GuildEventWhereUniqueInput | Prisma.GuildEventWhereUniqueInput[]
+  update?: Prisma.GuildEventUpdateWithWhereUniqueWithoutRequiredRoleInput | Prisma.GuildEventUpdateWithWhereUniqueWithoutRequiredRoleInput[]
+  updateMany?: Prisma.GuildEventUpdateManyWithWhereWithoutRequiredRoleInput | Prisma.GuildEventUpdateManyWithWhereWithoutRequiredRoleInput[]
+  deleteMany?: Prisma.GuildEventScalarWhereInput | Prisma.GuildEventScalarWhereInput[]
+}
+
 export type EnumGuildEventTypeFieldUpdateOperationsInput = {
   set?: $Enums.GuildEventType
 }
@@ -434,9 +478,9 @@ export type GuildEventCreateWithoutGuildInput = {
   title: string
   startsAt: Date | string
   type?: $Enums.GuildEventType
-  requiredRole?: $Enums.GuildMemberRole
   createdAt?: Date | string
   updatedAt?: Date | string
+  requiredRole: Prisma.GuildRoleCreateNestedOneWithoutEventsInput
 }
 
 export type GuildEventUncheckedCreateWithoutGuildInput = {
@@ -444,7 +488,7 @@ export type GuildEventUncheckedCreateWithoutGuildInput = {
   title: string
   startsAt: Date | string
   type?: $Enums.GuildEventType
-  requiredRole?: $Enums.GuildMemberRole
+  requiredRoleId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -484,9 +528,55 @@ export type GuildEventScalarWhereInput = {
   title?: Prisma.StringFilter<"GuildEvent"> | string
   startsAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
   type?: Prisma.EnumGuildEventTypeFilter<"GuildEvent"> | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFilter<"GuildEvent"> | $Enums.GuildMemberRole
+  requiredRoleId?: Prisma.StringFilter<"GuildEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GuildEvent"> | Date | string
+}
+
+export type GuildEventCreateWithoutRequiredRoleInput = {
+  id?: string
+  title: string
+  startsAt: Date | string
+  type?: $Enums.GuildEventType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  guild: Prisma.GuildCreateNestedOneWithoutEventsInput
+}
+
+export type GuildEventUncheckedCreateWithoutRequiredRoleInput = {
+  id?: string
+  guildId: string
+  title: string
+  startsAt: Date | string
+  type?: $Enums.GuildEventType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type GuildEventCreateOrConnectWithoutRequiredRoleInput = {
+  where: Prisma.GuildEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.GuildEventCreateWithoutRequiredRoleInput, Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput>
+}
+
+export type GuildEventCreateManyRequiredRoleInputEnvelope = {
+  data: Prisma.GuildEventCreateManyRequiredRoleInput | Prisma.GuildEventCreateManyRequiredRoleInput[]
+  skipDuplicates?: boolean
+}
+
+export type GuildEventUpsertWithWhereUniqueWithoutRequiredRoleInput = {
+  where: Prisma.GuildEventWhereUniqueInput
+  update: Prisma.XOR<Prisma.GuildEventUpdateWithoutRequiredRoleInput, Prisma.GuildEventUncheckedUpdateWithoutRequiredRoleInput>
+  create: Prisma.XOR<Prisma.GuildEventCreateWithoutRequiredRoleInput, Prisma.GuildEventUncheckedCreateWithoutRequiredRoleInput>
+}
+
+export type GuildEventUpdateWithWhereUniqueWithoutRequiredRoleInput = {
+  where: Prisma.GuildEventWhereUniqueInput
+  data: Prisma.XOR<Prisma.GuildEventUpdateWithoutRequiredRoleInput, Prisma.GuildEventUncheckedUpdateWithoutRequiredRoleInput>
+}
+
+export type GuildEventUpdateManyWithWhereWithoutRequiredRoleInput = {
+  where: Prisma.GuildEventScalarWhereInput
+  data: Prisma.XOR<Prisma.GuildEventUpdateManyMutationInput, Prisma.GuildEventUncheckedUpdateManyWithoutRequiredRoleInput>
 }
 
 export type GuildEventCreateManyGuildInput = {
@@ -494,7 +584,7 @@ export type GuildEventCreateManyGuildInput = {
   title: string
   startsAt: Date | string
   type?: $Enums.GuildEventType
-  requiredRole?: $Enums.GuildMemberRole
+  requiredRoleId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -504,9 +594,9 @@ export type GuildEventUpdateWithoutGuildInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFieldUpdateOperationsInput | $Enums.GuildMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requiredRole?: Prisma.GuildRoleUpdateOneRequiredWithoutEventsNestedInput
 }
 
 export type GuildEventUncheckedUpdateWithoutGuildInput = {
@@ -514,7 +604,7 @@ export type GuildEventUncheckedUpdateWithoutGuildInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFieldUpdateOperationsInput | $Enums.GuildMemberRole
+  requiredRoleId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -524,7 +614,47 @@ export type GuildEventUncheckedUpdateManyWithoutGuildInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
-  requiredRole?: Prisma.EnumGuildMemberRoleFieldUpdateOperationsInput | $Enums.GuildMemberRole
+  requiredRoleId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type GuildEventCreateManyRequiredRoleInput = {
+  id?: string
+  guildId: string
+  title: string
+  startsAt: Date | string
+  type?: $Enums.GuildEventType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type GuildEventUpdateWithoutRequiredRoleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  guild?: Prisma.GuildUpdateOneRequiredWithoutEventsNestedInput
+}
+
+export type GuildEventUncheckedUpdateWithoutRequiredRoleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  guildId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type GuildEventUncheckedUpdateManyWithoutRequiredRoleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  guildId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  type?: Prisma.EnumGuildEventTypeFieldUpdateOperationsInput | $Enums.GuildEventType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -537,10 +667,11 @@ export type GuildEventSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   title?: boolean
   startsAt?: boolean
   type?: boolean
-  requiredRole?: boolean
+  requiredRoleId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   guild?: boolean | Prisma.GuildDefaultArgs<ExtArgs>
+  requiredRole?: boolean | Prisma.GuildRoleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["guildEvent"]>
 
 export type GuildEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -549,10 +680,11 @@ export type GuildEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   title?: boolean
   startsAt?: boolean
   type?: boolean
-  requiredRole?: boolean
+  requiredRoleId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   guild?: boolean | Prisma.GuildDefaultArgs<ExtArgs>
+  requiredRole?: boolean | Prisma.GuildRoleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["guildEvent"]>
 
 export type GuildEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -561,10 +693,11 @@ export type GuildEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   title?: boolean
   startsAt?: boolean
   type?: boolean
-  requiredRole?: boolean
+  requiredRoleId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   guild?: boolean | Prisma.GuildDefaultArgs<ExtArgs>
+  requiredRole?: boolean | Prisma.GuildRoleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["guildEvent"]>
 
 export type GuildEventSelectScalar = {
@@ -573,26 +706,30 @@ export type GuildEventSelectScalar = {
   title?: boolean
   startsAt?: boolean
   type?: boolean
-  requiredRole?: boolean
+  requiredRoleId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GuildEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "guildId" | "title" | "startsAt" | "type" | "requiredRole" | "createdAt" | "updatedAt", ExtArgs["result"]["guildEvent"]>
+export type GuildEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "guildId" | "title" | "startsAt" | "type" | "requiredRoleId" | "createdAt" | "updatedAt", ExtArgs["result"]["guildEvent"]>
 export type GuildEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   guild?: boolean | Prisma.GuildDefaultArgs<ExtArgs>
+  requiredRole?: boolean | Prisma.GuildRoleDefaultArgs<ExtArgs>
 }
 export type GuildEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   guild?: boolean | Prisma.GuildDefaultArgs<ExtArgs>
+  requiredRole?: boolean | Prisma.GuildRoleDefaultArgs<ExtArgs>
 }
 export type GuildEventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   guild?: boolean | Prisma.GuildDefaultArgs<ExtArgs>
+  requiredRole?: boolean | Prisma.GuildRoleDefaultArgs<ExtArgs>
 }
 
 export type $GuildEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "GuildEvent"
   objects: {
     guild: Prisma.$GuildPayload<ExtArgs>
+    requiredRole: Prisma.$GuildRolePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -600,7 +737,7 @@ export type $GuildEventPayload<ExtArgs extends runtime.Types.Extensions.Internal
     title: string
     startsAt: Date
     type: $Enums.GuildEventType
-    requiredRole: $Enums.GuildMemberRole
+    requiredRoleId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["guildEvent"]>
@@ -998,6 +1135,7 @@ readonly fields: GuildEventFieldRefs;
 export interface Prisma__GuildEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   guild<T extends Prisma.GuildDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GuildDefaultArgs<ExtArgs>>): Prisma.Prisma__GuildClient<runtime.Types.Result.GetResult<Prisma.$GuildPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  requiredRole<T extends Prisma.GuildRoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GuildRoleDefaultArgs<ExtArgs>>): Prisma.Prisma__GuildRoleClient<runtime.Types.Result.GetResult<Prisma.$GuildRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1032,7 +1170,7 @@ export interface GuildEventFieldRefs {
   readonly title: Prisma.FieldRef<"GuildEvent", 'String'>
   readonly startsAt: Prisma.FieldRef<"GuildEvent", 'DateTime'>
   readonly type: Prisma.FieldRef<"GuildEvent", 'GuildEventType'>
-  readonly requiredRole: Prisma.FieldRef<"GuildEvent", 'GuildMemberRole'>
+  readonly requiredRoleId: Prisma.FieldRef<"GuildEvent", 'String'>
   readonly createdAt: Prisma.FieldRef<"GuildEvent", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GuildEvent", 'DateTime'>
 }

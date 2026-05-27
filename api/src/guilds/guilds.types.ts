@@ -1,6 +1,11 @@
 import type { MvpSpawnStatus } from "./guilds.schemas";
 
-export type GuildMemberRole = "member" | "officer" | "leader" | "admin";
+export type GuildRole = {
+  id: string;
+  name: string;
+  color: string;
+  rank: number;
+};
 
 export type GuildSummary = {
   id: string;
@@ -11,21 +16,24 @@ export type GuildSummary = {
   server: string;
   memberCount: number;
   onlineCount: number;
-  userRole: GuildMemberRole;
+  userRole: GuildRole;
+  isOwner: boolean;
 };
 
 export type GuildMember = {
   id: string;
+  userId: string;
   displayName: string;
-  role: GuildMemberRole;
+  role: GuildRole;
   mainClass: string;
   status: "online" | "offline";
+  isOwner: boolean;
 };
 
 export type GuildInvite = {
   id: string;
   email: string;
-  role: GuildMemberRole;
+  role: GuildRole;
   status: "pending" | "accepted";
   createdAt: string;
 };
@@ -34,6 +42,7 @@ export type GuildTool = {
   id: string;
   name: string;
   status: "ready" | "planned";
+  minimumRole: GuildRole | null;
 };
 
 export type GuildNotification = {
@@ -59,7 +68,7 @@ export type GuildEvent = {
   title: string;
   startsAt: string;
   type: "woe" | "farm" | "meeting";
-  requiredRole: GuildMemberRole;
+  requiredRole: GuildRole;
 };
 
 export type CurrentGuildUser = {
@@ -71,7 +80,7 @@ export type CurrentGuildUser = {
 export type CurrentGuildContext = {
   user: CurrentGuildUser;
   guilds: GuildSummary[];
-  activeGuild: GuildSummary;
+  activeGuild: GuildSummary | null;
 };
 
 export type MvpKillEntry = {
@@ -90,6 +99,7 @@ export type MvpKillEntry = {
 
 export type GuildDashboard = {
   guild: GuildSummary;
+  roles: GuildRole[];
   members: GuildMember[];
   invites: GuildInvite[];
   tools: GuildTool[];

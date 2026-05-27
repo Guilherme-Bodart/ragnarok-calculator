@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   createGuildSchema,
+  createGuildRoleSchema,
   createMvpKillSchema,
   getMvpSpawnStatus,
+  updateGuildToolAccessSchema,
 } from "./guilds.schemas";
 
 describe("guild schemas", () => {
@@ -54,6 +56,29 @@ describe("guild schemas", () => {
         respawnMinutes: 120,
       }),
     ).toThrow();
+  });
+
+  it("accepts custom guild roles with repeated names and colors", () => {
+    const first = createGuildRoleSchema.parse({
+      name: "Raid",
+      color: "#67e8f9",
+    });
+    const second = createGuildRoleSchema.parse({
+      name: "Raid",
+      color: "#67e8f9",
+      rank: 2,
+    });
+
+    expect(first.name).toBe(second.name);
+    expect(second.rank).toBe(2);
+  });
+
+  it("validates tool access role updates", () => {
+    const payload = updateGuildToolAccessSchema.parse({
+      minimumRoleId: "role-id",
+    });
+
+    expect(payload.minimumRoleId).toBe("role-id");
   });
 
   it("calculates MVP spawn status from respawn time", () => {
