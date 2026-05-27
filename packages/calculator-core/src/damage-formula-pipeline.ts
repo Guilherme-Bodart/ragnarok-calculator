@@ -15,10 +15,10 @@ import {
   getPhysicalTraitFinalRate,
   getWeaponRefineAtk,
   getWeaponSizeMultiplier,
-  getSkillMultiplier,
   sumMagicalEquipmentPower,
   sumPhysicalEquipmentPower,
 } from "./formulas";
+import { SkillFormulaRegistry } from "./skills";
 import type { RoItem, RoMonster, RoSkill } from "./ro-types";
 
 export type DamageBreakdownGroup =
@@ -71,15 +71,18 @@ type DamageFormulaContext = {
   defenseMultiplier: number;
   preDefenseDamage: number;
   singleHitDamage: number;
+  hitCount: number;
 };
 
 export class DamageFormulaPipeline {
+  constructor(private readonly skillFormulaRegistry = new SkillFormulaRegistry()) {}
+
   calculate(input: DamageFormulaInput): DamageFormulaResult {
     const context = this.createContext(input);
     const average = Math.max(1, context.singleHitDamage);
     const minimum = Math.max(1, Math.floor(average * 0.95));
     const maximum = Math.max(1, Math.floor(average * 1.05));
-    const total = average * input.skill.hitCount;
+    const total = average * context.hitCount;
 
     return {
       damage: {
@@ -103,7 +106,13 @@ export class DamageFormulaPipeline {
     const modifierFlatPower = magical
       ? getMagicalModifierFlatPower(input.modifierEffects)
       : getPhysicalModifierFlatPower(input.modifierEffects);
-    const skillMultiplier = getSkillMultiplier(input.skill, input.skillLevel);
+    const skillFormula = this.skillFormulaRegistry.calculate({
+      character: input.character,
+      monster: input.monster,
+      skill: input.skill,
+      skillLevel: input.skillLevel,
+    });
+    const skillMultiplier = skillFormula.multiplier;
     const legacyBonusRate = magical
       ? getMagicalLegacyBonusRate(input.items, input.skill, input.monster)
       : getPhysicalLegacyBonusRate(input.items, input.skill, input.monster);
@@ -158,6 +167,7 @@ export class DamageFormulaPipeline {
       defenseMultiplier,
       preDefenseDamage,
       singleHitDamage,
+      hitCount: skillFormula.hitCount,
     };
   }
 
@@ -267,7 +277,7 @@ export class DamageFormulaPipeline {
       {
         key: "hits",
         label: "Hits",
-        value: input.skill.hitCount,
+        value: context.hitCount,
         group: "skill",
         unit: "count",
       },
