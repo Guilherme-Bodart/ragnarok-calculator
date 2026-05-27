@@ -1,5 +1,6 @@
 export * from "./calculator-modifier-effects";
 export * from "./calculator-trait-effects";
+export * from "./character-status-engine";
 export * from "./calculate-damage-from-dataset";
 export * from "./damage-formula-pipeline";
 export * from "./damage-engine";

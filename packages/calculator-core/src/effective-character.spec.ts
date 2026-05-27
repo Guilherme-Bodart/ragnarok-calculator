@@ -36,10 +36,10 @@ describe("EffectiveCharacterBuilder", () => {
     );
 
     expect(character.effectiveStats).toMatchObject({
-      str: 101,
+      str: 111,
       agi: 3,
       vit: 2,
-      dex: 3,
+      dex: 8,
       pow: 4,
       spl: 4,
       con: 6,
@@ -54,5 +54,7 @@ describe("EffectiveCharacterBuilder", () => {
       pAtk: 2,
       smatk: 2,
     });
+    expect(character.maxAp).toBe(200);
+    expect(character.statusAtk).toBe(443);
   });
 });
