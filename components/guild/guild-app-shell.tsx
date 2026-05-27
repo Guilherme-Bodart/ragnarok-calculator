@@ -124,11 +124,11 @@ export function GuildAppShell({
             <button type="button" aria-label="Guild settings">
               <Settings size={16} />
             </button>
-            <button className="guild-user-button" type="button">
+            <Link className="guild-user-button" href="/profile">
               <Command size={16} />
               <span>{notice}</span>
               <ChevronDown size={14} />
-            </button>
+            </Link>
             <button type="button" aria-label="Exit guild">
               <LogOut size={16} />
             </button>

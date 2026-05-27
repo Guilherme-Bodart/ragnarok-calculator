@@ -83,6 +83,15 @@ export class GuildsService {
       throw new ConflictException("Guild slug is invalid");
     }
 
+    const existingMembership = await this.prisma.guildMember.findUnique({
+      where: { userId: user.id },
+      select: { id: true },
+    });
+
+    if (existingMembership) {
+      throw new ConflictException("User already belongs to a guild");
+    }
+
     try {
       const guild = await this.prisma.guild.create({
         data: {

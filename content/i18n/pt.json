@@ -117,6 +117,16 @@
     "loadError": "Não foi possível carregar a guilda.",
     "connected": "API conectada",
     "syncing": "Sincronizando",
+    "profile": {
+      "kicker": "Perfil",
+      "loadingTitle": "Carregando perfil",
+      "loading": "Validando sua sessão...",
+      "loadError": "Não foi possível carregar seu perfil.",
+      "description": "Gerencie sua conta, veja sua guilda e crie um workspace quando ainda não tiver uma.",
+      "accountTitle": "Conta",
+      "guildTitle": "Guilda",
+      "emptyGuild": "Você ainda não participa de uma guilda."
+    },
     "create": {
       "kicker": "Guild Workspace",
       "title": "Crie sua primeira guilda",

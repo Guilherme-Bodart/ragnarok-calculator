@@ -77,7 +77,7 @@ model GuildMember {
   updatedAt   DateTime        @updatedAt
 
   @@unique([guildId, userId])
-  @@index([userId])
+  @@unique([userId])
 }
 
 model GuildInvite {

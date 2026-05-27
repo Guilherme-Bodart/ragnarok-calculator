@@ -234,12 +234,12 @@ export type GuildMemberOrderByWithRelationInput = {
 
 export type GuildMemberWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  userId?: string
   guildId_userId?: Prisma.GuildMemberGuildIdUserIdCompoundUniqueInput
   AND?: Prisma.GuildMemberWhereInput | Prisma.GuildMemberWhereInput[]
   OR?: Prisma.GuildMemberWhereInput[]
   NOT?: Prisma.GuildMemberWhereInput | Prisma.GuildMemberWhereInput[]
   guildId?: Prisma.StringFilter<"GuildMember"> | string
-  userId?: Prisma.StringFilter<"GuildMember"> | string
   displayName?: Prisma.StringFilter<"GuildMember"> | string
   role?: Prisma.EnumGuildMemberRoleFilter<"GuildMember"> | $Enums.GuildMemberRole
   mainClass?: Prisma.StringFilter<"GuildMember"> | string
@@ -248,7 +248,7 @@ export type GuildMemberWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"GuildMember"> | Date | string
   guild?: Prisma.XOR<Prisma.GuildScalarRelationFilter, Prisma.GuildWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "guildId_userId">
+}, "id" | "guildId_userId" | "userId">
 
 export type GuildMemberOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

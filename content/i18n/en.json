@@ -117,6 +117,16 @@
     "loadError": "Could not load the guild.",
     "connected": "API connected",
     "syncing": "Syncing",
+    "profile": {
+      "kicker": "Profile",
+      "loadingTitle": "Loading profile",
+      "loading": "Validating your session...",
+      "loadError": "Could not load your profile.",
+      "description": "Manage your account, view your guild, and create a workspace when you do not have one yet.",
+      "accountTitle": "Account",
+      "guildTitle": "Guild",
+      "emptyGuild": "You are not part of a guild yet."
+    },
     "create": {
       "kicker": "Guild Workspace",
       "title": "Create your first guild",
