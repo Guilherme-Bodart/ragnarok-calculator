@@ -6,12 +6,8 @@ import { GuildsModule } from "./guilds/guilds.module";
 import { HealthController } from "./health.controller";
 import { PrismaModule } from "./prisma/prisma.module";
 
-const databaseBackedModules = process.env.DATABASE_URL
-  ? [PrismaModule, AuthModule]
-  : [];
-
 @Module({
-  imports: [...databaseBackedModules, GuildsModule, DataModule, CalculatorModule],
+  imports: [PrismaModule, AuthModule, GuildsModule, DataModule, CalculatorModule],
   controllers: [HealthController],
 })
 export class AppModule {}

@@ -1,5 +1,18 @@
 import { z } from "zod";
 
+export const createGuildSchema = z.object({
+  name: z.string().trim().min(2).max(80),
+  slug: z
+    .string()
+    .trim()
+    .min(2)
+    .max(64)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .optional(),
+  description: z.string().trim().max(240).optional(),
+  server: z.string().trim().min(2).max(80).optional(),
+});
+
 export const createMvpKillSchema = z.object({
   mvpName: z.string().trim().min(2).max(80),
   map: z.string().trim().min(2).max(80),
@@ -10,6 +23,7 @@ export const createMvpKillSchema = z.object({
   notes: z.string().trim().max(240).optional(),
 });
 
+export type CreateGuildRequest = z.infer<typeof createGuildSchema>;
 export type CreateMvpKillRequest = z.infer<typeof createMvpKillSchema>;
 
 export type MvpSpawnStatus = "waiting" | "soon" | "spawned";

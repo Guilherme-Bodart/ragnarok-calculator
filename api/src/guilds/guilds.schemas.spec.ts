@@ -1,7 +1,30 @@
 import { describe, expect, it } from "vitest";
-import { createMvpKillSchema, getMvpSpawnStatus } from "./guilds.schemas";
+import {
+  createGuildSchema,
+  createMvpKillSchema,
+  getMvpSpawnStatus,
+} from "./guilds.schemas";
 
 describe("guild schemas", () => {
+  it("accepts a guild creation payload", () => {
+    const payload = createGuildSchema.parse({
+      name: "Nightmare",
+      slug: "nightmare",
+      description: "Guilda de MVP e WoE",
+    });
+
+    expect(payload.slug).toBe("nightmare");
+  });
+
+  it("rejects invalid guild slugs", () => {
+    expect(() =>
+      createGuildSchema.parse({
+        name: "Nightmare",
+        slug: "Nightmare!!!",
+      }),
+    ).toThrow();
+  });
+
   it("accepts a valid MVP kill payload", () => {
     const payload = createMvpKillSchema.parse({
       mvpName: "Eddga",

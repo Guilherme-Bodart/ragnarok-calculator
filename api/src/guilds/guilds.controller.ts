@@ -1,36 +1,75 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Req, UnauthorizedException } from "@nestjs/common";
+import type { Request } from "express";
+import { AuthService } from "../auth/auth.service";
+import { SESSION_COOKIE_NAME } from "../auth/auth.constants";
 import { ZodValidationPipe } from "../common/zod-validation.pipe";
 import {
+  createGuildSchema,
   createMvpKillSchema,
+  type CreateGuildRequest,
   type CreateMvpKillRequest,
 } from "./guilds.schemas";
 import { GuildsService } from "./guilds.service";
 
 @Controller("guilds")
 export class GuildsController {
-  constructor(private readonly guildsService: GuildsService) {}
+  constructor(
+    private readonly guildsService: GuildsService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get("me")
-  getCurrentContext() {
-    return this.guildsService.getCurrentContext();
+  async getCurrentContext(@Req() request: Request) {
+    const user = await this.getCurrentUser(request);
+
+    return this.guildsService.getCurrentContext(user);
+  }
+
+  @Post()
+  async createGuild(
+    @Req() request: Request,
+    @Body(new ZodValidationPipe(createGuildSchema)) payload: CreateGuildRequest,
+  ) {
+    const user = await this.getCurrentUser(request);
+
+    return this.guildsService.createGuild(user, payload);
   }
 
   @Get(":slug/dashboard")
-  getDashboard(@Param("slug") slug: string) {
-    return this.guildsService.getDashboard(slug);
+  async getDashboard(@Req() request: Request, @Param("slug") slug: string) {
+    const user = await this.getCurrentUser(request);
+
+    return this.guildsService.getDashboard(user, slug);
   }
 
   @Get(":slug/mvp-kills")
-  getMvpEntries(@Param("slug") slug: string) {
-    return this.guildsService.getMvpEntries(slug);
+  async getMvpEntries(@Req() request: Request, @Param("slug") slug: string) {
+    const user = await this.getCurrentUser(request);
+
+    return this.guildsService.getMvpEntries(user, slug);
   }
 
   @Post(":slug/mvp-kills")
-  createMvpKill(
+  async createMvpKill(
+    @Req() request: Request,
     @Param("slug") slug: string,
     @Body(new ZodValidationPipe(createMvpKillSchema))
     payload: CreateMvpKillRequest,
   ) {
-    return this.guildsService.createMvpKill(slug, payload);
+    const user = await this.getCurrentUser(request);
+
+    return this.guildsService.createMvpKill(user, slug, payload);
+  }
+
+  private async getCurrentUser(request: Request) {
+    const user = await this.authService.getCurrentUser(
+      request.cookies?.[SESSION_COOKIE_NAME] as string | undefined,
+    );
+
+    if (!user) {
+      throw new UnauthorizedException("Authentication required");
+    }
+
+    return user;
   }
 }
