@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUp, Crown, MailPlus, Shield, Trash2, Users } from "luci
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
+import { getRoleRank } from "../guild-role-access";
 import type { GuildRole } from "../guild-types";
 import type { GuildToolComponentProps } from "../guild-tool-types";
 
@@ -16,7 +17,7 @@ export function GuildMembersTool({
   const router = useRouter();
   const { dictionary } = useNightmareLocale();
   const t = dictionary.guild.management;
-  const canManage = dashboard.guild.isOwner || dashboard.guild.userRole.rank === 1;
+  const canManage = dashboard.guild.isOwner || getRoleRank(dashboard.guild.userRole) === 1;
   const [roleName, setRoleName] = useState("");
   const [roleColor, setRoleColor] = useState("#67e8f9");
   const [leaderMemberId, setLeaderMemberId] = useState(

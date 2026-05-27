@@ -7,6 +7,10 @@ export type GuildRole = {
   rank: number;
 };
 
+export type LegacyGuildRole = "member" | "officer" | "leader" | "admin";
+
+export type GuildRoleLike = GuildRole | LegacyGuildRole;
+
 export type GuildSummary = {
   id: string;
   slug: string;
@@ -16,7 +20,7 @@ export type GuildSummary = {
   server: string;
   memberCount: number;
   onlineCount: number;
-  userRole: GuildRole;
+  userRole: GuildRoleLike;
   isOwner: boolean;
 };
 
