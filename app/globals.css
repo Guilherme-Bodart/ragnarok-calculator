@@ -1459,6 +1459,7 @@ a {
 .guild-role-panel,
 .guild-panel,
 .guild-mvp-panel,
+.guild-loading-panel,
 .guild-summary-tile {
   border: 1px solid rgb(167 239 255 / 0.16);
   border-radius: 10px;
@@ -1498,6 +1499,33 @@ a {
   min-height: 220px;
   padding: 26px;
   text-align: center;
+}
+
+.guild-loading-panel {
+  width: min(420px, 100%);
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  margin: 20vh auto 0;
+  padding: 28px;
+  text-align: center;
+}
+
+.guild-loading-panel svg {
+  color: #a7efff;
+}
+
+.guild-loading-panel strong {
+  color: #f2fbff;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.guild-loading-panel span {
+  color: rgb(242 251 255 / 0.62);
+  line-height: 1.5;
 }
 
 .guild-role-panel svg {

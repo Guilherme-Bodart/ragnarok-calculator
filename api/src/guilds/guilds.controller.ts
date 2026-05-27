@@ -10,6 +10,11 @@ import { GuildsService } from "./guilds.service";
 export class GuildsController {
   constructor(private readonly guildsService: GuildsService) {}
 
+  @Get("me")
+  getCurrentContext() {
+    return this.guildsService.getCurrentContext();
+  }
+
   @Get(":slug/dashboard")
   getDashboard(@Param("slug") slug: string) {
     return this.guildsService.getDashboard(slug);

@@ -6,6 +6,10 @@ import { MockGuildsStore } from "./mock-guilds.store";
 export class GuildsService {
   constructor(private readonly store: MockGuildsStore) {}
 
+  getCurrentContext() {
+    return this.store.getCurrentContext();
+  }
+
   getDashboard(slug: string) {
     return this.store.getDashboard(slug);
   }

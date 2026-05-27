@@ -36,6 +36,18 @@ export type GuildTool = {
   status: "ready" | "planned";
 };
 
+export type CurrentGuildUser = {
+  id: string;
+  email: string;
+  displayName: string;
+};
+
+export type CurrentGuildContext = {
+  user: CurrentGuildUser;
+  guilds: GuildSummary[];
+  activeGuild: GuildSummary;
+};
+
 export type MvpKillEntry = {
   id: string;
   mvpName: string;

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import {
   type CreateMvpKillRequest,
   getMvpSpawnStatus,
@@ -13,6 +13,13 @@ import type {
 } from "./guilds.types";
 
 type StoredMvpKillEntry = Omit<MvpKillEntry, "status">;
+type StoredGuildMember = GuildMember & { userId: string };
+
+const mockCurrentUser = {
+  id: "user_mock_owner",
+  email: "guild.master@example.com",
+  displayName: "Bodart",
+};
 
 @Injectable()
 export class MockGuildsStore {
@@ -28,9 +35,22 @@ export class MockGuildsStore {
     userRole: "owner",
   };
 
-  private readonly members: GuildMember[] = [
+  private readonly inaccessibleGuild: GuildSummary = {
+    id: "guild_valhalla",
+    slug: "valhalla",
+    name: "Valhalla",
+    emblemUrl: "/nightmare-reaper.png",
+    description: "Guilda existente no mock, mas sem membership do usuario atual.",
+    server: "Ragnarok Online",
+    memberCount: 24,
+    onlineCount: 4,
+    userRole: "member",
+  };
+
+  private readonly members: StoredGuildMember[] = [
     {
       id: "member_01",
+      userId: mockCurrentUser.id,
       displayName: "Bodart",
       role: "owner",
       mainClass: "Dragon Knight",
@@ -38,6 +58,7 @@ export class MockGuildsStore {
     },
     {
       id: "member_02",
+      userId: "user_mock_officer",
       displayName: "Mika",
       role: "officer",
       mainClass: "Cardinal",
@@ -45,6 +66,7 @@ export class MockGuildsStore {
     },
     {
       id: "member_03",
+      userId: "user_mock_member",
       displayName: "Zero",
       role: "member",
       mainClass: "Shadow Cross",
@@ -74,12 +96,40 @@ export class MockGuildsStore {
     createSeedMvpKill("mvp_seed_03", "Moonlight Flower", "pay_dun04", 60, -75),
   ];
 
-  getDashboard(slug: string): GuildDashboard {
-    this.assertGuild(slug);
+  getCurrentContext() {
+    const member = this.findMembership(this.guild.slug, mockCurrentUser.id);
+
+    if (!member) {
+      throw new ForbiddenException("User has no guild access");
+    }
+
+    const activeGuild = {
+      ...this.guild,
+      userRole: member.role,
+    };
 
     return {
-      guild: this.guild,
-      members: this.members,
+      user: mockCurrentUser,
+      guilds: [activeGuild],
+      activeGuild,
+    };
+  }
+
+  getDashboard(slug: string): GuildDashboard {
+    const member = this.assertMembership(slug, mockCurrentUser.id);
+
+    return {
+      guild: {
+        ...this.guild,
+        userRole: member.role,
+      },
+      members: this.members.map((member) => ({
+        id: member.id,
+        displayName: member.displayName,
+        role: member.role,
+        mainClass: member.mainClass,
+        status: member.status,
+      })),
       invites: this.invites,
       tools: this.tools,
       mvpEntries: this.getMvpEntries(slug),
@@ -87,7 +137,7 @@ export class MockGuildsStore {
   }
 
   getMvpEntries(slug: string): MvpKillEntry[] {
-    this.assertGuild(slug);
+    this.assertMembership(slug, mockCurrentUser.id);
 
     return this.mvpEntries
       .map((entry) => this.withStatus(entry))
@@ -98,7 +148,7 @@ export class MockGuildsStore {
   }
 
   createMvpKill(slug: string, payload: CreateMvpKillRequest): MvpKillEntry {
-    this.assertGuild(slug);
+    this.assertMembership(slug, mockCurrentUser.id);
 
     const killedAt = new Date(payload.killedAt);
     const respawnAt = new Date(
@@ -113,7 +163,7 @@ export class MockGuildsStore {
       respawnMinutes: payload.respawnMinutes,
       respawnAt: respawnAt.toISOString(),
       notes: payload.notes,
-      recordedBy: "Mock Officer",
+      recordedBy: mockCurrentUser.displayName,
       createdAt: new Date().toISOString(),
     };
 
@@ -130,9 +180,29 @@ export class MockGuildsStore {
   }
 
   private assertGuild(slug: string) {
-    if (slug !== this.guild.slug) {
+    if (slug !== this.guild.slug && slug !== this.inaccessibleGuild.slug) {
       throw new NotFoundException("Guild not found");
     }
+  }
+
+  private assertMembership(slug: string, userId: string) {
+    this.assertGuild(slug);
+
+    const member = this.findMembership(slug, userId);
+
+    if (!member) {
+      throw new ForbiddenException("User does not belong to this guild");
+    }
+
+    return member;
+  }
+
+  private findMembership(slug: string, userId: string) {
+    if (slug !== this.guild.slug) {
+      return null;
+    }
+
+    return this.members.find((member) => member.userId === userId) ?? null;
   }
 }
 

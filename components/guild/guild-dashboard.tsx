@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { fallbackDashboard } from "./guild-mock-data";
 import { GuildMvpTracker } from "./guild-mvp-tracker";
 import type { GuildDashboard as GuildDashboardData, MvpKillEntry } from "./guild-types";
@@ -21,7 +22,8 @@ import type { GuildDashboard as GuildDashboardData, MvpKillEntry } from "./guild
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 export function GuildDashboard({ slug }: { slug: string }) {
-  const [dashboard, setDashboard] = useState<GuildDashboardData>(fallbackDashboard);
+  const router = useRouter();
+  const [dashboard, setDashboard] = useState<GuildDashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notice, setNotice] = useState("Carregando guilda mockada...");
 
@@ -31,6 +33,11 @@ export function GuildDashboard({ slug }: { slug: string }) {
     async function loadDashboard() {
       try {
         const response = await fetch(`${apiBaseUrl}/guilds/${slug}/dashboard`);
+
+        if (response.status === 403 || response.status === 404) {
+          router.replace("/");
+          return;
+        }
 
         if (!response.ok) {
           throw new Error("Unable to load guild dashboard");
@@ -44,8 +51,12 @@ export function GuildDashboard({ slug }: { slug: string }) {
         }
       } catch {
         if (isMounted) {
-          setDashboard(fallbackDashboard);
-          setNotice("API offline: usando dados locais de preview.");
+          if (slug === fallbackDashboard.guild.slug) {
+            setDashboard(fallbackDashboard);
+            setNotice("API offline: usando dados locais de preview.");
+          } else {
+            router.replace("/");
+          }
         }
       } finally {
         if (isMounted) {
@@ -59,7 +70,7 @@ export function GuildDashboard({ slug }: { slug: string }) {
     return () => {
       isMounted = false;
     };
-  }, [slug]);
+  }, [router, slug]);
 
   const roleLabel = useMemo(
     () =>
@@ -67,15 +78,32 @@ export function GuildDashboard({ slug }: { slug: string }) {
         owner: "Guild Master",
         officer: "Officer",
         member: "Member",
-      })[dashboard.guild.userRole],
-    [dashboard.guild.userRole],
+      })[dashboard?.guild.userRole ?? "member"],
+    [dashboard?.guild.userRole],
   );
 
   function handleCreateMvpEntry(entry: MvpKillEntry) {
-    setDashboard((current) => ({
-      ...current,
-      mvpEntries: [entry, ...current.mvpEntries],
-    }));
+    setDashboard((current) => {
+      const baseDashboard = current ?? fallbackDashboard;
+
+      return {
+        ...baseDashboard,
+        mvpEntries: [entry, ...baseDashboard.mvpEntries],
+      };
+    });
+  }
+
+  if (!dashboard) {
+    return (
+      <main className="guild-page">
+        <div className="guild-grid-bg" />
+        <section className="guild-loading-panel" aria-live="polite">
+          <LayoutDashboard size={22} />
+          <strong>Carregando guilda</strong>
+          <span>Validando acesso do usuario mockado...</span>
+        </section>
+      </main>
+    );
   }
 
   return (
