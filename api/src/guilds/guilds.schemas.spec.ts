@@ -27,9 +27,18 @@ describe("guild schemas", () => {
 
   it("accepts a valid MVP kill payload", () => {
     const payload = createMvpKillSchema.parse({
-      mvpName: "Eddga",
-      map: "pay_fild11",
+      catalogEntryId: "1115-pay_fild10",
       killedAt: "2026-05-27T10:00:00.000Z",
+    });
+
+    expect(payload.catalogEntryId).toBe("1115-pay_fild10");
+  });
+
+  it("still accepts a manual MVP kill payload", () => {
+    const payload = createMvpKillSchema.parse({
+      killedAt: "2026-05-27T10:00:00.000Z",
+      map: "pay_fild10",
+      mvpName: "Eddga",
       respawnMinutes: 120,
     });
 

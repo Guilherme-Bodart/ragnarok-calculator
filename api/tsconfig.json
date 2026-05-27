@@ -18,5 +18,10 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts", "test/**/*.ts", "../packages/calculator-core/src/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "../packages/calculator-core/src/**/*.ts",
+    "../packages/guild-core/src/**/*.ts"
+  ]
 }

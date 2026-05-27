@@ -81,6 +81,7 @@ export type MvpKillEntry = {
   killedAt: string;
   respawnMinutes: number;
   respawnAt: string;
+  respawnWindowEndAt?: string;
   status: MvpSpawnStatus;
   notes?: string;
   recordedBy: string;

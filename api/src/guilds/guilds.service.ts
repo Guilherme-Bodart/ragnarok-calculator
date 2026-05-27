@@ -1,9 +1,14 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import {
+  MVP_RESPAWN_RANDOM_DELAY_MINUTES,
+  getMvpCatalogEntry,
+} from "../../../packages/guild-core/src";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import {
@@ -191,18 +196,34 @@ export class GuildsService {
     payload: CreateMvpKillRequest,
   ) {
     const membership = await this.assertMembership(user.id, slug);
+    const catalogEntry = payload.catalogEntryId
+      ? getMvpCatalogEntry(payload.catalogEntryId)
+      : null;
+
+    if (payload.catalogEntryId && !catalogEntry) {
+      throw new BadRequestException("Unknown MVP catalog entry");
+    }
+
+    const mvpName = catalogEntry?.name ?? payload.mvpName;
+    const map = catalogEntry?.mapId ?? payload.map;
+    const respawnMinutes = catalogEntry?.respawnMinutes ?? payload.respawnMinutes;
+
+    if (!mvpName || !map || !respawnMinutes) {
+      throw new BadRequestException("MVP data is incomplete");
+    }
+
     const killedAt = new Date(payload.killedAt);
     const respawnAt = new Date(
-      killedAt.getTime() + payload.respawnMinutes * 60 * 1000,
+      killedAt.getTime() + respawnMinutes * 60 * 1000,
     );
 
     const entry = await this.prisma.mvpKill.create({
       data: {
         guildId: membership.guildId,
-        mvpName: payload.mvpName,
-        map: payload.map,
+        mvpName,
+        map,
         killedAt,
-        respawnMinutes: payload.respawnMinutes,
+        respawnMinutes,
         respawnAt,
         notes: payload.notes,
         recordedById: user.id,
@@ -217,7 +238,7 @@ export class GuildsService {
         guildId: membership.guildId,
         author: getDisplayName(user),
         title: "Timer registrado",
-        body: `${payload.mvpName} foi adicionada ao MVP Tracker.`,
+        body: `${mvpName} foi adicionada ao MVP Tracker.`,
         type: "activity",
       },
     });
@@ -391,6 +412,9 @@ export class GuildsService {
       killedAt: entry.killedAt.toISOString(),
       respawnMinutes: entry.respawnMinutes,
       respawnAt: entry.respawnAt.toISOString(),
+      respawnWindowEndAt: new Date(
+        entry.respawnAt.getTime() + MVP_RESPAWN_RANDOM_DELAY_MINUTES * 60 * 1000,
+      ).toISOString(),
       status: getMvpSpawnStatus(entry.respawnAt),
       notes: entry.notes ?? undefined,
       recordedBy: entry.recordedBy.name ?? entry.recordedBy.email,

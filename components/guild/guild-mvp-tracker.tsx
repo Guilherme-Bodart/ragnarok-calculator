@@ -2,6 +2,10 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import { Clock3, MapPin, Plus, Skull, TimerReset } from "lucide-react";
+import {
+  MVP_RESPAWN_RANDOM_DELAY_MINUTES,
+  mvpCatalog,
+} from "@/packages/guild-core/src";
 import { cn } from "@/lib/utils";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { getMvpStatus } from "./guild-time";
@@ -15,14 +19,6 @@ type GuildMvpTrackerProps = {
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
-const commonMvps = [
-  { name: "Eddga", map: "pay_fild11", respawnMinutes: 120 },
-  { name: "Maya", map: "anthell02", respawnMinutes: 120 },
-  { name: "Moonlight Flower", map: "pay_dun04", respawnMinutes: 60 },
-  { name: "Pharaoh", map: "in_sphinx5", respawnMinutes: 60 },
-  { name: "Orc Hero", map: "gef_fild03", respawnMinutes: 60 },
-];
-
 export function GuildMvpTracker({
   entries,
   onCreateEntry,
@@ -30,13 +26,15 @@ export function GuildMvpTracker({
 }: GuildMvpTrackerProps) {
   const { dictionary } = useNightmareLocale();
   const t = dictionary.guild.mvp;
-  const [mvpName, setMvpName] = useState(commonMvps[0].name);
-  const [map, setMap] = useState(commonMvps[0].map);
+  const [catalogEntryId, setCatalogEntryId] = useState<string>(mvpCatalog[0].id);
   const [killedAt, setKilledAt] = useState(() => toDatetimeLocal(new Date()));
-  const [respawnMinutes, setRespawnMinutes] = useState(commonMvps[0].respawnMinutes);
   const [notes, setNotes] = useState("");
   const [message, setMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const selectedMvp = useMemo(
+    () => mvpCatalog.find((entry) => entry.id === catalogEntryId) ?? mvpCatalog[0],
+    [catalogEntryId],
+  );
 
   const sortedEntries = useMemo(
     () =>
@@ -60,27 +58,14 @@ export function GuildMvpTracker({
     [sortedEntries],
   );
 
-  function handlePresetChange(value: string) {
-    const preset = commonMvps.find((item) => item.name === value);
-
-    setMvpName(value);
-
-    if (preset) {
-      setMap(preset.map);
-      setRespawnMinutes(preset.respawnMinutes);
-    }
-  }
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSaving(true);
     setMessage("");
 
     const payload = {
-      mvpName,
-      map,
+      catalogEntryId,
       killedAt: new Date(killedAt).toISOString(),
-      respawnMinutes,
       notes: notes || undefined,
     };
 
@@ -129,17 +114,20 @@ export function GuildMvpTracker({
         <div className="guild-mvp-form-grid">
           <label>
             {t.mvpLabel}
-            <select value={mvpName} onChange={(event) => handlePresetChange(event.target.value)}>
-              {commonMvps.map((mvp) => (
-                <option key={mvp.name} value={mvp.name}>
-                  {mvp.name}
+            <select
+              value={catalogEntryId}
+              onChange={(event) => setCatalogEntryId(event.target.value)}
+            >
+              {mvpCatalog.map((mvp) => (
+                <option key={mvp.id} value={mvp.id}>
+                  {mvp.name} - {mvp.mapId} ({mvp.respawnLabel})
                 </option>
               ))}
             </select>
           </label>
           <label>
             {t.mapLabel}
-            <input value={map} onChange={(event) => setMap(event.target.value)} />
+            <input readOnly value={selectedMvp.mapId} />
           </label>
           <label>
             {t.killedAtLabel}
@@ -152,11 +140,8 @@ export function GuildMvpTracker({
           <label>
             {t.cooldownLabel}
             <input
-              min={1}
-              max={1440}
-              type="number"
-              value={respawnMinutes}
-              onChange={(event) => setRespawnMinutes(Number(event.target.value))}
+              readOnly
+              value={`${selectedMvp.respawnLabel} (+0-${MVP_RESPAWN_RANDOM_DELAY_MINUTES} min)`}
             />
           </label>
           <label className="guild-mvp-notes">
@@ -203,7 +188,7 @@ export function GuildMvpTracker({
                 <td>
                   <span className="guild-time-cell">
                     <Clock3 size={14} />
-                    {formatDateTime(entry.respawnAt)}
+                    {formatRespawnWindow(entry)}
                   </span>
                 </td>
                 <td>
@@ -265,6 +250,21 @@ function formatDateTime(value: string) {
     hour: "2-digit",
     minute: "2-digit",
     month: "2-digit",
+  }).format(new Date(value));
+}
+
+function formatRespawnWindow(entry: MvpKillEntry) {
+  if (!entry.respawnWindowEndAt) {
+    return formatDateTime(entry.respawnAt);
+  }
+
+  return `${formatDateTime(entry.respawnAt)} - ${formatTime(entry.respawnWindowEndAt)}`;
+}
+
+function formatTime(value: string) {
+  return new Intl.DateTimeFormat("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
   }).format(new Date(value));
 }
 

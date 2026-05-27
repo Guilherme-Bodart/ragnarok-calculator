@@ -14,13 +14,42 @@ export const createGuildSchema = z.object({
 });
 
 export const createMvpKillSchema = z.object({
-  mvpName: z.string().trim().min(2).max(80),
-  map: z.string().trim().min(2).max(80),
+  catalogEntryId: z.string().trim().min(2).max(120).optional(),
+  mvpName: z.string().trim().min(2).max(80).optional(),
+  map: z.string().trim().min(2).max(80).optional(),
   killedAt: z.string().refine((value) => !Number.isNaN(Date.parse(value)), {
     message: "Invalid killedAt date",
   }),
-  respawnMinutes: z.number().int().min(1).max(24 * 60),
+  respawnMinutes: z.number().int().min(1).max(24 * 60).optional(),
   notes: z.string().trim().max(240).optional(),
+}).superRefine((payload, context) => {
+  if (payload.catalogEntryId) {
+    return;
+  }
+
+  if (!payload.mvpName) {
+    context.addIssue({
+      code: "custom",
+      message: "mvpName is required when catalogEntryId is not provided",
+      path: ["mvpName"],
+    });
+  }
+
+  if (!payload.map) {
+    context.addIssue({
+      code: "custom",
+      message: "map is required when catalogEntryId is not provided",
+      path: ["map"],
+    });
+  }
+
+  if (!payload.respawnMinutes) {
+    context.addIssue({
+      code: "custom",
+      message: "respawnMinutes is required when catalogEntryId is not provided",
+      path: ["respawnMinutes"],
+    });
+  }
 });
 
 export type CreateGuildRequest = z.infer<typeof createGuildSchema>;
