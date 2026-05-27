@@ -125,6 +125,7 @@ a {
   left: 50%;
   z-index: 40;
   transform: translateX(-50%);
+  max-width: calc(100vw - 148px);
 }
 
 .site-nav {
@@ -137,6 +138,12 @@ a {
   background: rgb(2 6 18 / 0.58);
   box-shadow: 0 14px 44px rgb(0 0 0 / 0.32);
   backdrop-filter: blur(16px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.site-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .site-nav a {
@@ -161,8 +168,9 @@ a {
   right: 18px;
   top: 18px;
   z-index: 90;
-  display: flex;
-  gap: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 5px;
   border: 1px solid rgb(167 239 255 / 0.16);
   border-radius: 999px;
@@ -171,25 +179,87 @@ a {
   backdrop-filter: blur(16px);
 }
 
-.language-switcher button {
-  min-width: 40px;
+.language-switcher span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.language-switcher select {
+  min-width: 68px;
   border: 0;
   border-radius: 999px;
-  padding: 8px 10px;
-  color: rgb(242 251 255 / 0.58);
-  background: transparent;
+  padding: 8px 30px 8px 12px;
+  color: #020612;
+  background: #a7efff;
   font-family: var(--font-rune);
   font-size: 11px;
   font-weight: 900;
   cursor: pointer;
-  transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  box-shadow: 0 0 24px rgb(85 199 255 / 0.28);
+  outline: none;
+  appearance: none;
 }
 
-.language-switcher button:hover,
-.language-switcher button.active {
-  color: #020612;
-  background: #a7efff;
-  box-shadow: 0 0 24px rgb(85 199 255 / 0.28);
+.language-switcher::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  width: 7px;
+  height: 7px;
+  pointer-events: none;
+  border-right: 2px solid #020612;
+  border-bottom: 2px solid #020612;
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.language-switcher select:focus-visible {
+  outline: 2px solid #f2fbff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    top: 12px;
+    left: 12px;
+    right: 94px;
+    max-width: none;
+    transform: none;
+  }
+
+  .site-nav {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .site-nav a {
+    flex: 0 0 auto;
+    padding-inline: 12px;
+  }
+
+  .language-switcher {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-header {
+    right: 86px;
+  }
+
+  .site-nav a {
+    padding-inline: 10px;
+    font-size: 10px;
+  }
+
+  .language-switcher select {
+    min-width: 62px;
+    padding-inline: 10px 26px;
+  }
 }
 
 .hero-section {

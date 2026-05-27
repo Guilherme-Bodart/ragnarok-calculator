@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Calculator, MessageCircle, Sparkles } from "lucide-react";
+import { Calculator, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Dictionary } from "@/content/i18n";
 import { ParticleField } from "./particle-field";
@@ -36,13 +36,6 @@ export function Hero({ siteName, t }: HeroProps) {
             icon={<MessageCircle aria-hidden className="size-4" />}
           >
             {t.primaryAction}
-          </Button>
-          <Button
-            href="#valores"
-            variant="secondary"
-            icon={<Sparkles aria-hidden className="size-4" />}
-          >
-            {t.secondaryAction}
           </Button>
           <Button
             href="/calculator"

@@ -1,5 +1,10 @@
-import { dictionaries, type Dictionary, type Locale, locales } from "@/content/i18n";
-import { cn } from "@/lib/utils";
+import {
+  dictionaries,
+  isLocale,
+  type Dictionary,
+  type Locale,
+  locales,
+} from "@/content/i18n";
 
 type LanguageSwitcherProps = {
   locale: Locale;
@@ -13,18 +18,23 @@ export function LanguageSwitcher({
   t,
 }: LanguageSwitcherProps) {
   return (
-    <div className="language-switcher" aria-label={t.label}>
-      {locales.map((item) => (
-        <button
-          key={item}
-          type="button"
-          className={cn(item === locale && "active")}
-          onClick={() => onLocaleChange(item)}
-          aria-pressed={item === locale}
-        >
-          {dictionaries[item].language[item]}
-        </button>
-      ))}
-    </div>
+    <label className="language-switcher">
+      <span>{t.label}</span>
+      <select
+        aria-label={t.label}
+        onChange={(event) => {
+          if (isLocale(event.target.value)) {
+            onLocaleChange(event.target.value);
+          }
+        }}
+        value={locale}
+      >
+        {locales.map((item) => (
+          <option key={item} value={item}>
+            {dictionaries[item].language[item]}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
