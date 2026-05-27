@@ -127,10 +127,10 @@ function CreateGuildPanel() {
     <main className="guild-page">
       <div className="guild-grid-bg" />
       <section className="guild-create-panel">
-        <div>
+        <div className="guild-create-header">
           <span className="guild-tool-eyebrow">
             <LayoutDashboard size={16} />
-            Guild Workspace
+            {t.kicker}
           </span>
           <h1>{t.title}</h1>
           <p>{t.description}</p>
@@ -176,7 +176,11 @@ function CreateGuildPanel() {
               value={description}
             />
           </label>
-          <button className="guild-primary-button" disabled={isSaving} type="submit">
+          <button
+            className="guild-primary-button guild-create-submit"
+            disabled={isSaving}
+            type="submit"
+          >
             <Plus size={16} />
             {isSaving ? t.creating : t.submit}
           </button>

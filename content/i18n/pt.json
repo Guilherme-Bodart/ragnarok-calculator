@@ -118,6 +118,7 @@
     "connected": "API conectada",
     "syncing": "Sincronizando",
     "create": {
+      "kicker": "Guild Workspace",
       "title": "Crie sua primeira guilda",
       "description": "Seu usuário já está autenticado. Agora crie um workspace para membros, convites, ferramentas e timers.",
       "nameLabel": "Nome da guilda",

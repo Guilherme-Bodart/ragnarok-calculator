@@ -118,6 +118,7 @@
     "connected": "API connected",
     "syncing": "Syncing",
     "create": {
+      "kicker": "Guild Workspace",
       "title": "Create your first guild",
       "description": "Your user is authenticated. Now create a workspace for members, invites, tools, and timers.",
       "nameLabel": "Guild name",
