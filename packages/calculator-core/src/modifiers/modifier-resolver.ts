@@ -13,7 +13,7 @@ export class ModifierResolver {
     const parsedContext = modifierResolutionContextSchema.parse(context);
 
     return modifiers.filter((modifier) =>
-      modifier.conditions.every((condition) =>
+      modifier.conditions.every((condition: ModifierCondition) =>
         this.isConditionMet(condition, parsedContext),
       ),
     );

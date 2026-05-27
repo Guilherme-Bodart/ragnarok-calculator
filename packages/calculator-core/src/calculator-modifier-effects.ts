@@ -40,7 +40,7 @@ export type CalculatorModifierEffects = {
 };
 
 export class CalculatorModifierEffectsFactory {
-  constructor(private readonly pipeline = new ItemModifierPipeline()) {}
+  constructor(private readonly pipeline = new ItemModifierPipeline()) { }
 
   fromItems(
     items: RoItem[],
@@ -100,12 +100,14 @@ export class CalculatorModifierEffectsFactory {
 
       for (const bucket of result.aggregation.buckets) {
         if (bucket.target.type === "self" && isBaseStat(bucket.stat)) {
-          effects.statBonuses[bucket.stat] += bucket.value;
+          const stat = bucket.stat as BaseStat;
+          effects.statBonuses[stat] += bucket.value;
           continue;
         }
 
         if (bucket.stat === "allStats" && bucket.target.type === "self") {
           for (const stat of baseStats) {
+            const stat = bucket.stat as BaseStat;
             effects.statBonuses[stat] += bucket.value;
           }
 
