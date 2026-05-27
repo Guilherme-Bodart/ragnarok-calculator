@@ -9,7 +9,7 @@ export type GuildRole = {
 
 export type LegacyGuildRole = "member" | "officer" | "leader" | "admin";
 
-export type GuildRoleLike = GuildRole | LegacyGuildRole;
+export type GuildRoleLike = GuildRole | LegacyGuildRole | null | undefined;
 
 export type GuildSummary = {
   id: string;
@@ -46,7 +46,7 @@ export type GuildTool = {
   id: string;
   name: string;
   status: "ready" | "planned";
-  minimumRole: GuildRole | null;
+  minimumRole: GuildRoleLike;
 };
 
 export type GuildNotification = {

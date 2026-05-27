@@ -273,7 +273,7 @@ export function GuildMembersTool({
               <select
                 disabled={!canManage}
                 onChange={(event) => updateToolAccess(tool.id, event.target.value)}
-                value={tool.minimumRole?.id ?? dashboard.roles[0]?.id ?? ""}
+                value={getMinimumRoleId(tool.minimumRole, dashboard.roles)}
               >
                 {dashboard.roles.map((role) => (
                   <option key={role.id} value={role.id}>
@@ -347,4 +347,20 @@ function RoleBadge({ role }: { role: GuildRole }) {
       {role.name}
     </span>
   );
+}
+
+function getMinimumRoleId(
+  minimumRole: GuildToolComponentProps["dashboard"]["tools"][number]["minimumRole"],
+  roles: GuildRole[],
+) {
+  if (!minimumRole) {
+    return roles[0]?.id ?? "";
+  }
+
+  if (typeof minimumRole !== "string") {
+    return minimumRole.id ?? roles[0]?.id ?? "";
+  }
+
+  const legacyRank = getRoleRank(minimumRole);
+  return roles.find((role) => role.rank === legacyRank)?.id ?? roles[0]?.id ?? "";
 }

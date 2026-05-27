@@ -1,4 +1,4 @@
-import type { GuildRole, GuildRoleLike, LegacyGuildRole } from "./guild-types";
+import type { GuildRoleLike, LegacyGuildRole } from "./guild-types";
 
 const legacyRoleRank: Record<LegacyGuildRole, number> = {
   admin: 1,
@@ -16,22 +16,35 @@ const legacyRoleLabel: Record<LegacyGuildRole, string> = {
 
 export function canUseGuildTool(
   userRole: GuildRoleLike,
-  minimumRole: GuildRole | null,
+  minimumRole: GuildRoleLike,
 ) {
-  const userRank = getRoleRank(userRole);
+  if (!userRole || !minimumRole) {
+    return true;
+  }
 
-  return !minimumRole || userRank <= minimumRole.rank;
+  const userRank = getRoleRank(userRole);
+  const minimumRank = getRoleRank(minimumRole);
+
+  return userRank <= minimumRank;
 }
 
 export function formatGuildRole(role: GuildRoleLike) {
+  if (!role) {
+    return "Member";
+  }
+
   if (typeof role === "string") {
     return legacyRoleLabel[role] ?? role;
   }
 
-  return role.name;
+  return role.name ?? "Member";
 }
 
 export function getRoleRank(role: GuildRoleLike) {
+  if (!role) {
+    return 99;
+  }
+
   if (typeof role === "string") {
     return legacyRoleRank[role] ?? 1;
   }
