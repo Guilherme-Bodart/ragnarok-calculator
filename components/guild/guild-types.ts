@@ -1,6 +1,6 @@
 export type MvpSpawnStatus = "waiting" | "soon" | "spawned";
 
-export type GuildMemberRole = "owner" | "officer" | "member";
+export type GuildMemberRole = "member" | "officer" | "leader" | "admin";
 
 export type GuildSummary = {
   id: string;
@@ -36,6 +36,32 @@ export type GuildTool = {
   status: "ready" | "planned";
 };
 
+export type GuildNotification = {
+  id: string;
+  title: string;
+  body: string;
+  tone: "info" | "warning" | "success";
+  createdAt: string;
+  read: boolean;
+};
+
+export type GuildFeedItem = {
+  id: string;
+  author: string;
+  title: string;
+  body: string;
+  createdAt: string;
+  type: "announcement" | "activity" | "system";
+};
+
+export type GuildEvent = {
+  id: string;
+  title: string;
+  startsAt: string;
+  type: "woe" | "farm" | "meeting";
+  requiredRole: GuildMemberRole;
+};
+
 export type CurrentGuildUser = {
   id: string;
   email: string;
@@ -66,5 +92,8 @@ export type GuildDashboard = {
   members: GuildMember[];
   invites: GuildInvite[];
   tools: GuildTool[];
+  notifications: GuildNotification[];
+  feed: GuildFeedItem[];
+  events: GuildEvent[];
   mvpEntries: MvpKillEntry[];
 };

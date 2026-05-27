@@ -5,8 +5,11 @@ import {
 } from "./guilds.schemas";
 import type {
   GuildDashboard,
+  GuildEvent,
+  GuildFeedItem,
   GuildInvite,
   GuildMember,
+  GuildNotification,
   GuildSummary,
   GuildTool,
   MvpKillEntry,
@@ -32,7 +35,7 @@ export class MockGuildsStore {
     server: "Ragnarok Online",
     memberCount: 38,
     onlineCount: 11,
-    userRole: "owner",
+    userRole: "admin",
   };
 
   private readonly inaccessibleGuild: GuildSummary = {
@@ -52,7 +55,7 @@ export class MockGuildsStore {
       id: "member_01",
       userId: mockCurrentUser.id,
       displayName: "Bodart",
-      role: "owner",
+      role: "admin",
       mainClass: "Dragon Knight",
       status: "online",
     },
@@ -60,7 +63,7 @@ export class MockGuildsStore {
       id: "member_02",
       userId: "user_mock_officer",
       displayName: "Mika",
-      role: "officer",
+      role: "leader",
       mainClass: "Cardinal",
       status: "online",
     },
@@ -86,8 +89,93 @@ export class MockGuildsStore {
 
   private readonly tools: GuildTool[] = [
     { id: "mvp-tracker", name: "MVP Tracker", status: "ready" },
-    { id: "loot-ledger", name: "Loot Ledger", status: "planned" },
-    { id: "attendance", name: "Presenca", status: "planned" },
+    { id: "guild-feed", name: "Guild Feed", status: "ready" },
+    { id: "notifications", name: "Notificacoes", status: "ready" },
+    { id: "guild-calendar", name: "Agenda", status: "ready" },
+    { id: "member-management", name: "Membros", status: "ready" },
+    { id: "woe-tracker", name: "WoE Tracker", status: "planned" },
+    { id: "economy", name: "Economia", status: "planned" },
+    { id: "drops", name: "Drops", status: "planned" },
+    { id: "builds", name: "Builds", status: "planned" },
+    { id: "analytics", name: "Analytics", status: "planned" },
+  ];
+
+  private readonly notifications: GuildNotification[] = [
+    {
+      id: "notification_01",
+      title: "Janela de MVP abrindo",
+      body: "Maya entra na janela de respawn em poucos minutos.",
+      tone: "warning",
+      createdAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+      read: false,
+    },
+    {
+      id: "notification_02",
+      title: "Convite pendente",
+      body: "1 novo recruta aguarda aprovacao.",
+      tone: "info",
+      createdAt: new Date(Date.now() - 1000 * 60 * 31).toISOString(),
+      read: false,
+    },
+    {
+      id: "notification_03",
+      title: "Farm finalizado",
+      body: "Relatorio de drops da party noturna foi publicado.",
+      tone: "success",
+      createdAt: new Date(Date.now() - 1000 * 60 * 74).toISOString(),
+      read: true,
+    },
+  ];
+
+  private readonly feed: GuildFeedItem[] = [
+    {
+      id: "feed_01",
+      author: "Mika",
+      title: "Prioridade da noite",
+      body: "Foco em timers de MVP e farm de consumiveis para WoE.",
+      type: "announcement",
+      createdAt: new Date(Date.now() - 1000 * 60 * 24).toISOString(),
+    },
+    {
+      id: "feed_02",
+      author: "System",
+      title: "Timer registrado",
+      body: "Moonlight Flower foi adicionada ao MVP Tracker.",
+      type: "activity",
+      createdAt: new Date(Date.now() - 1000 * 60 * 54).toISOString(),
+    },
+    {
+      id: "feed_03",
+      author: "Bodart",
+      title: "Setup de builds",
+      body: "Comecando a organizar presets para classes principais.",
+      type: "announcement",
+      createdAt: new Date(Date.now() - 1000 * 60 * 118).toISOString(),
+    },
+  ];
+
+  private readonly events: GuildEvent[] = [
+    {
+      id: "event_01",
+      title: "WoE Training",
+      startsAt: new Date(Date.now() + 1000 * 60 * 60 * 4).toISOString(),
+      type: "woe",
+      requiredRole: "member",
+    },
+    {
+      id: "event_02",
+      title: "Farm de consumiveis",
+      startsAt: new Date(Date.now() + 1000 * 60 * 60 * 22).toISOString(),
+      type: "farm",
+      requiredRole: "member",
+    },
+    {
+      id: "event_03",
+      title: "Revisao de lineup",
+      startsAt: new Date(Date.now() + 1000 * 60 * 60 * 31).toISOString(),
+      type: "meeting",
+      requiredRole: "officer",
+    },
   ];
 
   private readonly mvpEntries: StoredMvpKillEntry[] = [
@@ -132,6 +220,9 @@ export class MockGuildsStore {
       })),
       invites: this.invites,
       tools: this.tools,
+      notifications: this.notifications,
+      feed: this.feed,
+      events: this.events,
       mvpEntries: this.getMvpEntries(slug),
     };
   }

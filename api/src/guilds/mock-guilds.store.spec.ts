@@ -15,7 +15,7 @@ describe("MockGuildsStore", () => {
     const store = new MockGuildsStore();
     const dashboard = store.getDashboard("nightmare");
 
-    expect(dashboard.guild.userRole).toBe("owner");
+    expect(dashboard.guild.userRole).toBe("admin");
     expect(dashboard.members.length).toBeGreaterThan(0);
   });
 
