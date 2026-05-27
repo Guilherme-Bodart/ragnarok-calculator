@@ -58,15 +58,52 @@
     ]
   },
   "agenda": {
-    "kicker": "Schedule",
-    "title": "Next chapter",
-    "description": "A guild panel to keep the crew ready before the castle opens.",
-    "badge": "Next chapter",
-    "eventTitle": "The War of Emperium has arrived",
-    "day": "Sunday",
-    "time": "8 PM to 10 PM BRT",
-    "copy": "A guild panel to remind the crew: review builds, prepare supplies, and join voice before the first recall.",
-    "status": "Recall ready"
+    "kicker": "Guild SaaS",
+    "title": "A workspace to command your guild",
+    "description": "Timers, members, roles, events, and permissions in a panel built for the Ragnarok Online routine.",
+    "action": "Enter the guild area",
+    "previewLabel": "Guild workspace preview",
+    "features": [
+      "Custom roles",
+      "Tool access control",
+      "Shared timers",
+      "Ready for new tools"
+    ],
+    "tools": [
+      "MVP Tracker",
+      "Calendar",
+      "Members",
+      "Permissions"
+    ],
+    "boardEyebrow": "Active operation",
+    "boardMeta": "3 timers",
+    "boardTitle": "MVP hunt",
+    "mvpRows": [
+      {
+        "mvp": "Eddga",
+        "map": "pay_fild11",
+        "time": "12:14",
+        "status": "Waiting"
+      },
+      {
+        "mvp": "Maya",
+        "map": "anthell02",
+        "time": "11:35",
+        "status": "Soon"
+      },
+      {
+        "mvp": "Moonlight Flower",
+        "map": "pay_dun04",
+        "time": "11:11",
+        "status": "Spawned"
+      }
+    ],
+    "sideAlerts": "Alerts",
+    "sideAlertValue": "MVP window opening",
+    "sideEvent": "Next event",
+    "sideEventValue": "WoE training - 8 PM",
+    "sideAccess": "Minimum access",
+    "sideAccessValue": "Officer or above"
   },
   "recruitment": {
     "kicker": "Join us",

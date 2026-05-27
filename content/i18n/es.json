@@ -58,15 +58,52 @@
     ]
   },
   "agenda": {
-    "kicker": "Agenda",
-    "title": "Próximo capítulo",
-    "description": "Un panel de guilda para mantener al grupo listo antes de que abra el castillo.",
-    "badge": "Próximo capítulo",
-    "eventTitle": "La Guerra del Emperium llegó",
-    "day": "Domingo",
-    "time": "20h a 22h BRT",
-    "copy": "Un panel de guilda para recordar al grupo: revisar builds, preparar consumibles y entrar a la llamada antes del primer recall.",
-    "status": "Recall preparado"
+    "kicker": "Guild SaaS",
+    "title": "Un workspace para comandar tu guilda",
+    "description": "Timers, miembros, cargos, eventos y permisos en un panel hecho para la rutina de Ragnarok Online.",
+    "action": "Entrar al área de guilda",
+    "previewLabel": "Vista previa del workspace de guilda",
+    "features": [
+      "Cargos personalizados",
+      "Acceso por herramienta",
+      "Timers compartidos",
+      "Listo para nuevas tools"
+    ],
+    "tools": [
+      "MVP Tracker",
+      "Agenda",
+      "Miembros",
+      "Permisos"
+    ],
+    "boardEyebrow": "Operación activa",
+    "boardMeta": "3 timers",
+    "boardTitle": "Caza de MVP",
+    "mvpRows": [
+      {
+        "mvp": "Eddga",
+        "map": "pay_fild11",
+        "time": "12:14",
+        "status": "Esperando"
+      },
+      {
+        "mvp": "Maya",
+        "map": "anthell02",
+        "time": "11:35",
+        "status": "Pronto"
+      },
+      {
+        "mvp": "Moonlight Flower",
+        "map": "pay_dun04",
+        "time": "11:11",
+        "status": "Ya nació"
+      }
+    ],
+    "sideAlerts": "Alertas",
+    "sideAlertValue": "Ventana de MVP abriendo",
+    "sideEvent": "Próximo evento",
+    "sideEventValue": "WoE treino - 20h",
+    "sideAccess": "Acceso mínimo",
+    "sideAccessValue": "Oficial o superior"
   },
   "recruitment": {
     "kicker": "Join us",

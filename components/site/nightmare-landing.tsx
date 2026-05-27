@@ -11,7 +11,7 @@ import { Hero } from "@/components/site/hero";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { Manifesto } from "@/components/site/manifesto";
 import { Recruitment } from "@/components/site/recruitment";
-import { Routine } from "@/components/site/routine";
+import { GuildSaasShowcase } from "@/components/site/guild-saas-showcase";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SpriteStage } from "@/components/site/sprite-stage";
@@ -57,7 +57,7 @@ export function NightmareLanding() {
       <main>
         <Hero t={t.hero} siteName={t.meta.siteName} />
         <Manifesto t={t.values} />
-        <Routine t={t.agenda} />
+        <GuildSaasShowcase t={t.agenda} />
         <Recruitment t={t.recruitment} />
       </main>
       <SiteFooter t={t.meta} />
