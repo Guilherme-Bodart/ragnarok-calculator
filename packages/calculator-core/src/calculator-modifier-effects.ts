@@ -107,7 +107,6 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "allStats" && bucket.target.type === "self") {
           for (const stat of baseStats) {
-            const stat = bucket.stat as BaseStat;
             effects.statBonuses[stat] += bucket.value;
           }
 
