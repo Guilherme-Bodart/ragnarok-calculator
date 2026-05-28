@@ -6,6 +6,7 @@ export * from "./character-status-engine";
 export * from "./calculate-damage-from-dataset";
 export * from "./damage-formula-pipeline";
 export * from "./damage-engine";
+export * from "./datasets";
 export * from "./effective-character";
 export * from "./formulas";
 export * from "./job-basepoints";
