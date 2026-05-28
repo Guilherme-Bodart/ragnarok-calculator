@@ -111,6 +111,69 @@
     "description": "Enter the Discord, meet the crew, and see if Nightmare fits the way you play Ragnarok.",
     "action": "Message on Discord"
   },
+  "calculator": {
+    "brandSubtitle": "Damage Lab",
+    "actionsAria": "Calculator actions",
+    "backHomeAria": "Back to Nightmare home",
+    "buildsAction": "Builds",
+    "syncAction": "Sync Data",
+    "kicker": "Ragnarok Online damage calculator",
+    "title": "Nightmare Combat Simulator",
+    "description": "Build your character, pick a monster, choose the skill and inspect every multiplier before the final hit lands.",
+    "engineTitle": "Prototype Engine",
+    "engineDescription": "Backend ready for exact formulas, sync jobs and saved builds.",
+    "workspaceAria": "Damage calculator workspace",
+    "character": {
+      "title": "Character",
+      "meta": "Base 260 / Job 55",
+      "classLabel": "Class",
+      "skillLabel": "Skill",
+      "levelLabel": "Level"
+    },
+    "equipment": {
+      "title": "Equipment, Cards, Costume & Shadow",
+      "meta": "All slots prepared",
+      "aria": "Character equipment slots",
+      "empty": "Empty",
+      "slots": {
+        "headTop": "Head Top",
+        "headMid": "Head Mid",
+        "headLow": "Head Low",
+        "weapon": "Weapon",
+        "armor": "Armor",
+        "shield": "Shield",
+        "garment": "Garment",
+        "shoes": "Shoes",
+        "accessoryLeft": "Accessory 1",
+        "accessoryRight": "Accessory 2",
+        "shadowWeapon": "Shadow Wpn",
+        "shadowShield": "Shadow Shld",
+        "shadowArmor": "Shadow Arm",
+        "shadowShoes": "Shadow Shoes"
+      }
+    },
+    "target": {
+      "title": "Target & Output",
+      "meta": "iRO profile",
+      "monsterLabel": "Monster",
+      "totalDamage": "Total Damage",
+      "averageHit": "average hit",
+      "hit": "hit",
+      "basePower": "Base Power",
+      "skillMultiplier": "Skill Multiplier",
+      "defenseMitigation": "Defense Mitigation",
+      "source": "Source",
+      "sourceValue": "Local core"
+    },
+    "buffs": {
+      "blessing": "Blessing",
+      "increaseAgi": "Increase AGI",
+      "endow": "Endow",
+      "food": "Food +10",
+      "guildAura": "Guild Aura",
+      "elementalScroll": "Elemental Scroll"
+    }
+  },
   "auth": {
     "back": "Nightmare",
     "kicker": "Guild Workspace",

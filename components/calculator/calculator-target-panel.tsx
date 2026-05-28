@@ -3,15 +3,18 @@
 import { Swords } from "lucide-react";
 import type { CalculateDamageResult } from "@/packages/calculator-core/src";
 import { calculatorDemoDataset } from "./calculator-demo-data";
+import type { CalculatorDictionary } from "./calculator-i18n";
 import { getBreakdownValue } from "./calculator-utils";
 
 type CalculatorTargetPanelProps = {
+  copy: CalculatorDictionary;
   result: CalculateDamageResult;
   selectedMonsterId: number;
   onMonsterChange: (monsterId: number) => void;
 };
 
 export function CalculatorTargetPanel({
+  copy,
   result,
   selectedMonsterId,
   onMonsterChange,
@@ -31,13 +34,13 @@ export function CalculatorTargetPanel({
       <div className="calc-panel-header">
         <span>
           <Swords size={17} />
-          Target & Output
+          {copy.target.title}
         </span>
-        <small>iRO profile</small>
+        <small>{copy.target.meta}</small>
       </div>
 
       <label className="monster-picker">
-        Monster
+        {copy.target.monsterLabel}
         <select
           value={selectedMonsterId}
           onChange={(event) => onMonsterChange(Number(event.target.value))}
@@ -51,29 +54,30 @@ export function CalculatorTargetPanel({
       </label>
 
       <div className="damage-card">
-        <span>Total Damage</span>
+        <span>{copy.target.totalDamage}</span>
         <strong>{totalDamage}</strong>
         <small>
-          {averageDamage} average hit / {hitCount} hit / {result.skill.damageType}
+          {averageDamage} {copy.target.averageHit} / {hitCount}{" "}
+          {copy.target.hit} / {result.skill.damageType}
         </small>
       </div>
 
       <div className="breakdown-list">
         <div>
-          <span>Base Power</span>
+          <span>{copy.target.basePower}</span>
           <strong>{basePower}</strong>
         </div>
         <div>
-          <span>Skill Multiplier</span>
+          <span>{copy.target.skillMultiplier}</span>
           <strong>{skillMultiplier.toFixed(2)}x</strong>
         </div>
         <div>
-          <span>Defense Mitigation</span>
+          <span>{copy.target.defenseMitigation}</span>
           <strong>{defenseMultiplier.toFixed(3)}x</strong>
         </div>
         <div>
-          <span>Source</span>
-          <strong>Local core</strong>
+          <span>{copy.target.source}</span>
+          <strong>{copy.target.sourceValue}</strong>
         </div>
       </div>
     </aside>

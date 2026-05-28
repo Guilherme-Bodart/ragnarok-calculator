@@ -3,6 +3,7 @@
 import { Activity, Sparkles } from "lucide-react";
 import type { CharacterStats, RoSkill } from "@/packages/calculator-core/src";
 import { calculatorDemoDataset } from "./calculator-demo-data";
+import type { CalculatorDictionary } from "./calculator-i18n";
 
 type VisibleStat = {
   label: string;
@@ -24,15 +25,16 @@ const statRows = [
 ] satisfies VisibleStat[];
 
 const buffs = [
-  "Blessing",
-  "Increase AGI",
-  "Endow",
-  "Food +10",
-  "Guild Aura",
-  "Elemental Scroll",
-];
+  "blessing",
+  "increaseAgi",
+  "endow",
+  "food",
+  "guildAura",
+  "elementalScroll",
+] as const;
 
 type CalculatorCharacterPanelProps = {
+  copy: CalculatorDictionary;
   skillLevel: number;
   selectedSkill: RoSkill;
   stats: CharacterStats;
@@ -42,6 +44,7 @@ type CalculatorCharacterPanelProps = {
 };
 
 export function CalculatorCharacterPanel({
+  copy,
   skillLevel,
   selectedSkill,
   stats,
@@ -54,14 +57,14 @@ export function CalculatorCharacterPanel({
       <div className="calc-panel-header">
         <span>
           <Activity size={17} />
-          Character
+          {copy.character.title}
         </span>
-        <small>Base 260 / Job 55</small>
+        <small>{copy.character.meta}</small>
       </div>
 
       <div className="calc-select-row">
         <label>
-          Class
+          {copy.character.classLabel}
           <select defaultValue="dragon-knight">
             <option value="dragon-knight">Dragon Knight</option>
             <option value="arch-mage">Arch Mage</option>
@@ -70,7 +73,7 @@ export function CalculatorCharacterPanel({
           </select>
         </label>
         <label>
-          Skill
+          {copy.character.skillLabel}
           <select
             value={selectedSkill.id}
             onChange={(event) => {
@@ -91,7 +94,7 @@ export function CalculatorCharacterPanel({
           </select>
         </label>
         <label>
-          Level
+          {copy.character.levelLabel}
           <select
             value={skillLevel}
             onChange={(event) => onSkillLevelChange(Number(event.target.value))}
@@ -131,7 +134,7 @@ export function CalculatorCharacterPanel({
         {buffs.map((buff) => (
           <button type="button" key={buff}>
             <Sparkles size={14} />
-            {buff}
+            {copy.buffs[buff]}
           </button>
         ))}
       </div>

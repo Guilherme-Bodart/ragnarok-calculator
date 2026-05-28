@@ -11,36 +11,41 @@ import {
   Sparkles,
   Swords,
 } from "lucide-react";
+import type { CalculatorDictionary } from "./calculator-i18n";
 
 const equipmentSlots = [
-  { id: "headTop", label: "Head Top", area: "headTop", icon: HardHat },
-  { id: "headMid", label: "Head Mid", area: "headMid", icon: Circle },
-  { id: "headLow", label: "Head Low", area: "headLow", icon: Circle },
-  { id: "weapon", label: "Weapon", area: "weapon", icon: Swords },
-  { id: "armor", label: "Armor", area: "armor", icon: Shirt },
-  { id: "shield", label: "Shield", area: "shield", icon: Shield },
-  { id: "garment", label: "Garment", area: "garment", icon: Armchair },
-  { id: "shoes", label: "Shoes", area: "shoes", icon: Sparkles },
-  { id: "accessoryLeft", label: "Accessory 1", area: "accessoryLeft", icon: Gem },
-  { id: "accessoryRight", label: "Accessory 2", area: "accessoryRight", icon: Gem },
-  { id: "shadowWeapon", label: "Shadow Wpn", area: "shadowWeapon", icon: Hand },
-  { id: "shadowShield", label: "Shadow Shld", area: "shadowShield", icon: Shield },
-  { id: "shadowArmor", label: "Shadow Arm", area: "shadowArmor", icon: Shirt },
-  { id: "shadowShoes", label: "Shadow Shoes", area: "shadowShoes", icon: Sparkles },
+  { id: "headTop", area: "headTop", icon: HardHat },
+  { id: "headMid", area: "headMid", icon: Circle },
+  { id: "headLow", area: "headLow", icon: Circle },
+  { id: "weapon", area: "weapon", icon: Swords },
+  { id: "armor", area: "armor", icon: Shirt },
+  { id: "shield", area: "shield", icon: Shield },
+  { id: "garment", area: "garment", icon: Armchair },
+  { id: "shoes", area: "shoes", icon: Sparkles },
+  { id: "accessoryLeft", area: "accessoryLeft", icon: Gem },
+  { id: "accessoryRight", area: "accessoryRight", icon: Gem },
+  { id: "shadowWeapon", area: "shadowWeapon", icon: Hand },
+  { id: "shadowShield", area: "shadowShield", icon: Shield },
+  { id: "shadowArmor", area: "shadowArmor", icon: Shirt },
+  { id: "shadowShoes", area: "shadowShoes", icon: Sparkles },
 ] as const;
 
-export function CalculatorEquipmentPanel() {
+type CalculatorEquipmentPanelProps = {
+  copy: CalculatorDictionary;
+};
+
+export function CalculatorEquipmentPanel({ copy }: CalculatorEquipmentPanelProps) {
   return (
     <section className="calc-panel calc-equipment">
       <div className="calc-panel-header">
         <span>
           <Shield size={17} />
-          Equipment, Cards, Costume & Shadow
+          {copy.equipment.title}
         </span>
-        <small>All slots prepared</small>
+        <small>{copy.equipment.meta}</small>
       </div>
 
-      <div className="equipment-paperdoll" aria-label="Character equipment slots">
+      <div className="equipment-paperdoll" aria-label={copy.equipment.aria}>
         <div className="equipment-avatar" aria-hidden="true">
           <div className="equipment-avatar-ring" />
           <div className="equipment-avatar-sprite">
@@ -55,6 +60,7 @@ export function CalculatorEquipmentPanel() {
 
         {equipmentSlots.map((slot) => {
           const Icon = slot.icon;
+          const label = copy.equipment.slots[slot.id];
 
           return (
             <button
@@ -62,11 +68,11 @@ export function CalculatorEquipmentPanel() {
               className="equipment-slot"
               data-slot-area={slot.area}
               key={slot.id}
-              aria-label={`${slot.label}: Empty`}
+              aria-label={`${label}: ${copy.equipment.empty}`}
             >
               <Icon size={17} />
-              <span>{slot.label}</span>
-              <strong>Empty</strong>
+              <span>{label}</span>
+              <strong>{copy.equipment.empty}</strong>
             </button>
           );
         })}

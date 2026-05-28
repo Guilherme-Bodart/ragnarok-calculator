@@ -111,6 +111,69 @@
     "description": "Entra al Discord, conoce al grupo y descubre si Nightmare combina con tu forma de jugar Ragnarok.",
     "action": "Enviar mensaje en Discord"
   },
+  "calculator": {
+    "brandSubtitle": "Laboratorio de Daño",
+    "actionsAria": "Acciones de la calculadora",
+    "backHomeAria": "Volver al inicio de Nightmare",
+    "buildsAction": "Builds",
+    "syncAction": "Sincronizar datos",
+    "kicker": "Calculadora de daño de Ragnarok Online",
+    "title": "Simulador de Combate Nightmare",
+    "description": "Arma tu personaje, elige un monstruo, selecciona la habilidad y revisa cada multiplicador antes del golpe final.",
+    "engineTitle": "Engine en prototipo",
+    "engineDescription": "Backend listo para fórmulas exactas, sync de datos y builds guardadas.",
+    "workspaceAria": "Área de la calculadora de daño",
+    "character": {
+      "title": "Personaje",
+      "meta": "Base 260 / Job 55",
+      "classLabel": "Clase",
+      "skillLabel": "Habilidad",
+      "levelLabel": "Nivel"
+    },
+    "equipment": {
+      "title": "Equipos, Cartas, Costume & Shadow",
+      "meta": "Slots preparados",
+      "aria": "Slots de equipo del personaje",
+      "empty": "Vacío",
+      "slots": {
+        "headTop": "Cabeza Sup.",
+        "headMid": "Cabeza Med.",
+        "headLow": "Cabeza Inf.",
+        "weapon": "Arma",
+        "armor": "Armadura",
+        "shield": "Escudo",
+        "garment": "Capa",
+        "shoes": "Zapatos",
+        "accessoryLeft": "Accesorio 1",
+        "accessoryRight": "Accesorio 2",
+        "shadowWeapon": "Shadow Arma",
+        "shadowShield": "Shadow Escudo",
+        "shadowArmor": "Shadow Armadura",
+        "shadowShoes": "Shadow Zapatos"
+      }
+    },
+    "target": {
+      "title": "Objetivo & Resultado",
+      "meta": "Perfil iRO",
+      "monsterLabel": "Monstruo",
+      "totalDamage": "Daño Total",
+      "averageHit": "daño medio",
+      "hit": "hit",
+      "basePower": "Poder Base",
+      "skillMultiplier": "Multiplicador de Skill",
+      "defenseMitigation": "Mitigación de Defensa",
+      "source": "Fuente",
+      "sourceValue": "Core local"
+    },
+    "buffs": {
+      "blessing": "Bendición",
+      "increaseAgi": "Aumentar AGI",
+      "endow": "Encantar",
+      "food": "Comida +10",
+      "guildAura": "Aura de Guilda",
+      "elementalScroll": "Pergamino Elemental"
+    }
+  },
   "auth": {
     "back": "Nightmare",
     "kicker": "Guild Workspace",

@@ -111,6 +111,69 @@
     "description": "Entre no Discord, conheça a tropa e veja se a Nightmare combina com seu jeito de jogar Ragnarok.",
     "action": "Chamar no Discord"
   },
+  "calculator": {
+    "brandSubtitle": "Laboratório de Dano",
+    "actionsAria": "Ações da calculadora",
+    "backHomeAria": "Voltar para a home da Nightmare",
+    "buildsAction": "Builds",
+    "syncAction": "Sincronizar dados",
+    "kicker": "Calculadora de dano de Ragnarok Online",
+    "title": "Simulador de Combate Nightmare",
+    "description": "Monte seu personagem, escolha um monstro, selecione a habilidade e veja cada multiplicador antes do dano final.",
+    "engineTitle": "Engine em protótipo",
+    "engineDescription": "Backend pronto para fórmulas exatas, sync de dados e builds salvas.",
+    "workspaceAria": "Área da calculadora de dano",
+    "character": {
+      "title": "Personagem",
+      "meta": "Base 260 / Job 55",
+      "classLabel": "Classe",
+      "skillLabel": "Habilidade",
+      "levelLabel": "Nível"
+    },
+    "equipment": {
+      "title": "Equipamentos, Cartas, Costume & Shadow",
+      "meta": "Slots preparados",
+      "aria": "Slots de equipamento do personagem",
+      "empty": "Vazio",
+      "slots": {
+        "headTop": "Topo",
+        "headMid": "Meio",
+        "headLow": "Baixo",
+        "weapon": "Arma",
+        "armor": "Armadura",
+        "shield": "Escudo",
+        "garment": "Capa",
+        "shoes": "Sapatos",
+        "accessoryLeft": "Acessório 1",
+        "accessoryRight": "Acessório 2",
+        "shadowWeapon": "Shadow Arma",
+        "shadowShield": "Shadow Escudo",
+        "shadowArmor": "Shadow Armadura",
+        "shadowShoes": "Shadow Sapatos"
+      }
+    },
+    "target": {
+      "title": "Alvo & Resultado",
+      "meta": "Perfil iRO",
+      "monsterLabel": "Monstro",
+      "totalDamage": "Dano Total",
+      "averageHit": "dano médio",
+      "hit": "hit",
+      "basePower": "Poder Base",
+      "skillMultiplier": "Multiplicador da Skill",
+      "defenseMitigation": "Mitigação da Defesa",
+      "source": "Fonte",
+      "sourceValue": "Core local"
+    },
+    "buffs": {
+      "blessing": "Bênção",
+      "increaseAgi": "Aumentar AGI",
+      "endow": "Encantar",
+      "food": "Comida +10",
+      "guildAura": "Aura da Guilda",
+      "elementalScroll": "Pergaminho Elemental"
+    }
+  },
   "auth": {
     "back": "Nightmare",
     "kicker": "Guild Workspace",
