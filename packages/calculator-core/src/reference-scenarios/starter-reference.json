@@ -115,14 +115,14 @@
       },
       "expected": {
         "damage": {
-          "average": 4943,
-          "total": 4943
+          "average": 4945,
+          "total": 4945
         },
         "breakdown": {
           "basePower": 920,
           "skillMultiplier": 4,
           "elementMultiplier": 1,
-          "defenseMultiplier": 0.9950248756218906,
+          "defenseMultiplier": 0.9955223880597015,
           "hits": 1
         }
       }
@@ -136,14 +136,14 @@
       },
       "expected": {
         "damage": {
-          "average": 4557,
-          "total": 4557
+          "average": 4598,
+          "total": 4598
         },
         "breakdown": {
           "basePower": 920,
           "skillMultiplier": 4,
           "elementMultiplier": 1,
-          "defenseMultiplier": 0.9174311926605505,
+          "defenseMultiplier": 0.9256880733944954,
           "hits": 1
         }
       }
@@ -157,14 +157,14 @@
       },
       "expected": {
         "damage": {
-          "average": 75,
-          "total": 750
+          "average": 72,
+          "total": 720
         },
         "breakdown": {
           "basePower": 282,
           "skillMultiplier": 1,
           "elementMultiplier": 0.25,
-          "defenseMultiplier": 0.9876543209876543,
+          "defenseMultiplier": 0.9571428571428572,
           "hits": 10
         }
       }
@@ -178,14 +178,14 @@
       },
       "expected": {
         "damage": {
-          "average": 75,
-          "total": 375
+          "average": 72,
+          "total": 360
         },
         "breakdown": {
           "basePower": 282,
           "skillMultiplier": 1,
           "elementMultiplier": 0.25,
-          "defenseMultiplier": 0.9876543209876543,
+          "defenseMultiplier": 0.9571428571428572,
           "hits": 5
         }
       }

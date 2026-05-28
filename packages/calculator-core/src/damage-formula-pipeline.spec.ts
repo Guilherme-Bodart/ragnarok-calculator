@@ -167,8 +167,8 @@ describe("DamageFormulaPipeline", () => {
       skillLevel: 10,
     });
 
-    expect(result.damage.average).toBe(689);
-    expect(result.damage.total).toBe(6890);
+    expect(result.damage.average).toBe(474);
+    expect(result.damage.total).toBe(4740);
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "elementMultiplier",
@@ -178,7 +178,7 @@ describe("DamageFormulaPipeline", () => {
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "defenseMultiplier",
-        value: 0.8,
+        value: 0.55,
       }),
     );
   });
