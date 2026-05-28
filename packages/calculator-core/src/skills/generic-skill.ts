@@ -16,7 +16,9 @@ export class GenericSkillFormula implements SkillFormulaAdapter {
     return {
       formulaId: this.id,
       multiplier: getSkillMultiplier(input.skill, input.skillLevel),
-      hitCount: input.skill.hitCount,
+      hitCount:
+        input.skill.hitCountByLevel?.[String(input.skillLevel)] ??
+        input.skill.hitCount,
     };
   }
 }

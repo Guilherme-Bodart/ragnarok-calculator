@@ -103,8 +103,40 @@ describe("rAthena normalized dataset adapter", () => {
       maxLevel: 10,
       hitCount: 1,
       baseMultiplierByLevel: {
-        "1": 100,
-        "10": 100,
+        "1": 130,
+        "10": 400,
+      },
+    });
+  });
+
+  it("maps per-level hit counts from rAthena skill data", () => {
+    expect(
+      toRoSkill({
+        skillId: 14,
+        name: "MG_COLDBOLT",
+        description: "Cold Bolt",
+        maxLevel: 10,
+        type: "Magic",
+        targetType: "Attack",
+        element: "Water",
+        raw: {
+          HitCount: [
+            { Level: 1, Count: 1 },
+            { Level: 2, Count: 2 },
+            { Level: 10, Count: 10 },
+          ],
+        },
+        source: "rathena",
+      }),
+    ).toMatchObject({
+      id: "MG_COLDBOLT",
+      damageType: "magical",
+      element: "water",
+      hitCount: 10,
+      hitCountByLevel: {
+        "1": 1,
+        "2": 2,
+        "10": 10,
       },
     });
   });

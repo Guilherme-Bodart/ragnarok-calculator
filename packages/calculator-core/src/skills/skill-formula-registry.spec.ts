@@ -61,6 +61,28 @@ describe("SkillFormulaRegistry", () => {
     });
   });
 
+  it("uses per-level hit counts when skill data provides them", () => {
+    expect(
+      new SkillFormulaRegistry().calculate({
+        ...input,
+        skill: {
+          ...input.skill,
+          hitCount: 10,
+          hitCountByLevel: {
+            "1": 1,
+            "5": 5,
+            "10": 10,
+          },
+        },
+        skillLevel: 5,
+      }),
+    ).toEqual({
+      formulaId: "generic",
+      multiplier: 1,
+      hitCount: 5,
+    });
+  });
+
   it("allows specific skill adapters to override generic behavior", () => {
     const adapter: SkillFormulaAdapter = {
       id: "test-specific",

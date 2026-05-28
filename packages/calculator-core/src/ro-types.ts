@@ -124,6 +124,7 @@ export type RoSkill = {
   element?: ElementType;
   maxLevel: number;
   hitCount: number;
+  hitCountByLevel?: Record<string, number>;
   baseMultiplierByLevel: Record<string, number>;
   source: "manual" | "irowiki" | "rathena";
   sourceUrl?: string;

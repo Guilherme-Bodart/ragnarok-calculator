@@ -105,6 +105,7 @@ export function toRoSkill(skill: RathenaNormalizedSkill): RoSkill | null {
   }
 
   const element = getSkillElement(skill.element);
+  const hitCount = getHitCount(skill.raw?.HitCount);
 
   return {
     id: skill.name,
@@ -113,8 +114,12 @@ export function toRoSkill(skill: RathenaNormalizedSkill): RoSkill | null {
     damageType: getDamageType(skill.type),
     element,
     maxLevel: skill.maxLevel ?? 1,
-    hitCount: getHitCount(skill.raw?.HitCount),
-    baseMultiplierByLevel: createDefaultMultipliers(skill.maxLevel ?? 1),
+    hitCount: hitCount.maximum,
+    hitCountByLevel: hitCount.byLevel,
+    baseMultiplierByLevel: getBaseMultiplierByLevel(
+      skill.name,
+      skill.maxLevel ?? 1,
+    ),
     source: "rathena",
   };
 }
@@ -183,27 +188,52 @@ function getSkillElement(element: unknown): ElementType | undefined {
   return undefined;
 }
 
-function getHitCount(hitCount: unknown) {
+function getHitCount(hitCount: unknown): {
+  maximum: number;
+  byLevel?: Record<string, number>;
+} {
   if (typeof hitCount === "number") {
-    return hitCount;
+    return { maximum: hitCount };
   }
 
   if (!Array.isArray(hitCount)) {
-    return 1;
+    return { maximum: 1 };
   }
 
-  return hitCount.reduce((highest, entry) => {
+  const byLevel: Record<string, number> = {};
+  let maximum = 1;
+
+  for (const entry of hitCount) {
     if (
       typeof entry === "object" &&
       entry !== null &&
+      "Level" in entry &&
       "Count" in entry &&
+      typeof entry.Level === "number" &&
       typeof entry.Count === "number"
     ) {
-      return Math.max(highest, entry.Count);
+      byLevel[String(entry.Level)] = entry.Count;
+      maximum = Math.max(maximum, entry.Count);
     }
+  }
 
-    return highest;
-  }, 1);
+  return {
+    maximum,
+    byLevel: Object.keys(byLevel).length > 0 ? byLevel : undefined,
+  };
+}
+
+function getBaseMultiplierByLevel(skillId: string, maxLevel: number) {
+  if (skillId === "SM_BASH") {
+    return Object.fromEntries(
+      Array.from({ length: maxLevel }, (_, index) => {
+        const level = index + 1;
+        return [String(level), 100 + 30 * level];
+      }),
+    );
+  }
+
+  return createDefaultMultipliers(maxLevel);
 }
 
 function createDefaultMultipliers(maxLevel: number) {
