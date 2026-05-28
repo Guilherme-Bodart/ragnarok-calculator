@@ -1461,37 +1461,200 @@ a {
   font-size: 0.78rem;
 }
 
-.equipment-grid {
+.equipment-paperdoll {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(92px, 1fr) minmax(128px, 0.9fr) minmax(92px, 1fr);
+  grid-template-rows: repeat(6, minmax(64px, auto));
+  grid-template-areas:
+    "headTop avatar headMid"
+    "headLow avatar garment"
+    "weapon avatar shield"
+    "armor avatar shoes"
+    "accessoryLeft shadowArmor accessoryRight"
+    "shadowWeapon shadowShoes shadowShield";
   gap: 10px;
+  min-height: 492px;
 }
 
 .equipment-slot {
-  min-height: 76px;
+  min-height: 64px;
   display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
   align-content: center;
-  gap: 6px;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 3px;
   text-align: left;
   border: 1px solid rgb(125 211 252 / 0.18);
   border-radius: 8px;
   background: rgb(2 6 23 / 0.46);
   color: var(--ice);
-  padding: 12px;
+  padding: 10px;
   cursor: pointer;
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
+.equipment-slot svg {
+  grid-row: 1 / 3;
+  color: rgb(125 211 252 / 0.82);
+}
+
 .equipment-slot span {
   color: var(--cyan);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .equipment-slot strong {
   color: rgb(226 246 255 / 0.58);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
+}
+
+.equipment-slot[data-slot-area="headTop"] {
+  grid-area: headTop;
+}
+
+.equipment-slot[data-slot-area="headMid"] {
+  grid-area: headMid;
+}
+
+.equipment-slot[data-slot-area="headLow"] {
+  grid-area: headLow;
+}
+
+.equipment-slot[data-slot-area="armor"] {
+  grid-area: armor;
+}
+
+.equipment-slot[data-slot-area="weapon"] {
+  grid-area: weapon;
+}
+
+.equipment-slot[data-slot-area="shield"] {
+  grid-area: shield;
+}
+
+.equipment-slot[data-slot-area="garment"] {
+  grid-area: garment;
+}
+
+.equipment-slot[data-slot-area="shoes"] {
+  grid-area: shoes;
+}
+
+.equipment-slot[data-slot-area="accessoryLeft"] {
+  grid-area: accessoryLeft;
+}
+
+.equipment-slot[data-slot-area="accessoryRight"] {
+  grid-area: accessoryRight;
+}
+
+.equipment-slot[data-slot-area="shadowWeapon"] {
+  grid-area: shadowWeapon;
+}
+
+.equipment-slot[data-slot-area="shadowShield"] {
+  grid-area: shadowShield;
+}
+
+.equipment-slot[data-slot-area="shadowArmor"] {
+  grid-area: shadowArmor;
+}
+
+.equipment-slot[data-slot-area="shadowShoes"] {
+  grid-area: shadowShoes;
+}
+
+.equipment-avatar {
+  grid-area: avatar;
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 288px;
+  border: 1px solid rgb(125 211 252 / 0.12);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgb(14 165 233 / 0.08), transparent 42%),
+    rgb(2 6 23 / 0.36);
+  overflow: hidden;
+}
+
+.equipment-avatar-ring {
+  position: absolute;
+  width: min(82%, 190px);
+  aspect-ratio: 1;
+  border: 1px solid rgb(125 211 252 / 0.22);
+  border-radius: 50%;
+  box-shadow: 0 0 48px rgb(14 165 233 / 0.12);
+}
+
+.equipment-avatar-sprite {
+  position: relative;
+  width: 104px;
+  height: 192px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.45));
+}
+
+.equipment-avatar-sprite span {
+  position: absolute;
+  display: block;
+  border: 1px solid rgb(226 246 255 / 0.16);
+  background: rgb(125 211 252 / 0.22);
+}
+
+.equipment-avatar-head {
+  left: 33px;
+  top: 8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 40% 40% 36% 36%;
+  box-shadow: inset 0 -10px 0 rgb(14 165 233 / 0.24);
+}
+
+.equipment-avatar-body {
+  left: 25px;
+  top: 54px;
+  width: 54px;
+  height: 76px;
+  border-radius: 8px 8px 16px 16px;
+  background: linear-gradient(180deg, rgb(125 211 252 / 0.34), rgb(8 47 73 / 0.58));
+}
+
+.equipment-avatar-arm {
+  top: 62px;
+  width: 22px;
+  height: 70px;
+  border-radius: 10px;
+}
+
+.equipment-avatar-arm-left {
+  left: 3px;
+  transform: rotate(9deg);
+}
+
+.equipment-avatar-arm-right {
+  right: 3px;
+  transform: rotate(-9deg);
+}
+
+.equipment-avatar-leg {
+  top: 130px;
+  width: 24px;
+  height: 56px;
+  border-radius: 8px 8px 12px 12px;
+  background: rgb(8 47 73 / 0.72);
+}
+
+.equipment-avatar-leg-left {
+  left: 26px;
+}
+
+.equipment-avatar-leg-right {
+  right: 26px;
 }
 
 .monster-picker {
@@ -1565,8 +1728,15 @@ a {
     border-left: 0;
   }
 
-  .equipment-grid {
+  .equipment-paperdoll {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "headTop headMid headLow"
+      "weapon avatar shield"
+      "armor avatar garment"
+      "shoes avatar accessoryLeft"
+      "accessoryRight shadowArmor shadowWeapon"
+      "shadowShield shadowShoes shadowShoes";
   }
 }
 
@@ -1618,9 +1788,21 @@ a {
   }
 
   .calc-select-row,
-  .equipment-grid,
   .stat-grid {
     grid-template-columns: 1fr;
+  }
+
+  .equipment-paperdoll {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "avatar avatar"
+      "headTop headMid"
+      "headLow garment"
+      "weapon shield"
+      "armor shoes"
+      "accessoryLeft accessoryRight"
+      "shadowWeapon shadowShield"
+      "shadowArmor shadowShoes";
   }
 }
 
