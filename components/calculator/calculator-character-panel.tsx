@@ -1,7 +1,11 @@
 "use client";
 
 import { Activity, Sparkles } from "lucide-react";
-import type { CharacterStats, RoSkill } from "@/packages/calculator-core/src";
+import {
+  evaluateStatusPointBudget,
+  type CharacterStats,
+  type RoSkill,
+} from "@/packages/calculator-core/src";
 import { calculatorDemoDataset } from "./calculator-demo-data";
 import type { CalculatorDictionary } from "./calculator-i18n";
 
@@ -11,17 +15,18 @@ type VisibleStat = {
     CharacterStats,
     "str" | "agi" | "vit" | "int" | "dex" | "luk" | "pow" | "con"
   >;
+  group: "regular" | "trait";
 };
 
 const statRows = [
-  { label: "STR", key: "str" },
-  { label: "AGI", key: "agi" },
-  { label: "VIT", key: "vit" },
-  { label: "INT", key: "int" },
-  { label: "DEX", key: "dex" },
-  { label: "LUK", key: "luk" },
-  { label: "POW", key: "pow" },
-  { label: "CON", key: "con" },
+  { label: "STR", key: "str", group: "regular" },
+  { label: "AGI", key: "agi", group: "regular" },
+  { label: "VIT", key: "vit", group: "regular" },
+  { label: "INT", key: "int", group: "regular" },
+  { label: "DEX", key: "dex", group: "regular" },
+  { label: "LUK", key: "luk", group: "regular" },
+  { label: "POW", key: "pow", group: "trait" },
+  { label: "CON", key: "con", group: "trait" },
 ] satisfies VisibleStat[];
 
 const buffs = [
@@ -34,7 +39,9 @@ const buffs = [
 ] as const;
 
 type CalculatorCharacterPanelProps = {
+  baseLevel: number;
   copy: CalculatorDictionary;
+  isTranscendent?: boolean;
   skillLevel: number;
   selectedSkill: RoSkill;
   stats: CharacterStats;
@@ -44,7 +51,9 @@ type CalculatorCharacterPanelProps = {
 };
 
 export function CalculatorCharacterPanel({
+  baseLevel,
   copy,
+  isTranscendent,
   skillLevel,
   selectedSkill,
   stats,
@@ -52,6 +61,31 @@ export function CalculatorCharacterPanel({
   onSkillLevelChange,
   onStatsChange,
 }: CalculatorCharacterPanelProps) {
+  const statusBudget = evaluateStatusPointBudget({
+    baseLevel,
+    isTranscendent,
+    stats,
+  });
+
+  function handleStatChange(stat: VisibleStat, rawValue: number) {
+    const min = stat.group === "regular" ? 1 : 0;
+    const max = stat.group === "regular" ? 130 : 110;
+    const nextValue = Math.max(min, Math.min(max, Math.floor(rawValue || min)));
+    const nextStats = {
+      ...stats,
+      [stat.key]: nextValue,
+    };
+    const nextBudget = evaluateStatusPointBudget({
+      baseLevel,
+      isTranscendent,
+      stats: nextStats,
+    });
+
+    if (nextBudget.regular.isValid && nextBudget.trait.isValid) {
+      onStatsChange(nextStats);
+    }
+  }
+
   return (
     <aside className="calc-panel calc-character">
       <div className="calc-panel-header">
@@ -118,16 +152,36 @@ export function CalculatorCharacterPanel({
             <span>{stat.label}</span>
             <input
               type="number"
+              min={stat.group === "regular" ? 1 : 0}
+              max={stat.group === "regular" ? 130 : 110}
               value={stats[stat.key]}
               onChange={(event) =>
-                onStatsChange({
-                  ...stats,
-                  [stat.key]: Number(event.target.value),
-                })
+                handleStatChange(stat, Number(event.target.value))
               }
             />
           </label>
         ))}
+      </div>
+
+      <div className="stat-budget" aria-live="polite">
+        <span>
+          {copy.character.statusPoints}:{" "}
+          <strong>
+            {statusBudget.regular.spent}/{statusBudget.regular.available}
+          </strong>
+          <small>
+            {copy.character.remainingPoints}: {statusBudget.regular.remaining}
+          </small>
+        </span>
+        <span>
+          {copy.character.traitPoints}:{" "}
+          <strong>
+            {statusBudget.trait.spent}/{statusBudget.trait.available}
+          </strong>
+          <small>
+            {copy.character.remainingPoints}: {statusBudget.trait.remaining}
+          </small>
+        </span>
       </div>
 
       <div className="buff-list">

@@ -15,3 +15,4 @@ export * from "./modifiers";
 export * from "./ro-types";
 export * from "./rulesets";
 export * from "./skills";
+export * from "./status-points";

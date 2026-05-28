@@ -93,7 +93,9 @@ export function CalculatorWorkbench() {
 
       <section className="calculator-workspace" aria-label={copy.workspaceAria}>
         <CalculatorCharacterPanel
+          baseLevel={calculatorDemoInput.character.baseLevel}
           copy={copy}
+          isTranscendent={calculatorDemoInput.character.isTranscendent}
           skillLevel={skillLevel}
           selectedSkill={selectedSkill}
           stats={stats}

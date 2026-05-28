@@ -128,7 +128,10 @@
       "meta": "Base 260 / Job 55",
       "classLabel": "Clase",
       "skillLabel": "Habilidad",
-      "levelLabel": "Nivel"
+      "levelLabel": "Nivel",
+      "statusPoints": "Status",
+      "traitPoints": "Trait",
+      "remainingPoints": "restante"
     },
     "equipment": {
       "title": "Equipos, Cartas, Costume & Shadow",

@@ -1448,6 +1448,35 @@ a {
   min-height: 36px;
 }
 
+.stat-budget {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid rgb(125 211 252 / 0.14);
+  border-radius: 8px;
+  background: rgb(2 6 23 / 0.42);
+}
+
+.stat-budget span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: rgb(226 246 255 / 0.64);
+  font-size: 0.78rem;
+}
+
+.stat-budget strong {
+  color: var(--ice);
+  font-family: var(--font-rune);
+}
+
+.stat-budget small {
+  color: rgb(125 211 252 / 0.72);
+  font-size: 0.72rem;
+}
+
 .buff-list {
   display: flex;
   flex-wrap: wrap;
