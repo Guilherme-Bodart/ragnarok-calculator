@@ -53,6 +53,16 @@ const buffs = ["Blessing", "Increase AGI", "Endow", "Food +10", "Guild Aura", "E
 
 export function CalculatorWorkbench() {
   const [stats, setStats] = useState(calculatorDemoInput.character.stats);
+  const [selectedSkillId, setSelectedSkillId] = useState(
+    calculatorDemoInput.skillId,
+  );
+  const [skillLevel, setSkillLevel] = useState(calculatorDemoInput.skillLevel);
+  const [selectedMonsterId, setSelectedMonsterId] = useState(
+    calculatorDemoInput.monsterId,
+  );
+  const selectedSkill =
+    calculatorDemoDataset.skills.find((skill) => skill.id === selectedSkillId) ??
+    calculatorDemoDataset.skills[0];
   const result = useMemo(
     () =>
       calculateDamageFromDataset(
@@ -62,11 +72,15 @@ export function CalculatorWorkbench() {
             ...calculatorDemoInput.character,
             stats,
           },
+          monsterId: selectedMonsterId,
+          skillId: selectedSkill.id,
+          skillLevel,
         },
         calculatorDemoDataset,
       ),
-    [stats],
+    [selectedMonsterId, selectedSkill.id, skillLevel, stats],
   );
+  const totalDamage = result.damage.total.toLocaleString();
   const averageDamage = result.damage.average.toLocaleString();
   const hitCount = getBreakdownValue(result.breakdown, "hits") || result.skill.hitCount;
   const basePower = getBreakdownValue(result.breakdown, "basePower");
@@ -141,9 +155,42 @@ export function CalculatorWorkbench() {
             </label>
             <label>
               Skill
-              <select defaultValue="SM_BASH">
-                <option value="SM_BASH">Bash Lv.10</option>
-                <option value="MG_COLDBOLT">Cold Bolt Lv.10</option>
+              <select
+                value={selectedSkill.id}
+                onChange={(event) => {
+                  const nextSkill =
+                    calculatorDemoDataset.skills.find(
+                      (skill) => skill.id === event.target.value,
+                    ) ?? calculatorDemoDataset.skills[0];
+
+                  setSelectedSkillId(nextSkill.id);
+                  setSkillLevel((currentLevel) =>
+                    Math.min(currentLevel, nextSkill.maxLevel),
+                  );
+                }}
+              >
+                {calculatorDemoDataset.skills.map((skill) => (
+                  <option value={skill.id} key={skill.id}>
+                    {skill.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Level
+              <select
+                value={skillLevel}
+                onChange={(event) => setSkillLevel(Number(event.target.value))}
+              >
+                {Array.from({ length: selectedSkill.maxLevel }, (_, index) => {
+                  const level = index + 1;
+
+                  return (
+                    <option value={level} key={level}>
+                      Lv.{level}
+                    </option>
+                  );
+                })}
               </select>
             </label>
           </div>
@@ -206,18 +253,26 @@ export function CalculatorWorkbench() {
 
           <label className="monster-picker">
             Monster
-            <select defaultValue="1002">
-              <option value="1002">Poring</option>
-              <option value="1031">Poporing</option>
+            <select
+              value={selectedMonsterId}
+              onChange={(event) =>
+                setSelectedMonsterId(Number(event.target.value))
+              }
+            >
+              {calculatorDemoDataset.monsters.map((monster) => (
+                <option value={monster.id} key={monster.id}>
+                  {monster.name}
+                </option>
+              ))}
             </select>
           </label>
 
           <div className="damage-card">
-            <span>Average Damage</span>
-            <strong>{averageDamage}</strong>
+            <span>Total Damage</span>
+            <strong>{totalDamage}</strong>
             <small>
-              {hitCount} hit / {result.skill.damageType} /{" "}
-              {result.meta.precision} formula
+              {averageDamage} average hit / {hitCount} hit /{" "}
+              {result.skill.damageType}
             </small>
           </div>
 
