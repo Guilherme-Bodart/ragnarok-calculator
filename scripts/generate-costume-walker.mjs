@@ -16,9 +16,9 @@ const outputPath = path.join(rootDir, "public", "sprites", "nightmare-walker.gif
 const endpoint =
   "https://api.costume.irowiki.org/render?downloadimage&accesstoken=3iznpprsozjn3nh6rvdvqn2fl89mo1jd";
 
-const walkFrames = [8, 9, 10, 11, 12, 13, 14, 15];
+const walkFrameIndexes = [0, 1, 2, 3, 4, 5, 6, 7];
 
-async function fetchFrame(character, action) {
+async function fetchFrame(character, frame) {
   const response = await fetch(endpoint, {
     method: "POST",
     headers: {
@@ -26,17 +26,18 @@ async function fetchFrame(character, action) {
     },
     body: JSON.stringify({
       ...character,
-      action,
+      action: 8,
+      frame,
     }),
   });
 
   if (!response.ok) {
-    throw new Error(`Frame ${action} failed with HTTP ${response.status}.`);
+    throw new Error(`Frame ${frame} failed with HTTP ${response.status}.`);
   }
 
   const contentType = response.headers.get("content-type") ?? "";
   if (!contentType.includes("image/png")) {
-    throw new Error(`Frame ${action} returned ${contentType}, expected image/png.`);
+    throw new Error(`Frame ${frame} returned ${contentType}, expected image/png.`);
   }
 
   const buffer = Buffer.from(await response.arrayBuffer());
@@ -81,8 +82,8 @@ async function main() {
   const character = JSON.parse(await readFile(characterPath, "utf8"));
   const frames = [];
 
-  for (const action of walkFrames) {
-    frames.push(await fetchFrame(character, action));
+  for (const frame of walkFrameIndexes) {
+    frames.push(await fetchFrame(character, frame));
   }
 
   await mkdir(path.dirname(outputPath), { recursive: true });
