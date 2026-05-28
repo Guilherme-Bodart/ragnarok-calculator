@@ -1,7 +1,13 @@
 {
   "version": 1,
   "expectedSource": "nightmare-current",
-  "notes": "Starter scenarios for local regression. Replace expected values after confirming against the external reference calculator.",
+  "externalReference": {
+    "name": "Tong RO Calculator",
+    "url": "https://turugrura.github.io/tong-calc-ro-host/#/",
+    "status": "pending",
+    "notes": "Use confirmed values here after copying scenarios from the external calculator. Keep nightmareCurrent for regression until a case is confirmed."
+  },
+  "notes": "Starter scenarios for local regression. Fill tongCalc.expected after confirming equivalent inputs in the external reference calculator.",
   "dataset": {
     "items": [],
     "monsters": [
@@ -125,6 +131,10 @@
           "defenseMultiplier": 0.9955223880597015,
           "hits": 1
         }
+      },
+      "tongCalc": {
+        "status": "pending",
+        "expected": null
       }
     },
     {
@@ -146,6 +156,10 @@
           "defenseMultiplier": 0.9256880733944954,
           "hits": 1
         }
+      },
+      "tongCalc": {
+        "status": "pending",
+        "expected": null
       }
     },
     {
@@ -167,6 +181,10 @@
           "defenseMultiplier": 0.9571428571428572,
           "hits": 10
         }
+      },
+      "tongCalc": {
+        "status": "pending",
+        "expected": null
       }
     },
     {
@@ -188,6 +206,10 @@
           "defenseMultiplier": 0.9571428571428572,
           "hits": 5
         }
+      },
+      "tongCalc": {
+        "status": "pending",
+        "expected": null
       }
     }
   ]

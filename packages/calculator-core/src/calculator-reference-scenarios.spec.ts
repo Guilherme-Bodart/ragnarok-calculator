@@ -19,4 +19,22 @@ describe("calculator reference scenarios", () => {
     expect(Object.fromEntries(result.breakdown.map((line) => [line.key, line.value])))
       .toMatchObject(scenario.expected.breakdown);
   });
+
+  it.each(reference.cases.filter((scenario) => scenario.tongCalc.expected))(
+    "$id matches confirmed Tong Calculator values",
+    (scenario) => {
+      const result = calculateDamageFromDataset(
+        {
+          ...reference.baseInput,
+          ...scenario.input,
+        },
+        dataset,
+      );
+      const expected = scenario.tongCalc.expected;
+
+      expect(result.damage).toMatchObject(expected.damage);
+      expect(Object.fromEntries(result.breakdown.map((line) => [line.key, line.value])))
+        .toMatchObject(expected.breakdown);
+    },
+  );
 });
