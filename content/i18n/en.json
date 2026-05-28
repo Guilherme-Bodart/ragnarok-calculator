@@ -134,6 +134,11 @@
       "title": "Equipment, Cards, Costume & Shadow",
       "meta": "All slots prepared",
       "aria": "Character equipment slots",
+      "tabsAria": "Equipment tabs",
+      "tabs": {
+        "equip": "Equip",
+        "special": "Special"
+      },
       "empty": "Empty",
       "slots": {
         "headTop": "Head Top",
@@ -146,10 +151,16 @@
         "shoes": "Shoes",
         "accessoryLeft": "Accessory 1",
         "accessoryRight": "Accessory 2",
+        "costumeHeadTop": "Costume Top",
+        "costumeHeadMid": "Costume Mid",
+        "costumeHeadLow": "Costume Low",
+        "costumeGarment": "Costume Garment",
         "shadowWeapon": "Shadow Wpn",
         "shadowShield": "Shadow Shld",
         "shadowArmor": "Shadow Arm",
-        "shadowShoes": "Shadow Shoes"
+        "shadowShoes": "Shadow Shoes",
+        "shadowEarring": "Shadow Earring",
+        "shadowPendant": "Shadow Pendant"
       }
     },
     "target": {

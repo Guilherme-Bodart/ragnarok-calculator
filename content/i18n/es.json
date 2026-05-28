@@ -134,6 +134,11 @@
       "title": "Equipos, Cartas, Costume & Shadow",
       "meta": "Slots preparados",
       "aria": "Slots de equipo del personaje",
+      "tabsAria": "Pestañas de equipo",
+      "tabs": {
+        "equip": "Equip",
+        "special": "Especial"
+      },
       "empty": "Vacío",
       "slots": {
         "headTop": "Cabeza Sup.",
@@ -146,10 +151,16 @@
         "shoes": "Zapatos",
         "accessoryLeft": "Accesorio 1",
         "accessoryRight": "Accesorio 2",
+        "costumeHeadTop": "Costume Sup.",
+        "costumeHeadMid": "Costume Med.",
+        "costumeHeadLow": "Costume Inf.",
+        "costumeGarment": "Costume Capa",
         "shadowWeapon": "Shadow Arma",
         "shadowShield": "Shadow Escudo",
         "shadowArmor": "Shadow Armadura",
-        "shadowShoes": "Shadow Zapatos"
+        "shadowShoes": "Shadow Zapatos",
+        "shadowEarring": "Shadow Arete",
+        "shadowPendant": "Shadow Colgante"
       }
     },
     "target": {

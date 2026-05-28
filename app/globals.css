@@ -1461,20 +1461,63 @@ a {
   font-size: 0.78rem;
 }
 
+.equipment-tabs {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(84px, 1fr));
+  gap: 3px;
+  width: min(220px, 100%);
+  padding: 3px;
+  margin-bottom: 12px;
+  border: 1px solid rgb(125 211 252 / 0.18);
+  border-radius: 8px;
+  background: rgb(2 6 23 / 0.46);
+}
+
+.equipment-tabs button {
+  min-height: 32px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: rgb(226 246 255 / 0.6);
+  font-family: var(--font-rune);
+  font-size: 0.76rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.equipment-tabs button.is-active {
+  background: rgb(14 165 233 / 0.16);
+  color: var(--ice);
+  box-shadow: inset 0 0 0 1px rgb(125 211 252 / 0.22);
+}
+
 .equipment-paperdoll {
   position: relative;
   display: grid;
   grid-template-columns: minmax(92px, 1fr) minmax(128px, 0.9fr) minmax(92px, 1fr);
   grid-template-rows: repeat(6, minmax(64px, auto));
+  gap: 10px;
+  min-height: 492px;
+}
+
+.equipment-paperdoll[data-equipment-tab="equip"] {
   grid-template-areas:
     "headTop avatar headMid"
     "headLow avatar garment"
     "weapon avatar shield"
     "armor avatar shoes"
-    "accessoryLeft shadowArmor accessoryRight"
-    "shadowWeapon shadowShoes shadowShield";
-  gap: 10px;
-  min-height: 492px;
+    "accessoryLeft avatar accessoryRight"
+    ". avatar .";
+}
+
+.equipment-paperdoll[data-equipment-tab="special"] {
+  grid-template-areas:
+    "headTop avatar headMid"
+    "headLow avatar garment"
+    "shadowWeapon avatar shadowShield"
+    "shadowArmor avatar shadowShoes"
+    "shadowEarring avatar shadowPendant"
+    ". avatar .";
 }
 
 .equipment-slot {
@@ -1566,6 +1609,14 @@ a {
 
 .equipment-slot[data-slot-area="shadowShoes"] {
   grid-area: shadowShoes;
+}
+
+.equipment-slot[data-slot-area="shadowEarring"] {
+  grid-area: shadowEarring;
+}
+
+.equipment-slot[data-slot-area="shadowPendant"] {
+  grid-area: shadowPendant;
 }
 
 .equipment-avatar {
@@ -1730,13 +1781,24 @@ a {
 
   .equipment-paperdoll {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .equipment-paperdoll[data-equipment-tab="equip"] {
     grid-template-areas:
       "headTop headMid headLow"
       "weapon avatar shield"
       "armor avatar garment"
       "shoes avatar accessoryLeft"
-      "accessoryRight shadowArmor shadowWeapon"
-      "shadowShield shadowShoes shadowShoes";
+      "accessoryRight avatar .";
+  }
+
+  .equipment-paperdoll[data-equipment-tab="special"] {
+    grid-template-areas:
+      "headTop headMid headLow"
+      "garment avatar shadowArmor"
+      "shadowWeapon avatar shadowShield"
+      "shadowShoes avatar shadowEarring"
+      "shadowPendant avatar .";
   }
 }
 
@@ -1794,15 +1856,26 @@ a {
 
   .equipment-paperdoll {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .equipment-paperdoll[data-equipment-tab="equip"] {
     grid-template-areas:
       "avatar avatar"
       "headTop headMid"
       "headLow garment"
       "weapon shield"
       "armor shoes"
-      "accessoryLeft accessoryRight"
+      "accessoryLeft accessoryRight";
+  }
+
+  .equipment-paperdoll[data-equipment-tab="special"] {
+    grid-template-areas:
+      "avatar avatar"
+      "headTop headMid"
+      "headLow garment"
       "shadowWeapon shadowShield"
-      "shadowArmor shadowShoes";
+      "shadowArmor shadowShoes"
+      "shadowEarring shadowPendant";
   }
 }
 

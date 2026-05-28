@@ -134,6 +134,11 @@
       "title": "Equipamentos, Cartas, Costume & Shadow",
       "meta": "Slots preparados",
       "aria": "Slots de equipamento do personagem",
+      "tabsAria": "Abas de equipamento",
+      "tabs": {
+        "equip": "Equip",
+        "special": "Especial"
+      },
       "empty": "Vazio",
       "slots": {
         "headTop": "Topo",
@@ -146,10 +151,16 @@
         "shoes": "Sapatos",
         "accessoryLeft": "Acessório 1",
         "accessoryRight": "Acessório 2",
+        "costumeHeadTop": "Costume Topo",
+        "costumeHeadMid": "Costume Meio",
+        "costumeHeadLow": "Costume Baixo",
+        "costumeGarment": "Costume Capa",
         "shadowWeapon": "Shadow Arma",
         "shadowShield": "Shadow Escudo",
         "shadowArmor": "Shadow Armadura",
-        "shadowShoes": "Shadow Sapatos"
+        "shadowShoes": "Shadow Sapatos",
+        "shadowEarring": "Shadow Brinco",
+        "shadowPendant": "Shadow Colar"
       }
     },
     "target": {
