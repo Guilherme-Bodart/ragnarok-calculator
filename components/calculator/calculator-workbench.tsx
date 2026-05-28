@@ -12,7 +12,12 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { calculatorDemoResult } from "./calculator-demo-data";
+import { useMemo, useState } from "react";
+import { calculateDamageFromDataset } from "@/packages/calculator-core/src";
+import {
+  calculatorDemoDataset,
+  calculatorDemoInput,
+} from "./calculator-demo-data";
 
 const equipmentSlots = [
   "Head Top",
@@ -34,24 +39,42 @@ const equipmentSlots = [
 ];
 
 const statRows = [
-  ["STR", 120],
-  ["AGI", 90],
-  ["VIT", 100],
-  ["INT", 1],
-  ["DEX", 100],
-  ["LUK", 60],
-  ["POW", 80],
-  ["CON", 45],
-];
+  { label: "STR", key: "str" },
+  { label: "AGI", key: "agi" },
+  { label: "VIT", key: "vit" },
+  { label: "INT", key: "int" },
+  { label: "DEX", key: "dex" },
+  { label: "LUK", key: "luk" },
+  { label: "POW", key: "pow" },
+  { label: "CON", key: "con" },
+] as const;
 
 const buffs = ["Blessing", "Increase AGI", "Endow", "Food +10", "Guild Aura", "Elemental Scroll"];
 
 export function CalculatorWorkbench() {
-  const averageDamage = calculatorDemoResult.damage.average.toLocaleString();
-  const hitCount = getBreakdownValue("hits") || calculatorDemoResult.skill.hitCount;
-  const basePower = getBreakdownValue("basePower");
-  const skillMultiplier = getBreakdownValue("skillMultiplier");
-  const defenseMultiplier = getBreakdownValue("defenseMultiplier");
+  const [stats, setStats] = useState(calculatorDemoInput.character.stats);
+  const result = useMemo(
+    () =>
+      calculateDamageFromDataset(
+        {
+          ...calculatorDemoInput,
+          character: {
+            ...calculatorDemoInput.character,
+            stats,
+          },
+        },
+        calculatorDemoDataset,
+      ),
+    [stats],
+  );
+  const averageDamage = result.damage.average.toLocaleString();
+  const hitCount = getBreakdownValue(result.breakdown, "hits") || result.skill.hitCount;
+  const basePower = getBreakdownValue(result.breakdown, "basePower");
+  const skillMultiplier = getBreakdownValue(result.breakdown, "skillMultiplier");
+  const defenseMultiplier = getBreakdownValue(
+    result.breakdown,
+    "defenseMultiplier",
+  );
 
   return (
     <main className="calculator-page">
@@ -126,10 +149,19 @@ export function CalculatorWorkbench() {
           </div>
 
           <div className="stat-grid">
-            {statRows.map(([label, value]) => (
-              <label key={label}>
-                <span>{label}</span>
-                <input type="number" defaultValue={value} />
+            {statRows.map((stat) => (
+              <label key={stat.key}>
+                <span>{stat.label}</span>
+                <input
+                  type="number"
+                  value={stats[stat.key]}
+                  onChange={(event) =>
+                    setStats((currentStats) => ({
+                      ...currentStats,
+                      [stat.key]: Number(event.target.value),
+                    }))
+                  }
+                />
               </label>
             ))}
           </div>
@@ -184,8 +216,8 @@ export function CalculatorWorkbench() {
             <span>Average Damage</span>
             <strong>{averageDamage}</strong>
             <small>
-              {hitCount} hit / {calculatorDemoResult.skill.damageType} /{" "}
-              {calculatorDemoResult.meta.precision} formula
+              {hitCount} hit / {result.skill.damageType} /{" "}
+              {result.meta.precision} formula
             </small>
           </div>
 
@@ -213,8 +245,9 @@ export function CalculatorWorkbench() {
   );
 }
 
-function getBreakdownValue(key: string) {
-  return (
-    calculatorDemoResult.breakdown.find((line) => line.key === key)?.value ?? 0
-  );
+function getBreakdownValue(
+  breakdown: Array<{ key: string; value: number }>,
+  key: string,
+) {
+  return breakdown.find((line) => line.key === key)?.value ?? 0;
 }
