@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { calculatorDemoResult } from "./calculator-demo-data";
 
 const equipmentSlots = [
   "Head Top",
@@ -46,6 +47,12 @@ const statRows = [
 const buffs = ["Blessing", "Increase AGI", "Endow", "Food +10", "Guild Aura", "Elemental Scroll"];
 
 export function CalculatorWorkbench() {
+  const averageDamage = calculatorDemoResult.damage.average.toLocaleString();
+  const hitCount = getBreakdownValue("hits") || calculatorDemoResult.skill.hitCount;
+  const basePower = getBreakdownValue("basePower");
+  const skillMultiplier = getBreakdownValue("skillMultiplier");
+  const defenseMultiplier = getBreakdownValue("defenseMultiplier");
+
   return (
     <main className="calculator-page">
       <div className="calculator-grid-bg" />
@@ -175,30 +182,39 @@ export function CalculatorWorkbench() {
 
           <div className="damage-card">
             <span>Average Damage</span>
-            <strong>214</strong>
-            <small>1 hit · physical · prototype formula</small>
+            <strong>{averageDamage}</strong>
+            <small>
+              {hitCount} hit / {calculatorDemoResult.skill.damageType} /{" "}
+              {calculatorDemoResult.meta.precision} formula
+            </small>
           </div>
 
           <div className="breakdown-list">
             <div>
               <span>Base Power</span>
-              <strong>361</strong>
+              <strong>{basePower}</strong>
             </div>
             <div>
               <span>Skill Multiplier</span>
-              <strong>4.00x</strong>
+              <strong>{skillMultiplier.toFixed(2)}x</strong>
             </div>
             <div>
               <span>Defense Mitigation</span>
-              <strong>0.995x</strong>
+              <strong>{defenseMultiplier.toFixed(3)}x</strong>
             </div>
             <div>
               <span>Source</span>
-              <strong>Local + API</strong>
+              <strong>Local core</strong>
             </div>
           </div>
         </aside>
       </section>
     </main>
+  );
+}
+
+function getBreakdownValue(key: string) {
+  return (
+    calculatorDemoResult.breakdown.find((line) => line.key === key)?.value ?? 0
   );
 }
