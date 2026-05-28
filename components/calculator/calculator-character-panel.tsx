@@ -5,6 +5,7 @@ import {
   evaluateStatusPointBudget,
   type CharacterStats,
   type RoSkill,
+  type SkillTreeJobOption,
 } from "@/packages/calculator-core/src";
 import { calculatorDemoDataset } from "./calculator-demo-data";
 import type { CalculatorDictionary } from "./calculator-i18n";
@@ -40,10 +41,13 @@ const buffs = [
 
 type CalculatorCharacterPanelProps = {
   baseLevel: number;
+  classOptions: SkillTreeJobOption[];
   copy: CalculatorDictionary;
   isTranscendent?: boolean;
+  selectedClassId: string;
   skillLevel: number;
   selectedSkill: RoSkill;
+  onClassChange: (classId: string) => void;
   stats: CharacterStats;
   onSkillChange: (skill: RoSkill) => void;
   onSkillLevelChange: (skillLevel: number) => void;
@@ -52,10 +56,13 @@ type CalculatorCharacterPanelProps = {
 
 export function CalculatorCharacterPanel({
   baseLevel,
+  classOptions,
   copy,
   isTranscendent,
+  selectedClassId,
   skillLevel,
   selectedSkill,
+  onClassChange,
   stats,
   onSkillChange,
   onSkillLevelChange,
@@ -99,11 +106,15 @@ export function CalculatorCharacterPanel({
       <div className="calc-select-row">
         <label>
           {copy.character.classLabel}
-          <select defaultValue="dragon-knight">
-            <option value="dragon-knight">Dragon Knight</option>
-            <option value="arch-mage">Arch Mage</option>
-            <option value="windhawk">Windhawk</option>
-            <option value="cardinal">Cardinal</option>
+          <select
+            value={selectedClassId}
+            onChange={(event) => onClassChange(event.target.value)}
+          >
+            {classOptions.map((job) => (
+              <option value={job.id} key={job.id}>
+                {job.name}
+              </option>
+            ))}
           </select>
         </label>
         <label>

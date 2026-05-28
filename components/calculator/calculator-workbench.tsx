@@ -4,7 +4,6 @@ import {
   Boxes,
   Calculator,
   FlaskConical,
-  Skull,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,11 +16,17 @@ import {
   calculatorDemoInput,
 } from "./calculator-demo-data";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
+import { calculatorSkillTreeClassOptions } from "./calculator-skill-tree-data";
+import { CalculatorSkillTreePanel } from "./calculator-skill-tree-panel";
 import { CalculatorTargetPanel } from "./calculator-target-panel";
 
 export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
   const copy = dictionary.calculator;
+  const [selectedClassId, setSelectedClassId] = useState(
+    calculatorDemoInput.character.classId ?? "Dragon_Knight",
+  );
+  const [learnedSkills, setLearnedSkills] = useState<Record<string, number>>({});
   const [stats, setStats] = useState(calculatorDemoInput.character.stats);
   const [selectedSkillId, setSelectedSkillId] = useState(
     calculatorDemoInput.skillId,
@@ -40,16 +45,23 @@ export function CalculatorWorkbench() {
           ...calculatorDemoInput,
           character: {
             ...calculatorDemoInput.character,
+            classId: selectedClassId,
             stats,
           },
+          learnedSkills,
           monsterId: selectedMonsterId,
           skillId: selectedSkill.id,
           skillLevel,
         },
         calculatorDemoDataset,
       ),
-    [selectedMonsterId, selectedSkill.id, skillLevel, stats],
+    [learnedSkills, selectedClassId, selectedMonsterId, selectedSkill.id, skillLevel, stats],
   );
+
+  function handleClassChange(classId: string) {
+    setSelectedClassId(classId);
+    setLearnedSkills({});
+  }
 
   return (
     <main className="calculator-page">
@@ -84,20 +96,25 @@ export function CalculatorWorkbench() {
           <h1>{copy.title}</h1>
           <p>{copy.description}</p>
         </div>
-        <div className="calculator-result-orb">
-          <Skull size={28} />
-          <strong>{copy.engineTitle}</strong>
-          <span>{copy.engineDescription}</span>
-        </div>
+        <CalculatorSkillTreePanel
+          copy={copy}
+          learnedSkills={learnedSkills}
+          selectedClassId={selectedClassId}
+          onClassChange={handleClassChange}
+          onLearnedSkillsChange={setLearnedSkills}
+        />
       </section>
 
       <section className="calculator-workspace" aria-label={copy.workspaceAria}>
         <CalculatorCharacterPanel
           baseLevel={calculatorDemoInput.character.baseLevel}
+          classOptions={calculatorSkillTreeClassOptions}
           copy={copy}
           isTranscendent={calculatorDemoInput.character.isTranscendent}
+          selectedClassId={selectedClassId}
           skillLevel={skillLevel}
           selectedSkill={selectedSkill}
+          onClassChange={handleClassChange}
           stats={stats}
           onSkillChange={(skill) => setSelectedSkillId(skill.id)}
           onSkillLevelChange={setSkillLevel}

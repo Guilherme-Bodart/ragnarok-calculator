@@ -86,7 +86,7 @@ export const calculatorDemoInput: CalculateDamageInput = {
   },
   learnedSkills: {},
   character: {
-    classId: "dragon-knight",
+    classId: "Dragon_Knight",
     isTranscendent: true,
     baseLevel: 260,
     jobLevel: 55,
