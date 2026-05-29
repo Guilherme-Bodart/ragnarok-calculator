@@ -11,22 +11,17 @@ import { useMemo, useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
-import {
-  calculateDamageFromDataset,
-  resolveSkillTreeJob,
-  type SkillTreeSkill,
-  type RoSkill,
-} from "@/packages/calculator-core/src";
-import rawSkills from "@/nightmare-data/normalized/skills/skills.en.json";
-import {
-  CalculatorCharacterPanel,
-  type CalculatorPanelSkill,
-} from "./calculator-character-panel";
+import { calculateDamageFromDataset } from "@/packages/calculator-core/src";
+import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import {
   calculatorDemoDataset,
   calculatorDemoInput,
 } from "./calculator-demo-data";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
+import {
+  getCalculatorClassSkills,
+  mergeCalculatorSkills,
+} from "./calculator-skill-classification";
 import {
   calculatorSkillTreeCatalog,
   calculatorSkillTreeClassOptions,
@@ -57,13 +52,16 @@ export function CalculatorWorkbench() {
     calculatorDemoInput.monsterId,
   );
   const selectedClassSkills = useMemo(
-    () => getCalculatorClassSkills(selectedClassId),
+    () => getCalculatorClassSkills(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
   );
   const calculatorDataset = useMemo(
     () => ({
       ...calculatorDemoDataset,
-      skills: mergeSkills(calculatorDemoDataset.skills, selectedClassSkills),
+      skills: mergeCalculatorSkills(
+        calculatorDemoDataset.skills,
+        selectedClassSkills,
+      ),
     }),
     [selectedClassSkills],
   );
@@ -115,7 +113,7 @@ export function CalculatorWorkbench() {
     setJobLevel((currentJobLevel) =>
       Math.min(currentJobLevel, isFourthJob ? 70 : 60),
     );
-    const nextSkills = getCalculatorClassSkills(classId);
+    const nextSkills = getCalculatorClassSkills(calculatorSkillTreeCatalog, classId);
     const nextSkill = nextSkills[0];
 
     if (nextSkill) {
@@ -205,74 +203,4 @@ export function CalculatorWorkbench() {
       </section>
     </main>
   );
-}
-
-type NormalizedSkillInfo = {
-  name: string;
-  description?: string;
-  targetType?: string | null;
-  rawDamageFlags?: Record<string, boolean> | null;
-};
-
-const rawSkillById = new Map(
-  (rawSkills as NormalizedSkillInfo[]).map((skill) => [skill.name, skill]),
-);
-
-function getCalculatorClassSkills(classId: string): CalculatorPanelSkill[] {
-  return resolveSkillTreeJob(calculatorSkillTreeCatalog, classId).skills
-    .filter(isCalculatorActionSkill)
-    .map(toGenericRoSkill);
-}
-
-function isCalculatorActionSkill(skill: SkillTreeSkill) {
-  const skillInfo = rawSkillById.get(skill.id);
-
-  if (!skillInfo) {
-    return false;
-  }
-
-  const targetType = skillInfo.targetType ?? "";
-  const noDamage = Boolean(skillInfo.rawDamageFlags?.NoDamage);
-  const isDamageSkill =
-    !noDamage && (targetType === "Attack" || targetType === "Ground");
-  const isHealingSkill =
-    targetType === "Support" &&
-    /\bheal\b|\bcure\b|cura|curar/i.test(
-      `${skill.id} ${skillInfo.description ?? ""}`,
-    );
-
-  return isDamageSkill || isHealingSkill;
-}
-
-function toGenericRoSkill(skill: SkillTreeSkill): CalculatorPanelSkill {
-  return {
-    id: skill.id,
-    name: skill.name,
-    numericId: skill.numericId,
-    classTree: skill.sourceJobId,
-    damageType: "physical",
-    element: "neutral",
-    maxLevel: skill.maxLevel,
-    hitCount: 1,
-    baseMultiplierByLevel: Object.fromEntries(
-      Array.from({ length: skill.maxLevel }, (_, index) => {
-        const level = index + 1;
-
-        return [String(level), 100 + level * 10];
-      }),
-    ),
-    source: "rathena",
-  };
-}
-
-function mergeSkills(baseSkills: RoSkill[], classSkills: RoSkill[]) {
-  const skillById = new Map(baseSkills.map((skill) => [skill.id, skill]));
-
-  for (const skill of classSkills) {
-    if (!skillById.has(skill.id)) {
-      skillById.set(skill.id, skill);
-    }
-  }
-
-  return Array.from(skillById.values());
 }
