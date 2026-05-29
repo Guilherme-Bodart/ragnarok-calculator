@@ -1,4 +1,5 @@
 import type { CalculatorPanelSkill } from "./calculator-character-panel";
+import type { CalculatorDictionary } from "./calculator-i18n";
 
 export const calculatorManualBuffItems = [
   {
@@ -31,10 +32,19 @@ export const calculatorManualBuffItems = [
   },
 ] as const;
 
-export const calculatorManualBuffSkills: CalculatorPanelSkill[] =
-  calculatorManualBuffItems.map((item) => ({
+const manualBuffLabelByItemId = {
+  900001: "blessing",
+  900002: "increaseAgi",
+  900003: "food",
+  900004: "guildAura",
+} as const;
+
+export function getCalculatorManualBuffSkills(
+  copy: CalculatorDictionary["buffs"],
+): CalculatorPanelSkill[] {
+  return calculatorManualBuffItems.map((item) => ({
     id: `BUFF_${item.itemId}`,
-    name: item.name,
+    name: copy[manualBuffLabelByItemId[item.itemId]],
     classTree: "manual-buffs",
     damageType: "physical",
     element: "neutral",
@@ -45,6 +55,7 @@ export const calculatorManualBuffSkills: CalculatorPanelSkill[] =
     },
     source: "manual",
   }));
+}
 
 const manualBuffItemIdBySkillId = new Map(
   calculatorManualBuffItems.map((item) => [

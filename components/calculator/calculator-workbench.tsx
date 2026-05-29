@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
 import { calculateDamageFromDataset } from "@/packages/calculator-core/src";
 import {
-  calculatorManualBuffSkills,
+  getCalculatorManualBuffSkills,
   getActiveCalculatorBuffItemIds,
 } from "./calculator-buff-data";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
@@ -97,9 +97,13 @@ export function CalculatorWorkbench() {
       getCalculatorClassBuffSkills(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
   );
+  const manualBuffSkills = useMemo(
+    () => getCalculatorManualBuffSkills(copy.buffs),
+    [copy.buffs],
+  );
   const buffSkills = useMemo(
-    () => [...calculatorManualBuffSkills, ...classBuffSkills],
-    [classBuffSkills],
+    () => [...manualBuffSkills, ...classBuffSkills],
+    [classBuffSkills, manualBuffSkills],
   );
   const calculatorDataset = useMemo(
     () => ({
@@ -206,7 +210,7 @@ export function CalculatorWorkbench() {
       setSkillLevel(Math.min(skillLevel, nextSkill.maxLevel));
     }
 
-    setSelectedBuffId(calculatorManualBuffSkills[0]?.id ?? "");
+    setSelectedBuffId(manualBuffSkills[0]?.id ?? "");
 
     if (!isFourthJob) {
       setStats((currentStats) => ({
