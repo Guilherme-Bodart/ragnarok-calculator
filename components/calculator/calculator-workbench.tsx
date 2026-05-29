@@ -4,6 +4,7 @@ import {
   Boxes,
   Calculator,
   FlaskConical,
+  RotateCcw,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -210,6 +211,27 @@ export function CalculatorWorkbench() {
     }
   }
 
+  function resetBuild() {
+    const defaultClassId =
+      calculatorDemoInput.character.classId ?? "Dragon_Knight";
+    const nextSkills = getCalculatorClassSkills(
+      calculatorSkillTreeCatalog,
+      defaultClassId,
+    );
+
+    window.localStorage.removeItem(calculatorBuildStorageKey);
+    setSelectedClassId(defaultClassId);
+    setLearnedSkills({});
+    setBaseLevel(calculatorDemoInput.character.baseLevel);
+    setJobLevel(calculatorDemoInput.character.jobLevel);
+    setStats(getDefaultCalculatorStats());
+    setSelectedSkillId(nextSkills[0]?.id ?? calculatorDemoInput.skillId);
+    setSkillLevel(calculatorDemoInput.skillLevel);
+    setSelectedMonsterId(calculatorDemoInput.monsterId);
+    setActiveBuffs({});
+    setSelectedBuffId("");
+  }
+
   return (
     <main className="calculator-page">
       <div className="calculator-grid-bg" />
@@ -228,6 +250,14 @@ export function CalculatorWorkbench() {
           </Button>
           <Button icon={<FlaskConical size={16} />} type="button" variant="ghost">
             {copy.syncAction}
+          </Button>
+          <Button
+            icon={<RotateCcw size={16} />}
+            type="button"
+            variant="ghost"
+            onClick={resetBuild}
+          >
+            {copy.resetAction}
           </Button>
         </nav>
       </header>
@@ -289,6 +319,10 @@ export function CalculatorWorkbench() {
       </section>
     </main>
   );
+}
+
+function getDefaultCalculatorStats() {
+  return { ...calculatorDemoInput.character.stats };
 }
 
 function readSavedCalculatorBuild(): CalculatorSavedBuild | null {
