@@ -3,9 +3,10 @@ import {
   createCalculatorDatasetFromRathenaNormalized,
   type CalculateDamageInput,
 } from "@/packages/calculator-core/src";
+import { calculatorManualBuffItems } from "./calculator-buff-data";
 
 export const calculatorDemoDataset = createCalculatorDatasetFromRathenaNormalized({
-  items: [],
+  items: [...calculatorManualBuffItems],
   monsters: [
     {
       monsterId: 1002,

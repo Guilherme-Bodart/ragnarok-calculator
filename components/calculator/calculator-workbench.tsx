@@ -13,6 +13,10 @@ import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
 import { calculateDamageFromDataset } from "@/packages/calculator-core/src";
+import {
+  calculatorManualBuffSkills,
+  getActiveCalculatorBuffItemIds,
+} from "./calculator-buff-data";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import {
@@ -93,6 +97,10 @@ export function CalculatorWorkbench() {
       getCalculatorClassBuffSkills(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
   );
+  const buffSkills = useMemo(
+    () => [...calculatorManualBuffSkills, ...classBuffSkills],
+    [classBuffSkills],
+  );
   const calculatorDataset = useMemo(
     () => ({
       ...calculatorDemoDataset,
@@ -114,6 +122,10 @@ export function CalculatorWorkbench() {
     () => ({ ...learnedSkills, ...activeBuffs }),
     [activeBuffs, learnedSkills],
   );
+  const activeBuffItemIds = useMemo(
+    () => getActiveCalculatorBuffItemIds(activeBuffs),
+    [activeBuffs],
+  );
   const result = useMemo(
     () =>
       calculateDamageFromDataset(
@@ -128,6 +140,7 @@ export function CalculatorWorkbench() {
             stats,
           },
           learnedSkills: effectiveLearnedSkills,
+          buffItemIds: [...calculatorDemoInput.buffItemIds, ...activeBuffItemIds],
           monsterId: selectedMonsterId,
           skillId: selectedSkill.id,
           skillLevel,
@@ -139,6 +152,7 @@ export function CalculatorWorkbench() {
       calculatorDataset,
       jobLevel,
       effectiveLearnedSkills,
+      activeBuffItemIds,
       selectedClassId,
       selectedMonsterId,
       selectedSkill.id,
@@ -185,10 +199,6 @@ export function CalculatorWorkbench() {
       Math.min(currentJobLevel, isFourthJob ? 70 : 60),
     );
     const nextSkills = getCalculatorClassSkills(calculatorSkillTreeCatalog, classId);
-    const nextBuffSkills = getCalculatorClassBuffSkills(
-      calculatorSkillTreeCatalog,
-      classId,
-    );
     const nextSkill = nextSkills[0];
 
     if (nextSkill) {
@@ -196,7 +206,7 @@ export function CalculatorWorkbench() {
       setSkillLevel(Math.min(skillLevel, nextSkill.maxLevel));
     }
 
-    setSelectedBuffId(nextBuffSkills[0]?.id ?? "");
+    setSelectedBuffId(calculatorManualBuffSkills[0]?.id ?? "");
 
     if (!isFourthJob) {
       setStats((currentStats) => ({
@@ -302,7 +312,7 @@ export function CalculatorWorkbench() {
           />
           <CalculatorBuffsPanel
             activeBuffs={activeBuffs}
-            buffSkills={classBuffSkills}
+            buffSkills={buffSkills}
             copy={copy}
             selectedBuffId={selectedBuffId}
             onActiveBuffsChange={setActiveBuffs}
