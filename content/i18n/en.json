@@ -198,6 +198,14 @@
       "sourceValue": "Local core"
     },
     "buffs": {
+      "title": "Buffs",
+      "activeMeta": "active",
+      "skillLabel": "Buff",
+      "classGroup": "Class buffs",
+      "searchPlaceholder": "Filter buff",
+      "addAction": "Add",
+      "removeAction": "Remove buff",
+      "emptyState": "No active buffs.",
       "blessing": "Blessing",
       "increaseAgi": "Increase AGI",
       "endow": "Endow",

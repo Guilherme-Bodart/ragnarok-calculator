@@ -12,6 +12,7 @@ import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
 import { calculateDamageFromDataset } from "@/packages/calculator-core/src";
+import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import {
   calculatorDemoDataset,
@@ -19,6 +20,7 @@ import {
 } from "./calculator-demo-data";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
 import {
+  getCalculatorClassBuffSkills,
   getCalculatorClassSkills,
   mergeCalculatorSkills,
 } from "./calculator-skill-classification";
@@ -51,8 +53,15 @@ export function CalculatorWorkbench() {
   const [selectedMonsterId, setSelectedMonsterId] = useState(
     calculatorDemoInput.monsterId,
   );
+  const [activeBuffs, setActiveBuffs] = useState<Record<string, number>>({});
+  const [selectedBuffId, setSelectedBuffId] = useState("");
   const selectedClassSkills = useMemo(
     () => getCalculatorClassSkills(calculatorSkillTreeCatalog, selectedClassId),
+    [selectedClassId],
+  );
+  const classBuffSkills = useMemo(
+    () =>
+      getCalculatorClassBuffSkills(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
   );
   const calculatorDataset = useMemo(
@@ -72,6 +81,10 @@ export function CalculatorWorkbench() {
   const selectedClassName =
     calculatorSkillTreeClassOptions.find((job) => job.id === selectedClassId)
       ?.name ?? selectedClassId.replace(/_/g, " ");
+  const effectiveLearnedSkills = useMemo(
+    () => ({ ...learnedSkills, ...activeBuffs }),
+    [activeBuffs, learnedSkills],
+  );
   const result = useMemo(
     () =>
       calculateDamageFromDataset(
@@ -85,7 +98,7 @@ export function CalculatorWorkbench() {
             isTranscendent: selectedClassId.includes("_T"),
             stats,
           },
-          learnedSkills,
+          learnedSkills: effectiveLearnedSkills,
           monsterId: selectedMonsterId,
           skillId: selectedSkill.id,
           skillLevel,
@@ -96,7 +109,7 @@ export function CalculatorWorkbench() {
       baseLevel,
       calculatorDataset,
       jobLevel,
-      learnedSkills,
+      effectiveLearnedSkills,
       selectedClassId,
       selectedMonsterId,
       selectedSkill.id,
@@ -110,16 +123,23 @@ export function CalculatorWorkbench() {
 
     setSelectedClassId(classId);
     setLearnedSkills({});
+    setActiveBuffs({});
     setJobLevel((currentJobLevel) =>
       Math.min(currentJobLevel, isFourthJob ? 70 : 60),
     );
     const nextSkills = getCalculatorClassSkills(calculatorSkillTreeCatalog, classId);
+    const nextBuffSkills = getCalculatorClassBuffSkills(
+      calculatorSkillTreeCatalog,
+      classId,
+    );
     const nextSkill = nextSkills[0];
 
     if (nextSkill) {
       setSelectedSkillId(nextSkill.id);
       setSkillLevel(Math.min(skillLevel, nextSkill.maxLevel));
     }
+
+    setSelectedBuffId(nextBuffSkills[0]?.id ?? "");
 
     if (!isFourthJob) {
       setStats((currentStats) => ({
@@ -175,24 +195,34 @@ export function CalculatorWorkbench() {
       </section>
 
       <section className="calculator-workspace" aria-label={copy.workspaceAria}>
-        <CalculatorCharacterPanel
-          availableSkills={selectedClassSkills}
-          baseLevel={baseLevel}
-          copy={copy}
-          isFourthJob={isFourthJobClassId(selectedClassId)}
-          isTranscendent={selectedClassId.includes("_T")}
-          jobLevel={jobLevel}
-          selectedClassId={selectedClassId}
-          selectedClassName={selectedClassName}
-          skillLevel={skillLevel}
-          selectedSkill={selectedSkill}
-          stats={stats}
-          onBaseLevelChange={setBaseLevel}
-          onJobLevelChange={setJobLevel}
-          onSkillChange={(skill) => setSelectedSkillId(skill.id)}
-          onSkillLevelChange={setSkillLevel}
-          onStatsChange={setStats}
-        />
+        <div className="calculator-character-column">
+          <CalculatorCharacterPanel
+            availableSkills={selectedClassSkills}
+            baseLevel={baseLevel}
+            copy={copy}
+            isFourthJob={isFourthJobClassId(selectedClassId)}
+            isTranscendent={selectedClassId.includes("_T")}
+            jobLevel={jobLevel}
+            selectedClassId={selectedClassId}
+            selectedClassName={selectedClassName}
+            skillLevel={skillLevel}
+            selectedSkill={selectedSkill}
+            stats={stats}
+            onBaseLevelChange={setBaseLevel}
+            onJobLevelChange={setJobLevel}
+            onSkillChange={(skill) => setSelectedSkillId(skill.id)}
+            onSkillLevelChange={setSkillLevel}
+            onStatsChange={setStats}
+          />
+          <CalculatorBuffsPanel
+            activeBuffs={activeBuffs}
+            buffSkills={classBuffSkills}
+            copy={copy}
+            selectedBuffId={selectedBuffId}
+            onActiveBuffsChange={setActiveBuffs}
+            onSelectedBuffChange={setSelectedBuffId}
+          />
+        </div>
         <CalculatorEquipmentPanel copy={copy} />
         <CalculatorTargetPanel
           copy={copy}

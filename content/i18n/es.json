@@ -198,6 +198,14 @@
       "sourceValue": "Core local"
     },
     "buffs": {
+      "title": "Buffs",
+      "activeMeta": "activos",
+      "skillLabel": "Buff",
+      "classGroup": "Buffs de clase",
+      "searchPlaceholder": "Filtrar buff",
+      "addAction": "Agregar",
+      "removeAction": "Quitar buff",
+      "emptyState": "Ningún buff activo.",
       "blessing": "Bendición",
       "increaseAgi": "Aumentar AGI",
       "endow": "Encantar",

@@ -11,6 +11,7 @@ import {
   type RoSkill,
 } from "@/packages/calculator-core/src";
 import type { CalculatorDictionary } from "./calculator-i18n";
+import { CalculatorSkillIcon } from "./calculator-skill-icon";
 
 export type CalculatorPanelSkill = RoSkill & {
   numericId?: number;
@@ -103,7 +104,7 @@ export function CalculatorCharacterPanel({
       options: availableSkills.map((skill) => ({
         id: skill.id,
         label: skill.name,
-        icon: <SkillOptionIcon name={skill.name} numericId={skill.numericId} />,
+        icon: <CalculatorSkillIcon name={skill.name} numericId={skill.numericId} />,
       })),
     },
   ];
@@ -221,35 +222,5 @@ export function CalculatorCharacterPanel({
         ) : null}
       </div>
     </aside>
-  );
-}
-
-function SkillOptionIcon({
-  name,
-  numericId,
-}: {
-  name: string;
-  numericId?: number;
-}) {
-  const initials = name
-    .split(" ")
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2);
-
-  if (typeof numericId !== "number" || !Number.isFinite(numericId) || numericId <= 0) {
-    return <span className="skill-tree-icon-fallback">{initials}</span>;
-  }
-
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      className="skill-select-icon"
-      src={`https://static.divine-pride.net/images/skill/${numericId}.png`}
-      alt=""
-      width={24}
-      height={24}
-      loading="lazy"
-    />
   );
 }

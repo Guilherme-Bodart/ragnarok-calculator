@@ -2070,6 +2070,11 @@ a {
   align-items: start;
 }
 
+.calculator-character-column {
+  display: grid;
+  gap: 18px;
+}
+
 .calc-panel {
   padding: 18px;
 }
@@ -2140,17 +2145,52 @@ a {
   font-size: 0.72rem;
 }
 
-.buff-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
+.calc-buff-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
 }
 
-.buff-list button {
-  padding: 0 10px;
-  min-height: 34px;
-  font-size: 0.78rem;
+.calc-buff-picker .night-button {
+  min-height: 42px;
+  padding-inline: 14px;
+}
+
+.calc-buff-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.calc-buff-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto 34px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgb(125 211 252 / 0.12);
+  border-radius: 8px;
+  background: rgb(2 6 18 / 0.34);
+  padding: 7px;
+}
+
+.calc-buff-row strong {
+  overflow: hidden;
+  color: var(--ice);
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calc-buff-row .ui-rich-select {
+  min-width: 84px;
+}
+
+.calc-empty-state {
+  margin: 14px 0 0;
+  color: rgb(242 251 255 / 0.54);
+  font-size: 0.82rem;
+  font-weight: 800;
 }
 
 .equipment-paperdoll {
