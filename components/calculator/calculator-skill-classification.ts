@@ -5,11 +5,15 @@ import {
   type SkillTreeCatalog,
   type SkillTreeSkill,
 } from "@/packages/calculator-core/src";
+import {
+  toRoSkill,
+  type RathenaNormalizedSkill,
+} from "@/packages/calculator-core/src/datasets/rathena-normalized";
 import type { CalculatorPanelSkill } from "./calculator-character-panel";
 
 export type CalculatorSkillKind = "damage" | "heal" | "buff" | "passive" | "utility";
 
-type NormalizedSkillInfo = {
+type NormalizedSkillInfo = RathenaNormalizedSkill & {
   name: string;
   description?: string;
   targetType?: string | null;
@@ -81,16 +85,20 @@ export function classifyCalculatorSkill(skill: SkillTreeSkill): CalculatorSkillK
 }
 
 function toCalculatorPanelSkill(skill: SkillTreeSkill): CalculatorPanelSkill {
+  const normalizedSkill = rawSkillById.get(skill.id);
+  const roSkill = normalizedSkill ? toRoSkill(normalizedSkill) : null;
+
   return {
     id: skill.id,
-    name: skill.name,
+    name: roSkill?.name ?? skill.name,
     numericId: skill.numericId,
     classTree: skill.sourceJobId,
-    damageType: "physical",
-    element: "neutral",
+    damageType: roSkill?.damageType ?? "physical",
+    element: roSkill?.element ?? "neutral",
     maxLevel: skill.maxLevel,
-    hitCount: 1,
-    baseMultiplierByLevel: Object.fromEntries(
+    hitCount: roSkill?.hitCount ?? 1,
+    hitCountByLevel: roSkill?.hitCountByLevel,
+    baseMultiplierByLevel: roSkill?.baseMultiplierByLevel ?? Object.fromEntries(
       Array.from({ length: skill.maxLevel }, (_, index) => {
         const level = index + 1;
 
