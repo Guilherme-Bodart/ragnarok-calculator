@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
@@ -32,29 +32,57 @@ import {
 import { CalculatorSkillTreePanel } from "./calculator-skill-tree-panel";
 import { CalculatorTargetPanel } from "./calculator-target-panel";
 
+const calculatorBuildStorageKey = "nightmare-calculator-build";
+
+type CalculatorSavedBuild = {
+  activeBuffs?: Record<string, number>;
+  baseLevel?: number;
+  jobLevel?: number;
+  learnedSkills?: Record<string, number>;
+  selectedBuffId?: string;
+  selectedClassId?: string;
+  selectedMonsterId?: number;
+  selectedSkillId?: string;
+  skillLevel?: number;
+  stats?: typeof calculatorDemoInput.character.stats;
+};
+
 export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
   const copy = dictionary.calculator;
+  const savedBuild = readSavedCalculatorBuild();
   const [selectedClassId, setSelectedClassId] = useState(
-    calculatorDemoInput.character.classId ?? "Dragon_Knight",
+    savedBuild?.selectedClassId ??
+      calculatorDemoInput.character.classId ??
+      "Dragon_Knight",
   );
-  const [learnedSkills, setLearnedSkills] = useState<Record<string, number>>({});
+  const [learnedSkills, setLearnedSkills] = useState<Record<string, number>>(
+    savedBuild?.learnedSkills ?? {},
+  );
   const [baseLevel, setBaseLevel] = useState(
-    calculatorDemoInput.character.baseLevel,
+    savedBuild?.baseLevel ?? calculatorDemoInput.character.baseLevel,
   );
   const [jobLevel, setJobLevel] = useState(
-    calculatorDemoInput.character.jobLevel,
+    savedBuild?.jobLevel ?? calculatorDemoInput.character.jobLevel,
   );
-  const [stats, setStats] = useState(calculatorDemoInput.character.stats);
+  const [stats, setStats] = useState(
+    savedBuild?.stats ?? calculatorDemoInput.character.stats,
+  );
   const [selectedSkillId, setSelectedSkillId] = useState(
-    calculatorDemoInput.skillId,
+    savedBuild?.selectedSkillId ?? calculatorDemoInput.skillId,
   );
-  const [skillLevel, setSkillLevel] = useState(calculatorDemoInput.skillLevel);
+  const [skillLevel, setSkillLevel] = useState(
+    savedBuild?.skillLevel ?? calculatorDemoInput.skillLevel,
+  );
   const [selectedMonsterId, setSelectedMonsterId] = useState(
-    calculatorDemoInput.monsterId,
+    savedBuild?.selectedMonsterId ?? calculatorDemoInput.monsterId,
   );
-  const [activeBuffs, setActiveBuffs] = useState<Record<string, number>>({});
-  const [selectedBuffId, setSelectedBuffId] = useState("");
+  const [activeBuffs, setActiveBuffs] = useState<Record<string, number>>(
+    savedBuild?.activeBuffs ?? {},
+  );
+  const [selectedBuffId, setSelectedBuffId] = useState(
+    savedBuild?.selectedBuffId ?? "",
+  );
   const selectedClassSkills = useMemo(
     () => getCalculatorClassSkills(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
@@ -117,6 +145,34 @@ export function CalculatorWorkbench() {
       stats,
     ],
   );
+
+  useEffect(() => {
+    const build: CalculatorSavedBuild = {
+      activeBuffs,
+      baseLevel,
+      jobLevel,
+      learnedSkills,
+      selectedBuffId,
+      selectedClassId,
+      selectedMonsterId,
+      selectedSkillId,
+      skillLevel,
+      stats,
+    };
+
+    window.localStorage.setItem(calculatorBuildStorageKey, JSON.stringify(build));
+  }, [
+    activeBuffs,
+    baseLevel,
+    jobLevel,
+    learnedSkills,
+    selectedBuffId,
+    selectedClassId,
+    selectedMonsterId,
+    selectedSkillId,
+    skillLevel,
+    stats,
+  ]);
 
   function handleClassChange(classId: string) {
     const isFourthJob = isFourthJobClassId(classId);
@@ -233,4 +289,22 @@ export function CalculatorWorkbench() {
       </section>
     </main>
   );
+}
+
+function readSavedCalculatorBuild(): CalculatorSavedBuild | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const rawBuild = window.localStorage.getItem(calculatorBuildStorageKey);
+
+  if (!rawBuild) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawBuild) as CalculatorSavedBuild;
+  } catch {
+    return null;
+  }
 }
