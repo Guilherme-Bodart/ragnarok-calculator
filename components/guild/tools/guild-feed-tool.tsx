@@ -1,16 +1,15 @@
 import { Radio } from "lucide-react";
+import { PanelHeader } from "@/components/ui/panel-header";
 import type { GuildToolComponentProps } from "../guild-tool-types";
 
 export function GuildFeedTool({ dashboard }: GuildToolComponentProps) {
   return (
     <section className="guild-module-panel">
-      <div className="guild-panel-header">
-        <span>
-          <Radio size={17} />
-          Guild Feed
-        </span>
-        <small>{dashboard.feed.length} posts</small>
-      </div>
+      <PanelHeader
+        icon={<Radio size={17} />}
+        title="Guild Feed"
+        meta={`${dashboard.feed.length} posts`}
+      />
       <div className="guild-feed-stack">
         {dashboard.feed.map((item) => (
           <article key={item.id} className="guild-feed-item">

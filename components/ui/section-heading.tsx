@@ -1,36 +1,34 @@
+import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-type SectionHeadingProps = {
+type SectionHeadingProps = HTMLAttributes<HTMLDivElement> & {
   align?: "left" | "center";
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description?: string;
 };
 
 export function SectionHeading({
   align = "center",
+  className,
+  description,
   eyebrow,
   title,
-  description,
+  ...props
 }: SectionHeadingProps) {
   return (
     <div
       className={cn(
-        "max-w-[620px]",
-        align === "center" && "mx-auto text-center",
+        "section-heading",
+        align === "center" && "section-heading-center",
+        align === "left" && "section-heading-left",
+        className,
       )}
+      {...props}
     >
-      <p className="font-mono text-xs font-bold uppercase tracking-normal text-death-300">
-        {eyebrow}
-      </p>
-      <h2 className="mt-3 text-2xl font-black leading-tight text-bone-100 sm:text-3xl">
-        {title}
-      </h2>
-      {description ? (
-        <p className="mt-4 text-base leading-7 text-bone-100/68 sm:text-lg">
-          {description}
-        </p>
-      ) : null}
+      {eyebrow ? <div className="ornament">{eyebrow}</div> : null}
+      <h2 className="section-title">{title}</h2>
+      {description ? <p className="section-copy">{description}</p> : null}
     </div>
   );
 }

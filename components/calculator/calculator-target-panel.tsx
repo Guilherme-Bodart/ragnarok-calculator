@@ -1,6 +1,9 @@
 "use client";
 
 import { Swords } from "lucide-react";
+import { Field } from "@/components/ui/field";
+import { PanelHeader } from "@/components/ui/panel-header";
+import { RichSelect } from "@/components/ui/rich-select";
 import type { CalculateDamageResult } from "@/packages/calculator-core/src";
 import { calculatorDemoDataset } from "./calculator-demo-data";
 import type { CalculatorDictionary } from "./calculator-i18n";
@@ -31,27 +34,28 @@ export function CalculatorTargetPanel({
 
   return (
     <aside className="calc-panel calc-target">
-      <div className="calc-panel-header">
-        <span>
-          <Swords size={17} />
-          {copy.target.title}
-        </span>
-        <small>{copy.target.meta}</small>
-      </div>
+      <PanelHeader
+        icon={<Swords size={17} />}
+        title={copy.target.title}
+        meta={copy.target.meta}
+      />
 
-      <label className="monster-picker">
-        {copy.target.monsterLabel}
-        <select
-          value={selectedMonsterId}
-          onChange={(event) => onMonsterChange(Number(event.target.value))}
-        >
-          {calculatorDemoDataset.monsters.map((monster) => (
-            <option value={monster.id} key={monster.id}>
-              {monster.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <Field className="monster-picker" label={copy.target.monsterLabel}>
+        <RichSelect
+          value={String(selectedMonsterId)}
+          onChange={(monsterId) => onMonsterChange(Number(monsterId))}
+          searchPlaceholder="Filtrar monstro"
+          groups={[
+            {
+              label: copy.target.monsterLabel,
+              options: calculatorDemoDataset.monsters.map((monster) => ({
+                id: String(monster.id),
+                label: monster.name,
+              })),
+            },
+          ]}
+        />
+      </Field>
 
       <div className="damage-card">
         <span>{copy.target.totalDamage}</span>

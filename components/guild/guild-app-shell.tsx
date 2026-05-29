@@ -4,6 +4,9 @@ import { Bell, ChevronDown, Command, LogOut, Search, Settings, Swords } from "lu
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { IconButton } from "@/components/ui/icon-button";
+import { PanelHeader } from "@/components/ui/panel-header";
+import { TabButton, Tabs } from "@/components/ui/tabs";
 import { canUseGuildTool, formatGuildRole } from "./guild-role-access";
 import { getGuildTool, guildTools } from "./guild-tool-registry";
 import type { GuildToolDefinition } from "./guild-tool-types";
@@ -22,6 +25,8 @@ const categoryLabels: Record<GuildToolDefinition["category"], string> = {
   management: "Management",
   insights: "Insights",
 };
+
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 export function GuildAppShell({
   dashboard,
@@ -62,6 +67,15 @@ export function GuildAppShell({
     router.replace(`/guilds/${dashboard.guild.slug}${query ? `?${query}` : ""}`);
   }
 
+  async function handleLogout() {
+    await fetch(`${apiBaseUrl}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+    router.replace("/login");
+    router.refresh();
+  }
+
   return (
     <main className="guild-saas-page">
       <div className="guild-grid-bg" />
@@ -88,17 +102,17 @@ export function GuildAppShell({
                 <section key={category}>
                   <span className="guild-sidebar-section">{categoryLabels[category]}</span>
                   {tools.map((tool) => (
-                    <button
-                      className={tool.id === renderableTool.id ? "active" : ""}
+                    <TabButton
+                      active={tool.id === renderableTool.id}
+                      className="guild-sidebar-tab"
                       disabled={tool.status !== "ready"}
                       key={tool.id}
                       onClick={() => activateTool(tool)}
-                      type="button"
                     >
                       <tool.icon size={16} />
                       <span>{tool.name}</span>
                       {tool.status === "planned" && <small>soon</small>}
-                    </button>
+                    </TabButton>
                   ))}
                 </section>
               );
@@ -118,44 +132,46 @@ export function GuildAppShell({
           </div>
 
           <div className="guild-header-actions">
-            <button type="button">
+            <IconButton label="Search" type="button">
               <Search size={16} />
-            </button>
-            <Link href="/calculator" aria-label="Open calculator">
+            </IconButton>
+            <IconButton href="/calculator" label="Open calculator">
               <Swords size={16} />
-            </Link>
-            <button type="button" aria-label="Guild settings">
+            </IconButton>
+            <IconButton label="Guild settings" type="button">
               <Settings size={16} />
-            </button>
+            </IconButton>
             <Link className="guild-user-button" href="/profile">
               <Command size={16} />
               <span>{notice}</span>
               <ChevronDown size={14} />
             </Link>
-            <button type="button" aria-label="Exit guild">
+            <IconButton
+              label="Logout"
+              onClick={() => void handleLogout()}
+              type="button"
+              variant="danger"
+            >
               <LogOut size={16} />
-            </button>
+            </IconButton>
           </div>
         </header>
 
-        <div className="guild-tool-tabs" role="tablist" aria-label="Open tools">
+        <Tabs label="Open tools">
           {visibleTools
             .filter((tool) => tool.status === "ready")
             .slice(0, 6)
             .map((tool) => (
-              <button
-                aria-selected={tool.id === renderableTool.id}
-                className={tool.id === renderableTool.id ? "active" : ""}
+              <TabButton
+                active={tool.id === renderableTool.id}
                 key={tool.id}
                 onClick={() => activateTool(tool)}
-                role="tab"
-                type="button"
               >
                 <tool.icon size={15} />
                 {tool.name}
-              </button>
+              </TabButton>
             ))}
-        </div>
+        </Tabs>
 
         <div className="guild-workspace-shell">
           <section className="guild-workspace-content">
@@ -167,13 +183,11 @@ export function GuildAppShell({
           </section>
 
           <aside className="guild-notification-center" aria-label="Notification center">
-            <div className="guild-panel-header">
-              <span>
-                <Bell size={17} />
-                Notifications
-              </span>
-              <small>{unreadCount} new</small>
-            </div>
+            <PanelHeader
+              icon={<Bell size={17} />}
+              title="Notifications"
+              meta={`${unreadCount} new`}
+            />
             <div className="guild-notification-mini-list">
               {dashboard.notifications.slice(0, 4).map((notification) => (
                 <article key={notification.id}>

@@ -10,6 +10,9 @@ export type SkillTreeRawSkill = {
   jobLevel?: number;
   exclude?: boolean;
   requires?: SkillTreeRawRequirement[];
+  sourceJobId?: string;
+  sourceJobName?: string;
+  displaySourceJobId?: string;
 };
 
 export type SkillTreeRawJob = {
@@ -19,6 +22,7 @@ export type SkillTreeRawJob = {
 
 export type SkillTreeRawDataset = {
   jobs: Record<string, SkillTreeRawJob>;
+  resolvedJobs?: Record<string, SkillTreeResolvedRawJob>;
 };
 
 export type SkillTreeRawSkillInfo = {
@@ -34,8 +38,23 @@ export type SkillTreeJobOption = {
   directSkillCount: number;
 };
 
+export type SkillTreeResolvedPathJob = {
+  id: string;
+  name?: string;
+  directSkillCount?: number;
+};
+
+export type SkillTreeResolvedRawJob = {
+  id: string;
+  name?: string;
+  jobPath: SkillTreeResolvedPathJob[];
+  skillOrder?: string[];
+  skills: Record<string, SkillTreeRawSkill>;
+};
+
 export type SkillTreeCatalog = {
   jobs: Record<string, SkillTreeRawJob>;
+  resolvedJobs?: Record<string, SkillTreeResolvedRawJob>;
   jobOptions: SkillTreeJobOption[];
   skillInfoById: Record<string, SkillTreeRawSkillInfo>;
 };
@@ -55,6 +74,7 @@ export type SkillTreeSkill = {
   jobLevel: number;
   sourceJobId: string;
   sourceJobName: string;
+  displaySourceJobId?: string;
   requirements: SkillTreeRequirement[];
 };
 
@@ -87,6 +107,7 @@ export function createSkillTreeCatalog(
 
   return {
     jobs: rawTree.jobs,
+    resolvedJobs: rawTree.resolvedJobs,
     jobOptions,
     skillInfoById,
   };
@@ -96,6 +117,43 @@ export function resolveSkillTreeJob(
   catalog: SkillTreeCatalog,
   jobId: string,
 ): ResolvedSkillTreeJob {
+  const rawResolvedJob = catalog.resolvedJobs?.[jobId];
+
+  if (rawResolvedJob) {
+    const skillIds = rawResolvedJob.skillOrder ?? Object.keys(rawResolvedJob.skills);
+    const skills = skillIds.flatMap((skillId) => {
+      const rawSkill = rawResolvedJob.skills[skillId];
+
+      if (!rawSkill || rawSkill.maxLevel <= 0) {
+        return [];
+      }
+
+      return [
+        toResolvedSkill(
+          catalog,
+          rawSkill,
+          rawSkill.sourceJobId ?? rawSkill.displaySourceJobId ?? jobId,
+        ),
+      ];
+    });
+
+    return {
+      id: rawResolvedJob.id,
+      name: rawResolvedJob.name ?? formatSkillTreeJobName(rawResolvedJob.id),
+      inheritedJobIds: rawResolvedJob.jobPath
+        .map((pathJob) => pathJob.id)
+        .filter((pathJobId) => pathJobId !== jobId),
+      jobPath: rawResolvedJob.jobPath.map((pathJob) => ({
+        id: pathJob.id,
+        name: pathJob.name ?? formatSkillTreeJobName(pathJob.id),
+        directSkillCount:
+          pathJob.directSkillCount ??
+          Object.values(catalog.jobs[pathJob.id]?.skills ?? {}).length,
+      })),
+      skills,
+    };
+  }
+
   const visited = new Set<string>();
   const path: string[] = [];
   const skills = new Map<string, SkillTreeSkill>();
@@ -125,7 +183,9 @@ export function resolveSkillTreeJob(
         continue;
       }
 
-      skills.set(rawSkill.id, toResolvedSkill(catalog, rawSkill, currentJobId));
+      if (!skills.has(rawSkill.id)) {
+        skills.set(rawSkill.id, toResolvedSkill(catalog, rawSkill, currentJobId));
+      }
     }
   }
 
@@ -180,6 +240,58 @@ export function canDecreaseSkill(
   });
 }
 
+export function increaseSkillWithRequirements(
+  resolvedJob: ResolvedSkillTreeJob,
+  skillId: string,
+  learnedSkills: LearnedSkillLevels,
+): LearnedSkillLevels {
+  const skillById = Object.fromEntries(
+    resolvedJob.skills.map((skill) => [skill.id, skill]),
+  );
+  const targetSkill = skillById[skillId];
+
+  if (!targetSkill) {
+    return learnedSkills;
+  }
+
+  const currentLevel = learnedSkills[skillId] ?? 0;
+
+  if (currentLevel >= targetSkill.maxLevel) {
+    return learnedSkills;
+  }
+
+  const nextSkills = { ...learnedSkills };
+  const visiting = new Set<string>();
+
+  function learnRequiredSkill(requiredSkillId: string, requiredLevel: number) {
+    const requiredSkill = skillById[requiredSkillId];
+
+    if (!requiredSkill || visiting.has(requiredSkillId)) {
+      return;
+    }
+
+    visiting.add(requiredSkillId);
+
+    for (const requirement of requiredSkill.requirements) {
+      learnRequiredSkill(requirement.id, requirement.level);
+    }
+
+    nextSkills[requiredSkillId] = Math.min(
+      Math.max(nextSkills[requiredSkillId] ?? 0, requiredLevel),
+      requiredSkill.maxLevel,
+    );
+    visiting.delete(requiredSkillId);
+  }
+
+  for (const requirement of targetSkill.requirements) {
+    learnRequiredSkill(requirement.id, requirement.level);
+  }
+
+  nextSkills[skillId] = currentLevel + 1;
+
+  return nextSkills;
+}
+
 export function getMissingRequirements(
   skill: SkillTreeSkill,
   learnedSkills: LearnedSkillLevels,
@@ -208,7 +320,8 @@ function toResolvedSkill(
     baseLevel: rawSkill.baseLevel ?? 0,
     jobLevel: rawSkill.jobLevel ?? 0,
     sourceJobId,
-    sourceJobName: formatSkillTreeJobName(sourceJobId),
+    sourceJobName: rawSkill.sourceJobName ?? formatSkillTreeJobName(sourceJobId),
+    displaySourceJobId: rawSkill.displaySourceJobId,
     requirements: (rawSkill.requires ?? []).map((requirement) => ({
       id: requirement.id,
       name: catalog.skillInfoById[requirement.id]?.description ?? requirement.id,

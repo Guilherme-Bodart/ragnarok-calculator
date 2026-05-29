@@ -1,16 +1,15 @@
 import { CalendarClock } from "lucide-react";
+import { PanelHeader } from "@/components/ui/panel-header";
 import type { GuildToolComponentProps } from "../guild-tool-types";
 
 export function GuildCalendarTool({ dashboard }: GuildToolComponentProps) {
   return (
     <section className="guild-module-panel">
-      <div className="guild-panel-header">
-        <span>
-          <CalendarClock size={17} />
-          Agenda
-        </span>
-        <small>{dashboard.events.length} events</small>
-      </div>
+      <PanelHeader
+        icon={<CalendarClock size={17} />}
+        title="Agenda"
+        meta={`${dashboard.events.length} events`}
+      />
       <div className="guild-event-list">
         {dashboard.events.map((event) => (
           <article key={event.id} className="guild-event-row">

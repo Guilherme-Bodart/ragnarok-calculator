@@ -4,6 +4,10 @@ import { ArrowDown, ArrowUp, Crown, MailPlus, Shield, Trash2, Users } from "luci
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
+import { Button } from "@/components/ui/button";
+import { IconButton } from "@/components/ui/icon-button";
+import { PanelHeader } from "@/components/ui/panel-header";
+import { Select } from "@/components/ui/select";
 import { getRoleRank } from "../guild-role-access";
 import type { GuildRole } from "../guild-types";
 import type { GuildToolComponentProps } from "../guild-tool-types";
@@ -136,13 +140,11 @@ export function GuildMembersTool({
   return (
     <div className="guild-tool-grid guild-management-grid">
       <section className="guild-module-panel">
-        <div className="guild-panel-header">
-          <span>
-            <Users size={17} />
-            {t.membersTitle}
-          </span>
-          <small>{dashboard.members.length}</small>
-        </div>
+        <PanelHeader
+          icon={<Users size={17} />}
+          title={t.membersTitle}
+          meta={dashboard.members.length}
+        />
         <div className="guild-member-list">
           {dashboard.members.map((member) => (
             <div key={member.id} className="guild-member-row">
@@ -158,7 +160,7 @@ export function GuildMembersTool({
                 </small>
               </div>
               {canManage && (
-                <select
+                <Select
                   aria-label={t.memberRoleLabel}
                   onChange={(event) => updateMemberRole(member.id, event.target.value)}
                   value={member.role.id}
@@ -168,7 +170,7 @@ export function GuildMembersTool({
                       {role.name}
                     </option>
                   ))}
-                </select>
+                </Select>
               )}
             </div>
           ))}
@@ -176,13 +178,11 @@ export function GuildMembersTool({
       </section>
 
       <section className="guild-module-panel">
-        <div className="guild-panel-header">
-          <span>
-            <Shield size={17} />
-            {t.rolesTitle}
-          </span>
-          <small>{dashboard.roles.length}/10</small>
-        </div>
+        <PanelHeader
+          icon={<Shield size={17} />}
+          title={t.rolesTitle}
+          meta={`${dashboard.roles.length}/10`}
+        />
         <div className="guild-role-list">
           {dashboard.roles.map((role, index) => (
             <article key={role.id} className="guild-role-row">
@@ -214,22 +214,22 @@ export function GuildMembersTool({
               <small>{t.rankLabel} {role.rank}</small>
               {canManage && (
                 <span className="guild-role-actions">
-                  <button
-                    aria-label={t.moveUp}
+                  <IconButton
+                    label={t.moveUp}
                     disabled={index === 0}
                     onClick={() => moveRole(role, -1)}
                     type="button"
                   >
                     <ArrowUp size={14} />
-                  </button>
-                  <button
-                    aria-label={t.moveDown}
+                  </IconButton>
+                  <IconButton
+                    label={t.moveDown}
                     disabled={index === dashboard.roles.length - 1}
                     onClick={() => moveRole(role, 1)}
                     type="button"
                   >
                     <ArrowDown size={14} />
-                  </button>
+                  </IconButton>
                 </span>
               )}
             </article>
@@ -249,20 +249,15 @@ export function GuildMembersTool({
               type="color"
               value={roleColor}
             />
-            <button className="guild-secondary-button" onClick={createRole} type="button">
+            <Button onClick={createRole} type="button" variant="secondary">
               {t.createRoleAction}
-            </button>
+            </Button>
           </div>
         )}
       </section>
 
       <section className="guild-module-panel">
-        <div className="guild-panel-header">
-          <span>
-            <Shield size={17} />
-            {t.toolsTitle}
-          </span>
-        </div>
+        <PanelHeader icon={<Shield size={17} />} title={t.toolsTitle} />
         <div className="guild-tool-access-list">
           {dashboard.tools.map((tool) => (
             <label key={tool.id}>
@@ -270,7 +265,7 @@ export function GuildMembersTool({
                 <strong>{tool.name}</strong>
                 <small>{t.minimumRoleLabel}</small>
               </span>
-              <select
+              <Select
                 disabled={!canManage}
                 onChange={(event) => updateToolAccess(tool.id, event.target.value)}
                 value={getMinimumRoleId(tool.minimumRole, dashboard.roles)}
@@ -280,20 +275,18 @@ export function GuildMembersTool({
                     {role.name}
                   </option>
                 ))}
-              </select>
+              </Select>
             </label>
           ))}
         </div>
       </section>
 
       <section className="guild-module-panel">
-        <div className="guild-panel-header">
-          <span>
-            <MailPlus size={17} />
-            {t.invitesTitle}
-          </span>
-          <small>{dashboard.invites.length}</small>
-        </div>
+        <PanelHeader
+          icon={<MailPlus size={17} />}
+          title={t.invitesTitle}
+          meta={dashboard.invites.length}
+        />
         <div className="guild-invite-list">
           {dashboard.invites.map((invite) => (
             <div key={invite.id}>
@@ -308,14 +301,9 @@ export function GuildMembersTool({
 
       {dashboard.guild.isOwner && (
         <section className="guild-module-panel guild-danger-panel">
-          <div className="guild-panel-header">
-            <span>
-              <Crown size={17} />
-              {t.leadershipTitle}
-            </span>
-          </div>
+          <PanelHeader icon={<Crown size={17} />} title={t.leadershipTitle} />
           <div className="guild-owner-actions">
-            <select
+            <Select
               onChange={(event) => setLeaderMemberId(event.target.value)}
               value={leaderMemberId}
             >
@@ -324,14 +312,18 @@ export function GuildMembersTool({
                   {member.displayName}
                 </option>
               ))}
-            </select>
-            <button className="guild-secondary-button" onClick={transferLeadership} type="button">
+            </Select>
+            <Button onClick={transferLeadership} type="button" variant="secondary">
               {t.transferAction}
-            </button>
-            <button className="guild-danger-button" onClick={deleteGuild} type="button">
-              <Trash2 size={15} />
+            </Button>
+            <Button
+              icon={<Trash2 size={15} />}
+              onClick={deleteGuild}
+              type="button"
+              variant="danger"
+            >
               {t.deleteGuildAction}
-            </button>
+            </Button>
           </div>
         </section>
       )}

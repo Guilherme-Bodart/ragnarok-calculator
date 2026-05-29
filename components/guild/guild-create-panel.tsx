@@ -1,9 +1,13 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { LayoutDashboard, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
+import { Button } from "@/components/ui/button";
+import { Panel } from "@/components/ui/panel";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Select } from "@/components/ui/select";
 import type { GuildSummary } from "./guild-types";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
@@ -62,15 +66,17 @@ export function GuildCreatePanel({ compact = false }: GuildCreatePanelProps) {
   }
 
   return (
-    <section className={compact ? "guild-create-panel compact" : "guild-create-panel"}>
-      <div className="guild-create-header">
-        <span className="guild-tool-eyebrow">
-          <LayoutDashboard size={16} />
-          {t.kicker}
-        </span>
-        <h1>{t.title}</h1>
-        <p>{t.description}</p>
-      </div>
+    <Panel
+      as="section"
+      className={compact ? "guild-create-panel compact" : "guild-create-panel"}
+    >
+      <SectionHeading
+        align="left"
+        className="guild-create-header"
+        eyebrow={t.kicker}
+        title={t.title}
+        description={t.description}
+      />
 
       <form className="guild-create-form" onSubmit={handleSubmit}>
         <label>
@@ -97,10 +103,10 @@ export function GuildCreatePanel({ compact = false }: GuildCreatePanelProps) {
         </label>
         <label>
           {t.serverLabel}
-          <select onChange={(event) => setServer(event.target.value)} value={server}>
+          <Select onChange={(event) => setServer(event.target.value)} value={server}>
             <option value="Freya">Freya</option>
             <option value="Nidhogg">Nidhogg</option>
-          </select>
+          </Select>
         </label>
         <label>
           {t.descriptionLabel}
@@ -110,18 +116,18 @@ export function GuildCreatePanel({ compact = false }: GuildCreatePanelProps) {
             value={description}
           />
         </label>
-        <button
+        <Button
           className="guild-primary-button guild-create-submit"
           disabled={isSaving}
+          icon={<Plus size={16} />}
           type="submit"
         >
-          <Plus size={16} />
           {isSaving ? t.creating : t.submit}
-        </button>
+        </Button>
       </form>
 
       {message && <p className="guild-inline-message">{message}</p>}
-    </section>
+    </Panel>
   );
 }
 

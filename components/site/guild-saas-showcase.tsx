@@ -1,5 +1,6 @@
 import { Bell, CalendarClock, Crown, ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FeaturePill } from "@/components/ui/feature-pill";
 import type { Dictionary } from "@/content/i18n";
 
 type GuildSaasShowcaseProps = {
@@ -16,9 +17,9 @@ export function GuildSaasShowcase({ t }: GuildSaasShowcaseProps) {
           <div className="section-kicker">{t.kicker}</div>
           <h2>{t.title}</h2>
           <p>{t.description}</p>
-          <div className="guild-saas-feature-row">
+          <div className="ui-pill-row">
             {t.features.map((feature) => (
-              <span key={feature}>{feature}</span>
+              <FeaturePill key={feature}>{feature}</FeaturePill>
             ))}
           </div>
           <Button href="/login">{t.action}</Button>

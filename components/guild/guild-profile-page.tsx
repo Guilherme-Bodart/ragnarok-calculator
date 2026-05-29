@@ -14,6 +14,10 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
+import { Button } from "@/components/ui/button";
+import { Panel } from "@/components/ui/panel";
+import { PanelHeader } from "@/components/ui/panel-header";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { GuildCreatePanel } from "./guild-create-panel";
 import { formatGuildRole } from "./guild-role-access";
 import type { CurrentGuildContext } from "./guild-types";
@@ -89,25 +93,18 @@ export function GuildProfilePage() {
     <main className="guild-page">
       <div className="guild-grid-bg" />
       <section className="guild-profile-shell">
-        <header className="guild-profile-header">
-          <span className="guild-tool-eyebrow">
-            <UserRound size={16} />
-            {t.kicker}
-          </span>
-          <div>
-            <h1>{context.user.displayName}</h1>
-            <p>{t.description}</p>
-          </div>
-        </header>
+        <Panel as="header" className="guild-profile-header">
+          <SectionHeading
+            align="left"
+            eyebrow={t.kicker}
+            title={context.user.displayName}
+            description={t.description}
+          />
+        </Panel>
 
         <section className="guild-profile-grid">
-          <article className="guild-profile-card">
-            <div className="guild-panel-header">
-              <span>
-                <ShieldCheck size={17} />
-                {t.accountTitle}
-              </span>
-            </div>
+          <Panel as="article" className="guild-profile-card">
+            <PanelHeader icon={<ShieldCheck size={17} />} title={t.accountTitle} />
             <div className="guild-profile-detail">
               <UserRound size={17} />
               <span>{context.user.displayName}</span>
@@ -116,16 +113,14 @@ export function GuildProfilePage() {
               <Mail size={17} />
               <span>{context.user.email}</span>
             </div>
-          </article>
+          </Panel>
 
-          <article className="guild-profile-card">
-            <div className="guild-panel-header">
-              <span>
-                <Crown size={17} />
-                {t.guildTitle}
-              </span>
-              <small>{guild ? "1" : "0"}</small>
-            </div>
+          <Panel as="article" className="guild-profile-card">
+            <PanelHeader
+              icon={<Crown size={17} />}
+              title={t.guildTitle}
+              meta={guild ? "1" : "0"}
+            />
 
             {guild ? (
               <div className="guild-profile-guild-list">
@@ -142,28 +137,23 @@ export function GuildProfilePage() {
             ) : (
               <div className="guild-profile-empty-stack">
                 <p className="guild-profile-empty">{t.emptyGuild}</p>
-                <button
-                  className="guild-secondary-button"
+                <Button
+                  icon={<Plus size={16} />}
                   onClick={() => setIsCreateOpen((current) => !current)}
                   type="button"
+                  variant="secondary"
                 >
-                  <Plus size={16} />
                   {isCreateOpen ? t.hideCreateAction : t.showCreateAction}
-                </button>
+                </Button>
               </div>
             )}
-          </article>
+          </Panel>
         </section>
 
-        <article className="guild-profile-card">
-          <div className="guild-panel-header">
-            <span>
-              <Inbox size={17} />
-              {t.invitesTitle}
-            </span>
-          </div>
+        <Panel as="article" className="guild-profile-card">
+          <PanelHeader icon={<Inbox size={17} />} title={t.invitesTitle} />
           <p className="guild-profile-empty">{t.emptyInvites}</p>
-        </article>
+        </Panel>
 
         {!guild && isCreateOpen && <GuildCreatePanel compact />}
       </section>

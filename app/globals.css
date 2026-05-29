@@ -60,28 +60,37 @@ a {
   background: #a7efff;
 }
 
-.nightmare-page select,
-.calculator-page select,
-.guild-page select,
-.guild-saas-page select,
-.guild-auth-page select {
+.ui-select {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.ui-select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid rgb(167 239 255 / 0.9);
+  pointer-events: none;
+  transform: translateY(-35%);
+}
+
+.ui-select select {
+  width: 100%;
+  min-height: 40px;
   border: 1px solid rgb(167 239 255 / 0.16);
   border-radius: 8px;
   color: #f2fbff;
-  background-color: rgb(2 6 18 / 0.34);
-  background-image:
-    linear-gradient(45deg, transparent 50%, rgb(167 239 255 / 0.9) 50%),
-    linear-gradient(135deg, rgb(167 239 255 / 0.9) 50%, transparent 50%),
-    linear-gradient(180deg, rgb(167 239 255 / 0.08), rgb(2 6 18 / 0.08));
-  background-position:
-    calc(100% - 17px) 50%,
-    calc(100% - 12px) 50%,
-    100% 0;
-  background-size:
-    5px 5px,
-    5px 5px,
-    38px 100%;
-  background-repeat: no-repeat;
+  background:
+    linear-gradient(90deg, transparent calc(100% - 42px), rgb(8 47 73 / 0.56) 0),
+    linear-gradient(180deg, rgb(167 239 255 / 0.08), rgb(2 6 18 / 0.08)),
+    rgb(2 6 18 / 0.48);
+  padding-right: 46px;
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.045),
     0 12px 26px rgb(0 0 0 / 0.12);
@@ -89,27 +98,12 @@ a {
   transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
 
-.calculator-page select,
-.guild-page select,
-.guild-saas-page select,
-.guild-auth-page select {
-  padding-right: 42px;
-}
-
-.nightmare-page select:hover,
-.calculator-page select:hover,
-.guild-page select:hover,
-.guild-saas-page select:hover,
-.guild-auth-page select:hover {
+.ui-select select:hover {
   border-color: rgb(167 239 255 / 0.34);
   background-color: rgb(7 23 40 / 0.52);
 }
 
-.nightmare-page select:focus,
-.calculator-page select:focus,
-.guild-page select:focus,
-.guild-saas-page select:focus,
-.guild-auth-page select:focus {
+.ui-select select:focus {
   border-color: rgb(167 239 255 / 0.58);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.06),
@@ -117,13 +111,320 @@ a {
   outline: none;
 }
 
-.nightmare-page select option,
-.calculator-page select option,
-.guild-page select option,
-.guild-saas-page select option,
-.guild-auth-page select option {
+.ui-select select:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.ui-select option,
+.ui-select optgroup {
   color: #f2fbff;
   background: #020612;
+}
+
+.ui-rich-select {
+  position: relative;
+  display: inline-block;
+  width: min(var(--rich-select-width, 100%), 100%);
+  max-width: min(250px, 100%);
+  isolation: isolate;
+}
+
+.ui-rich-select:has(.ui-rich-select-menu) {
+  z-index: 300;
+}
+
+.ui-rich-select-trigger {
+  width: 100%;
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgb(167 239 255 / 0.16);
+  border-radius: 8px;
+  color: #f2fbff;
+  background:
+    linear-gradient(180deg, rgb(167 239 255 / 0.08), rgb(2 6 18 / 0.08)),
+    rgb(2 6 18 / 0.48);
+  padding: 4px 4px 4px 6px;
+  font: inherit;
+  font-weight: 900;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ui-rich-select-trigger[data-has-icons="false"] {
+  grid-template-columns: minmax(0, 1fr) 18px;
+  padding-left: 12px;
+}
+
+.ui-rich-select-trigger span:not(.ui-rich-select-icon) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-rich-select-chevron {
+  width: 34px;
+  min-height: 32px;
+  display: grid;
+  place-items: center;
+  justify-self: end;
+  border-left: 1px solid rgb(167 239 255 / 0.12);
+  border-radius: 0 6px 6px 0;
+  color: rgb(167 239 255 / 0.9);
+  background: rgb(8 47 73 / 0.48);
+}
+
+.ui-rich-select-menu {
+  position: absolute;
+  z-index: 200;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  max-width: min(250px, calc(100vw - 48px));
+  max-height: min(320px, 46vh);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  border: 1px solid rgb(167 239 255 / 0.22);
+  border-radius: 8px;
+  background: rgb(2 6 18 / 0.98);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.44);
+  padding: 8px;
+}
+
+.ui-rich-select-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-menu {
+  max-height: min(260px, 42vh);
+}
+
+.ui-rich-select-menu:has(button:nth-of-type(12)) {
+  width: 100%;
+}
+
+.ui-rich-select-menu section + section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgb(167 239 255 / 0.1);
+}
+
+.ui-rich-select-search {
+  min-height: 36px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  border: 1px solid rgb(167 239 255 / 0.14);
+  border-radius: 8px;
+  color: rgb(167 239 255 / 0.84);
+  background: rgb(2 6 18 / 0.64);
+  padding: 0 9px;
+}
+
+.ui-rich-select-search input {
+  min-width: 0;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  color: #f2fbff;
+  background: transparent;
+  font: inherit;
+  font-weight: 800;
+}
+
+.ui-rich-select-search:focus-within {
+  border-color: rgb(167 239 255 / 0.34);
+  box-shadow: inset 0 0 0 1px rgb(167 239 255 / 0.06);
+}
+
+.ui-rich-select-search input::placeholder {
+  color: rgb(242 251 255 / 0.42);
+}
+
+.ui-rich-select-empty {
+  display: block;
+  padding: 10px 8px;
+  color: rgb(242 251 255 / 0.52);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.ui-rich-select-menu section > strong {
+  display: block;
+  padding: 6px 8px;
+  color: rgb(167 239 255 / 0.92);
+  font-size: 0.78rem;
+}
+
+.ui-rich-select-menu button {
+  width: 100%;
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 8px;
+  color: rgb(242 251 255 / 0.82);
+  background: transparent;
+  padding: 5px 8px;
+  font: inherit;
+  font-weight: 850;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ui-rich-select-menu button span:not(.ui-rich-select-icon) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-rich-select-menu button[data-has-icons="false"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ui-rich-select-menu button:hover,
+.ui-rich-select-menu button.active {
+  color: #020612;
+  background: #a7efff;
+}
+
+.ui-rich-select-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+}
+
+.skill-select-icon {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+
+.ui-field {
+  display: grid;
+  gap: 7px;
+  color: rgb(242 251 255 / 0.58);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ui-input {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid rgb(167 239 255 / 0.16);
+  border-radius: 8px;
+  color: #f2fbff;
+  background:
+    linear-gradient(180deg, rgb(167 239 255 / 0.05), rgb(2 6 18 / 0.08)),
+    rgb(2 6 18 / 0.58);
+  padding: 0 12px;
+  font: inherit;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.ui-input:focus {
+  border-color: rgb(167 239 255 / 0.58);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 0 0 3px rgb(85 199 255 / 0.12);
+}
+
+.ui-field-value {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(167 239 255 / 0.16);
+  border-radius: 8px;
+  color: rgb(242 251 255 / 0.82);
+  background:
+    linear-gradient(180deg, rgb(167 239 255 / 0.05), rgb(2 6 18 / 0.08)),
+    rgb(2 6 18 / 0.48);
+  padding: 0 12px;
+  font: inherit;
+  font-weight: 850;
+}
+
+.ui-icon-button {
+  min-width: 38px;
+  min-height: 38px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgb(167 239 255 / 0.14);
+  border-radius: 8px;
+  color: rgb(242 251 255 / 0.7);
+  background: rgb(6 17 34 / 0.5);
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.ui-icon-button:hover {
+  color: #f2fbff;
+  border-color: rgb(167 239 255 / 0.38);
+  background: rgb(85 199 255 / 0.1);
+}
+
+.ui-icon-button.danger {
+  color: #fecaca;
+  border-color: rgb(248 113 113 / 0.28);
+  background: rgb(127 29 29 / 0.2);
+}
+
+.ui-tabs {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid rgb(167 239 255 / 0.1);
+  background: rgb(2 6 18 / 0.42);
+  padding: 8px clamp(16px, 3vw, 28px);
+}
+
+.ui-tabs button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgb(167 239 255 / 0.12);
+  border-radius: 8px;
+  padding: 0 11px;
+  color: rgb(242 251 255 / 0.6);
+  background: rgb(6 17 34 / 0.38);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ui-tabs button.active,
+.ui-tabs button:hover {
+  color: #020612;
+  border-color: #a7efff;
+  background: #a7efff;
+}
+
+.ui-tabs.segmented {
+  min-height: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  padding: 0;
 }
 
 .pixelated {
@@ -542,6 +843,26 @@ a {
   backdrop-filter: blur(12px);
 }
 
+.night-button.ghost {
+  color: rgb(242 251 255 / 0.76);
+  background: rgb(6 17 34 / 0.5);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  backdrop-filter: blur(12px);
+}
+
+.night-button.danger {
+  color: #fecaca;
+  border-color: rgb(248 113 113 / 0.32);
+  background: rgb(127 29 29 / 0.26);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+.night-button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+  transform: none;
+}
+
 .section-band {
   position: relative;
   padding-block: clamp(84px, 9vw, 136px);
@@ -549,6 +870,20 @@ a {
 
 .section-heading {
   text-align: center;
+}
+
+.section-heading-center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-heading-left {
+  text-align: left;
+}
+
+.section-heading-left .ornament {
+  justify-content: flex-start;
+  margin-inline: 0;
 }
 
 .section-title {
@@ -804,14 +1139,16 @@ a {
   margin-top: 30px;
 }
 
-.guild-saas-feature-row {
+.ui-pill-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 24px;
 }
 
-.guild-saas-feature-row span {
+.ui-feature-pill {
+  display: inline-flex;
+  align-items: center;
   border: 1px solid rgb(167 239 255 / 0.14);
   border-radius: 999px;
   padding: 8px 11px;
@@ -1262,7 +1599,6 @@ a {
 
 .calculator-brand small,
 .calculator-actions button,
-.calc-panel-header small,
 .damage-card small {
   color: rgb(226 246 255 / 0.62);
 }
@@ -1315,6 +1651,7 @@ a {
 .calculator-result-orb,
 .calculator-skill-tree-card,
 .calc-panel {
+  position: relative;
   border: 1px solid rgb(125 211 252 / 0.18);
   background:
     linear-gradient(135deg, rgb(8 47 73 / 0.42), rgb(2 6 23 / 0.72)),
@@ -1328,8 +1665,7 @@ a {
   padding: clamp(24px, 4vw, 46px);
 }
 
-.calculator-kicker,
-.calc-panel-header span {
+.calculator-kicker {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1450,8 +1786,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 18px;
+  gap: 16px;
+  padding: 14px 18px;
   border-bottom: 1px solid rgb(125 211 252 / 0.12);
 }
 
@@ -1485,7 +1821,13 @@ a {
 }
 
 .skill-tree-toolbar label {
+  display: grid;
+  gap: 6px;
   width: min(360px, 100%);
+  color: rgb(226 246 255 / 0.68);
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .skill-tree-search {
@@ -1495,18 +1837,48 @@ a {
   border: 1px solid rgb(125 211 252 / 0.2);
   border-radius: 8px;
   background: rgb(2 6 23 / 0.62);
-  padding-left: 10px;
+  padding-left: 11px;
 }
 
 .skill-tree-search input {
+  min-height: 32px;
   border: 0;
   background: transparent;
+  color: var(--ice);
+  padding: 0 10px 0 0;
+  font: inherit;
+}
+
+.skill-tree-class-fallback {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(125 211 252 / 0.28);
+  border-radius: 7px;
+  color: var(--cyan);
+  background: rgb(8 47 73 / 0.46);
+  overflow: hidden;
+  font-size: 0.7rem;
+  font-weight: 950;
+}
+
+.skill-tree-class-fallback img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.skill-tree-class-fallback b {
+  display: none;
 }
 
 .skill-tree-path {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
   padding: 12px 18px;
   border-bottom: 1px solid rgb(125 211 252 / 0.1);
 }
@@ -1519,43 +1891,69 @@ a {
   font-size: 0.72rem;
 }
 
+.skill-tree-total-points {
+  margin-right: 6px;
+  color: var(--cyan);
+  font-family: var(--font-rune);
+  font-size: 1rem;
+  font-weight: 950;
+}
+
 .skill-tree-groups {
   overflow: auto;
-  padding: 18px;
+  padding: 14px 18px;
 }
 
 .skill-tree-group + .skill-tree-group {
-  margin-top: 22px;
+  margin-top: 18px;
 }
 
 .skill-tree-group h3 {
-  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  margin: 0 0 12px;
   color: var(--cyan);
-  font-size: 0.82rem;
+  font-size: 1rem;
+  font-weight: 950;
   text-transform: uppercase;
 }
 
-.skill-tree-grid {
+.skill-tree-group h3 small {
+  color: var(--ice);
+  font-family: var(--font-rune);
+  font-size: 1rem;
+  font-weight: 950;
+}
+
+.skill-tree-board {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(var(--skill-tree-column-count, 7), minmax(72px, 1fr));
+  gap: 12px 8px;
+  min-width: max(720px, calc(var(--skill-tree-column-count, 7) * 112px));
 }
 
 .skill-tree-skill {
   position: relative;
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
-  min-height: 104px;
-  padding: 10px;
-  border: 1px solid rgb(125 211 252 / 0.16);
-  border-radius: 8px;
-  background: rgb(2 6 23 / 0.46);
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  min-height: 78px;
+  padding: 0 2px 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
 }
 
 .skill-tree-skill[data-locked="true"] {
-  opacity: 0.66;
+  opacity: 0.72;
+}
+
+.skill-tree-skill[data-learned="true"] {
+  opacity: 1;
 }
 
 .skill-tree-skill img,
@@ -1584,53 +1982,68 @@ a {
 
 .skill-tree-skill strong {
   color: var(--ice);
-  font-size: 0.86rem;
+  width: 100%;
+  overflow: hidden;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .skill-tree-skill small,
 .skill-tree-skill p {
   color: rgb(226 246 255 / 0.54);
-  font-size: 0.68rem;
+  font-size: 0.64rem;
+  line-height: 1.2;
 }
 
 .skill-tree-skill em {
   color: var(--cyan);
   font-style: normal;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 900;
 }
 
 .skill-tree-skill p {
-  margin: 3px 0 0;
+  margin: 2px 0 0;
 }
 
 .skill-tree-leveler {
   display: grid;
-  grid-template-columns: 28px 28px 28px;
+  grid-template-columns: 24px minmax(40px, auto) 24px;
   align-items: center;
   justify-items: center;
-  gap: 3px;
+  gap: 5px;
 }
 
-.skill-tree-leveler button {
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgb(125 211 252 / 0.18);
-  border-radius: 6px;
-  background: rgb(8 47 73 / 0.44);
-  color: var(--ice);
-  cursor: pointer;
+.skill-tree-leveler .ui-icon-button {
+  min-width: 24px;
+  min-height: 24px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgb(125 211 252 / 0.24);
+  background: rgb(8 47 73 / 0.34);
+  color: var(--cyan);
+  padding: 0;
 }
 
-.skill-tree-leveler button:disabled {
+.skill-tree-leveler .ui-icon-button:hover {
+  color: #020612;
+  border-color: var(--cyan);
+  background: var(--cyan);
+}
+
+.skill-tree-leveler .ui-icon-button:disabled {
   cursor: not-allowed;
-  opacity: 0.38;
+  opacity: 0.28;
 }
 
 .skill-tree-leveler span {
   color: var(--ice);
   font-family: var(--font-rune);
   font-size: 0.8rem;
+  font-weight: 950;
 }
 
 .skill-tree-skill mark {
@@ -1638,6 +2051,16 @@ a {
   background: transparent;
   color: rgb(251 191 36 / 0.84);
   font-size: 0.68rem;
+}
+
+.skill-tree-empty-cell {
+  width: 28px;
+  height: 28px;
+  justify-self: center;
+  align-self: center;
+  border: 1px solid rgb(226 246 255 / 0.2);
+  border-radius: 5px;
+  background: rgb(255 255 255 / 0.02);
 }
 
 .calculator-workspace {
@@ -1651,14 +2074,9 @@ a {
   padding: 18px;
 }
 
-.calc-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding-bottom: 14px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid rgb(125 211 252 / 0.12);
+.calc-equipment .ui-tabs {
+  width: min(220px, 100%);
+  margin-bottom: 12px;
 }
 
 .calc-select-row {
@@ -1668,28 +2086,14 @@ a {
   margin-bottom: 16px;
 }
 
-.calc-panel label {
-  display: grid;
-  gap: 7px;
-  color: rgb(226 246 255 / 0.58);
-  font-size: 0.72rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.calc-panel select,
-.calc-panel input {
+.skill-tree-toolbar .ui-select select {
   width: 100%;
   min-height: 40px;
   border: 1px solid rgb(125 211 252 / 0.2);
   border-radius: 8px;
   color: var(--ice);
-  padding: 0 10px;
+  padding: 0 12px;
   font: inherit;
-}
-
-.calc-panel input {
-  background: rgb(2 6 23 / 0.62);
 }
 
 .stat-grid {
@@ -1698,12 +2102,12 @@ a {
   gap: 10px;
 }
 
-.stat-grid label {
+.stat-grid .ui-field {
   grid-template-columns: 42px minmax(0, 1fr);
   align-items: center;
 }
 
-.stat-grid input {
+.stat-grid .ui-input {
   min-height: 36px;
 }
 
@@ -1747,36 +2151,6 @@ a {
   padding: 0 10px;
   min-height: 34px;
   font-size: 0.78rem;
-}
-
-.equipment-tabs {
-  display: inline-grid;
-  grid-template-columns: repeat(2, minmax(84px, 1fr));
-  gap: 3px;
-  width: min(220px, 100%);
-  padding: 3px;
-  margin-bottom: 12px;
-  border: 1px solid rgb(125 211 252 / 0.18);
-  border-radius: 8px;
-  background: rgb(2 6 23 / 0.46);
-}
-
-.equipment-tabs button {
-  min-height: 32px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: rgb(226 246 255 / 0.6);
-  font-family: var(--font-rune);
-  font-size: 0.76rem;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.equipment-tabs button.is-active {
-  background: rgb(14 165 233 / 0.16);
-  color: var(--ice);
-  box-shadow: inset 0 0 0 1px rgb(125 211 252 / 0.22);
 }
 
 .equipment-paperdoll {
@@ -2095,7 +2469,7 @@ a {
     justify-items: stretch;
   }
 
-  .guild-saas-feature-row {
+  .ui-pill-row {
     display: grid;
     grid-template-columns: 1fr;
   }
@@ -2131,8 +2505,7 @@ a {
   }
 
   .calculator-topbar,
-  .calculator-actions,
-  .calc-panel-header {
+  .calculator-actions {
     align-items: stretch;
     flex-direction: column;
   }
@@ -2234,6 +2607,10 @@ a {
   letter-spacing: 0;
 }
 
+.guild-auth-copy .ui-pill-row {
+  margin-top: 8px;
+}
+
 .guild-auth-copy p {
   max-width: 560px;
   color: rgb(242 251 255 / 0.72);
@@ -2249,7 +2626,7 @@ a {
   margin-top: 8px;
 }
 
-.guild-auth-feature-grid span {
+.guild-auth-feature-grid .ui-feature-pill {
   min-height: 48px;
   display: flex;
   align-items: center;
@@ -2275,6 +2652,10 @@ a {
   background: rgb(2 6 18 / 0.72);
   box-shadow: 0 28px 88px rgb(0 0 0 / 0.34), inset 0 1px 0 rgb(255 255 255 / 0.06);
   backdrop-filter: blur(18px);
+}
+
+.calc-panel[data-overlay-open="true"] {
+  z-index: 400;
 }
 
 .guild-auth-card-header {
@@ -2681,7 +3062,7 @@ a {
   gap: 10px;
 }
 
-.guild-create-panel h1 {
+.guild-create-panel .section-title {
   max-width: 560px;
   margin: 0;
   color: #f2fbff;
@@ -2691,7 +3072,7 @@ a {
   line-height: 1.08;
 }
 
-.guild-create-panel p {
+.guild-create-panel .section-copy {
   max-width: 600px;
   margin: 0;
   color: rgb(242 251 255 / 0.58);
@@ -2721,7 +3102,7 @@ a {
 }
 
 .guild-create-form input,
-.guild-create-form select {
+.guild-create-form .ui-select select {
   width: 100%;
   min-height: 46px;
   border: 1px solid transparent;
@@ -2736,12 +3117,12 @@ a {
   transition: background 180ms ease, box-shadow 180ms ease;
 }
 
-.guild-create-form select {
+.guild-create-form .ui-select select {
   cursor: pointer;
 }
 
 .guild-create-form input:focus,
-.guild-create-form select:focus {
+.guild-create-form .ui-select select:focus {
   background: rgb(5 15 30 / 0.94);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.055),
@@ -2794,14 +3175,14 @@ a {
   padding: clamp(22px, 4vw, 34px);
 }
 
-.guild-profile-header h1 {
+.guild-profile-header .section-title {
   margin: 0 0 8px;
   color: #f2fbff;
   font-size: clamp(28px, 4vw, 42px);
   line-height: 1.08;
 }
 
-.guild-profile-header p,
+.guild-profile-header .section-copy,
 .guild-profile-empty {
   margin: 0;
   color: rgb(242 251 255 / 0.58);
@@ -3536,30 +3917,15 @@ a {
   gap: 8px;
 }
 
-.guild-header-actions a,
-.guild-header-actions button {
-  min-width: 38px;
+.guild-user-button {
   min-height: 38px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   border: 1px solid rgb(167 239 255 / 0.14);
   border-radius: 8px;
   color: rgb(242 251 255 / 0.7);
   background: rgb(6 17 34 / 0.5);
-  font: inherit;
-  cursor: pointer;
-}
-
-.guild-header-actions a:hover,
-.guild-header-actions button:hover {
-  color: #f2fbff;
-  border-color: rgb(167 239 255 / 0.38);
-  background: rgb(85 199 255 / 0.1);
-}
-
-.guild-user-button {
   max-width: 260px;
   padding-inline: 11px;
 }
@@ -3570,41 +3936,6 @@ a {
   font-size: 0.78rem;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.guild-tool-tabs {
-  min-height: 52px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  overflow-x: auto;
-  border-bottom: 1px solid rgb(167 239 255 / 0.1);
-  background: rgb(2 6 18 / 0.42);
-  padding: 8px clamp(16px, 3vw, 28px);
-}
-
-.guild-tool-tabs button {
-  min-height: 34px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid rgb(167 239 255 / 0.12);
-  border-radius: 8px;
-  padding: 0 11px;
-  color: rgb(242 251 255 / 0.6);
-  background: rgb(6 17 34 / 0.38);
-  font: inherit;
-  font-size: 0.82rem;
-  font-weight: 900;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.guild-tool-tabs button.active,
-.guild-tool-tabs button:hover {
-  color: #020612;
-  border-color: #a7efff;
-  background: #a7efff;
 }
 
 .guild-workspace-shell {
@@ -3841,11 +4172,10 @@ a {
   gap: 6px;
 }
 
-.guild-member-row select,
 .guild-role-create input,
 .guild-role-create button,
-.guild-tool-access-list select,
-.guild-owner-actions select {
+.guild-tool-access-list .ui-select select,
+.guild-owner-actions .ui-select select {
   min-height: 38px;
   border: 1px solid rgb(167 239 255 / 0.14);
   border-radius: 8px;
@@ -3859,9 +4189,22 @@ a {
   background: rgb(2 6 18 / 0.54);
 }
 
-.guild-member-row select {
+.guild-role-create .night-button,
+.guild-owner-actions .night-button {
+  min-height: 38px;
+  border-radius: 8px;
+  padding: 0 14px;
+}
+
+.guild-member-row .ui-select {
   margin-left: auto;
   max-width: 150px;
+}
+
+.guild-member-row .ui-select select {
+  min-height: 38px;
+  border-color: rgb(167 239 255 / 0.14);
+  font: inherit;
 }
 
 .guild-role-list,
@@ -3939,20 +4282,12 @@ a {
   gap: 6px;
 }
 
-.guild-role-actions button {
+.guild-role-actions .ui-icon-button {
   width: 30px;
-  height: 30px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgb(167 239 255 / 0.12);
-  border-radius: 8px;
+  min-width: 30px;
+  min-height: 30px;
   color: #a7efff;
   background: rgb(85 199 255 / 0.08);
-}
-
-.guild-role-actions button:disabled {
-  cursor: not-allowed;
-  opacity: 0.38;
 }
 
 .guild-role-create {

@@ -21,6 +21,9 @@ import {
   type Locale,
 } from "@/content/i18n";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
+import { Button } from "@/components/ui/button";
+import { FeaturePill } from "@/components/ui/feature-pill";
+import { Panel } from "@/components/ui/panel";
 
 type AuthMode = "login" | "register";
 
@@ -179,60 +182,63 @@ export function LoginPanel() {
           </span>
           <h1>{t.title}</h1>
           <p>{t.description}</p>
-          <div className="guild-auth-feature-grid" aria-label="Guild tools">
-            <span>
-              <ShieldCheck size={16} />
+          <div className="ui-pill-row guild-auth-feature-grid" aria-label="Guild tools">
+            <FeaturePill>
+              <ShieldCheck aria-hidden size={16} />
               {t.features.session}
-            </span>
-            <span>
-              <Sparkles size={16} />
+            </FeaturePill>
+            <FeaturePill>
+              <Sparkles aria-hidden size={16} />
               {t.features.tools}
-            </span>
-            <span>
-              <LockKeyhole size={16} />
+            </FeaturePill>
+            <FeaturePill>
+              <LockKeyhole aria-hidden size={16} />
               {t.features.permissions}
-            </span>
+            </FeaturePill>
           </div>
         </div>
 
-        <div className="guild-auth-card">
+        <Panel className="guild-auth-card">
           <div className="guild-auth-card-header">
             <span>{t.cardKicker}</span>
             <strong>{mode === "register" ? t.registerTitle : t.loginTitle}</strong>
           </div>
 
           <div className="guild-auth-tabs" role="tablist" aria-label="Auth mode">
-            <button
+            <Button
               aria-selected={mode === "login"}
               className={mode === "login" ? "active" : ""}
+              icon={<LogIn size={16} />}
               onClick={() => setMode("login")}
               role="tab"
               type="button"
+              variant="ghost"
             >
-              <LogIn size={16} />
               {t.loginTab}
-            </button>
-            <button
+            </Button>
+            <Button
               aria-selected={mode === "register"}
               className={mode === "register" ? "active" : ""}
+              icon={<UserPlus size={16} />}
               onClick={() => setMode("register")}
               role="tab"
               type="button"
+              variant="ghost"
             >
-              <UserPlus size={16} />
               {t.registerTab}
-            </button>
+            </Button>
           </div>
 
           {!user && !isCheckingSession && (
-            <button
+            <Button
               className="guild-auth-google"
+              icon={<Globe size={17} />}
               onClick={handleGoogleSignIn}
               type="button"
+              variant="secondary"
             >
-              <Globe size={17} />
               {t.googleAction}
-            </button>
+            </Button>
           )}
 
           {isCheckingSession ? (
@@ -250,14 +256,28 @@ export function LoginPanel() {
                 <strong>{user.name ?? user.email}</strong>
                 <span>{user.email}</span>
               </div>
-              <Link className="guild-auth-continue" href={nextPath}>
+              <Button
+                className="guild-auth-continue"
+                href={nextPath}
+                icon={<ArrowRight size={16} />}
+              >
                 {t.continueAction}
-                <ArrowRight size={16} />
-              </Link>
-              <button onClick={handleLogout} type="button" disabled={isLoading}>
-                {isLoading ? <Loader2 className="spin" size={16} /> : <LogIn size={16} />}
+              </Button>
+              <Button
+                disabled={isLoading}
+                icon={
+                  isLoading ? (
+                    <Loader2 className="spin" size={16} />
+                  ) : (
+                    <LogIn size={16} />
+                  )
+                }
+                onClick={handleLogout}
+                type="button"
+                variant="ghost"
+              >
                 {t.logoutAction}
-              </button>
+              </Button>
             </div>
           ) : (
             <form className="guild-auth-form" onSubmit={handleSubmit}>
@@ -296,16 +316,22 @@ export function LoginPanel() {
                   value={password}
                 />
               </label>
-              <button className="guild-auth-submit" type="submit" disabled={isLoading}>
-                {isLoading ? (
-                  <Loader2 className="spin" size={17} />
-                ) : mode === "register" ? (
-                  <UserPlus size={17} />
-                ) : (
-                  <LogIn size={17} />
-                )}
+              <Button
+                className="guild-auth-submit"
+                disabled={isLoading}
+                icon={
+                  isLoading ? (
+                    <Loader2 className="spin" size={17} />
+                  ) : mode === "register" ? (
+                    <UserPlus size={17} />
+                  ) : (
+                    <LogIn size={17} />
+                  )
+                }
+                type="submit"
+              >
                 {mode === "register" ? t.registerAction : t.loginAction}
-              </button>
+              </Button>
             </form>
           )}
 
@@ -314,7 +340,7 @@ export function LoginPanel() {
               {visibleMessage}
             </p>
           )}
-        </div>
+        </Panel>
       </section>
     </main>
   );

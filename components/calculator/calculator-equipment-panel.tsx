@@ -12,6 +12,8 @@ import {
   Sparkles,
   Swords,
 } from "lucide-react";
+import { PanelHeader } from "@/components/ui/panel-header";
+import { TabButton, Tabs } from "@/components/ui/tabs";
 import type { CalculatorDictionary } from "./calculator-i18n";
 
 const equipSlots = [
@@ -50,38 +52,26 @@ export function CalculatorEquipmentPanel({ copy }: CalculatorEquipmentPanelProps
 
   return (
     <section className="calc-panel calc-equipment">
-      <div className="calc-panel-header">
-        <span>
-          <Shield size={17} />
-          {copy.equipment.title}
-        </span>
-        <small>{copy.equipment.meta}</small>
-      </div>
+      <PanelHeader
+        icon={<Shield size={17} />}
+        title={copy.equipment.title}
+        meta={copy.equipment.meta}
+      />
 
-      <div
-        className="equipment-tabs"
-        role="tablist"
-        aria-label={copy.equipment.tabsAria}
-      >
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === "equip"}
-          className={activeTab === "equip" ? "is-active" : undefined}
+      <Tabs label={copy.equipment.tabsAria} variant="segmented">
+        <TabButton
+          active={activeTab === "equip"}
           onClick={() => setActiveTab("equip")}
         >
           {copy.equipment.tabs.equip}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === "special"}
-          className={activeTab === "special" ? "is-active" : undefined}
+        </TabButton>
+        <TabButton
+          active={activeTab === "special"}
           onClick={() => setActiveTab("special")}
         >
           {copy.equipment.tabs.special}
-        </button>
-      </div>
+        </TabButton>
+      </Tabs>
 
       <div
         className="equipment-paperdoll"

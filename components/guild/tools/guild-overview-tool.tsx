@@ -1,4 +1,5 @@
 import { Activity, Bell, CalendarClock, Radio, TimerReset, Users } from "lucide-react";
+import { PanelHeader } from "@/components/ui/panel-header";
 import { getMvpStatus } from "../guild-time";
 import type { GuildToolComponentProps } from "../guild-tool-types";
 
@@ -27,13 +28,11 @@ export function GuildOverviewTool({ dashboard }: GuildToolComponentProps) {
 
       <section className="guild-tool-grid">
         <div className="guild-module-panel">
-          <div className="guild-panel-header">
-            <span>
-              <Radio size={17} />
-              Guild Feed
-            </span>
-            <small>{dashboard.feed.length} updates</small>
-          </div>
+          <PanelHeader
+            icon={<Radio size={17} />}
+            title="Guild Feed"
+            meta={`${dashboard.feed.length} updates`}
+          />
           <div className="guild-feed-stack compact">
             {dashboard.feed.slice(0, 3).map((item) => (
               <article key={item.id} className="guild-feed-item">
@@ -46,13 +45,11 @@ export function GuildOverviewTool({ dashboard }: GuildToolComponentProps) {
         </div>
 
         <div className="guild-module-panel">
-          <div className="guild-panel-header">
-            <span>
-              <CalendarClock size={17} />
-              Next Event
-            </span>
-            <small>{nextEvent ? formatDateTime(nextEvent.startsAt) : "Empty"}</small>
-          </div>
+          <PanelHeader
+            icon={<CalendarClock size={17} />}
+            title="Next Event"
+            meta={nextEvent ? formatDateTime(nextEvent.startsAt) : "Empty"}
+          />
           {nextEvent && (
             <div className="guild-event-focus">
               <strong>{nextEvent.title}</strong>

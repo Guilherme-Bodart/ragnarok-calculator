@@ -1,16 +1,15 @@
 import { Bell } from "lucide-react";
+import { PanelHeader } from "@/components/ui/panel-header";
 import type { GuildToolComponentProps } from "../guild-tool-types";
 
 export function GuildNotificationsTool({ dashboard }: GuildToolComponentProps) {
   return (
     <section className="guild-module-panel">
-      <div className="guild-panel-header">
-        <span>
-          <Bell size={17} />
-          Notificacoes
-        </span>
-        <small>{dashboard.notifications.filter((item) => !item.read).length} unread</small>
-      </div>
+      <PanelHeader
+        icon={<Bell size={17} />}
+        title="Notificacoes"
+        meta={`${dashboard.notifications.filter((item) => !item.read).length} unread`}
+      />
       <div className="guild-notification-list">
         {dashboard.notifications.map((notification) => (
           <article

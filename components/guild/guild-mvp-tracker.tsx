@@ -8,6 +8,9 @@ import {
 } from "@/packages/guild-core/src";
 import { cn } from "@/lib/utils";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
+import { Button } from "@/components/ui/button";
+import { PanelHeader } from "@/components/ui/panel-header";
+import { Select } from "@/components/ui/select";
 import { getMvpStatus } from "./guild-time";
 import type { MvpKillEntry, MvpSpawnStatus } from "./guild-types";
 
@@ -114,7 +117,7 @@ export function GuildMvpTracker({
         <div className="guild-mvp-form-grid">
           <label>
             {t.mvpLabel}
-            <select
+            <Select
               value={catalogEntryId}
               onChange={(event) => setCatalogEntryId(event.target.value)}
             >
@@ -123,7 +126,7 @@ export function GuildMvpTracker({
                   {mvp.name} - {mvp.mapId} ({mvp.respawnLabel})
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
           <label>
             {t.mapLabel}
@@ -149,22 +152,24 @@ export function GuildMvpTracker({
             <input value={notes} onChange={(event) => setNotes(event.target.value)} />
           </label>
         </div>
-        <button className="guild-primary-button" disabled={isSaving} type="submit">
-          <Plus size={16} />
+        <Button
+          className="guild-primary-button"
+          disabled={isSaving}
+          icon={<Plus size={16} />}
+          type="submit"
+        >
           {t.submit}
-        </button>
+        </Button>
       </form>
 
       {message && <p className="guild-inline-message">{message}</p>}
 
       <div className="guild-mvp-board">
-        <div className="guild-panel-header">
-          <span>
-            <TimerReset size={17} />
-            {t.activeTimers}
-          </span>
-          <small>{sortedEntries.length} {t.records}</small>
-        </div>
+        <PanelHeader
+          icon={<TimerReset size={17} />}
+          title={t.activeTimers}
+          meta={`${sortedEntries.length} ${t.records}`}
+        />
         <table className="guild-mvp-table">
           <thead>
             <tr>
