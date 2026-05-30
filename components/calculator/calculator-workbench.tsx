@@ -21,6 +21,11 @@ import {
   getCalculatorManualBuffSkills,
   getActiveCalculatorBuffItemIds,
 } from "./calculator-buff-data";
+import {
+  calculatorBuildPayloadVersion,
+  isCalculatorBuildPayload,
+  type CalculatorBuildPayload,
+} from "./calculator-build-payload";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import {
@@ -47,67 +52,37 @@ import { CalculatorTargetPanel } from "./calculator-target-panel";
 
 const calculatorBuildStorageKey = "nightmare-calculator-build";
 
-type CalculatorSavedBuild = {
-  activeBuffs?: Record<string, number>;
-  baseLevel?: number;
-  jobLevel?: number;
-  learnedSkills?: Record<string, number>;
-  selectedBuffId?: string;
-  selectedClassId?: string;
-  selectedMonsterId?: number;
-  selectedSkillId?: string;
-  skillLevel?: number;
-  stats?: typeof calculatorDemoInput.character.stats;
-  itemContexts?: Record<number, { refine?: number }>;
-  selectedCardsBySlot?: Partial<Record<EquipmentSlot, number[]>>;
-  selectedItemsBySlot?: Partial<Record<EquipmentSlot, number>>;
-};
-
 export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
   const copy = dictionary.calculator;
   const savedBuild = readSavedCalculatorBuild();
   const [selectedClassId, setSelectedClassId] = useState(
-    savedBuild?.selectedClassId ??
-      calculatorDemoInput.character.classId ??
-      "Dragon_Knight",
+    savedBuild.selectedClassId,
   );
   const [learnedSkills, setLearnedSkills] = useState<Record<string, number>>(
-    savedBuild?.learnedSkills ?? {},
+    savedBuild.learnedSkills,
   );
-  const [baseLevel, setBaseLevel] = useState(
-    savedBuild?.baseLevel ?? calculatorDemoInput.character.baseLevel,
-  );
-  const [jobLevel, setJobLevel] = useState(
-    savedBuild?.jobLevel ?? calculatorDemoInput.character.jobLevel,
-  );
-  const [stats, setStats] = useState(
-    savedBuild?.stats ?? calculatorDemoInput.character.stats,
-  );
-  const [selectedSkillId, setSelectedSkillId] = useState(
-    savedBuild?.selectedSkillId ?? calculatorDemoInput.skillId,
-  );
-  const [skillLevel, setSkillLevel] = useState(
-    savedBuild?.skillLevel ?? calculatorDemoInput.skillLevel,
-  );
+  const [baseLevel, setBaseLevel] = useState(savedBuild.baseLevel);
+  const [jobLevel, setJobLevel] = useState(savedBuild.jobLevel);
+  const [stats, setStats] = useState(savedBuild.stats);
+  const [selectedSkillId, setSelectedSkillId] = useState(savedBuild.selectedSkillId);
+  const [skillLevel, setSkillLevel] = useState(savedBuild.skillLevel);
   const [selectedMonsterId, setSelectedMonsterId] = useState(
-    savedBuild?.selectedMonsterId ?? calculatorDemoInput.monsterId,
+    savedBuild.selectedMonsterId,
   );
   const [activeBuffs, setActiveBuffs] = useState<Record<string, number>>(
-    savedBuild?.activeBuffs ?? {},
+    savedBuild.activeBuffs,
   );
-  const [selectedBuffId, setSelectedBuffId] = useState(
-    savedBuild?.selectedBuffId ?? "",
-  );
+  const [selectedBuffId, setSelectedBuffId] = useState(savedBuild.selectedBuffId);
   const [selectedItemsBySlot, setSelectedItemsBySlot] = useState<
     Partial<Record<EquipmentSlot, number>>
-  >(savedBuild?.selectedItemsBySlot ?? {});
+  >(savedBuild.selectedItemsBySlot);
   const [selectedCardsBySlot, setSelectedCardsBySlot] = useState<
     Partial<Record<EquipmentSlot, number[]>>
-  >(savedBuild?.selectedCardsBySlot ?? {});
+  >(savedBuild.selectedCardsBySlot);
   const [itemContexts, setItemContexts] = useState<
     Record<number, { refine?: number }>
-  >(savedBuild?.itemContexts ?? {});
+  >(savedBuild.itemContexts);
   const [selectedItemDetails, setSelectedItemDetails] = useState<
     Record<number, CalculatorItemDetail>
   >({});
@@ -225,7 +200,9 @@ export function CalculatorWorkbench() {
   );
 
   useEffect(() => {
-    const build: CalculatorSavedBuild = {
+    const build: CalculatorBuildPayload = {
+      version: calculatorBuildPayloadVersion,
+      name: savedBuild.name,
       activeBuffs,
       baseLevel,
       jobLevel,
@@ -248,6 +225,7 @@ export function CalculatorWorkbench() {
     jobLevel,
     itemContexts,
     learnedSkills,
+    savedBuild.name,
     selectedCardsBySlot,
     selectedBuffId,
     selectedClassId,
@@ -458,20 +436,46 @@ function mergeCalculatorItems(baseItems: RoItem[], selectedItems: RoItem[]) {
   return Array.from(itemById.values());
 }
 
-function readSavedCalculatorBuild(): CalculatorSavedBuild | null {
+function readSavedCalculatorBuild(): CalculatorBuildPayload {
   if (typeof window === "undefined") {
-    return null;
+    return createDefaultCalculatorBuild();
   }
 
   const rawBuild = window.localStorage.getItem(calculatorBuildStorageKey);
 
   if (!rawBuild) {
-    return null;
+    return createDefaultCalculatorBuild();
   }
 
   try {
-    return JSON.parse(rawBuild) as CalculatorSavedBuild;
+    const parsedBuild = JSON.parse(rawBuild) as unknown;
+
+    if (isCalculatorBuildPayload(parsedBuild)) {
+      return parsedBuild;
+    }
+
+    return createDefaultCalculatorBuild();
   } catch {
-    return null;
+    return createDefaultCalculatorBuild();
   }
+}
+
+function createDefaultCalculatorBuild(): CalculatorBuildPayload {
+  return {
+    version: calculatorBuildPayloadVersion,
+    name: "Build local",
+    activeBuffs: {},
+    baseLevel: calculatorDemoInput.character.baseLevel,
+    jobLevel: calculatorDemoInput.character.jobLevel,
+    learnedSkills: {},
+    itemContexts: {},
+    selectedBuffId: "",
+    selectedCardsBySlot: {},
+    selectedClassId: calculatorDemoInput.character.classId ?? "Dragon_Knight",
+    selectedItemsBySlot: {},
+    selectedMonsterId: calculatorDemoInput.monsterId,
+    selectedSkillId: calculatorDemoInput.skillId,
+    skillLevel: calculatorDemoInput.skillLevel,
+    stats: getDefaultCalculatorStats(),
+  };
 }

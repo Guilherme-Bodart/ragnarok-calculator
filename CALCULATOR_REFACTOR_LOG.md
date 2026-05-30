@@ -37,3 +37,13 @@ Motivo: começar a sprint com uma base verificável antes de alterar dados, API 
 - `npm run build`: passou.
 
 Motivo: remover o JSON gigante de itens do bundle client e manter o modal funcional com dados sob demanda.
+
+### 2026-05-29 - Payload versionado de build
+
+- Criado `components/calculator/calculator-build-payload.ts`.
+- O `localStorage` agora salva `CalculatorBuildPayload` com `version`, `name` e todos os campos de personagem/build.
+- Builds antigas sem versão caem no payload padrão.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: preparar o formato que depois será salvo na conta do usuário como personagem/build, sem acoplar o frontend ao banco ainda.
