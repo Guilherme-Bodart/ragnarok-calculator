@@ -2091,6 +2091,19 @@ a {
   margin-bottom: 16px;
 }
 
+.calc-preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.calc-preset-row .night-button {
+  min-height: 32px;
+  padding-inline: 10px;
+  font-size: 0.72rem;
+}
+
 .skill-tree-toolbar .ui-select select {
   width: 100%;
   min-height: 40px;

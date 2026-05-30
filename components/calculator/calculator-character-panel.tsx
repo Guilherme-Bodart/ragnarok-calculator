@@ -1,6 +1,7 @@
 "use client";
 
 import { Activity } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Field, FieldValue, Input } from "@/components/ui/field";
 import { NumberSelect } from "@/components/ui/number-select";
 import { PanelHeader } from "@/components/ui/panel-header";
@@ -129,6 +130,68 @@ export function CalculatorCharacterPanel({
     }
   }
 
+  function applyPreset(preset: "third" | "fourth" | "max") {
+    if (preset === "third") {
+      onBaseLevelChange(200);
+      onJobLevelChange(70);
+      onStatsChange({
+        ...stats,
+        str: 100,
+        agi: 90,
+        vit: 100,
+        int: 1,
+        dex: 100,
+        luk: 60,
+        pow: 0,
+        sta: 0,
+        wis: 0,
+        spl: 0,
+        con: 0,
+        crt: 0,
+      });
+      return;
+    }
+
+    if (preset === "fourth") {
+      onBaseLevelChange(250);
+      onJobLevelChange(50);
+      onStatsChange({
+        ...stats,
+        str: 120,
+        agi: 90,
+        vit: 100,
+        int: 1,
+        dex: 100,
+        luk: 60,
+        pow: 70,
+        sta: 0,
+        wis: 0,
+        spl: 0,
+        con: 45,
+        crt: 0,
+      });
+      return;
+    }
+
+    onBaseLevelChange(260);
+    onJobLevelChange(isFourthJob ? 55 : 70);
+    onStatsChange({
+      ...stats,
+      str: 120,
+      agi: 90,
+      vit: 100,
+      int: 1,
+      dex: 100,
+      luk: 60,
+      pow: isFourthJob ? 80 : 0,
+      sta: 0,
+      wis: 0,
+      spl: 0,
+      con: isFourthJob ? 45 : 0,
+      crt: 0,
+    });
+  }
+
   return (
     <aside className="calc-panel calc-character">
       <PanelHeader
@@ -181,6 +244,18 @@ export function CalculatorCharacterPanel({
             onChange={onSkillLevelChange}
           />
         </Field>
+      </div>
+
+      <div className="calc-preset-row">
+        <Button type="button" variant="ghost" onClick={() => applyPreset("third")}>
+          {copy.character.thirdPreset}
+        </Button>
+        <Button type="button" variant="ghost" onClick={() => applyPreset("fourth")}>
+          {copy.character.fourthPreset}
+        </Button>
+        <Button type="button" variant="ghost" onClick={() => applyPreset("max")}>
+          {copy.character.maxPreset}
+        </Button>
       </div>
 
       <div className="stat-grid">

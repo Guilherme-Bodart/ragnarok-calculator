@@ -148,6 +148,9 @@
       "classLabel": "Classe",
       "skillLabel": "Habilidade",
       "levelLabel": "Nível",
+      "thirdPreset": "3rd 200",
+      "fourthPreset": "4th 250",
+      "maxPreset": "Max 260",
       "statusPoints": "Status",
       "traitPoints": "Trait",
       "remainingPoints": "restante"
