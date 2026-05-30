@@ -124,3 +124,14 @@ Motivo: transformar o payload versionado em fluxo real de personagem/build sem a
 - `npm run build`: passou.
 
 Motivo: permitir alterar padroes visuais globais sem procurar regras em um arquivo unico gigante.
+
+### 2026-05-30 - Parser rAthena separado por fases iniciais
+
+- Criados `rathena-script-types`, `rathena-script-commands` e `rathena-script-conditions`.
+- O parser principal deixou de concentrar tipos, parse de comando e parse de condicoes.
+- `rathena-script-parser.ts` caiu para 629 linhas.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+- `npm test -- ...`: nao rodou porque a raiz nao possui script `test`.
+
+Motivo: iniciar a separacao do parser por responsabilidade sem mexer nos mappers de bonus, que sao a parte mais sensivel da regra de dano.

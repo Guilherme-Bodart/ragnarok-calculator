@@ -7,22 +7,18 @@ import type {
   ModifierSizeId,
   NormalizedModifier,
 } from "./modifier.types";
+import { parseRathenaCommand } from "./rathena-script-commands";
+import {
+  createClassConditions,
+  createRefineCondition,
+  createSkillLevelConditions,
+} from "./rathena-script-conditions";
+import type {
+  ParsedCommand,
+  ParserVariables,
+  ScriptSegment,
+} from "./rathena-script-types";
 import { evaluateRathenaExpression } from "./rathena-expression";
-
-type ParsedCommand = {
-  command: "bonus" | "bonus2";
-  args: string[];
-  raw: string;
-};
-
-type ScriptSegment = {
-  statement: string;
-  conditions: ModifierCondition[];
-};
-
-type ParserVariables = {
-  refine?: number;
-};
 
 type ModifierMapper = (
   command: ParsedCommand,
@@ -251,7 +247,7 @@ export class RathenaScriptParser {
     };
 
     for (const segment of this.extractSegments(rawScript)) {
-      const command = this.parseCommand(segment.statement);
+      const command = parseRathenaCommand(segment.statement);
 
       if (!command) {
         result.unsupportedStatements.push(segment.statement);
@@ -301,7 +297,7 @@ export class RathenaScriptParser {
 
     for (const match of scriptWithoutBlocks.matchAll(inlineRefine)) {
       const [, operator, refineValue, statement] = match;
-      const condition = this.createRefineCondition(operator, refineValue);
+      const condition = createRefineCondition(operator, refineValue);
 
       if (condition) {
         segments.push({
@@ -339,7 +335,7 @@ export class RathenaScriptParser {
       }
 
       const [, operator, refineValue] = match;
-      const condition = this.createRefineCondition(operator, refineValue);
+      const condition = createRefineCondition(operator, refineValue);
 
       remainingScript += script.slice(cursor, match.index);
 
@@ -378,7 +374,7 @@ export class RathenaScriptParser {
         continue;
       }
 
-      const conditions = this.createSkillLevelConditions(match[1]);
+      const conditions = createSkillLevelConditions(match[1]);
 
       if (!conditions) {
         continue;
@@ -417,7 +413,7 @@ export class RathenaScriptParser {
         continue;
       }
 
-      const conditions = this.createClassConditions(match[1]);
+      const conditions = createClassConditions(match[1]);
 
       if (!conditions) {
         continue;
@@ -440,71 +436,6 @@ export class RathenaScriptParser {
       segments,
       remainingScript,
     };
-  }
-
-  private createClassConditions(conditionText: string) {
-    const conditions: ModifierCondition[] = [];
-    const classPattern = /BaseJob\s*(==|!=)\s*(Job_[A-Za-z0-9_]+)/g;
-
-    for (const match of conditionText.matchAll(classPattern)) {
-      const [, operator, classId] = match;
-
-      if (operator !== "==" && operator !== "!=") {
-        return null;
-      }
-
-      conditions.push({
-        type: "class",
-        classId,
-        operator,
-      });
-    }
-
-    if (conditions.length === 0) {
-      return null;
-    }
-
-    const leftover = conditionText
-      .replace(classPattern, "")
-      .replace(/eaclass\s*\(\s*\)\s*&\s*[A-Za-z0-9_]+/g, "")
-      .replace(/[\s()&|]+/g, "");
-
-    if (leftover) {
-      return null;
-    }
-
-    return conditions;
-  }
-
-  private createSkillLevelConditions(conditionText: string) {
-    const conditions: ModifierCondition[] = [];
-    const skillLevelPattern =
-      /getskilllv\s*\(\s*"([^"]+)"\s*\)\s*(>=|>|<=|<|==|!=)\s*(-?\d+)/g;
-
-    for (const match of conditionText.matchAll(skillLevelPattern)) {
-      const [, skillId, operator, value] = match;
-      const condition = this.createSkillLevelCondition(skillId, operator, value);
-
-      if (!condition) {
-        return null;
-      }
-
-      conditions.push(condition);
-    }
-
-    if (conditions.length === 0) {
-      return null;
-    }
-
-    const leftover = conditionText
-      .replace(skillLevelPattern, "")
-      .replace(/[\s()&|]+/g, "");
-
-    if (leftover) {
-      return null;
-    }
-
-    return conditions;
   }
 
   private findMatchingBrace(script: string, openingBraceIndex: number) {
@@ -617,26 +548,6 @@ export class RathenaScriptParser {
     return statements.filter(Boolean);
   }
 
-  private parseCommand(statement: string): ParsedCommand | null {
-    const match = /^(bonus2?|bonus)\s+(.+);$/.exec(statement);
-
-    if (!match) {
-      return null;
-    }
-
-    const command = match[1];
-
-    if (command !== "bonus" && command !== "bonus2") {
-      return null;
-    }
-
-    return {
-      command,
-      args: match[2].split(",").map((arg) => arg.trim()).filter(Boolean),
-      raw: statement,
-    };
-  }
-
   private toModifier(
     command: ParsedCommand,
     conditions: ModifierCondition[],
@@ -655,45 +566,6 @@ export class RathenaScriptParser {
     return BONUS2_MAPPERS[code]?.(command, conditions, variables) ?? null;
   }
 
-  private createRefineCondition(
-    operator: string,
-    value: string,
-  ): ModifierCondition | null {
-    const numericValue = Number(value);
-
-    if (!Number.isInteger(numericValue)) {
-      return null;
-    }
-
-    if (!isRefineOperator(operator)) {
-      return null;
-    }
-
-    return {
-      type: "refine",
-      operator,
-      value: numericValue,
-    };
-  }
-
-  private createSkillLevelCondition(
-    skillId: string,
-    operator: string,
-    value: string,
-  ): ModifierCondition | null {
-    const numericValue = Number(value);
-
-    if (!Number.isInteger(numericValue) || !isRefineOperator(operator)) {
-      return null;
-    }
-
-    return {
-      type: "skillLevel",
-      skillId,
-      operator,
-      value: numericValue,
-    };
-  }
 }
 
 function createModifier(
@@ -794,12 +666,6 @@ function evaluateModifierValue(
 
 function normalizeScriptString(value: string | undefined) {
   return value?.replace(/^["']|["']$/g, "").trim() ?? null;
-}
-
-function isRefineOperator(
-  operator: string,
-): operator is ModifierCondition["operator"] {
-  return [">", ">=", "<", "<=", "==", "!="].includes(operator);
 }
 
 function toInternalRaceId(rathenaRaceId: string | undefined): ModifierRaceId | null {
