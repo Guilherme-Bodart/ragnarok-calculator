@@ -28,7 +28,10 @@ import {
   calculatorDemoInput,
 } from "./calculator-demo-data";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
-import { findCalculatorItem } from "./calculator-item-data";
+import {
+  getCalculatorItemDetail,
+  type CalculatorItemDetail,
+} from "./calculator-item-data";
 import {
   getCalculatorClassBuffSkills,
   getCalculatorClassSkills,
@@ -105,6 +108,9 @@ export function CalculatorWorkbench() {
   const [itemContexts, setItemContexts] = useState<
     Record<number, { refine?: number }>
   >(savedBuild?.itemContexts ?? {});
+  const [selectedItemDetails, setSelectedItemDetails] = useState<
+    Record<number, CalculatorItemDetail>
+  >({});
   const selectedClassSkills = useMemo(
     () => getCalculatorClassSkills(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
@@ -133,9 +139,17 @@ export function CalculatorWorkbench() {
   const selectedCalculatorItems = useMemo(
     () =>
       [...equipmentItemIds, ...cardItemIds]
-        .map((itemId) => findCalculatorItem(itemId))
-        .filter((item): item is NonNullable<typeof item> => Boolean(item)),
-    [cardItemIds, equipmentItemIds],
+        .map((itemId) => selectedItemDetails[itemId])
+        .filter((item): item is CalculatorItemDetail => Boolean(item)),
+    [cardItemIds, equipmentItemIds, selectedItemDetails],
+  );
+  const resolvedEquipmentItemIds = useMemo(
+    () => equipmentItemIds.filter((itemId) => Boolean(selectedItemDetails[itemId])),
+    [equipmentItemIds, selectedItemDetails],
+  );
+  const resolvedCardItemIds = useMemo(
+    () => cardItemIds.filter((itemId) => Boolean(selectedItemDetails[itemId])),
+    [cardItemIds, selectedItemDetails],
   );
   const calculatorDataset = useMemo(
     () => ({
@@ -180,8 +194,8 @@ export function CalculatorWorkbench() {
             stats,
           },
           learnedSkills: effectiveLearnedSkills,
-          equipmentItemIds,
-          cardItemIds,
+          equipmentItemIds: resolvedEquipmentItemIds,
+          cardItemIds: resolvedCardItemIds,
           buffItemIds: [...calculatorDemoInput.buffItemIds, ...activeBuffItemIds],
           itemContexts: Object.entries(itemContexts).map(([itemId, context]) => ({
             itemId: Number(itemId),
@@ -196,12 +210,12 @@ export function CalculatorWorkbench() {
     [
       baseLevel,
       calculatorDataset,
-      cardItemIds,
-      equipmentItemIds,
       jobLevel,
       effectiveLearnedSkills,
       activeBuffItemIds,
       itemContexts,
+      resolvedCardItemIds,
+      resolvedEquipmentItemIds,
       selectedClassId,
       selectedMonsterId,
       selectedSkill.id,
@@ -243,6 +257,33 @@ export function CalculatorWorkbench() {
     skillLevel,
     stats,
   ]);
+
+  useEffect(() => {
+    const selectedItemIds = [...equipmentItemIds, ...cardItemIds].filter(
+      (itemId) => !selectedItemDetails[itemId],
+    );
+
+    if (selectedItemIds.length === 0) {
+      return;
+    }
+
+    let isCurrent = true;
+
+    Promise.all(selectedItemIds.map((itemId) => getCalculatorItemDetail(itemId)))
+      .then((items) => {
+        if (!isCurrent) return;
+
+        setSelectedItemDetails((currentDetails) => ({
+          ...currentDetails,
+          ...Object.fromEntries(items.map((item) => [item.id, item])),
+        }));
+      })
+      .catch(() => undefined);
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [cardItemIds, equipmentItemIds, selectedItemDetails]);
 
   function handleClassChange(classId: string) {
     const isFourthJob = isFourthJobClassId(classId);
@@ -298,6 +339,7 @@ export function CalculatorWorkbench() {
     setSelectedItemsBySlot({});
     setSelectedCardsBySlot({});
     setItemContexts({});
+    setSelectedItemDetails({});
   }
 
   return (
@@ -381,6 +423,7 @@ export function CalculatorWorkbench() {
           copy={copy}
           itemContexts={itemContexts}
           selectedCardsBySlot={selectedCardsBySlot}
+          selectedItemDetails={selectedItemDetails}
           selectedItemsBySlot={selectedItemsBySlot}
           onItemContextsChange={setItemContexts}
           onSelectedCardsBySlotChange={setSelectedCardsBySlot}

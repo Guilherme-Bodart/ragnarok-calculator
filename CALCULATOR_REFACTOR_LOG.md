@@ -22,3 +22,18 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 - `npm run build`: passou.
 
 Motivo: começar a sprint com uma base verificável antes de alterar dados, API e UI.
+
+### 2026-05-29 - Índice leve de itens e API local
+
+- Criado `scripts/generate-calculator-item-index.mjs`.
+- Gerados índices em `nightmare-data/generated/calculator`.
+- Criados endpoints:
+  - `GET /api/calculator/items?slot=weapon`
+  - `GET /api/calculator/items?kind=card`
+  - `GET /api/calculator/items/:itemId`
+- `components/calculator/calculator-item-data.ts` deixou de importar `items.en.json` no client.
+- O modal de equipamento agora carrega opções por API e busca detalhes apenas dos itens/cartas selecionados.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: remover o JSON gigante de itens do bundle client e manter o modal funcional com dados sob demanda.

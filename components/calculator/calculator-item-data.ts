@@ -1,35 +1,52 @@
-import rawItems from "@/nightmare-data/normalized/items/items.en.json";
-import {
-  toRoItem,
-  type RathenaNormalizedItem,
-} from "@/packages/calculator-core/src/datasets/rathena-normalized";
-import type { EquipmentSlot, RoItem } from "@/packages/calculator-core/src";
+import type { RoItem } from "@/packages/calculator-core/src";
 
-export type CalculatorItemOption = RoItem & {
+export type CalculatorItemIndexOption = {
+  id: number;
+  name: string;
+  kind: RoItem["kind"];
+  cardSlots: number | null;
+  refineable: boolean;
+  attack: number | null;
+  magicAttack: number | null;
+  defense: number | null;
+  hasModifiers: boolean;
+};
+
+export type CalculatorItemDetail = RoItem & {
   refineable: boolean;
   rawType?: string | null;
   rawSubType?: string | null;
 };
 
-const normalizedItems = rawItems as RathenaNormalizedItem[];
+type SearchCalculatorItemsInput = {
+  slot?: string;
+  kind?: "card";
+};
 
-export const calculatorItemCatalog: CalculatorItemOption[] = normalizedItems
-  .map((item) => ({
-    ...toRoItem(item),
-    refineable: Boolean((item as { refineable?: boolean }).refineable),
-    rawType: item.type,
-    rawSubType: item.subType,
-  }))
-  .filter((item) => item.kind === "card" || Boolean(item.slots?.length));
+export async function searchCalculatorItems({
+  kind,
+  slot,
+}: SearchCalculatorItemsInput) {
+  const params = new URLSearchParams();
 
-export const calculatorCardOptions = calculatorItemCatalog.filter(
-  (item) => item.kind === "card",
-);
+  if (kind) params.set("kind", kind);
+  if (slot) params.set("slot", slot);
 
-export function getCalculatorItemsForSlot(slot: EquipmentSlot) {
-  return calculatorItemCatalog.filter((item) => item.slots?.includes(slot));
+  const response = await fetch(`/api/calculator/items?${params.toString()}`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load calculator items.");
+  }
+
+  return (await response.json()) as CalculatorItemIndexOption[];
 }
 
-export function findCalculatorItem(itemId: number) {
-  return calculatorItemCatalog.find((item) => item.id === itemId);
+export async function getCalculatorItemDetail(itemId: number) {
+  const response = await fetch(`/api/calculator/items/${itemId}`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to load item ${itemId}.`);
+  }
+
+  return (await response.json()) as CalculatorItemDetail;
 }

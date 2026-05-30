@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Armchair,
   Circle,
@@ -23,9 +23,9 @@ import { TabButton, Tabs } from "@/components/ui/tabs";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import {
-  calculatorCardOptions,
-  getCalculatorItemsForSlot,
-  type CalculatorItemOption,
+  searchCalculatorItems,
+  type CalculatorItemDetail,
+  type CalculatorItemIndexOption,
 } from "./calculator-item-data";
 
 const equipSlots = [
@@ -57,6 +57,7 @@ const specialSlots = [
 type CalculatorEquipmentPanelProps = {
   itemContexts: Record<number, { refine?: number }>;
   selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
+  selectedItemDetails: Record<number, CalculatorItemDetail>;
   selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
   copy: CalculatorDictionary;
   onItemContextsChange: (contexts: Record<number, { refine?: number }>) => void;
@@ -72,6 +73,7 @@ export function CalculatorEquipmentPanel({
   copy,
   itemContexts,
   selectedCardsBySlot,
+  selectedItemDetails,
   selectedItemsBySlot,
   onItemContextsChange,
   onSelectedCardsBySlotChange,
@@ -79,12 +81,55 @@ export function CalculatorEquipmentPanel({
 }: CalculatorEquipmentPanelProps) {
   const [activeTab, setActiveTab] = useState<"equip" | "special">("equip");
   const [editingSlot, setEditingSlot] = useState<EquipmentSlot | null>(null);
+  const [cardOptions, setCardOptions] = useState<CalculatorItemIndexOption[]>([]);
+  const [slotOptions, setSlotOptions] = useState<CalculatorItemIndexOption[]>([]);
   const activeSlots = activeTab === "equip" ? equipSlots : specialSlots;
-  const slotOptions = editingSlot ? getCalculatorItemsForSlot(editingSlot) : [];
   const selectedItemId = editingSlot ? selectedItemsBySlot[editingSlot] : undefined;
-  const selectedItem = slotOptions.find((item) => item.id === selectedItemId);
+  const selectedItem =
+    slotOptions.find((item) => item.id === selectedItemId) ??
+    (selectedItemId ? selectedItemDetails[selectedItemId] : undefined);
   const selectedCards = editingSlot ? selectedCardsBySlot[editingSlot] ?? [] : [];
   const cardSlotCount = Math.min(selectedItem?.cardSlots ?? 0, 4);
+
+  useEffect(() => {
+    if (!editingSlot) {
+      return;
+    }
+
+    let isCurrent = true;
+
+    searchCalculatorItems({ slot: editingSlot })
+      .then((items) => {
+        if (isCurrent) setSlotOptions(items);
+      })
+      .catch(() => {
+        if (isCurrent) setSlotOptions([]);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [editingSlot]);
+
+  useEffect(() => {
+    if (cardSlotCount <= 0 || cardOptions.length > 0) {
+      return;
+    }
+
+    let isCurrent = true;
+
+    searchCalculatorItems({ kind: "card" })
+      .then((items) => {
+        if (isCurrent) setCardOptions(items);
+      })
+      .catch(() => {
+        if (isCurrent) setCardOptions([]);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [cardOptions.length, cardSlotCount]);
 
   function selectItem(slotId: EquipmentSlot, itemId: string) {
     const nextItems = { ...selectedItemsBySlot };
@@ -117,7 +162,7 @@ export function CalculatorEquipmentPanel({
     });
   }
 
-  function setRefine(item: CalculatorItemOption, refine: number) {
+  function setRefine(item: CalculatorItemIndexOption | CalculatorItemDetail, refine: number) {
     onItemContextsChange({
       ...itemContexts,
       [item.id]: {
@@ -169,11 +214,8 @@ export function CalculatorEquipmentPanel({
         {activeSlots.map((slot) => {
           const Icon = slot.icon;
           const label = copy.equipment.slots[slot.id];
-          const item = selectedItemsBySlot[slot.id]
-            ? getCalculatorItemsForSlot(slot.id).find(
-                (candidate) => candidate.id === selectedItemsBySlot[slot.id],
-              )
-            : null;
+          const itemId = selectedItemsBySlot[slot.id];
+          const item = itemId ? selectedItemDetails[itemId] : null;
 
           return (
             <button
@@ -261,7 +303,7 @@ export function CalculatorEquipmentPanel({
                           label: copy.equipment.cardLabel,
                           options: [
                             { id: "empty", label: copy.equipment.empty },
-                            ...calculatorCardOptions.map((card) => ({
+                            ...cardOptions.map((card) => ({
                               id: String(card.id),
                               label: card.name,
                             })),
@@ -280,7 +322,7 @@ export function CalculatorEquipmentPanel({
             <div className="calc-modifier-preview">
               <strong>{copy.equipment.modifiersTitle}</strong>
               <p>
-                {selectedItem?.rawScript
+                {selectedItemHasModifiers(selectedItem)
                   ? copy.equipment.modifiersReady
                   : copy.equipment.noModifiers}
               </p>
@@ -294,4 +336,14 @@ export function CalculatorEquipmentPanel({
       ) : null}
     </section>
   );
+}
+
+function selectedItemHasModifiers(
+  item: CalculatorItemIndexOption | CalculatorItemDetail | undefined,
+) {
+  if (!item) {
+    return false;
+  }
+
+  return "hasModifiers" in item ? item.hasModifiers : Boolean(item.rawScript);
 }
