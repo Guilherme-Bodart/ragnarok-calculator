@@ -145,3 +145,13 @@ Motivo: iniciar a separacao do parser por responsabilidade sem mexer nos mappers
 - `npm run lint`: passou.
 
 Motivo: deixar a arvore de skills facil de alterar sem misturar modal, toolbar, layout e celulas no mesmo arquivo.
+
+### 2026-05-30 - Mappers rAthena extraidos
+
+- Criados `rathena-script-mappers` e `rathena-script-converters`.
+- `rathena-script-parser.ts` caiu para 283 linhas e ficou focado em extrair segmentos/fluxo de parse.
+- Mapeamento de `bonus`/`bonus2` e conversao de race/element/size sairam do parser principal.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: deixar a regra de interpretacao rAthena mais modular para adicionar comandos sem crescer o parser central.
