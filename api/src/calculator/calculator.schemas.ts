@@ -71,3 +71,21 @@ export const calculateDamageSchema = z.object({
 });
 
 export type CalculateDamageRequest = z.infer<typeof calculateDamageSchema>;
+
+export const calculatorBuildPayloadSchema = z
+  .object({
+    version: z.number().int().min(1),
+    name: z.string().min(1).max(80),
+    selectedClassId: z.string().min(1),
+  })
+  .passthrough();
+
+export const saveCalculatorBuildSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+  classId: z.string().trim().min(1).max(80),
+  payload: calculatorBuildPayloadSchema,
+});
+
+export type SaveCalculatorBuildRequest = z.infer<
+  typeof saveCalculatorBuildSchema
+>;

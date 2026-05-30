@@ -47,3 +47,20 @@ Motivo: remover o JSON gigante de itens do bundle client e manter o modal funcio
 - `npm run build`: passou.
 
 Motivo: preparar o formato que depois será salvo na conta do usuário como personagem/build, sem acoplar o frontend ao banco ainda.
+
+### 2026-05-29 - Base de saves por conta
+
+- Adicionado modelo Prisma `CalculatorCharacterBuild`.
+- Criados endpoints autenticados no backend Nest:
+  - `GET /calculator/builds`
+  - `POST /calculator/builds`
+  - `PUT /calculator/builds/:buildId`
+  - `DELETE /calculator/builds/:buildId`
+- Payload salvo no banco usa `payloadJson`, mantendo flexibilidade enquanto o formato da build estabiliza.
+- `npm --prefix api run prisma:generate`: passou.
+- `npm --prefix api run lint`: passou.
+- `npm --prefix api run build`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: permitir que builds virem "personagens" da conta no próximo passo de UI, mantendo localStorage como fallback para usuário deslogado.

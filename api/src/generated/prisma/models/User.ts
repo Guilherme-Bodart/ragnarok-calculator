@@ -195,6 +195,7 @@ export type UserWhereInput = {
   guildMembers?: Prisma.GuildMemberListRelationFilter
   ownedGuilds?: Prisma.GuildListRelationFilter
   recordedMvpKills?: Prisma.MvpKillListRelationFilter
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -209,6 +210,7 @@ export type UserOrderByWithRelationInput = {
   guildMembers?: Prisma.GuildMemberOrderByRelationAggregateInput
   ownedGuilds?: Prisma.GuildOrderByRelationAggregateInput
   recordedMvpKills?: Prisma.MvpKillOrderByRelationAggregateInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -226,6 +228,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   guildMembers?: Prisma.GuildMemberListRelationFilter
   ownedGuilds?: Prisma.GuildListRelationFilter
   recordedMvpKills?: Prisma.MvpKillListRelationFilter
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -264,6 +267,7 @@ export type UserCreateInput = {
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -278,6 +282,7 @@ export type UserUncheckedCreateInput = {
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -292,6 +297,7 @@ export type UserUpdateInput = {
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -306,6 +312,7 @@ export type UserUncheckedUpdateInput = {
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -379,6 +386,20 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type UserCreateNestedOneWithoutCalculatorBuildsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCalculatorBuildsInput, Prisma.UserUncheckedCreateWithoutCalculatorBuildsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCalculatorBuildsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCalculatorBuildsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCalculatorBuildsInput, Prisma.UserUncheckedCreateWithoutCalculatorBuildsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCalculatorBuildsInput
+  upsert?: Prisma.UserUpsertWithoutCalculatorBuildsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCalculatorBuildsInput, Prisma.UserUpdateWithoutCalculatorBuildsInput>, Prisma.UserUncheckedUpdateWithoutCalculatorBuildsInput>
+}
+
 export type UserCreateNestedOneWithoutAccountsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
@@ -449,6 +470,78 @@ export type UserUpdateOneRequiredWithoutRecordedMvpKillsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRecordedMvpKillsInput, Prisma.UserUpdateWithoutRecordedMvpKillsInput>, Prisma.UserUncheckedUpdateWithoutRecordedMvpKillsInput>
 }
 
+export type UserCreateWithoutCalculatorBuildsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AuthAccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
+  recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
+}
+
+export type UserUncheckedCreateWithoutCalculatorBuildsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AuthAccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
+  ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
+  recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
+}
+
+export type UserCreateOrConnectWithoutCalculatorBuildsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCalculatorBuildsInput, Prisma.UserUncheckedCreateWithoutCalculatorBuildsInput>
+}
+
+export type UserUpsertWithoutCalculatorBuildsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCalculatorBuildsInput, Prisma.UserUncheckedUpdateWithoutCalculatorBuildsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCalculatorBuildsInput, Prisma.UserUncheckedCreateWithoutCalculatorBuildsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCalculatorBuildsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCalculatorBuildsInput, Prisma.UserUncheckedUpdateWithoutCalculatorBuildsInput>
+}
+
+export type UserUpdateWithoutCalculatorBuildsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AuthAccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
+  recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCalculatorBuildsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AuthAccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
+  ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
+  recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   email: string
@@ -460,6 +553,7 @@ export type UserCreateWithoutAccountsInput = {
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -473,6 +567,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -502,6 +597,7 @@ export type UserUpdateWithoutAccountsInput = {
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -515,6 +611,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -528,6 +625,7 @@ export type UserCreateWithoutSessionsInput = {
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -541,6 +639,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -570,6 +669,7 @@ export type UserUpdateWithoutSessionsInput = {
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -583,6 +683,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOwnedGuildsInput = {
@@ -596,6 +697,7 @@ export type UserCreateWithoutOwnedGuildsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOwnedGuildsInput = {
@@ -609,6 +711,7 @@ export type UserUncheckedCreateWithoutOwnedGuildsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOwnedGuildsInput = {
@@ -638,6 +741,7 @@ export type UserUpdateWithoutOwnedGuildsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedGuildsInput = {
@@ -651,6 +755,7 @@ export type UserUncheckedUpdateWithoutOwnedGuildsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGuildMembersInput = {
@@ -664,6 +769,7 @@ export type UserCreateWithoutGuildMembersInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGuildMembersInput = {
@@ -677,6 +783,7 @@ export type UserUncheckedCreateWithoutGuildMembersInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
   recordedMvpKills?: Prisma.MvpKillUncheckedCreateNestedManyWithoutRecordedByInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGuildMembersInput = {
@@ -706,6 +813,7 @@ export type UserUpdateWithoutGuildMembersInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGuildMembersInput = {
@@ -719,6 +827,7 @@ export type UserUncheckedUpdateWithoutGuildMembersInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
   recordedMvpKills?: Prisma.MvpKillUncheckedUpdateManyWithoutRecordedByNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRecordedMvpKillsInput = {
@@ -732,6 +841,7 @@ export type UserCreateWithoutRecordedMvpKillsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildCreateNestedManyWithoutOwnerInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRecordedMvpKillsInput = {
@@ -745,6 +855,7 @@ export type UserUncheckedCreateWithoutRecordedMvpKillsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   guildMembers?: Prisma.GuildMemberUncheckedCreateNestedManyWithoutUserInput
   ownedGuilds?: Prisma.GuildUncheckedCreateNestedManyWithoutOwnerInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRecordedMvpKillsInput = {
@@ -774,6 +885,7 @@ export type UserUpdateWithoutRecordedMvpKillsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUpdateManyWithoutOwnerNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRecordedMvpKillsInput = {
@@ -787,6 +899,7 @@ export type UserUncheckedUpdateWithoutRecordedMvpKillsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   guildMembers?: Prisma.GuildMemberUncheckedUpdateManyWithoutUserNestedInput
   ownedGuilds?: Prisma.GuildUncheckedUpdateManyWithoutOwnerNestedInput
+  calculatorBuilds?: Prisma.CalculatorCharacterBuildUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -800,6 +913,7 @@ export type UserCountOutputType = {
   guildMembers: number
   ownedGuilds: number
   recordedMvpKills: number
+  calculatorBuilds: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -808,6 +922,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   guildMembers?: boolean | UserCountOutputTypeCountGuildMembersArgs
   ownedGuilds?: boolean | UserCountOutputTypeCountOwnedGuildsArgs
   recordedMvpKills?: boolean | UserCountOutputTypeCountRecordedMvpKillsArgs
+  calculatorBuilds?: boolean | UserCountOutputTypeCountCalculatorBuildsArgs
 }
 
 /**
@@ -855,6 +970,13 @@ export type UserCountOutputTypeCountRecordedMvpKillsArgs<ExtArgs extends runtime
   where?: Prisma.MvpKillWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCalculatorBuildsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CalculatorCharacterBuildWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -868,6 +990,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   guildMembers?: boolean | Prisma.User$guildMembersArgs<ExtArgs>
   ownedGuilds?: boolean | Prisma.User$ownedGuildsArgs<ExtArgs>
   recordedMvpKills?: boolean | Prisma.User$recordedMvpKillsArgs<ExtArgs>
+  calculatorBuilds?: boolean | Prisma.User$calculatorBuildsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -905,6 +1028,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   guildMembers?: boolean | Prisma.User$guildMembersArgs<ExtArgs>
   ownedGuilds?: boolean | Prisma.User$ownedGuildsArgs<ExtArgs>
   recordedMvpKills?: boolean | Prisma.User$recordedMvpKillsArgs<ExtArgs>
+  calculatorBuilds?: boolean | Prisma.User$calculatorBuildsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -918,6 +1042,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     guildMembers: Prisma.$GuildMemberPayload<ExtArgs>[]
     ownedGuilds: Prisma.$GuildPayload<ExtArgs>[]
     recordedMvpKills: Prisma.$MvpKillPayload<ExtArgs>[]
+    calculatorBuilds: Prisma.$CalculatorCharacterBuildPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1325,6 +1450,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   guildMembers<T extends Prisma.User$guildMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$guildMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownedGuilds<T extends Prisma.User$ownedGuildsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedGuildsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recordedMvpKills<T extends Prisma.User$recordedMvpKillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recordedMvpKillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MvpKillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  calculatorBuilds<T extends Prisma.User$calculatorBuildsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$calculatorBuildsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalculatorCharacterBuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1870,6 +1996,30 @@ export type User$recordedMvpKillsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.MvpKillScalarFieldEnum | Prisma.MvpKillScalarFieldEnum[]
+}
+
+/**
+ * User.calculatorBuilds
+ */
+export type User$calculatorBuildsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CalculatorCharacterBuild
+   */
+  select?: Prisma.CalculatorCharacterBuildSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CalculatorCharacterBuild
+   */
+  omit?: Prisma.CalculatorCharacterBuildOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CalculatorCharacterBuildInclude<ExtArgs> | null
+  where?: Prisma.CalculatorCharacterBuildWhereInput
+  orderBy?: Prisma.CalculatorCharacterBuildOrderByWithRelationInput | Prisma.CalculatorCharacterBuildOrderByWithRelationInput[]
+  cursor?: Prisma.CalculatorCharacterBuildWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CalculatorCharacterBuildScalarFieldEnum | Prisma.CalculatorCharacterBuildScalarFieldEnum[]
 }
 
 /**

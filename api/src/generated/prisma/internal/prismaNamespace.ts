@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  CalculatorCharacterBuild: 'CalculatorCharacterBuild',
   AuthAccount: 'AuthAccount',
   Session: 'Session',
   Guild: 'Guild',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "authAccount" | "session" | "guild" | "guildRole" | "guildMember" | "guildInvite" | "guildNotification" | "guildFeedItem" | "guildEvent" | "guildToolAccess" | "mvpKill"
+    modelProps: "user" | "calculatorCharacterBuild" | "authAccount" | "session" | "guild" | "guildRole" | "guildMember" | "guildInvite" | "guildNotification" | "guildFeedItem" | "guildEvent" | "guildToolAccess" | "mvpKill"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -486,6 +487,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    CalculatorCharacterBuild: {
+      payload: Prisma.$CalculatorCharacterBuildPayload<ExtArgs>
+      fields: Prisma.CalculatorCharacterBuildFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CalculatorCharacterBuildFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CalculatorCharacterBuildFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>
+        }
+        findFirst: {
+          args: Prisma.CalculatorCharacterBuildFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CalculatorCharacterBuildFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>
+        }
+        findMany: {
+          args: Prisma.CalculatorCharacterBuildFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>[]
+        }
+        create: {
+          args: Prisma.CalculatorCharacterBuildCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>
+        }
+        createMany: {
+          args: Prisma.CalculatorCharacterBuildCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CalculatorCharacterBuildCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>[]
+        }
+        delete: {
+          args: Prisma.CalculatorCharacterBuildDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>
+        }
+        update: {
+          args: Prisma.CalculatorCharacterBuildUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>
+        }
+        deleteMany: {
+          args: Prisma.CalculatorCharacterBuildDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CalculatorCharacterBuildUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CalculatorCharacterBuildUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>[]
+        }
+        upsert: {
+          args: Prisma.CalculatorCharacterBuildUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalculatorCharacterBuildPayload>
+        }
+        aggregate: {
+          args: Prisma.CalculatorCharacterBuildAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCalculatorCharacterBuild>
+        }
+        groupBy: {
+          args: Prisma.CalculatorCharacterBuildGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CalculatorCharacterBuildGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CalculatorCharacterBuildCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CalculatorCharacterBuildCountAggregateOutputType> | number
         }
       }
     }
@@ -1354,6 +1429,19 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const CalculatorCharacterBuildScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  classId: 'classId',
+  payloadJson: 'payloadJson',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CalculatorCharacterBuildScalarFieldEnum = (typeof CalculatorCharacterBuildScalarFieldEnum)[keyof typeof CalculatorCharacterBuildScalarFieldEnum]
+
+
 export const AuthAccountScalarFieldEnum = {
   id: 'id',
   provider: 'provider',
@@ -1510,6 +1598,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -1524,6 +1619,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1557,6 +1661,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1775,6 +1893,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  calculatorCharacterBuild?: Prisma.CalculatorCharacterBuildOmit
   authAccount?: Prisma.AuthAccountOmit
   session?: Prisma.SessionOmit
   guild?: Prisma.GuildOmit

@@ -45,6 +45,11 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model CalculatorCharacterBuild
+ * 
+ */
+export type CalculatorCharacterBuild = Prisma.CalculatorCharacterBuildModel
+/**
  * Model AuthAccount
  * 
  */
