@@ -74,3 +74,12 @@ Motivo: permitir que builds virem "personagens" da conta no próximo passo de UI
 - `npm run build`: passou.
 
 Motivo: reduzir responsabilidade do workbench antes de quebrá-lo em hooks maiores.
+
+### 2026-05-30 - Workbench dividido em hooks
+
+- Criados `use-calculator-build-state`, `use-calculator-dataset` e `use-calculator-result`.
+- `calculator-workbench.tsx` ficou como composicao dos paineis principais.
+- O fluxo visual nao foi alterado.
+- `npm run lint`: passou.
+
+Motivo: reduzir o arquivo principal da calculadora e deixar estado, dataset e calculo em unidades testaveis/reutilizaveis.
