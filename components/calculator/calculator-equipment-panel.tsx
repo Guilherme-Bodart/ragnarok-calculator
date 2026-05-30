@@ -1,58 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  Armchair,
-  Circle,
-  Gem,
-  Hand,
-  HardHat,
-  Shield,
-  Shirt,
-  Sparkles,
-  Swords,
-  X,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
-import { IconButton } from "@/components/ui/icon-button";
-import { NumberSelect } from "@/components/ui/number-select";
+import { useState } from "react";
+import { Shield } from "lucide-react";
 import { PanelHeader } from "@/components/ui/panel-header";
-import { RichSelect } from "@/components/ui/rich-select";
 import { TabButton, Tabs } from "@/components/ui/tabs";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import type { CalculatorDictionary } from "./calculator-i18n";
+import { CalculatorEquipmentPaperdoll } from "./calculator-equipment-paperdoll";
 import {
-  searchCalculatorItems,
-  type CalculatorItemDetail,
-  type CalculatorItemIndexOption,
-} from "./calculator-item-data";
-
-const equipSlots = [
-  { id: "headTop", area: "headTop", icon: HardHat },
-  { id: "headMid", area: "headMid", icon: Circle },
-  { id: "headLow", area: "headLow", icon: Circle },
-  { id: "weapon", area: "weapon", icon: Swords },
-  { id: "armor", area: "armor", icon: Shirt },
-  { id: "shield", area: "shield", icon: Shield },
-  { id: "garment", area: "garment", icon: Armchair },
-  { id: "shoes", area: "shoes", icon: Sparkles },
-  { id: "accessoryLeft", area: "accessoryLeft", icon: Gem },
-  { id: "accessoryRight", area: "accessoryRight", icon: Gem },
-] as const;
-
-const specialSlots = [
-  { id: "costumeHeadTop", area: "headTop", icon: HardHat },
-  { id: "costumeHeadMid", area: "headMid", icon: Circle },
-  { id: "costumeHeadLow", area: "headLow", icon: Circle },
-  { id: "costumeGarment", area: "garment", icon: Armchair },
-  { id: "shadowWeapon", area: "shadowWeapon", icon: Hand },
-  { id: "shadowShield", area: "shadowShield", icon: Shield },
-  { id: "shadowArmor", area: "shadowArmor", icon: Shirt },
-  { id: "shadowShoes", area: "shadowShoes", icon: Sparkles },
-  { id: "shadowEarring", area: "shadowEarring", icon: Gem },
-  { id: "shadowPendant", area: "shadowPendant", icon: Gem },
-] as const;
+  calculatorEquipSlots,
+  calculatorSpecialSlots,
+} from "./calculator-equipment-slots";
+import { CalculatorItemPickerModal } from "./calculator-item-picker-modal";
+import type { CalculatorItemDetail } from "./calculator-item-data";
 
 type CalculatorEquipmentPanelProps = {
   itemContexts: Record<number, { refine?: number }>;
@@ -81,95 +41,8 @@ export function CalculatorEquipmentPanel({
 }: CalculatorEquipmentPanelProps) {
   const [activeTab, setActiveTab] = useState<"equip" | "special">("equip");
   const [editingSlot, setEditingSlot] = useState<EquipmentSlot | null>(null);
-  const [cardOptions, setCardOptions] = useState<CalculatorItemIndexOption[]>([]);
-  const [slotOptions, setSlotOptions] = useState<CalculatorItemIndexOption[]>([]);
-  const activeSlots = activeTab === "equip" ? equipSlots : specialSlots;
-  const selectedItemId = editingSlot ? selectedItemsBySlot[editingSlot] : undefined;
-  const selectedItem =
-    slotOptions.find((item) => item.id === selectedItemId) ??
-    (selectedItemId ? selectedItemDetails[selectedItemId] : undefined);
-  const selectedCards = editingSlot ? selectedCardsBySlot[editingSlot] ?? [] : [];
-  const cardSlotCount = Math.min(selectedItem?.cardSlots ?? 0, 4);
-
-  useEffect(() => {
-    if (!editingSlot) {
-      return;
-    }
-
-    let isCurrent = true;
-
-    searchCalculatorItems({ slot: editingSlot })
-      .then((items) => {
-        if (isCurrent) setSlotOptions(items);
-      })
-      .catch(() => {
-        if (isCurrent) setSlotOptions([]);
-      });
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [editingSlot]);
-
-  useEffect(() => {
-    if (cardSlotCount <= 0 || cardOptions.length > 0) {
-      return;
-    }
-
-    let isCurrent = true;
-
-    searchCalculatorItems({ kind: "card" })
-      .then((items) => {
-        if (isCurrent) setCardOptions(items);
-      })
-      .catch(() => {
-        if (isCurrent) setCardOptions([]);
-      });
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [cardOptions.length, cardSlotCount]);
-
-  function selectItem(slotId: EquipmentSlot, itemId: string) {
-    const nextItems = { ...selectedItemsBySlot };
-    const nextCards = { ...selectedCardsBySlot };
-
-    if (itemId === "empty") {
-      delete nextItems[slotId];
-      delete nextCards[slotId];
-    } else {
-      nextItems[slotId] = Number(itemId);
-      nextCards[slotId] = [];
-    }
-
-    onSelectedItemsBySlotChange(nextItems);
-    onSelectedCardsBySlotChange(nextCards);
-  }
-
-  function selectCard(slotId: EquipmentSlot, index: number, itemId: string) {
-    const cards = [...(selectedCardsBySlot[slotId] ?? [])];
-
-    if (itemId === "empty") {
-      cards.splice(index, 1);
-    } else {
-      cards[index] = Number(itemId);
-    }
-
-    onSelectedCardsBySlotChange({
-      ...selectedCardsBySlot,
-      [slotId]: cards.filter(Boolean),
-    });
-  }
-
-  function setRefine(item: CalculatorItemIndexOption | CalculatorItemDetail, refine: number) {
-    onItemContextsChange({
-      ...itemContexts,
-      [item.id]: {
-        refine,
-      },
-    });
-  }
+  const activeSlots =
+    activeTab === "equip" ? calculatorEquipSlots : calculatorSpecialSlots;
 
   return (
     <section className="calc-panel calc-equipment">
@@ -194,156 +67,29 @@ export function CalculatorEquipmentPanel({
         </TabButton>
       </Tabs>
 
-      <div
-        className="equipment-paperdoll"
-        data-equipment-tab={activeTab}
-        aria-label={copy.equipment.aria}
-      >
-        <div className="equipment-avatar" aria-hidden="true">
-          <div className="equipment-avatar-ring" />
-          <div className="equipment-avatar-sprite">
-            <span className="equipment-avatar-head" />
-            <span className="equipment-avatar-body" />
-            <span className="equipment-avatar-arm equipment-avatar-arm-left" />
-            <span className="equipment-avatar-arm equipment-avatar-arm-right" />
-            <span className="equipment-avatar-leg equipment-avatar-leg-left" />
-            <span className="equipment-avatar-leg equipment-avatar-leg-right" />
-          </div>
-        </div>
-
-        {activeSlots.map((slot) => {
-          const Icon = slot.icon;
-          const label = copy.equipment.slots[slot.id];
-          const itemId = selectedItemsBySlot[slot.id];
-          const item = itemId ? selectedItemDetails[itemId] : null;
-
-          return (
-            <button
-              type="button"
-              className="equipment-slot"
-              data-slot-area={slot.area}
-              key={slot.id}
-              aria-label={`${label}: ${item?.name ?? copy.equipment.empty}`}
-              onClick={() => setEditingSlot(slot.id)}
-            >
-              <Icon size={17} />
-              <span>{label}</span>
-              <strong>{item?.name ?? copy.equipment.empty}</strong>
-            </button>
-          );
-        })}
-      </div>
+      <CalculatorEquipmentPaperdoll
+        activeTab={activeTab}
+        copy={copy}
+        selectedItemDetails={selectedItemDetails}
+        selectedItemsBySlot={selectedItemsBySlot}
+        slots={activeSlots}
+        onEditSlot={setEditingSlot}
+      />
 
       {editingSlot ? (
-        <div className="calc-modal-backdrop" role="presentation">
-          <section
-            aria-modal="true"
-            className="calc-modal"
-            role="dialog"
-            aria-label={copy.equipment.modalTitle}
-          >
-            <PanelHeader
-              icon={<Shield size={17} />}
-              title={copy.equipment.modalTitle}
-              meta={copy.equipment.slots[editingSlot]}
-            />
-            <IconButton
-              className="calc-modal-close"
-              label={copy.equipment.closeAction}
-              type="button"
-              onClick={() => setEditingSlot(null)}
-            >
-              <X size={17} />
-            </IconButton>
-
-            <div className="calc-item-modal-grid">
-              <Field label={copy.equipment.itemLabel}>
-                <RichSelect
-                  groups={[
-                    {
-                      label: copy.equipment.itemLabel,
-                      options: [
-                        { id: "empty", label: copy.equipment.empty },
-                        ...slotOptions.map((item) => ({
-                          id: String(item.id),
-                          label: item.name,
-                        })),
-                      ],
-                    },
-                  ]}
-                  searchPlaceholder={copy.equipment.searchItemPlaceholder}
-                  value={selectedItem ? String(selectedItem.id) : "empty"}
-                  onChange={(itemId) => selectItem(editingSlot, itemId)}
-                />
-              </Field>
-
-              {selectedItem?.refineable ? (
-                <Field label={copy.equipment.refineLabel}>
-                  <NumberSelect
-                    min={0}
-                    max={20}
-                    prefix="+"
-                    value={itemContexts[selectedItem.id]?.refine ?? 0}
-                    onChange={(refine) => setRefine(selectedItem, refine)}
-                  />
-                </Field>
-              ) : null}
-            </div>
-
-            {cardSlotCount > 0 ? (
-              <div className="calc-card-grid">
-                {Array.from({ length: cardSlotCount }, (_, index) => (
-                  <Field
-                    label={`${copy.equipment.cardLabel} ${index + 1}`}
-                    key={index}
-                  >
-                    <RichSelect
-                      groups={[
-                        {
-                          label: copy.equipment.cardLabel,
-                          options: [
-                            { id: "empty", label: copy.equipment.empty },
-                            ...cardOptions.map((card) => ({
-                              id: String(card.id),
-                              label: card.name,
-                            })),
-                          ],
-                        },
-                      ]}
-                      searchPlaceholder={copy.equipment.searchCardPlaceholder}
-                      value={String(selectedCards[index] ?? "empty")}
-                      onChange={(itemId) => selectCard(editingSlot, index, itemId)}
-                    />
-                  </Field>
-                ))}
-              </div>
-            ) : null}
-
-            <div className="calc-modifier-preview">
-              <strong>{copy.equipment.modifiersTitle}</strong>
-              <p>
-                {selectedItemHasModifiers(selectedItem)
-                  ? copy.equipment.modifiersReady
-                  : copy.equipment.noModifiers}
-              </p>
-            </div>
-
-            <Button type="button" onClick={() => setEditingSlot(null)}>
-              {copy.equipment.doneAction}
-            </Button>
-          </section>
-        </div>
+        <CalculatorItemPickerModal
+          copy={copy}
+          editingSlot={editingSlot}
+          itemContexts={itemContexts}
+          selectedCardsBySlot={selectedCardsBySlot}
+          selectedItemDetails={selectedItemDetails}
+          selectedItemsBySlot={selectedItemsBySlot}
+          onClose={() => setEditingSlot(null)}
+          onItemContextsChange={onItemContextsChange}
+          onSelectedCardsBySlotChange={onSelectedCardsBySlotChange}
+          onSelectedItemsBySlotChange={onSelectedItemsBySlotChange}
+        />
       ) : null}
     </section>
   );
-}
-
-function selectedItemHasModifiers(
-  item: CalculatorItemIndexOption | CalculatorItemDetail | undefined,
-) {
-  if (!item) {
-    return false;
-  }
-
-  return "hasModifiers" in item ? item.hasModifiers : Boolean(item.rawScript);
 }

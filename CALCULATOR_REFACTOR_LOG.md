@@ -83,3 +83,12 @@ Motivo: reduzir responsabilidade do workbench antes de quebrá-lo em hooks maior
 - `npm run lint`: passou.
 
 Motivo: reduzir o arquivo principal da calculadora e deixar estado, dataset e calculo em unidades testaveis/reutilizaveis.
+
+### 2026-05-30 - Painel de equipamentos componentizado
+
+- Criados `calculator-equipment-slots`, `calculator-equipment-paperdoll` e `calculator-item-picker-modal`.
+- `calculator-equipment-panel.tsx` virou apenas o shell de tabs/estado do slot editado.
+- As classes CSS existentes foram preservadas.
+- `npm run lint`: passou.
+
+Motivo: separar dados de slots, grade visual e modal de escolha para facilitar trocar layout/design sem reescrever regra de item.
