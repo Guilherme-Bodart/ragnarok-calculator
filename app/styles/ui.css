@@ -1,0 +1,371 @@
+.ui-select {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.ui-select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid rgb(167 239 255 / 0.9);
+  pointer-events: none;
+  transform: translateY(-35%);
+}
+
+.ui-select select {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid rgb(167 239 255 / 0.16);
+  border-radius: 8px;
+  color: #f2fbff;
+  background:
+    linear-gradient(90deg, transparent calc(100% - 42px), rgb(8 47 73 / 0.56) 0),
+    linear-gradient(180deg, rgb(167 239 255 / 0.08), rgb(2 6 18 / 0.08)),
+    rgb(2 6 18 / 0.48);
+  padding-right: 46px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.045),
+    0 12px 26px rgb(0 0 0 / 0.12);
+  appearance: none;
+  transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.ui-select select:hover {
+  border-color: rgb(167 239 255 / 0.34);
+  background-color: rgb(7 23 40 / 0.52);
+}
+
+.ui-select select:focus {
+  border-color: rgb(167 239 255 / 0.58);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 0 0 3px rgb(85 199 255 / 0.12);
+  outline: none;
+}
+
+.ui-select select:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.ui-select option,
+.ui-select optgroup {
+  color: #f2fbff;
+  background: #020612;
+}
+
+.ui-rich-select {
+  position: relative;
+  display: inline-block;
+  width: min(var(--rich-select-width, 100%), 100%);
+  max-width: min(250px, 100%);
+  isolation: isolate;
+}
+
+.ui-rich-select:has(.ui-rich-select-menu) {
+  z-index: 300;
+}
+
+.ui-rich-select-trigger {
+  width: 100%;
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgb(167 239 255 / 0.16);
+  border-radius: 8px;
+  color: #f2fbff;
+  background:
+    linear-gradient(180deg, rgb(167 239 255 / 0.08), rgb(2 6 18 / 0.08)),
+    rgb(2 6 18 / 0.48);
+  padding: 4px 4px 4px 6px;
+  font: inherit;
+  font-weight: 900;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ui-rich-select-trigger[data-has-icons="false"] {
+  grid-template-columns: minmax(0, 1fr) 18px;
+  padding-left: 12px;
+}
+
+.ui-rich-select-trigger span:not(.ui-rich-select-icon) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-rich-select-chevron {
+  width: 34px;
+  min-height: 32px;
+  display: grid;
+  place-items: center;
+  justify-self: end;
+  border-left: 1px solid rgb(167 239 255 / 0.12);
+  border-radius: 0 6px 6px 0;
+  color: rgb(167 239 255 / 0.9);
+  background: rgb(8 47 73 / 0.48);
+}
+
+.ui-rich-select-menu {
+  position: absolute;
+  z-index: 200;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  max-width: min(250px, calc(100vw - 48px));
+  max-height: min(320px, 46vh);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  border: 1px solid rgb(167 239 255 / 0.22);
+  border-radius: 8px;
+  background: rgb(2 6 18 / 0.98);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.44);
+  padding: 8px;
+}
+
+.ui-rich-select-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-menu {
+  max-height: min(260px, 42vh);
+}
+
+.ui-rich-select-menu:has(button:nth-of-type(12)) {
+  width: 100%;
+}
+
+.ui-rich-select-menu section + section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgb(167 239 255 / 0.1);
+}
+
+.ui-rich-select-search {
+  min-height: 36px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  border: 1px solid rgb(167 239 255 / 0.14);
+  border-radius: 8px;
+  color: rgb(167 239 255 / 0.84);
+  background: rgb(2 6 18 / 0.64);
+  padding: 0 9px;
+}
+
+.ui-rich-select-search input {
+  min-width: 0;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  color: #f2fbff;
+  background: transparent;
+  font: inherit;
+  font-weight: 800;
+}
+
+.ui-rich-select-search:focus-within {
+  border-color: rgb(167 239 255 / 0.34);
+  box-shadow: inset 0 0 0 1px rgb(167 239 255 / 0.06);
+}
+
+.ui-rich-select-search input::placeholder {
+  color: rgb(242 251 255 / 0.42);
+}
+
+.ui-rich-select-empty {
+  display: block;
+  padding: 10px 8px;
+  color: rgb(242 251 255 / 0.52);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.ui-rich-select-menu section > strong {
+  display: block;
+  padding: 6px 8px;
+  color: rgb(167 239 255 / 0.92);
+  font-size: 0.78rem;
+}
+
+.ui-rich-select-menu button {
+  width: 100%;
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 8px;
+  color: rgb(242 251 255 / 0.82);
+  background: transparent;
+  padding: 5px 8px;
+  font: inherit;
+  font-weight: 850;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ui-rich-select-menu button span:not(.ui-rich-select-icon) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-rich-select-menu button[data-has-icons="false"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ui-rich-select-menu button:hover,
+.ui-rich-select-menu button.active {
+  color: #020612;
+  background: #a7efff;
+}
+
+.ui-rich-select-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+}
+
+.skill-select-icon {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+
+.ui-field {
+  display: grid;
+  gap: 7px;
+  color: rgb(242 251 255 / 0.58);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ui-input {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid rgb(167 239 255 / 0.16);
+  border-radius: 8px;
+  color: #f2fbff;
+  background:
+    linear-gradient(180deg, rgb(167 239 255 / 0.05), rgb(2 6 18 / 0.08)),
+    rgb(2 6 18 / 0.58);
+  padding: 0 12px;
+  font: inherit;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.ui-input:focus {
+  border-color: rgb(167 239 255 / 0.58);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 0 0 3px rgb(85 199 255 / 0.12);
+}
+
+.ui-field-value {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(167 239 255 / 0.16);
+  border-radius: 8px;
+  color: rgb(242 251 255 / 0.82);
+  background:
+    linear-gradient(180deg, rgb(167 239 255 / 0.05), rgb(2 6 18 / 0.08)),
+    rgb(2 6 18 / 0.48);
+  padding: 0 12px;
+  font: inherit;
+  font-weight: 850;
+}
+
+.ui-icon-button {
+  min-width: 38px;
+  min-height: 38px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgb(167 239 255 / 0.14);
+  border-radius: 8px;
+  color: rgb(242 251 255 / 0.7);
+  background: rgb(6 17 34 / 0.5);
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.ui-icon-button:hover {
+  color: #f2fbff;
+  border-color: rgb(167 239 255 / 0.38);
+  background: rgb(85 199 255 / 0.1);
+}
+
+.ui-icon-button.danger {
+  color: #fecaca;
+  border-color: rgb(248 113 113 / 0.28);
+  background: rgb(127 29 29 / 0.2);
+}
+
+.ui-tabs {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid rgb(167 239 255 / 0.1);
+  background: rgb(2 6 18 / 0.42);
+  padding: 8px clamp(16px, 3vw, 28px);
+}
+
+.ui-tabs button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgb(167 239 255 / 0.12);
+  border-radius: 8px;
+  padding: 0 11px;
+  color: rgb(242 251 255 / 0.6);
+  background: rgb(6 17 34 / 0.38);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ui-tabs button.active,
+.ui-tabs button:hover {
+  color: #020612;
+  border-color: #a7efff;
+  background: #a7efff;
+}
+
+.ui-tabs.segmented {
+  min-height: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+

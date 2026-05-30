@@ -114,3 +114,13 @@ Motivo: reduzir listas grandes no client e preparar o picker para catalogos maio
 - `npm run build`: passou.
 
 Motivo: transformar o payload versionado em fluxo real de personagem/build sem acoplar o workbench aos detalhes da API.
+
+### 2026-05-30 - CSS global dividido por dominio
+
+- `app/globals.css` virou apenas a lista de imports globais.
+- Criados `app/styles/base.css`, `ui.css`, `site.css`, `calculator.css`, `auth.css` e `guild.css`.
+- Tokens e componentes UI ficaram separados dos dominios de produto.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: permitir alterar padroes visuais globais sem procurar regras em um arquivo unico gigante.

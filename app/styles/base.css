@@ -1,0 +1,60 @@
+@theme {
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-rune);
+
+  --color-night-950: #020612;
+  --color-night-900: #061122;
+  --color-night-800: #0b1d3a;
+  --color-death-500: #1f7aff;
+  --color-death-400: #55c7ff;
+  --color-death-300: #a7efff;
+  --color-frost-100: #f2fbff;
+  --color-rose-500: #d62b62;
+}
+
+:root {
+  --font-body: var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-title: var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-rune: var(--font-jetbrains-mono), "Courier New", monospace;
+  --shell: 1120px;
+  --narrow: 720px;
+  --background: #020612;
+  --foreground: #f2fbff;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  overflow-x: hidden;
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at 50% -8%, rgb(85 199 255 / 0.2), transparent 34rem),
+    radial-gradient(circle at 10% 26%, rgb(31 122 255 / 0.12), transparent 28rem),
+    radial-gradient(circle at 88% 78%, rgb(214 43 98 / 0.09), transparent 30rem),
+    linear-gradient(180deg, #020612 0%, #061122 42%, #020612 100%);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  color: #020612;
+  background: #a7efff;
+}
+
