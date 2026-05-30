@@ -64,3 +64,13 @@ Motivo: preparar o formato que depois será salvo na conta do usuário como pers
 - `npm run build`: passou.
 
 Motivo: permitir que builds virem "personagens" da conta no próximo passo de UI, mantendo localStorage como fallback para usuário deslogado.
+
+### 2026-05-29 - Storage local extraído
+
+- Criado `components/calculator/calculator-build-storage.ts`.
+- Leitura/default do payload saiu de `calculator-workbench.tsx`.
+- `npm run lint`: passou.
+- `npm --prefix api run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: reduzir responsabilidade do workbench antes de quebrá-lo em hooks maiores.

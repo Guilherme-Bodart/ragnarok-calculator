@@ -23,9 +23,13 @@ import {
 } from "./calculator-buff-data";
 import {
   calculatorBuildPayloadVersion,
-  isCalculatorBuildPayload,
   type CalculatorBuildPayload,
 } from "./calculator-build-payload";
+import {
+  calculatorBuildStorageKey,
+  createDefaultCalculatorBuild,
+  readSavedCalculatorBuild,
+} from "./calculator-build-storage";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import {
@@ -49,8 +53,6 @@ import {
 } from "./calculator-skill-tree-data";
 import { CalculatorSkillTreePanel } from "./calculator-skill-tree-panel";
 import { CalculatorTargetPanel } from "./calculator-target-panel";
-
-const calculatorBuildStorageKey = "nightmare-calculator-build";
 
 export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
@@ -419,7 +421,7 @@ export function CalculatorWorkbench() {
 }
 
 function getDefaultCalculatorStats() {
-  return { ...calculatorDemoInput.character.stats };
+  return createDefaultCalculatorBuild().stats;
 }
 
 function isNumber(value: unknown): value is number {
@@ -434,48 +436,4 @@ function mergeCalculatorItems(baseItems: RoItem[], selectedItems: RoItem[]) {
   }
 
   return Array.from(itemById.values());
-}
-
-function readSavedCalculatorBuild(): CalculatorBuildPayload {
-  if (typeof window === "undefined") {
-    return createDefaultCalculatorBuild();
-  }
-
-  const rawBuild = window.localStorage.getItem(calculatorBuildStorageKey);
-
-  if (!rawBuild) {
-    return createDefaultCalculatorBuild();
-  }
-
-  try {
-    const parsedBuild = JSON.parse(rawBuild) as unknown;
-
-    if (isCalculatorBuildPayload(parsedBuild)) {
-      return parsedBuild;
-    }
-
-    return createDefaultCalculatorBuild();
-  } catch {
-    return createDefaultCalculatorBuild();
-  }
-}
-
-function createDefaultCalculatorBuild(): CalculatorBuildPayload {
-  return {
-    version: calculatorBuildPayloadVersion,
-    name: "Build local",
-    activeBuffs: {},
-    baseLevel: calculatorDemoInput.character.baseLevel,
-    jobLevel: calculatorDemoInput.character.jobLevel,
-    learnedSkills: {},
-    itemContexts: {},
-    selectedBuffId: "",
-    selectedCardsBySlot: {},
-    selectedClassId: calculatorDemoInput.character.classId ?? "Dragon_Knight",
-    selectedItemsBySlot: {},
-    selectedMonsterId: calculatorDemoInput.monsterId,
-    selectedSkillId: calculatorDemoInput.skillId,
-    skillLevel: calculatorDemoInput.skillLevel,
-    stats: getDefaultCalculatorStats(),
-  };
 }
