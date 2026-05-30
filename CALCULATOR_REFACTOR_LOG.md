@@ -166,3 +166,13 @@ Motivo: deixar a regra de interpretacao rAthena mais modular para adicionar coma
 - `npm run build`: passou.
 
 Motivo: completar o fluxo basico de saves por conta sem confundir sobrescrita com criacao de nova build.
+
+### 2026-05-30 - Modal promovido ao design system
+
+- Criado `components/ui/modal.tsx`.
+- Modais de builds e escolha de item passaram a usar o componente compartilhado.
+- CSS base de modal saiu de `calculator.css` e foi para `ui.css`.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: evitar repetir estrutura/estilo de modal por dominio e facilitar alteracoes globais de design depois.

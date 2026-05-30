@@ -365,6 +365,36 @@
   padding: 0;
 }
 
+.ui-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 700;
+  display: grid;
+  place-items: center;
+  background: rgb(2 6 18 / 0.62);
+  padding: 18px;
+}
+
+.ui-modal {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: min(720px, calc(100vh - 36px));
+  overflow: auto;
+  border: 1px solid rgb(125 211 252 / 0.22);
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgb(8 47 73 / 0.56), rgb(2 6 23 / 0.92)),
+    rgb(2 6 23 / 0.96);
+  box-shadow: 0 28px 90px rgb(0 0 0 / 0.5);
+  padding: 18px;
+}
+
+.ui-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
 .pixelated {
   image-rendering: pixelated;
 }

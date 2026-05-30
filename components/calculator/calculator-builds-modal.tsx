@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Boxes, CopyPlus, Save, Trash2, X } from "lucide-react";
+import { Boxes, CopyPlus, Save, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { IconButton } from "@/components/ui/icon-button";
-import { PanelHeader } from "@/components/ui/panel-header";
+import { Modal } from "@/components/ui/modal";
 import type { CalculatorBuildPayload } from "./calculator-build-payload";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import {
@@ -139,23 +139,15 @@ export function CalculatorBuildsModal({
   }
 
   return (
-    <div className="calc-modal-backdrop" role="presentation">
-      <section
-        aria-modal="true"
-        className="calc-modal calculator-builds-modal"
-        role="dialog"
-        aria-label={t.aria}
-      >
-        <PanelHeader icon={<Boxes size={17} />} title={t.title} meta={t.meta} />
-        <IconButton
-          className="calc-modal-close"
-          label={t.closeAction}
-          type="button"
-          onClick={onClose}
-        >
-          <X size={17} />
-        </IconButton>
-
+    <Modal
+      ariaLabel={t.aria}
+      className="calculator-builds-modal"
+      closeLabel={t.closeAction}
+      icon={<Boxes size={17} />}
+      title={t.title}
+      meta={t.meta}
+      onClose={onClose}
+    >
         <div className="calculator-build-save-row">
           <Field label={t.nameLabel}>
             <Input
@@ -228,8 +220,7 @@ export function CalculatorBuildsModal({
         </div>
 
         {message ? <p className="calculator-build-message">{message}</p> : null}
-      </section>
-    </div>
+    </Modal>
   );
 }
 

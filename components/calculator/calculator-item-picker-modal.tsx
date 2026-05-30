@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Shield, X } from "lucide-react";
+import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
-import { IconButton } from "@/components/ui/icon-button";
+import { Modal } from "@/components/ui/modal";
 import { NumberSelect } from "@/components/ui/number-select";
-import { PanelHeader } from "@/components/ui/panel-header";
 import { RichSelect } from "@/components/ui/rich-select";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import type { CalculatorDictionary } from "./calculator-i18n";
@@ -140,27 +139,14 @@ export function CalculatorItemPickerModal({
   }
 
   return (
-    <div className="calc-modal-backdrop" role="presentation">
-      <section
-        aria-modal="true"
-        className="calc-modal"
-        role="dialog"
-        aria-label={copy.equipment.modalTitle}
-      >
-        <PanelHeader
-          icon={<Shield size={17} />}
-          title={copy.equipment.modalTitle}
-          meta={copy.equipment.slots[editingSlot]}
-        />
-        <IconButton
-          className="calc-modal-close"
-          label={copy.equipment.closeAction}
-          type="button"
-          onClick={onClose}
-        >
-          <X size={17} />
-        </IconButton>
-
+    <Modal
+      ariaLabel={copy.equipment.modalTitle}
+      closeLabel={copy.equipment.closeAction}
+      icon={<Shield size={17} />}
+      title={copy.equipment.modalTitle}
+      meta={copy.equipment.slots[editingSlot]}
+      onClose={onClose}
+    >
         <div className="calc-item-modal-grid">
           <Field label={copy.equipment.itemLabel}>
             <RichSelect
@@ -243,8 +229,7 @@ export function CalculatorItemPickerModal({
         <Button type="button" onClick={onClose}>
           {copy.equipment.doneAction}
         </Button>
-      </section>
-    </div>
+    </Modal>
   );
 }
 
