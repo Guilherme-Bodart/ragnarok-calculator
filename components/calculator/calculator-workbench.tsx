@@ -12,7 +12,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
-import { calculateDamageFromDataset } from "@/packages/calculator-core/src";
+import {
+  calculateDamageFromDataset,
+  type EquipmentSlot,
+  type RoItem,
+} from "@/packages/calculator-core/src";
 import {
   getCalculatorManualBuffSkills,
   getActiveCalculatorBuffItemIds,
@@ -24,6 +28,7 @@ import {
   calculatorDemoInput,
 } from "./calculator-demo-data";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
+import { findCalculatorItem } from "./calculator-item-data";
 import {
   getCalculatorClassBuffSkills,
   getCalculatorClassSkills,
@@ -50,6 +55,9 @@ type CalculatorSavedBuild = {
   selectedSkillId?: string;
   skillLevel?: number;
   stats?: typeof calculatorDemoInput.character.stats;
+  itemContexts?: Record<number, { refine?: number }>;
+  selectedCardsBySlot?: Partial<Record<EquipmentSlot, number[]>>;
+  selectedItemsBySlot?: Partial<Record<EquipmentSlot, number>>;
 };
 
 export function CalculatorWorkbench() {
@@ -88,6 +96,15 @@ export function CalculatorWorkbench() {
   const [selectedBuffId, setSelectedBuffId] = useState(
     savedBuild?.selectedBuffId ?? "",
   );
+  const [selectedItemsBySlot, setSelectedItemsBySlot] = useState<
+    Partial<Record<EquipmentSlot, number>>
+  >(savedBuild?.selectedItemsBySlot ?? {});
+  const [selectedCardsBySlot, setSelectedCardsBySlot] = useState<
+    Partial<Record<EquipmentSlot, number[]>>
+  >(savedBuild?.selectedCardsBySlot ?? {});
+  const [itemContexts, setItemContexts] = useState<
+    Record<number, { refine?: number }>
+  >(savedBuild?.itemContexts ?? {});
   const selectedClassSkills = useMemo(
     () => getCalculatorClassSkills(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
@@ -105,15 +122,34 @@ export function CalculatorWorkbench() {
     () => [...manualBuffSkills, ...classBuffSkills],
     [classBuffSkills, manualBuffSkills],
   );
+  const equipmentItemIds = useMemo(
+    () => Object.values(selectedItemsBySlot).filter(isNumber),
+    [selectedItemsBySlot],
+  );
+  const cardItemIds = useMemo(
+    () => Object.values(selectedCardsBySlot).flat().filter(isNumber),
+    [selectedCardsBySlot],
+  );
+  const selectedCalculatorItems = useMemo(
+    () =>
+      [...equipmentItemIds, ...cardItemIds]
+        .map((itemId) => findCalculatorItem(itemId))
+        .filter((item): item is NonNullable<typeof item> => Boolean(item)),
+    [cardItemIds, equipmentItemIds],
+  );
   const calculatorDataset = useMemo(
     () => ({
       ...calculatorDemoDataset,
+      items: mergeCalculatorItems(
+        calculatorDemoDataset.items,
+        selectedCalculatorItems,
+      ),
       skills: mergeCalculatorSkills(
         calculatorDemoDataset.skills,
         selectedClassSkills,
       ),
     }),
-    [selectedClassSkills],
+    [selectedCalculatorItems, selectedClassSkills],
   );
   const selectedSkill =
     calculatorDataset.skills.find((skill) => skill.id === selectedSkillId) ??
@@ -144,7 +180,13 @@ export function CalculatorWorkbench() {
             stats,
           },
           learnedSkills: effectiveLearnedSkills,
+          equipmentItemIds,
+          cardItemIds,
           buffItemIds: [...calculatorDemoInput.buffItemIds, ...activeBuffItemIds],
+          itemContexts: Object.entries(itemContexts).map(([itemId, context]) => ({
+            itemId: Number(itemId),
+            refine: context.refine,
+          })),
           monsterId: selectedMonsterId,
           skillId: selectedSkill.id,
           skillLevel,
@@ -154,9 +196,12 @@ export function CalculatorWorkbench() {
     [
       baseLevel,
       calculatorDataset,
+      cardItemIds,
+      equipmentItemIds,
       jobLevel,
       effectiveLearnedSkills,
       activeBuffItemIds,
+      itemContexts,
       selectedClassId,
       selectedMonsterId,
       selectedSkill.id,
@@ -177,6 +222,9 @@ export function CalculatorWorkbench() {
       selectedSkillId,
       skillLevel,
       stats,
+      itemContexts,
+      selectedCardsBySlot,
+      selectedItemsBySlot,
     };
 
     window.localStorage.setItem(calculatorBuildStorageKey, JSON.stringify(build));
@@ -184,9 +232,12 @@ export function CalculatorWorkbench() {
     activeBuffs,
     baseLevel,
     jobLevel,
+    itemContexts,
     learnedSkills,
+    selectedCardsBySlot,
     selectedBuffId,
     selectedClassId,
+    selectedItemsBySlot,
     selectedMonsterId,
     selectedSkillId,
     skillLevel,
@@ -244,6 +295,9 @@ export function CalculatorWorkbench() {
     setSelectedMonsterId(calculatorDemoInput.monsterId);
     setActiveBuffs({});
     setSelectedBuffId("");
+    setSelectedItemsBySlot({});
+    setSelectedCardsBySlot({});
+    setItemContexts({});
   }
 
   return (
@@ -323,7 +377,15 @@ export function CalculatorWorkbench() {
             onSelectedBuffChange={setSelectedBuffId}
           />
         </div>
-        <CalculatorEquipmentPanel copy={copy} />
+        <CalculatorEquipmentPanel
+          copy={copy}
+          itemContexts={itemContexts}
+          selectedCardsBySlot={selectedCardsBySlot}
+          selectedItemsBySlot={selectedItemsBySlot}
+          onItemContextsChange={setItemContexts}
+          onSelectedCardsBySlotChange={setSelectedCardsBySlot}
+          onSelectedItemsBySlotChange={setSelectedItemsBySlot}
+        />
         <CalculatorTargetPanel
           copy={copy}
           result={result}
@@ -337,6 +399,20 @@ export function CalculatorWorkbench() {
 
 function getDefaultCalculatorStats() {
   return { ...calculatorDemoInput.character.stats };
+}
+
+function isNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function mergeCalculatorItems(baseItems: RoItem[], selectedItems: RoItem[]) {
+  const itemById = new Map(baseItems.map((item) => [item.id, item]));
+
+  for (const item of selectedItems) {
+    itemById.set(item.id, item);
+  }
+
+  return Array.from(itemById.values());
 }
 
 function readSavedCalculatorBuild(): CalculatorSavedBuild | null {
