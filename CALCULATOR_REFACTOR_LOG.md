@@ -186,3 +186,12 @@ Motivo: evitar repetir estrutura/estilo de modal por dominio e facilitar alterac
 - `npm run build`: passou.
 
 Motivo: deixar o select focado em escolher e mover detalhes do item para uma area de confirmacao mais legivel.
+
+### 2026-05-30 - Item picker dividido
+
+- `calculator-item-picker-modal.tsx` caiu para 177 linhas.
+- Criados componentes para preview, campos de item e grade de cartas.
+- Helpers de opcoes selecionadas/modificadores foram movidos para `calculator-item-picker-utils`.
+- `npm run lint`: passou.
+
+Motivo: manter o modal como orquestrador de estado e deixar selecao/preview/cartas em unidades menores.

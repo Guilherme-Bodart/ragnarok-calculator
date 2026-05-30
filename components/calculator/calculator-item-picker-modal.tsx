@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { Modal } from "@/components/ui/modal";
-import { NumberSelect } from "@/components/ui/number-select";
-import { RichSelect } from "@/components/ui/rich-select";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
+import { CalculatorCardSelectGrid } from "./calculator-card-select-grid";
 import type { CalculatorDictionary } from "./calculator-i18n";
+import { CalculatorItemPreview } from "./calculator-item-preview";
+import { selectedItemHasModifiers } from "./calculator-item-picker-utils";
+import { CalculatorItemSelectFields } from "./calculator-item-select-fields";
 import {
   searchCalculatorItems,
   type CalculatorItemDetail,
@@ -147,42 +148,17 @@ export function CalculatorItemPickerModal({
       meta={copy.equipment.slots[editingSlot]}
       onClose={onClose}
     >
-        <div className="calc-item-modal-grid">
-          <Field label={copy.equipment.itemLabel}>
-            <RichSelect
-              groups={[
-                {
-                  label: copy.equipment.itemLabel,
-                  options: [
-                    { id: "empty", label: copy.equipment.empty },
-                    ...ensureSelectedOption(slotOptions, selectedItem).map((item) => ({
-                      id: String(item.id),
-                      label: item.name,
-                    })),
-                  ],
-                },
-              ]}
-              searchable
-              searchValue={itemQuery}
-              searchPlaceholder={copy.equipment.searchItemPlaceholder}
-              value={selectedItem ? String(selectedItem.id) : "empty"}
-              onChange={(itemId) => selectItem(editingSlot, itemId)}
-              onSearchChange={setItemQuery}
-            />
-          </Field>
-
-          {selectedItem?.refineable ? (
-            <Field label={copy.equipment.refineLabel}>
-              <NumberSelect
-                min={0}
-                max={20}
-                prefix="+"
-                value={itemContexts[selectedItem.id]?.refine ?? 0}
-                onChange={(refine) => setRefine(selectedItem, refine)}
-              />
-            </Field>
-          ) : null}
-        </div>
+        <CalculatorItemSelectFields
+          copy={copy}
+          editingSlot={editingSlot}
+          itemContexts={itemContexts}
+          itemQuery={itemQuery}
+          selectedItem={selectedItem}
+          slotOptions={slotOptions}
+          onItemQueryChange={setItemQuery}
+          onRefineChange={setRefine}
+          onSelectItem={selectItem}
+        />
 
         <CalculatorItemPreview
           copy={copy}
@@ -192,38 +168,17 @@ export function CalculatorItemPickerModal({
           selectedItemDetails={selectedItemDetails}
         />
 
-        {cardSlotCount > 0 ? (
-          <div className="calc-card-grid">
-            {Array.from({ length: cardSlotCount }, (_, index) => (
-              <Field label={`${copy.equipment.cardLabel} ${index + 1}`} key={index}>
-                <RichSelect
-                  groups={[
-                    {
-                      label: copy.equipment.cardLabel,
-                      options: [
-                        { id: "empty", label: copy.equipment.empty },
-                        ...ensureSelectedCardOptions(
-                          cardOptions,
-                          selectedCards,
-                          selectedItemDetails,
-                        ).map((card) => ({
-                          id: String(card.id),
-                          label: card.name,
-                        })),
-                      ],
-                    },
-                  ]}
-                  searchable
-                  searchValue={cardQuery}
-                  searchPlaceholder={copy.equipment.searchCardPlaceholder}
-                  value={String(selectedCards[index] ?? "empty")}
-                  onChange={(itemId) => selectCard(editingSlot, index, itemId)}
-                  onSearchChange={setCardQuery}
-                />
-              </Field>
-            ))}
-          </div>
-        ) : null}
+        <CalculatorCardSelectGrid
+          cardOptions={cardOptions}
+          cardQuery={cardQuery}
+          cardSlotCount={cardSlotCount}
+          copy={copy}
+          editingSlot={editingSlot}
+          selectedCards={selectedCards}
+          selectedItemDetails={selectedItemDetails}
+          onCardQueryChange={setCardQuery}
+          onSelectCard={selectCard}
+        />
 
         <div className="calc-modifier-preview">
           <strong>{copy.equipment.modifiersTitle}</strong>
@@ -239,102 +194,4 @@ export function CalculatorItemPickerModal({
         </Button>
     </Modal>
   );
-}
-
-function CalculatorItemPreview({
-  copy,
-  item,
-  itemContexts,
-  selectedCards,
-  selectedItemDetails,
-}: {
-  copy: CalculatorDictionary;
-  item: CalculatorItemIndexOption | CalculatorItemDetail | undefined;
-  itemContexts: Record<number, { refine?: number }>;
-  selectedCards: number[];
-  selectedItemDetails: Record<number, CalculatorItemDetail>;
-}) {
-  const t = copy.equipment.preview;
-
-  if (!item) {
-    return (
-      <div className="calc-item-preview">
-        <strong>{t.emptyTitle}</strong>
-        <p>{t.emptyDescription}</p>
-      </div>
-    );
-  }
-
-  const stats = [
-    { label: t.kind, value: item.kind },
-    { label: t.cardSlots, value: item.cardSlots ?? 0 },
-    { label: t.attack, value: item.attack ?? 0 },
-    { label: t.magicAttack, value: item.magicAttack ?? 0 },
-    { label: t.defense, value: item.defense ?? 0 },
-    { label: t.refine, value: item.refineable ? t.yes : t.no },
-  ];
-  const refine = itemContexts[item.id]?.refine ?? 0;
-  const cardNames = selectedCards
-    .map((cardId) => selectedItemDetails[cardId]?.name)
-    .filter((name): name is string => Boolean(name));
-
-  return (
-    <div className="calc-item-preview">
-      <div className="calc-item-preview-header">
-        <span>{item.id}</span>
-        <strong>{item.name}</strong>
-        {item.refineable ? <em>+{refine}</em> : null}
-      </div>
-
-      <dl className="calc-item-stat-grid">
-        {stats.map((stat) => (
-          <div key={stat.label}>
-            <dt>{stat.label}</dt>
-            <dd>{stat.value}</dd>
-          </div>
-        ))}
-      </dl>
-
-      <div className="calc-item-card-list">
-        <strong>{t.cards}</strong>
-        <span>{cardNames.length > 0 ? cardNames.join(" / ") : t.noCards}</span>
-      </div>
-    </div>
-  );
-}
-
-function ensureSelectedOption(
-  options: CalculatorItemIndexOption[],
-  selectedItem: CalculatorItemIndexOption | CalculatorItemDetail | undefined,
-) {
-  if (!selectedItem || options.some((option) => option.id === selectedItem.id)) {
-    return options;
-  }
-
-  return [selectedItem, ...options];
-}
-
-function ensureSelectedCardOptions(
-  options: CalculatorItemIndexOption[],
-  selectedCardIds: number[],
-  selectedItemDetails: Record<number, CalculatorItemDetail>,
-) {
-  const missingCards = selectedCardIds
-    .map((cardId) => selectedItemDetails[cardId])
-    .filter(
-      (card): card is CalculatorItemDetail =>
-        Boolean(card) && !options.some((option) => option.id === card.id),
-    );
-
-  return [...missingCards, ...options];
-}
-
-function selectedItemHasModifiers(
-  item: CalculatorItemIndexOption | CalculatorItemDetail | undefined,
-) {
-  if (!item) {
-    return false;
-  }
-
-  return "hasModifiers" in item ? item.hasModifiers : Boolean(item.rawScript);
 }
