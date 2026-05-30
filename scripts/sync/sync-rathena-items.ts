@@ -37,6 +37,7 @@ type NightmareItem = {
     defense: number | null;
     range: number | null;
     slots: number | null;
+    locations: Record<string, boolean> | null;
     weaponLevel: number | null;
     equipLevelMin: number | null;
     refineable: boolean;
@@ -101,6 +102,7 @@ for (const file of inputFiles) {
             defense: item.Defense ?? null,
             range: item.Range ?? null,
             slots: item.Slots ?? null,
+            locations: item.Locations ?? null,
             weaponLevel: item.WeaponLevel ?? null,
             equipLevelMin: item.EquipLevelMin ?? null,
             refineable: item.Refineable ?? false,

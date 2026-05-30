@@ -18,6 +18,7 @@ export type RathenaNormalizedItem = {
   magicAttack?: number | null;
   defense?: number | null;
   slots?: number | null;
+  locations?: Record<string, boolean> | null;
   rawScript?: string | null;
   source: "rathena";
 };
@@ -76,11 +77,45 @@ export function toRoItem(item: RathenaNormalizedItem): RoItem {
     attack: numberOrUndefined(item.attack),
     magicAttack: numberOrUndefined(item.magicAttack),
     defense: numberOrUndefined(item.defense),
+    slots: getItemSlots(item.locations),
     cardSlots: numberOrUndefined(item.slots),
     bonuses: [],
     rawScript: item.rawScript ?? undefined,
     source: "rathena",
   };
+}
+
+function getItemSlots(
+  locations: RathenaNormalizedItem["locations"],
+): RoItem["slots"] | undefined {
+  if (!locations) {
+    return undefined;
+  }
+
+  const slots: NonNullable<RoItem["slots"]> = [];
+
+  if (locations.Head_Top) slots.push("headTop");
+  if (locations.Head_Mid) slots.push("headMid");
+  if (locations.Head_Low) slots.push("headLow");
+  if (locations.Armor) slots.push("armor");
+  if (locations.Right_Hand) slots.push("weapon");
+  if (locations.Left_Hand) slots.push("shield");
+  if (locations.Garment) slots.push("garment");
+  if (locations.Shoes) slots.push("shoes");
+  if (locations.Left_Accessory) slots.push("accessoryLeft");
+  if (locations.Right_Accessory) slots.push("accessoryRight");
+  if (locations.Costume_Head_Top) slots.push("costumeHeadTop");
+  if (locations.Costume_Head_Mid) slots.push("costumeHeadMid");
+  if (locations.Costume_Head_Low) slots.push("costumeHeadLow");
+  if (locations.Costume_Garment) slots.push("costumeGarment");
+  if (locations.Shadow_Weapon) slots.push("shadowWeapon");
+  if (locations.Shadow_Shield) slots.push("shadowShield");
+  if (locations.Shadow_Armor) slots.push("shadowArmor");
+  if (locations.Shadow_Shoes) slots.push("shadowShoes");
+  if (locations.Shadow_Right_Accessory) slots.push("shadowEarring");
+  if (locations.Shadow_Left_Accessory) slots.push("shadowPendant");
+
+  return slots.length > 0 ? slots : undefined;
 }
 
 export function toRoMonster(monster: RathenaNormalizedMonster): RoMonster {
