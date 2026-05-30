@@ -2299,6 +2299,71 @@ a {
   font-size: 0.82rem;
 }
 
+.calculator-builds-modal {
+  width: min(620px, 100%);
+}
+
+.calculator-build-save-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.calculator-build-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.calculator-build-list p,
+.calculator-build-message {
+  margin: 0;
+  color: rgb(226 246 255 / 0.64);
+  font-size: 0.86rem;
+}
+
+.calculator-build-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.calculator-build-row > button:first-child {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  border: 1px solid rgb(125 211 252 / 0.16);
+  border-radius: 8px;
+  background: rgb(2 6 23 / 0.46);
+  color: var(--ice);
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.calculator-build-row strong,
+.calculator-build-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calculator-build-row strong {
+  font-size: 0.9rem;
+}
+
+.calculator-build-row span {
+  color: rgb(226 246 255 / 0.54);
+  font-size: 0.78rem;
+}
+
+.calculator-build-message {
+  margin-top: 14px;
+}
+
 .equipment-slot {
   min-height: 64px;
   display: grid;

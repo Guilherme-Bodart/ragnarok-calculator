@@ -33,6 +33,7 @@ import type { CalculatorDictionary } from "./calculator-i18n";
 
 export function useCalculatorBuildState(copy: CalculatorDictionary) {
   const [savedBuild] = useState(readSavedCalculatorBuild);
+  const [buildName, setBuildName] = useState(savedBuild.name);
   const [selectedClassId, setSelectedClassId] = useState(
     savedBuild.selectedClassId,
   );
@@ -117,11 +118,10 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     () => getActiveCalculatorBuffItemIds(activeBuffs),
     [activeBuffs],
   );
-
-  useEffect(() => {
-    const build: CalculatorBuildPayload = {
+  const currentBuild = useMemo<CalculatorBuildPayload>(
+    () => ({
       version: calculatorBuildPayloadVersion,
-      name: savedBuild.name,
+      name: buildName,
       activeBuffs,
       baseLevel,
       jobLevel,
@@ -135,26 +135,53 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
       itemContexts,
       selectedCardsBySlot,
       selectedItemsBySlot,
-    };
+    }),
+    [
+      activeBuffs,
+      baseLevel,
+      buildName,
+      itemContexts,
+      jobLevel,
+      learnedSkills,
+      selectedBuffId,
+      selectedCardsBySlot,
+      selectedClassId,
+      selectedItemsBySlot,
+      selectedMonsterId,
+      selectedSkillId,
+      skillLevel,
+      stats,
+    ],
+  );
 
-    window.localStorage.setItem(calculatorBuildStorageKey, JSON.stringify(build));
-  }, [
-    activeBuffs,
-    baseLevel,
-    jobLevel,
-    itemContexts,
-    learnedSkills,
-    savedBuild.name,
-    selectedCardsBySlot,
-    selectedBuffId,
-    selectedClassId,
-    selectedItemsBySlot,
-    selectedMonsterId,
-    selectedSkillId,
-    skillLevel,
-    stats,
-  ]);
+  useEffect(() => {
+    window.localStorage.setItem(
+      calculatorBuildStorageKey,
+      JSON.stringify(currentBuild),
+    );
+  }, [currentBuild]);
 
+  function loadBuild(nextBuild: CalculatorBuildPayload) {
+    setBuildName(nextBuild.name);
+    setSelectedClassId(nextBuild.selectedClassId);
+    setLearnedSkills(nextBuild.learnedSkills);
+    setBaseLevel(nextBuild.baseLevel);
+    setJobLevel(nextBuild.jobLevel);
+    setStats(nextBuild.stats);
+    setSelectedSkillId(nextBuild.selectedSkillId);
+    setSkillLevel(nextBuild.skillLevel);
+    setSelectedMonsterId(nextBuild.selectedMonsterId);
+    setActiveBuffs(nextBuild.activeBuffs);
+    setSelectedBuffId(nextBuild.selectedBuffId);
+    setSelectedItemsBySlot(nextBuild.selectedItemsBySlot);
+    setSelectedCardsBySlot(nextBuild.selectedCardsBySlot);
+    setItemContexts(nextBuild.itemContexts);
+    setSelectedItemDetails({});
+  }
+
+  function renameBuild(nextName: string) {
+    setBuildName(nextName);
+  }
   useEffect(() => {
     const selectedItemIds = [...equipmentItemIds, ...cardItemIds].filter(
       (itemId) => !selectedItemDetails[itemId],
@@ -224,6 +251,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     );
 
     window.localStorage.removeItem(calculatorBuildStorageKey);
+    setBuildName(createDefaultCalculatorBuild().name);
     setSelectedClassId(defaultClassId);
     setLearnedSkills({});
     setBaseLevel(calculatorDemoInput.character.baseLevel);
@@ -244,6 +272,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     activeBuffItemIds,
     activeBuffs,
     baseLevel,
+    buildName,
     buffSkills,
     cardItemIds,
     effectiveLearnedSkills,
@@ -252,6 +281,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     itemContexts,
     jobLevel,
     learnedSkills,
+    loadBuild,
     resetBuild,
     resolvedCardItemIds,
     resolvedEquipmentItemIds,
@@ -279,6 +309,8 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     setStats,
     skillLevel,
     stats,
+    currentBuild,
+    renameBuild,
   };
 }
 

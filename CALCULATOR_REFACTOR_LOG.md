@@ -103,3 +103,14 @@ Motivo: separar dados de slots, grade visual e modal de escolha para facilitar t
 - `npm run build`: passou.
 
 Motivo: reduzir listas grandes no client e preparar o picker para catalogos maiores sem fugir do design system.
+
+### 2026-05-30 - UI inicial de builds da conta
+
+- Criados `calculator-build-api` e `calculator-builds-modal`.
+- O botao `Builds` abre modal com nome da build, salvar, carregar e remover.
+- O hook `use-calculator-build-state` agora expoe payload atual e consegue carregar payload salvo.
+- O save local continua automatico; conta usa `NEXT_PUBLIC_API_URL` como o resto do app.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: transformar o payload versionado em fluxo real de personagem/build sem acoplar o workbench aos detalhes da API.

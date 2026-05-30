@@ -8,10 +8,12 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
+import { CalculatorBuildsModal } from "./calculator-builds-modal";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
 import { isFourthJobClassId } from "./calculator-skill-tree-data";
@@ -24,6 +26,7 @@ import { useCalculatorResult } from "./use-calculator-result";
 export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
   const copy = dictionary.calculator;
+  const [isBuildsModalOpen, setIsBuildsModalOpen] = useState(false);
   const build = useCalculatorBuildState(copy);
   const calculatorDataset = useCalculatorDataset({
     selectedCalculatorItems: build.selectedCalculatorItems,
@@ -62,7 +65,12 @@ export function CalculatorWorkbench() {
         </Link>
 
         <nav className="calculator-actions" aria-label={copy.actionsAria}>
-          <Button icon={<Boxes size={16} />} type="button" variant="ghost">
+          <Button
+            icon={<Boxes size={16} />}
+            type="button"
+            variant="ghost"
+            onClick={() => setIsBuildsModalOpen(true)}
+          >
             {copy.buildsAction}
           </Button>
           <Button icon={<FlaskConical size={16} />} type="button" variant="ghost">
@@ -143,6 +151,15 @@ export function CalculatorWorkbench() {
           onMonsterChange={build.setSelectedMonsterId}
         />
       </section>
+
+      {isBuildsModalOpen ? (
+        <CalculatorBuildsModal
+          currentBuild={build.currentBuild}
+          onClose={() => setIsBuildsModalOpen(false)}
+          onLoadBuild={build.loadBuild}
+          onRenameBuild={build.renameBuild}
+        />
+      ) : null}
     </main>
   );
 }
