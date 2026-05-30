@@ -5,6 +5,7 @@ import type {
 } from "./calculator-item-data";
 
 type CalculatorItemPreviewProps = {
+  cardOptions: CalculatorItemIndexOption[];
   copy: CalculatorDictionary;
   item: CalculatorItemIndexOption | CalculatorItemDetail | undefined;
   itemContexts: Record<number, { refine?: number }>;
@@ -13,6 +14,7 @@ type CalculatorItemPreviewProps = {
 };
 
 export function CalculatorItemPreview({
+  cardOptions,
   copy,
   item,
   itemContexts,
@@ -40,7 +42,11 @@ export function CalculatorItemPreview({
   ];
   const refine = itemContexts[item.id]?.refine ?? 0;
   const cardNames = selectedCards
-    .map((cardId) => selectedItemDetails[cardId]?.name)
+    .map(
+      (cardId) =>
+        selectedItemDetails[cardId]?.name ??
+        cardOptions.find((card) => card.id === cardId)?.name,
+    )
     .filter((name): name is string => Boolean(name));
 
   return (

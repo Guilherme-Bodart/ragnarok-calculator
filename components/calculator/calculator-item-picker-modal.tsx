@@ -161,6 +161,7 @@ export function CalculatorItemPickerModal({
         />
 
         <CalculatorItemPreview
+          cardOptions={cardOptions}
           copy={copy}
           item={selectedItem}
           itemContexts={itemContexts}

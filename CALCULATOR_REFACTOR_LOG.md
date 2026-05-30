@@ -205,3 +205,12 @@ Motivo: manter o modal como orquestrador de estado e deixar selecao/preview/cart
 - `npm run lint`: passou.
 
 Motivo: separar regra de status/preset do painel visual e reduzir risco ao ajustar calculo de personagem.
+
+### 2026-05-30 - Preview de cartas imediato
+
+- Preview de item agora usa tambem o indice de cartas carregado no modal.
+- Nomes das cartas selecionadas aparecem sem esperar o detalhe completo do item.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: evitar estado visual incompleto ao selecionar carta nova no picker.
