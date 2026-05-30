@@ -135,3 +135,13 @@ Motivo: permitir alterar padroes visuais globais sem procurar regras em um arqui
 - `npm test -- ...`: nao rodou porque a raiz nao possui script `test`.
 
 Motivo: iniciar a separacao do parser por responsabilidade sem mexer nos mappers de bonus, que sao a parte mais sensivel da regra de dano.
+
+### 2026-05-30 - Skill tree componentizada
+
+- `calculator-skill-tree-panel.tsx` caiu para 187 linhas.
+- Criados componentes para board, toolbar, path/header de grupo, icone de skill e retrato da classe.
+- Criado `calculator-skill-tree-layout.ts` para regras puras de agrupamento/layout.
+- Classes CSS e comportamento visual foram preservados.
+- `npm run lint`: passou.
+
+Motivo: deixar a arvore de skills facil de alterar sem misturar modal, toolbar, layout e celulas no mesmo arquivo.
