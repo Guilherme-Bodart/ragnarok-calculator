@@ -191,6 +191,20 @@
       "searchItemPlaceholder": "Filtrar item",
       "searchCardPlaceholder": "Filtrar carta",
       "doneAction": "Concluir",
+      "preview": {
+        "emptyTitle": "Ningun item seleccionado",
+        "emptyDescription": "Elige un item para ver slots, refino y cartas.",
+        "kind": "Tipo",
+        "cardSlots": "Slots",
+        "attack": "ATK",
+        "magicAttack": "MATK",
+        "defense": "DEF",
+        "refine": "Refino",
+        "yes": "Si",
+        "no": "No",
+        "cards": "Cartas equipadas",
+        "noCards": "Ninguna carta"
+      },
       "tabsAria": "Pestañas de equipo",
       "tabs": {
         "equip": "Equip",

@@ -191,6 +191,20 @@
       "searchItemPlaceholder": "Filtrar item",
       "searchCardPlaceholder": "Filtrar carta",
       "doneAction": "Concluir",
+      "preview": {
+        "emptyTitle": "Nenhum item selecionado",
+        "emptyDescription": "Escolha um item para ver slots, refino e cartas.",
+        "kind": "Tipo",
+        "cardSlots": "Slots",
+        "attack": "ATK",
+        "magicAttack": "MATK",
+        "defense": "DEF",
+        "refine": "Refino",
+        "yes": "Sim",
+        "no": "Nao",
+        "cards": "Cartas equipadas",
+        "noCards": "Nenhuma carta"
+      },
       "tabsAria": "Abas de equipamento",
       "tabs": {
         "equip": "Equip",

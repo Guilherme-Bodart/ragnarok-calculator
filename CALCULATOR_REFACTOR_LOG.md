@@ -176,3 +176,13 @@ Motivo: completar o fluxo basico de saves por conta sem confundir sobrescrita co
 - `npm run build`: passou.
 
 Motivo: evitar repetir estrutura/estilo de modal por dominio e facilitar alteracoes globais de design depois.
+
+### 2026-05-30 - Preview do item no picker
+
+- Modal de equipamento ganhou preview do item selecionado.
+- Preview mostra id, nome, refino, tipo, slots, ATK, MATK, DEF e cartas equipadas.
+- Textos adicionados ao i18n `pt/en/es`.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: deixar o select focado em escolher e mover detalhes do item para uma area de confirmacao mais legivel.

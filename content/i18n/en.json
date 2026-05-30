@@ -191,6 +191,20 @@
       "searchItemPlaceholder": "Filter item",
       "searchCardPlaceholder": "Filter card",
       "doneAction": "Done",
+      "preview": {
+        "emptyTitle": "No item selected",
+        "emptyDescription": "Choose an item to inspect slots, refine and cards.",
+        "kind": "Type",
+        "cardSlots": "Slots",
+        "attack": "ATK",
+        "magicAttack": "MATK",
+        "defense": "DEF",
+        "refine": "Refine",
+        "yes": "Yes",
+        "no": "No",
+        "cards": "Equipped cards",
+        "noCards": "No cards"
+      },
       "tabsAria": "Equipment tabs",
       "tabs": {
         "equip": "Equip",
