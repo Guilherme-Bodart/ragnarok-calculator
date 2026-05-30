@@ -195,3 +195,13 @@ Motivo: deixar o select focado em escolher e mover detalhes do item para uma are
 - `npm run lint`: passou.
 
 Motivo: manter o modal como orquestrador de estado e deixar selecao/preview/cartas em unidades menores.
+
+### 2026-05-30 - Personagem dividido em controles e regras
+
+- `calculator-character-panel.tsx` caiu para 132 linhas.
+- Controles de classe/base/job/skill foram extraidos para `calculator-character-controls`.
+- Grade de status foi extraida para `calculator-character-stats`.
+- Presets e validacao de status foram movidos para `calculator-character-utils`.
+- `npm run lint`: passou.
+
+Motivo: separar regra de status/preset do painel visual e reduzir risco ao ajustar calculo de personagem.
