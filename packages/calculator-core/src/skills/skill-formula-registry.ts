@@ -1,4 +1,5 @@
 import { GenericSkillFormula } from "./generic-skill";
+import { StaticSkillFormula } from "./static-skill-formulas";
 import type {
   SkillFormulaAdapter,
   SkillFormulaInput,
@@ -7,7 +8,10 @@ import type {
 
 export class SkillFormulaRegistry {
   constructor(
-    private readonly adapters: SkillFormulaAdapter[] = [new GenericSkillFormula()],
+    private readonly adapters: SkillFormulaAdapter[] = [
+      new StaticSkillFormula(),
+      new GenericSkillFormula(),
+    ],
   ) {}
 
   calculate(input: SkillFormulaInput): SkillFormulaResult {

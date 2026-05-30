@@ -54,8 +54,24 @@ const input: SkillFormulaInput = {
 
 describe("SkillFormulaRegistry", () => {
   it("uses generic skill data when no specific adapter is registered", () => {
-    expect(new SkillFormulaRegistry().calculate(input)).toEqual({
+    expect(
+      new SkillFormulaRegistry().calculate({
+        ...input,
+        skill: {
+          ...input.skill,
+          id: "GENERIC_TEST",
+        },
+      }),
+    ).toEqual({
       formulaId: "generic",
+      multiplier: 4,
+      hitCount: 1,
+    });
+  });
+
+  it("uses a static adapter for known starter skills", () => {
+    expect(new SkillFormulaRegistry().calculate(input)).toEqual({
+      formulaId: "static:SM_BASH",
       multiplier: 4,
       hitCount: 1,
     });
