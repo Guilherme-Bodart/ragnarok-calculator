@@ -155,3 +155,14 @@ Motivo: deixar a arvore de skills facil de alterar sem misturar modal, toolbar, 
 - `npm run build`: passou.
 
 Motivo: deixar a regra de interpretacao rAthena mais modular para adicionar comandos sem crescer o parser central.
+
+### 2026-05-30 - Builds com atualizar/salvar como
+
+- Modal de builds passou a usar textos do i18n.
+- Adicionadas acoes separadas para atualizar build selecionada e salvar como nova.
+- Lista agora mantém build selecionada no modal e mostra data de atualização.
+- `calculator-build-api` ganhou `PUT` para atualizar builds existentes.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: completar o fluxo basico de saves por conta sem confundir sobrescrita com criacao de nova build.

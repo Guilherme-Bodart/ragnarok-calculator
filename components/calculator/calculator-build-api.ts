@@ -65,6 +65,37 @@ export async function saveCalculatorAccountBuild(payload: CalculatorBuildPayload
   return build;
 }
 
+export async function updateCalculatorAccountBuild(
+  buildId: string,
+  payload: CalculatorBuildPayload,
+) {
+  const response = await fetch(`${apiBaseUrl}/calculator/builds/${buildId}`, {
+    body: JSON.stringify({
+      classId: payload.selectedClassId,
+      name: payload.name,
+      payload,
+    }),
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update calculator build.");
+  }
+
+  const data = (await response.json()) as { build?: unknown };
+  const build = toAccountBuild(data.build);
+
+  if (!build) {
+    throw new Error("Invalid calculator build response.");
+  }
+
+  return build;
+}
+
 export async function deleteCalculatorAccountBuild(buildId: string) {
   const response = await fetch(`${apiBaseUrl}/calculator/builds/${buildId}`, {
     credentials: "include",

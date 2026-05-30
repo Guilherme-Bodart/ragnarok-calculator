@@ -1,20 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Boxes, Save, Trash2, X } from "lucide-react";
+import { Boxes, CopyPlus, Save, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { IconButton } from "@/components/ui/icon-button";
 import { PanelHeader } from "@/components/ui/panel-header";
 import type { CalculatorBuildPayload } from "./calculator-build-payload";
+import type { CalculatorDictionary } from "./calculator-i18n";
 import {
   deleteCalculatorAccountBuild,
   listCalculatorAccountBuilds,
   saveCalculatorAccountBuild,
+  updateCalculatorAccountBuild,
   type CalculatorAccountBuild,
 } from "./calculator-build-api";
 
 type CalculatorBuildsModalProps = {
+  copy: CalculatorDictionary;
   currentBuild: CalculatorBuildPayload;
   onClose: () => void;
   onLoadBuild: (build: CalculatorBuildPayload) => void;
@@ -22,16 +25,23 @@ type CalculatorBuildsModalProps = {
 };
 
 export function CalculatorBuildsModal({
+  copy,
   currentBuild,
   onClose,
   onLoadBuild,
   onRenameBuild,
 }: CalculatorBuildsModalProps) {
+  const t = copy.builds;
   const [builds, setBuilds] = useState<CalculatorAccountBuild[]>([]);
   const [message, setMessage] = useState("");
+  const [selectedBuildId, setSelectedBuildId] = useState<string | null>(null);
   const [status, setStatus] = useState<
-    "idle" | "loading" | "saving" | "unauthenticated" | "error"
+    "idle" | "loading" | "saving" | "deleting" | "unauthenticated" | "error"
   >("loading");
+  const selectedBuild = selectedBuildId
+    ? builds.find((build) => build.id === selectedBuildId)
+    : null;
+  const isBusy = status === "saving" || status === "deleting";
 
   useEffect(() => {
     let isCurrent = true;
@@ -46,7 +56,7 @@ export function CalculatorBuildsModal({
         );
         setMessage(
           result.status === "unauthenticated"
-            ? "Entre na conta para salvar builds no servidor. O save local continua ativo."
+            ? t.unauthenticatedMessage
             : "",
         );
       })
@@ -54,15 +64,15 @@ export function CalculatorBuildsModal({
         if (!isCurrent) return;
 
         setStatus("error");
-        setMessage("Nao foi possivel carregar builds da conta.");
+        setMessage(t.loadError);
       });
 
     return () => {
       isCurrent = false;
     };
-  }, []);
+  }, [t.loadError, t.unauthenticatedMessage]);
 
-  async function handleSave() {
+  async function handleCreate() {
     setStatus("saving");
     setMessage("");
 
@@ -73,24 +83,58 @@ export function CalculatorBuildsModal({
         savedBuild,
         ...currentBuilds.filter((build) => build.id !== savedBuild.id),
       ]);
+      setSelectedBuildId(savedBuild.id);
       setStatus("idle");
-      setMessage("Build salva na conta.");
+      setMessage(t.savedMessage);
     } catch {
       setStatus("error");
-      setMessage("Nao foi possivel salvar. Verifique se voce esta logado.");
+      setMessage(t.saveError);
+    }
+  }
+
+  async function handleUpdate() {
+    if (!selectedBuildId) {
+      return;
+    }
+
+    setStatus("saving");
+    setMessage("");
+
+    try {
+      const updatedBuild = await updateCalculatorAccountBuild(
+        selectedBuildId,
+        currentBuild,
+      );
+
+      setBuilds((currentBuilds) =>
+        currentBuilds.map((build) =>
+          build.id === updatedBuild.id ? updatedBuild : build,
+        ),
+      );
+      setStatus("idle");
+      setMessage(t.updatedMessage);
+    } catch {
+      setStatus("error");
+      setMessage(t.updateError);
     }
   }
 
   async function handleDelete(buildId: string) {
+    setStatus("deleting");
+
     try {
       await deleteCalculatorAccountBuild(buildId);
       setBuilds((currentBuilds) =>
         currentBuilds.filter((build) => build.id !== buildId),
       );
-      setMessage("Build removida.");
+      if (selectedBuildId === buildId) {
+        setSelectedBuildId(null);
+      }
+      setStatus("idle");
+      setMessage(t.deletedMessage);
     } catch {
       setStatus("error");
-      setMessage("Nao foi possivel remover a build.");
+      setMessage(t.deleteError);
     }
   }
 
@@ -100,12 +144,12 @@ export function CalculatorBuildsModal({
         aria-modal="true"
         className="calc-modal calculator-builds-modal"
         role="dialog"
-        aria-label="Builds da calculadora"
+        aria-label={t.aria}
       >
-        <PanelHeader icon={<Boxes size={17} />} title="Builds" meta="Conta" />
+        <PanelHeader icon={<Boxes size={17} />} title={t.title} meta={t.meta} />
         <IconButton
           className="calc-modal-close"
-          label="Fechar"
+          label={t.closeAction}
           type="button"
           onClick={onClose}
         >
@@ -113,7 +157,7 @@ export function CalculatorBuildsModal({
         </IconButton>
 
         <div className="calculator-build-save-row">
-          <Field label="Nome da build">
+          <Field label={t.nameLabel}>
             <Input
               maxLength={80}
               value={currentBuild.name}
@@ -123,32 +167,55 @@ export function CalculatorBuildsModal({
           <Button
             icon={<Save size={16} />}
             type="button"
-            disabled={status === "saving"}
-            onClick={handleSave}
+            disabled={!selectedBuildId || isBusy}
+            onClick={handleUpdate}
           >
-            Salvar
+            {t.updateAction}
+          </Button>
+          <Button
+            icon={<CopyPlus size={16} />}
+            type="button"
+            variant="secondary"
+            disabled={isBusy}
+            onClick={handleCreate}
+          >
+            {t.saveAsAction}
           </Button>
         </div>
 
+        {selectedBuild ? (
+          <p className="calculator-build-selected">
+            {t.selectedPrefix} <strong>{selectedBuild.name}</strong>
+          </p>
+        ) : null}
+
         <div className="calculator-build-list" aria-live="polite">
           {status === "loading" ? (
-            <p>Carregando builds...</p>
+            <p>{t.loading}</p>
           ) : builds.length > 0 ? (
             builds.map((build) => (
-              <article className="calculator-build-row" key={build.id}>
+              <article
+                className="calculator-build-row"
+                data-selected={build.id === selectedBuildId}
+                key={build.id}
+              >
                 <button
                   type="button"
                   onClick={() => {
+                    setSelectedBuildId(build.id);
                     onLoadBuild(build.payload);
-                    onClose();
                   }}
                 >
                   <strong>{build.name}</strong>
-                  <span>{build.classId.replace(/_/g, " ")}</span>
+                  <span>
+                    {build.classId.replace(/_/g, " ")} /{" "}
+                    {formatBuildDate(build.updatedAt)}
+                  </span>
                 </button>
                 <IconButton
-                  label={`Remover ${build.name}`}
+                  label={`${t.deleteAction} ${build.name}`}
                   type="button"
+                  disabled={isBusy}
                   onClick={() => handleDelete(build.id)}
                 >
                   <Trash2 size={16} />
@@ -156,7 +223,7 @@ export function CalculatorBuildsModal({
               </article>
             ))
           ) : (
-            <p>Nenhuma build salva na conta ainda.</p>
+            <p>{t.empty}</p>
           )}
         </div>
 
@@ -164,4 +231,11 @@ export function CalculatorBuildsModal({
       </section>
     </div>
   );
+}
+
+function formatBuildDate(value: string) {
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(new Date(value));
 }

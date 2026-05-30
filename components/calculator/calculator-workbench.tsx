@@ -154,6 +154,7 @@ export function CalculatorWorkbench() {
 
       {isBuildsModalOpen ? (
         <CalculatorBuildsModal
+          copy={copy}
           currentBuild={build.currentBuild}
           onClose={() => setIsBuildsModalOpen(false)}
           onLoadBuild={build.loadBuild}
