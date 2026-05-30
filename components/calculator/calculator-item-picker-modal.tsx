@@ -46,6 +46,8 @@ export function CalculatorItemPickerModal({
   onSelectedItemsBySlotChange,
 }: CalculatorItemPickerModalProps) {
   const [cardOptions, setCardOptions] = useState<CalculatorItemIndexOption[]>([]);
+  const [cardQuery, setCardQuery] = useState("");
+  const [itemQuery, setItemQuery] = useState("");
   const [slotOptions, setSlotOptions] = useState<CalculatorItemIndexOption[]>([]);
   const selectedItemId = selectedItemsBySlot[editingSlot];
   const selectedItem =
@@ -56,39 +58,43 @@ export function CalculatorItemPickerModal({
 
   useEffect(() => {
     let isCurrent = true;
-
-    searchCalculatorItems({ slot: editingSlot })
-      .then((items) => {
-        if (isCurrent) setSlotOptions(items);
-      })
-      .catch(() => {
-        if (isCurrent) setSlotOptions([]);
-      });
+    const timeoutId = window.setTimeout(() => {
+      searchCalculatorItems({ limit: 80, query: itemQuery, slot: editingSlot })
+        .then((items) => {
+          if (isCurrent) setSlotOptions(items);
+        })
+        .catch(() => {
+          if (isCurrent) setSlotOptions([]);
+        });
+    }, 180);
 
     return () => {
       isCurrent = false;
+      window.clearTimeout(timeoutId);
     };
-  }, [editingSlot]);
+  }, [editingSlot, itemQuery]);
 
   useEffect(() => {
-    if (cardSlotCount <= 0 || cardOptions.length > 0) {
+    if (cardSlotCount <= 0) {
       return;
     }
 
     let isCurrent = true;
-
-    searchCalculatorItems({ kind: "card" })
-      .then((items) => {
-        if (isCurrent) setCardOptions(items);
-      })
-      .catch(() => {
-        if (isCurrent) setCardOptions([]);
-      });
+    const timeoutId = window.setTimeout(() => {
+      searchCalculatorItems({ kind: "card", limit: 80, query: cardQuery })
+        .then((items) => {
+          if (isCurrent) setCardOptions(items);
+        })
+        .catch(() => {
+          if (isCurrent) setCardOptions([]);
+        });
+    }, 180);
 
     return () => {
       isCurrent = false;
+      window.clearTimeout(timeoutId);
     };
-  }, [cardOptions.length, cardSlotCount]);
+  }, [cardQuery, cardSlotCount]);
 
   function selectItem(slotId: EquipmentSlot, itemId: string) {
     const nextItems = { ...selectedItemsBySlot };
@@ -163,16 +169,19 @@ export function CalculatorItemPickerModal({
                   label: copy.equipment.itemLabel,
                   options: [
                     { id: "empty", label: copy.equipment.empty },
-                    ...slotOptions.map((item) => ({
+                    ...ensureSelectedOption(slotOptions, selectedItem).map((item) => ({
                       id: String(item.id),
                       label: item.name,
                     })),
                   ],
                 },
               ]}
+              searchable
+              searchValue={itemQuery}
               searchPlaceholder={copy.equipment.searchItemPlaceholder}
               value={selectedItem ? String(selectedItem.id) : "empty"}
               onChange={(itemId) => selectItem(editingSlot, itemId)}
+              onSearchChange={setItemQuery}
             />
           </Field>
 
@@ -199,16 +208,23 @@ export function CalculatorItemPickerModal({
                       label: copy.equipment.cardLabel,
                       options: [
                         { id: "empty", label: copy.equipment.empty },
-                        ...cardOptions.map((card) => ({
+                        ...ensureSelectedCardOptions(
+                          cardOptions,
+                          selectedCards,
+                          selectedItemDetails,
+                        ).map((card) => ({
                           id: String(card.id),
                           label: card.name,
                         })),
                       ],
                     },
                   ]}
+                  searchable
+                  searchValue={cardQuery}
                   searchPlaceholder={copy.equipment.searchCardPlaceholder}
                   value={String(selectedCards[index] ?? "empty")}
                   onChange={(itemId) => selectCard(editingSlot, index, itemId)}
+                  onSearchChange={setCardQuery}
                 />
               </Field>
             ))}
@@ -230,6 +246,32 @@ export function CalculatorItemPickerModal({
       </section>
     </div>
   );
+}
+
+function ensureSelectedOption(
+  options: CalculatorItemIndexOption[],
+  selectedItem: CalculatorItemIndexOption | CalculatorItemDetail | undefined,
+) {
+  if (!selectedItem || options.some((option) => option.id === selectedItem.id)) {
+    return options;
+  }
+
+  return [selectedItem, ...options];
+}
+
+function ensureSelectedCardOptions(
+  options: CalculatorItemIndexOption[],
+  selectedCardIds: number[],
+  selectedItemDetails: Record<number, CalculatorItemDetail>,
+) {
+  const missingCards = selectedCardIds
+    .map((cardId) => selectedItemDetails[cardId])
+    .filter(
+      (card): card is CalculatorItemDetail =>
+        Boolean(card) && !options.some((option) => option.id === card.id),
+    );
+
+  return [...missingCards, ...options];
 }
 
 function selectedItemHasModifiers(

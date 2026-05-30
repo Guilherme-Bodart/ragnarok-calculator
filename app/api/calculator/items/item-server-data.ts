@@ -36,6 +36,28 @@ export function getSlotItemIndex(slot: string) {
   return readIndexFile(path.join(slotDir, `${safeSlot}.json`));
 }
 
+export function searchItemIndex({
+  kind,
+  limit,
+  query,
+  slot,
+}: {
+  kind?: "card";
+  limit: number;
+  query?: string;
+  slot?: string;
+}) {
+  const source = kind === "card" ? getCardIndex() : slot ? getSlotItemIndex(slot) : [];
+  const normalizedQuery = normalizeSearch(query ?? "");
+  const filteredItems = normalizedQuery
+    ? source.filter((item) =>
+        normalizeSearch(`${item.name} ${item.id}`).includes(normalizedQuery),
+      )
+    : source;
+
+  return filteredItems.slice(0, limit);
+}
+
 export function getItemDetail(itemId: number) {
   const item = itemById.get(itemId);
 
@@ -57,4 +79,12 @@ function readIndexFile(filePath: string) {
   }
 
   return JSON.parse(fs.readFileSync(filePath, "utf8")) as CalculatorItemIndexEntry[];
+}
+
+function normalizeSearch(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .trim()
+    .toLowerCase();
 }

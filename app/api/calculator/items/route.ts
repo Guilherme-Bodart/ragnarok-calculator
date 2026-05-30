@@ -1,18 +1,27 @@
 import { NextResponse } from "next/server";
-import { getCardIndex, getSlotItemIndex } from "./item-server-data";
+import { searchItemIndex } from "./item-server-data";
 
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const kind = searchParams.get("kind");
   const slot = searchParams.get("slot");
+  const query = searchParams.get("q") ?? undefined;
+  const limit = clampLimit(Number(searchParams.get("limit") ?? 80));
 
-  if (kind === "card") {
-    return NextResponse.json(getCardIndex());
+  return NextResponse.json(
+    searchItemIndex({
+      kind: kind === "card" ? "card" : undefined,
+      limit,
+      query,
+      slot: slot ?? undefined,
+    }),
+  );
+}
+
+function clampLimit(value: number) {
+  if (!Number.isFinite(value)) {
+    return 80;
   }
 
-  if (!slot) {
-    return NextResponse.json([]);
-  }
-
-  return NextResponse.json(getSlotItemIndex(slot));
+  return Math.min(120, Math.max(10, Math.floor(value)));
 }

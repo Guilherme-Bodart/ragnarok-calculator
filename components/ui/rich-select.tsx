@@ -2,6 +2,7 @@
 
 import { ChevronDown, Search } from "lucide-react";
 import {
+  useCallback,
   useEffect,
   useId,
   useRef,
@@ -29,7 +30,9 @@ type RichSelectProps = {
   className?: string;
   menuSize?: "default" | "compact";
   searchable?: boolean | "auto";
+  searchValue?: string;
   searchPlaceholder?: string;
+  onSearchChange?: (query: string) => void;
 };
 
 export function RichSelect({
@@ -38,14 +41,17 @@ export function RichSelect({
   onChange,
   className,
   menuSize = "default",
+  onSearchChange,
   searchable = "auto",
+  searchValue,
   searchPlaceholder = "Filtrar",
 }: RichSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  const [internalQuery, setInternalQuery] = useState("");
   const listboxId = useId();
   const rootRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const query = searchValue ?? internalQuery;
   const options = groups.flatMap((group) => group.options);
   const selectedOption =
     options.find((option) => option.id === value) ?? options[0];
@@ -55,9 +61,9 @@ export function RichSelect({
     ...options.map((option) => option.label.length),
   );
   const estimatedWidth = Math.min(
-      250,
-      Math.max(
-        hasIcons ? 150 : 92,
+    250,
+    Math.max(
+      hasIcons ? 150 : 92,
       longestLabelLength * 7.2 + (hasIcons ? 112 : 64),
     ),
   );
@@ -67,7 +73,7 @@ export function RichSelect({
   const isSearchable =
     searchable === "auto" ? options.length >= 10 : searchable;
   const normalizedQuery = query.trim().toLowerCase();
-  const visibleGroups = normalizedQuery
+  const visibleGroups = normalizedQuery && !onSearchChange
     ? groups
         .map((group) => ({
           ...group,
@@ -79,6 +85,17 @@ export function RichSelect({
         }))
         .filter((group) => group.options.length > 0)
     : groups;
+
+  const updateQuery = useCallback(
+    (nextQuery: string) => {
+      if (onSearchChange) {
+        onSearchChange(nextQuery);
+      } else {
+        setInternalQuery(nextQuery);
+      }
+    },
+    [onSearchChange],
+  );
 
   useEffect(() => {
     if (!isOpen) {
@@ -98,7 +115,7 @@ export function RichSelect({
         return;
       }
 
-      setQuery("");
+      updateQuery("");
       setIsOpen(false);
     }
 
@@ -107,7 +124,7 @@ export function RichSelect({
         return;
       }
 
-      setQuery("");
+      updateQuery("");
       setIsOpen(false);
     }
 
@@ -119,11 +136,11 @@ export function RichSelect({
       document.removeEventListener("ui-rich-select-open", handleOpen);
       elevatedPanel?.removeAttribute("data-overlay-open");
     };
-  }, [isOpen, isSearchable]);
+  }, [isOpen, isSearchable, updateQuery]);
 
   function selectOption(nextValue: string) {
     onChange(nextValue);
-    setQuery("");
+    updateQuery("");
     setIsOpen(false);
   }
 
@@ -138,7 +155,7 @@ export function RichSelect({
           }),
         );
       } else {
-        setQuery("");
+        updateQuery("");
       }
 
       return nextOpen;
@@ -180,7 +197,7 @@ export function RichSelect({
                 value={query}
                 placeholder={searchPlaceholder}
                 ref={searchRef}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => updateQuery(event.target.value)}
               />
             </label>
           ) : null}

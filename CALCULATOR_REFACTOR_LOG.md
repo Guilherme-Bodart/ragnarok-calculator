@@ -92,3 +92,14 @@ Motivo: reduzir o arquivo principal da calculadora e deixar estado, dataset e ca
 - `npm run lint`: passou.
 
 Motivo: separar dados de slots, grade visual e modal de escolha para facilitar trocar layout/design sem reescrever regra de item.
+
+### 2026-05-30 - Busca paginada de itens no select
+
+- `GET /api/calculator/items` agora aceita `q` e `limit`.
+- `RichSelect` ganhou busca controlada opcional, mantendo o comportamento local por padrao.
+- O modal de item/cartas busca no servidor com debounce e limite de resultados.
+- Itens/cartas ja selecionados continuam aparecendo mesmo quando a busca atual nao os retorna.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: reduzir listas grandes no client e preparar o picker para catalogos maiores sem fugir do design system.

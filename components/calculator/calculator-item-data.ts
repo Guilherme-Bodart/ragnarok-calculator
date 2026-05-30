@@ -19,17 +19,23 @@ export type CalculatorItemDetail = RoItem & {
 };
 
 type SearchCalculatorItemsInput = {
+  limit?: number;
+  query?: string;
   slot?: string;
   kind?: "card";
 };
 
 export async function searchCalculatorItems({
   kind,
+  limit,
+  query,
   slot,
 }: SearchCalculatorItemsInput) {
   const params = new URLSearchParams();
 
   if (kind) params.set("kind", kind);
+  if (limit) params.set("limit", String(limit));
+  if (query) params.set("q", query);
   if (slot) params.set("slot", slot);
 
   const response = await fetch(`/api/calculator/items?${params.toString()}`);
