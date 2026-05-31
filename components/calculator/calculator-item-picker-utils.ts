@@ -36,5 +36,8 @@ export function selectedItemHasModifiers(
     return false;
   }
 
-  return "hasModifiers" in item ? item.hasModifiers : Boolean(item.rawScript);
+  return (
+    ("hasModifiers" in item && item.hasModifiers) ||
+    ("rawScript" in item && Boolean(item.rawScript))
+  );
 }

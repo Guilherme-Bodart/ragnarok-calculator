@@ -214,3 +214,15 @@ Motivo: separar regra de status/preset do painel visual e reduzir risco ao ajust
 - `npm run build`: passou.
 
 Motivo: evitar estado visual incompleto ao selecionar carta nova no picker.
+
+### 2026-05-30 - Testes e validacao do payload
+
+- Adicionado Vitest na raiz com scripts `test`, `test:calculator` e `test:all`.
+- `test:calculator` cobre os utilitarios da calculadora, parser rAthena e um fluxo de equipamento+carta+refino no core.
+- `isCalculatorBuildPayload` agora valida a estrutura real do payload em vez de aceitar apenas a versao.
+- Corrigido `selectedItemHasModifiers` para reconhecer scripts em detalhes carregados mesmo quando o indice marcava `hasModifiers` como falso.
+- `npm run test:calculator`: passou, 30 testes.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: criar uma rede de seguranca para regras puras e evitar builds quebradas vindo do localStorage/conta.

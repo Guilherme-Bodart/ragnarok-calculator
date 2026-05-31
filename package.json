@@ -13,6 +13,9 @@
     "render:api:migrate": "npm --prefix api run prisma:deploy",
     "render:api:start": "npm --prefix api run start",
     "start": "next start",
+    "test": "npm run test:calculator",
+    "test:all": "vitest run",
+    "test:calculator": "vitest run components/calculator packages/calculator-core/src/calculator-equipment-flow.spec.ts packages/calculator-core/src/modifiers/rathena-script-parser.spec.ts packages/calculator-core/src/modifiers/rathena-expression.spec.ts",
     "lint": "eslint",
     "lint:api": "npm --prefix api run lint"
   },
@@ -37,6 +40,7 @@
     "postcss": "^8.5.15",
     "tailwindcss": "^4.3.0",
     "tsx": "^4.22.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.7"
   }
 }
