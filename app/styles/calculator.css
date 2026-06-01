@@ -582,9 +582,10 @@
 .stat-budget div {
   min-width: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto auto;
   align-items: baseline;
-  gap: 4px 10px;
+  justify-content: start;
+  gap: 4px 12px;
 }
 
 .stat-budget span {
@@ -605,8 +606,8 @@
 }
 
 .stat-budget small {
-  grid-column: 1 / -1;
-  justify-self: end;
+  grid-column: 2;
+  justify-self: start;
   color: rgb(125 211 252 / 0.72);
   font-size: 0.74rem;
   font-weight: 800;
