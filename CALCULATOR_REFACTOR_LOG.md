@@ -226,3 +226,14 @@ Motivo: evitar estado visual incompleto ao selecionar carta nova no picker.
 - `npm run build`: passou.
 
 Motivo: criar uma rede de seguranca para regras puras e evitar builds quebradas vindo do localStorage/conta.
+
+### 2026-06-01 - Pontos de status trans-equivalentes
+
+- Criado `calculator-class-rules` para concentrar regras de classe 4th e trans-equivalente.
+- Classes regulares 3rd/4th deduplicadas no select agora contam como trans-equivalentes no painel e no calculo.
+- Adicionados testes para `Base 200 = 4151` quando a classe e trans-equivalente e `Base 250 = 197` trait em 4th job.
+- `npm run test:calculator`: passou, 32 testes.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: depois de remover as variantes `T/T2` do select, a calculadora nao podia mais depender de `classId.includes("_T")` para liberar os 52 pontos de transclasse.

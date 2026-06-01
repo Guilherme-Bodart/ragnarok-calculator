@@ -5,6 +5,10 @@ import {
   type SkillTreeRawDataset,
   type SkillTreeRawSkillInfo,
 } from "@/packages/calculator-core/src";
+export {
+  isFourthJobClassId,
+  isTranscendentEquivalentClassId,
+} from "./calculator-class-rules";
 
 export const calculatorSkillTreeCatalog = createSkillTreeCatalog(
   rawSkillTree as SkillTreeRawDataset,
@@ -316,38 +320,6 @@ const selectableThirdAndFourthClassIds = new Set([
 ]);
 
 export const calculatorSkillTreeClassGroups = createClassGroups();
-
-const fourthJobClassIds = new Set([
-  "Hyper_Novice",
-  "Dragon_Knight",
-  "Dragon_Knight2",
-  "Imperial_Guard",
-  "Imperial_Guard2",
-  "Arch_Mage",
-  "Elemental_Master",
-  "Windhawk",
-  "Windhawk2",
-  "Troubadour",
-  "Trouvere",
-  "Cardinal",
-  "Inquisitor",
-  "Meister",
-  "Meister2",
-  "Biolo",
-  "Shadow_Cross",
-  "Abyss_Chaser",
-  "Sky_Emperor",
-  "Sky_Emperor2",
-  "Soul_Ascetic",
-  "Night_Watch",
-  "Shinkiro",
-  "Shiranui",
-  "Spirit_Handler",
-]);
-
-export function isFourthJobClassId(classId: string) {
-  return fourthJobClassIds.has(classId);
-}
 
 const mergedDisplayJobIds: Record<string, string> = {
   Novice_High: "Novice",

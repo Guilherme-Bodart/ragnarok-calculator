@@ -16,7 +16,10 @@ import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorBuildsModal } from "./calculator-builds-modal";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
-import { isFourthJobClassId } from "./calculator-skill-tree-data";
+import {
+  isFourthJobClassId,
+  isTranscendentEquivalentClassId,
+} from "./calculator-class-rules";
 import { CalculatorSkillTreePanel } from "./calculator-skill-tree-panel";
 import { CalculatorTargetPanel } from "./calculator-target-panel";
 import { useCalculatorBuildState } from "./use-calculator-build-state";
@@ -112,7 +115,7 @@ export function CalculatorWorkbench() {
             baseLevel={build.baseLevel}
             copy={copy}
             isFourthJob={isFourthJobClassId(build.selectedClassId)}
-            isTranscendent={build.selectedClassId.includes("_T")}
+            isTranscendent={isTranscendentEquivalentClassId(build.selectedClassId)}
             jobLevel={build.jobLevel}
             selectedClassId={build.selectedClassId}
             selectedClassName={build.selectedClassName}

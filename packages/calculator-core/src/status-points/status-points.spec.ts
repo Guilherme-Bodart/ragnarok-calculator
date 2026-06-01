@@ -44,12 +44,24 @@ describe("status point budget", () => {
   });
 
   it("adds transcendent and fourth job change points to the budget", () => {
+    const base200Budget = evaluateStatusPointBudget({
+      baseLevel: 200,
+      isTranscendent: true,
+      stats: emptyStats,
+    });
+    const base250FourthBudget = evaluateStatusPointBudget({
+      baseLevel: 250,
+      isFourthJob: true,
+      stats: emptyStats,
+    });
     const budget = evaluateStatusPointBudget({
       baseLevel: 260,
       isTranscendent: true,
       stats: emptyStats,
     });
 
+    expect(base200Budget.regular.available).toBe(4151);
+    expect(base250FourthBudget.trait.available).toBe(197);
     expect(budget.regular.available).toBe(4151);
     expect(budget.trait.available).toBe(235);
   });

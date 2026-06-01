@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import {
   calculateDamageFromDataset,
 } from "@/packages/calculator-core/src";
+import { isTranscendentEquivalentClassId } from "./calculator-class-rules";
 import { calculatorDemoInput } from "./calculator-demo-data";
 
 type CalculatorDataset = Parameters<typeof calculateDamageFromDataset>[1];
@@ -48,7 +49,7 @@ export function useCalculatorResult({
             classId: selectedClassId,
             baseLevel,
             jobLevel,
-            isTranscendent: selectedClassId.includes("_T"),
+            isTranscendent: isTranscendentEquivalentClassId(selectedClassId),
             stats,
           },
           learnedSkills: effectiveLearnedSkills,
