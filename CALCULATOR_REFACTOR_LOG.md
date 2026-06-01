@@ -237,3 +237,15 @@ Motivo: criar uma rede de seguranca para regras puras e evitar builds quebradas 
 - `npm run build`: passou.
 
 Motivo: depois de remover as variantes `T/T2` do select, a calculadora nao podia mais depender de `classId.includes("_T")` para liberar os 52 pontos de transclasse.
+
+### 2026-06-01 - Dicionario de tooltips de skill
+
+- Criado `scripts/generate-skill-tooltips.ts`.
+- O script cruza `nightmare-data/raw/iRo/skill_tree.json` com nossa skill tree usando `skill_code` do iRO como equivalente ao `id` da nossa arvore.
+- Gerado `skill-tooltips.en.json` com `bySkillCode`, mantendo a skill tree atual como fonte de classe/requisitos/layout.
+- Gerado relatorio com cobertura: 1111/1142 skills unicas da arvore possuem tooltip; 31 ficaram sem match no iRO.
+- `npm run data:skill-tooltips`: passou.
+- `npm run test:calculator`: passou, 32 testes.
+- `npm run lint`: passou.
+
+Motivo: enriquecer tooltips sem inflar `skill-tree.json` com descricoes repetidas por classe e sem depender do iRO Wiki em runtime.
