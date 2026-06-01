@@ -2,7 +2,6 @@
 
 import {
   Boxes,
-  Calculator,
   FlaskConical,
   RotateCcw,
 } from "lucide-react";
@@ -11,7 +10,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
-import { Panel } from "@/components/ui/panel";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorBuildsModal } from "./calculator-builds-modal";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
@@ -91,14 +89,24 @@ export function CalculatorWorkbench() {
       </header>
 
       <section className="calculator-hero-panel">
-        <Panel>
-          <span className="calculator-kicker">
-            <Calculator size={16} />
-            {copy.kicker}
-          </span>
-          <h1>{copy.title}</h1>
-          <p>{copy.description}</p>
-        </Panel>
+        <CalculatorCharacterPanel
+          availableSkills={build.selectedClassSkills}
+          baseLevel={build.baseLevel}
+          copy={copy}
+          isFourthJob={isFourthJobClassId(build.selectedClassId)}
+          isTranscendent={isTranscendentEquivalentClassId(build.selectedClassId)}
+          jobLevel={build.jobLevel}
+          selectedClassId={build.selectedClassId}
+          selectedClassName={build.selectedClassName}
+          skillLevel={build.skillLevel}
+          selectedSkill={selectedSkill}
+          stats={build.stats}
+          onBaseLevelChange={build.setBaseLevel}
+          onJobLevelChange={build.setJobLevel}
+          onSkillChange={(skill) => build.setSelectedSkillId(skill.id)}
+          onSkillLevelChange={build.setSkillLevel}
+          onStatsChange={build.setStats}
+        />
         <CalculatorSkillTreePanel
           copy={copy}
           learnedSkills={build.learnedSkills}
@@ -110,24 +118,6 @@ export function CalculatorWorkbench() {
 
       <section className="calculator-workspace" aria-label={copy.workspaceAria}>
         <div className="calculator-character-column">
-          <CalculatorCharacterPanel
-            availableSkills={build.selectedClassSkills}
-            baseLevel={build.baseLevel}
-            copy={copy}
-            isFourthJob={isFourthJobClassId(build.selectedClassId)}
-            isTranscendent={isTranscendentEquivalentClassId(build.selectedClassId)}
-            jobLevel={build.jobLevel}
-            selectedClassId={build.selectedClassId}
-            selectedClassName={build.selectedClassName}
-            skillLevel={build.skillLevel}
-            selectedSkill={selectedSkill}
-            stats={build.stats}
-            onBaseLevelChange={build.setBaseLevel}
-            onJobLevelChange={build.setJobLevel}
-            onSkillChange={(skill) => build.setSelectedSkillId(skill.id)}
-            onSkillLevelChange={build.setSkillLevel}
-            onStatsChange={build.setStats}
-          />
           <CalculatorBuffsPanel
             activeBuffs={build.activeBuffs}
             buffSkills={build.buffSkills}

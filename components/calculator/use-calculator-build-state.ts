@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import {
   getCalculatorManualBuffSkills,
@@ -32,7 +32,8 @@ import {
 import type { CalculatorDictionary } from "./calculator-i18n";
 
 export function useCalculatorBuildState(copy: CalculatorDictionary) {
-  const [savedBuild] = useState(readSavedCalculatorBuild);
+  const [savedBuild] = useState(createDefaultCalculatorBuild);
+  const hasLoadedSavedBuildRef = useRef(false);
   const [buildName, setBuildName] = useState(savedBuild.name);
   const [selectedClassId, setSelectedClassId] = useState(
     savedBuild.selectedClassId,
@@ -155,11 +156,20 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
   );
 
   useEffect(() => {
+    if (!hasLoadedSavedBuildRef.current) {
+      return;
+    }
+
     window.localStorage.setItem(
       calculatorBuildStorageKey,
       JSON.stringify(currentBuild),
     );
   }, [currentBuild]);
+
+  useEffect(() => {
+    loadBuild(readSavedCalculatorBuild());
+    hasLoadedSavedBuildRef.current = true;
+  }, []);
 
   function loadBuild(nextBuild: CalculatorBuildPayload) {
     setBuildName(nextBuild.name);

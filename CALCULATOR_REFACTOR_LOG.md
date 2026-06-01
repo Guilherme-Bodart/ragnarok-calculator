@@ -249,3 +249,15 @@ Motivo: depois de remover as variantes `T/T2` do select, a calculadora nao podia
 - `npm run lint`: passou.
 
 Motivo: enriquecer tooltips sem inflar `skill-tree.json` com descricoes repetidas por classe e sem depender do iRO Wiki em runtime.
+
+### 2026-06-01 - Personagem no topo e hidratacao estavel
+
+- O painel de personagem saiu da coluna inferior e passou para a faixa superior no lugar do hero grande.
+- Removido o bloco visual "Simulador de Combate Nightmare" para reduzir espaco vazio antes dos cards operacionais.
+- O build salvo no localStorage agora e carregado apos a hidratacao; o primeiro render usa o mesmo build padrao no server e no client.
+- O salvamento local fica bloqueado ate o save real ser lido, evitando sobrescrever o build salvo com o default.
+- `npm run test:calculator`: passou, 32 testes.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: evitar mismatch de hidratacao quando o localStorage tinha uma classe diferente do HTML gerado no server e deixar a tela inicial mais focada na configuracao do personagem.
