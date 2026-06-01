@@ -273,3 +273,15 @@ Motivo: evitar mismatch de hidratacao quando o localStorage tinha uma classe dif
 - `npm run build`: passou.
 
 Motivo: deixar classe/base/job/status como responsabilidade do personagem e preparar um card separado para ataque/habilidade depois.
+
+### 2026-06-01 - Tooltip de skill na arvore
+
+- Criados `calculator-skill-tooltip` e `calculator-skill-tooltip-data`.
+- A celula da arvore agora mostra informacoes do dicionario `skill-tooltips.en.json` ao passar mouse ou focar controles da skill.
+- O tooltip usa `skill.id` da nossa arvore como chave para `bySkillCode`, incluindo linhas como `Skill Requirement : Finish Quest`.
+- Skills sem entrada no dicionario mostram fallback simples com nome e max level.
+- `npm run test:calculator`: passou, 32 testes.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: enriquecer a leitura da arvore sem misturar dados de descricao dentro do layout da celula.

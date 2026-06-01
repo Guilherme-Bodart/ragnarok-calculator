@@ -505,6 +505,111 @@
   font-size: 0.68rem;
 }
 
+.skill-info-tooltip {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.skill-info-tooltip:hover,
+.skill-info-tooltip:focus-within {
+  z-index: 40;
+}
+
+.skill-info-trigger {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  width: 100%;
+}
+
+.skill-info-popover {
+  position: absolute;
+  z-index: 50;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  width: min(320px, 82vw);
+  max-height: min(420px, 64vh);
+  overflow: auto;
+  scrollbar-width: thin;
+  border: 1px solid rgb(167 239 255 / 0.26);
+  border-radius: 8px;
+  color: rgb(226 246 255 / 0.78);
+  background:
+    linear-gradient(180deg, rgb(8 47 73 / 0.94), rgb(2 6 23 / 0.98)),
+    rgb(2 6 23);
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.54);
+  padding: 12px;
+  text-align: left;
+  transform: translate(-50%, 6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.skill-info-tooltip:hover .skill-info-popover,
+.skill-info-tooltip:focus-within .skill-info-popover {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.skill-info-popover header {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgb(167 239 255 / 0.12);
+  padding-bottom: 8px;
+}
+
+.skill-info-popover header strong {
+  width: auto;
+  color: var(--ice);
+  font-size: 0.92rem;
+  font-weight: 950;
+  line-height: 1.2;
+  white-space: normal;
+}
+
+.skill-info-popover header span {
+  color: var(--cyan);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.skill-info-section,
+.skill-info-levels {
+  display: grid;
+  gap: 5px;
+}
+
+.skill-info-levels {
+  margin-top: 10px;
+  border-top: 1px solid rgb(167 239 255 / 0.1);
+  padding-top: 10px;
+}
+
+.skill-info-popover p {
+  margin: 0;
+  color: rgb(226 246 255 / 0.72);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.skill-info-popover p[data-requirement="true"] {
+  color: rgb(167 239 255 / 0.9);
+  font-weight: 900;
+}
+
+.skill-info-levels p {
+  color: rgb(226 246 255 / 0.64);
+}
+
+.skill-info-empty {
+  color: rgb(226 246 255 / 0.54);
+  font-style: italic;
+}
+
 .skill-tree-empty-cell {
   width: 28px;
   height: 28px;

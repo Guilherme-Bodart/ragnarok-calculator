@@ -11,6 +11,7 @@ import {
 } from "@/packages/calculator-core/src";
 import { IconButton } from "@/components/ui/icon-button";
 import type { CalculatorDictionary } from "./calculator-i18n";
+import { CalculatorSkillTooltip } from "./calculator-skill-tooltip";
 import { SkillTreeIcon } from "./calculator-skill-tree-icon";
 import { layoutSkillTreeSkills } from "./calculator-skill-tree-layout";
 
@@ -96,29 +97,31 @@ function CalculatorSkillTreeCell({
       data-locked={isLocked}
       data-learned={currentLevel > 0}
     >
-      <strong>{skill.name}</strong>
-      <SkillTreeIcon numericId={skill.numericId} name={skill.name} />
-      <div className="skill-tree-leveler">
-        <IconButton
-          label={`${copy.skillTree.decreaseAction} ${skill.name}`}
-          disabled={!canDecrease}
-          onClick={() => onDecreaseSkill(skill.id)}
-          type="button"
-        >
-          <Minus size={14} />
-        </IconButton>
-        <span>
-          {currentLevel}/{skill.maxLevel}
-        </span>
-        <IconButton
-          label={`${copy.skillTree.increaseAction} ${skill.name}`}
-          disabled={!canIncrease}
-          onClick={() => onIncreaseSkill(skill.id)}
-          type="button"
-        >
-          <Plus size={14} />
-        </IconButton>
-      </div>
+      <CalculatorSkillTooltip skill={skill}>
+        <strong>{skill.name}</strong>
+        <SkillTreeIcon numericId={skill.numericId} name={skill.name} />
+        <div className="skill-tree-leveler">
+          <IconButton
+            label={`${copy.skillTree.decreaseAction} ${skill.name}`}
+            disabled={!canDecrease}
+            onClick={() => onDecreaseSkill(skill.id)}
+            type="button"
+          >
+            <Minus size={14} />
+          </IconButton>
+          <span>
+            {currentLevel}/{skill.maxLevel}
+          </span>
+          <IconButton
+            label={`${copy.skillTree.increaseAction} ${skill.name}`}
+            disabled={!canIncrease}
+            onClick={() => onIncreaseSkill(skill.id)}
+            type="button"
+          >
+            <Plus size={14} />
+          </IconButton>
+        </div>
+      </CalculatorSkillTooltip>
     </article>
   );
 }
