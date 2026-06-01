@@ -10,12 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
 import { PanelHeader } from "@/components/ui/panel-header";
-import { CalculatorClassOptionPortrait } from "./calculator-class-option-portrait";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorSkillTreeBoard } from "./calculator-skill-tree-board";
 import {
   calculatorSkillTreeCatalog,
-  calculatorSkillTreeClassGroups,
 } from "./calculator-skill-tree-data";
 import {
   createCompactSkillGroups,
@@ -30,7 +28,6 @@ type CalculatorSkillTreePanelProps = {
   copy: CalculatorDictionary;
   learnedSkills: LearnedSkillLevels;
   selectedClassId: string;
-  onClassChange: (classId: string) => void;
   onLearnedSkillsChange: (skills: LearnedSkillLevels) => void;
 };
 
@@ -38,7 +35,6 @@ export function CalculatorSkillTreePanel({
   copy,
   learnedSkills,
   selectedClassId,
-  onClassChange,
   onLearnedSkillsChange,
 }: CalculatorSkillTreePanelProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,21 +80,6 @@ export function CalculatorSkillTreePanel({
         .filter((group) => group.visibleSkills.length > 0),
     [filteredSkillIds, skillGroups],
   );
-  const classSelectGroups = useMemo(
-    () =>
-      calculatorSkillTreeClassGroups.map((group) => ({
-        label: group.label,
-        options: group.options.map((job) => ({
-          id: job.id,
-          label: job.name,
-          icon: (
-            <CalculatorClassOptionPortrait classId={job.id} name={job.name} />
-          ),
-        })),
-      })),
-    [],
-  );
-
   function increaseSkill(skillId: string) {
     onLearnedSkillsChange(
       increaseSkillWithRequirements(resolvedJob, skillId, learnedSkills),
@@ -157,14 +138,8 @@ export function CalculatorSkillTreePanel({
             </header>
 
             <CalculatorSkillTreeToolbar
-              classSelectGroups={classSelectGroups}
               copy={copy}
               search={search}
-              selectedClassId={selectedClassId}
-              onClassChange={(classId) => {
-                onClassChange(classId);
-                onLearnedSkillsChange({});
-              }}
               onSearchChange={setSearch}
             />
 

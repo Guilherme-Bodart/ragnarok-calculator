@@ -10,7 +10,6 @@ import {
 import { CalculatorCharacterControls } from "./calculator-character-controls";
 import { CalculatorCharacterStats } from "./calculator-character-stats";
 import {
-  getCalculatorPresetStats,
   resolveNextCalculatorStats,
   type VisibleCalculatorStat,
 } from "./calculator-character-utils";
@@ -21,40 +20,30 @@ export type CalculatorPanelSkill = RoSkill & {
 };
 
 type CalculatorCharacterPanelProps = {
-  availableSkills: CalculatorPanelSkill[];
   baseLevel: number;
   copy: CalculatorDictionary;
   isFourthJob: boolean;
   isTranscendent?: boolean;
   jobLevel: number;
   selectedClassId: string;
-  selectedClassName: string;
-  skillLevel: number;
-  selectedSkill: CalculatorPanelSkill;
   stats: CharacterStats;
   onBaseLevelChange: (baseLevel: number) => void;
+  onClassChange: (classId: string) => void;
   onJobLevelChange: (jobLevel: number) => void;
-  onSkillChange: (skill: CalculatorPanelSkill) => void;
-  onSkillLevelChange: (skillLevel: number) => void;
   onStatsChange: (stats: CharacterStats) => void;
 };
 
 export function CalculatorCharacterPanel({
-  availableSkills,
   baseLevel,
   copy,
   isFourthJob,
   isTranscendent,
   jobLevel,
   selectedClassId,
-  selectedClassName,
-  skillLevel,
-  selectedSkill,
   stats,
   onBaseLevelChange,
+  onClassChange,
   onJobLevelChange,
-  onSkillChange,
-  onSkillLevelChange,
   onStatsChange,
 }: CalculatorCharacterPanelProps) {
   const statusBudget = evaluateStatusPointBudget({
@@ -77,14 +66,6 @@ export function CalculatorCharacterPanel({
     );
   }
 
-  function applyPreset(preset: "third" | "fourth" | "max") {
-    const presetBuild = getCalculatorPresetStats(preset, isFourthJob);
-
-    onBaseLevelChange(presetBuild.baseLevel);
-    onJobLevelChange(presetBuild.jobLevel);
-    onStatsChange(presetBuild.stats);
-  }
-
   return (
     <aside className="calc-panel calc-character">
       <PanelHeader
@@ -94,20 +75,14 @@ export function CalculatorCharacterPanel({
       />
 
       <CalculatorCharacterControls
-        availableSkills={availableSkills}
         baseLevel={baseLevel}
         copy={copy}
         isFourthJob={isFourthJob}
         jobLevel={jobLevel}
         selectedClassId={selectedClassId}
-        selectedClassName={selectedClassName}
-        selectedSkill={selectedSkill}
-        skillLevel={skillLevel}
         onBaseLevelChange={onBaseLevelChange}
+        onClassChange={onClassChange}
         onJobLevelChange={onJobLevelChange}
-        onPresetApply={applyPreset}
-        onSkillChange={onSkillChange}
-        onSkillLevelChange={onSkillLevelChange}
       />
 
       <CalculatorCharacterStats
@@ -117,25 +92,25 @@ export function CalculatorCharacterPanel({
       />
 
       <div className="stat-budget" aria-live="polite">
-        <span>
-          {copy.character.statusPoints}:{" "}
+        <div>
+          <span>{copy.character.statusPoints}</span>
           <strong>
             {statusBudget.regular.spent}/{statusBudget.regular.available}
           </strong>
           <small>
             {copy.character.remainingPoints}: {statusBudget.regular.remaining}
           </small>
-        </span>
+        </div>
         {isFourthJob ? (
-          <span>
-            {copy.character.traitPoints}:{" "}
+          <div>
+            <span>{copy.character.traitPoints}</span>
             <strong>
               {statusBudget.trait.spent}/{statusBudget.trait.available}
             </strong>
             <small>
               {copy.character.remainingPoints}: {statusBudget.trait.remaining}
             </small>
-          </span>
+          </div>
         ) : null}
       </div>
     </aside>

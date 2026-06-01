@@ -90,28 +90,22 @@ export function CalculatorWorkbench() {
 
       <section className="calculator-hero-panel">
         <CalculatorCharacterPanel
-          availableSkills={build.selectedClassSkills}
           baseLevel={build.baseLevel}
           copy={copy}
           isFourthJob={isFourthJobClassId(build.selectedClassId)}
           isTranscendent={isTranscendentEquivalentClassId(build.selectedClassId)}
           jobLevel={build.jobLevel}
           selectedClassId={build.selectedClassId}
-          selectedClassName={build.selectedClassName}
-          skillLevel={build.skillLevel}
-          selectedSkill={selectedSkill}
           stats={build.stats}
           onBaseLevelChange={build.setBaseLevel}
+          onClassChange={build.handleClassChange}
           onJobLevelChange={build.setJobLevel}
-          onSkillChange={(skill) => build.setSelectedSkillId(skill.id)}
-          onSkillLevelChange={build.setSkillLevel}
           onStatsChange={build.setStats}
         />
         <CalculatorSkillTreePanel
           copy={copy}
           learnedSkills={build.learnedSkills}
           selectedClassId={build.selectedClassId}
-          onClassChange={build.handleClassChange}
           onLearnedSkillsChange={build.setLearnedSkills}
         />
       </section>

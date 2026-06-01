@@ -261,3 +261,15 @@ Motivo: enriquecer tooltips sem inflar `skill-tree.json` com descricoes repetida
 - `npm run build`: passou.
 
 Motivo: evitar mismatch de hidratacao quando o localStorage tinha uma classe diferente do HTML gerado no server e deixar a tela inicial mais focada na configuracao do personagem.
+
+### 2026-06-01 - Separacao de personagem e arvore
+
+- A selecao de classe foi movida para o card de personagem usando o `RichSelect` do design system.
+- A arvore de skills agora abre sempre na classe selecionada no personagem e nao permite trocar classe dentro do modal.
+- Removidos habilidade, nivel da habilidade e presets do card de personagem para separar configuracao de personagem de configuracao de ataque.
+- Status passou para grade de 3 colunas e o resumo Status/Trait virou duas colunas compactas com valores maiores.
+- `npm run test:calculator`: passou, 32 testes.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: deixar classe/base/job/status como responsabilidade do personagem e preparar um card separado para ataque/habilidade depois.

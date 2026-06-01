@@ -126,7 +126,7 @@
 
 .calculator-hero-panel {
   display: grid;
-  grid-template-columns: minmax(280px, 0.86fr) minmax(260px, 360px);
+  grid-template-columns: minmax(640px, 1fr) minmax(300px, 0.52fr);
   gap: 18px;
   align-items: start;
   margin-bottom: 18px;
@@ -269,6 +269,7 @@
 
 .skill-tree-toolbar {
   align-items: end;
+  justify-content: flex-end;
 }
 
 .skill-tree-toolbar label {
@@ -527,7 +528,7 @@
 }
 
 .calc-panel {
-  padding: 18px;
+  padding: 16px;
 }
 
 .calc-equipment .ui-tabs {
@@ -537,22 +538,9 @@
 
 .calc-select-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(260px, 1fr) minmax(118px, 0.36fr) minmax(108px, 0.32fr);
   gap: 12px;
-  margin-bottom: 16px;
-}
-
-.calc-preset-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.calc-preset-row .night-button {
-  min-height: 32px;
-  padding-inline: 10px;
-  font-size: 0.72rem;
+  margin-bottom: 14px;
 }
 
 .skill-tree-toolbar .ui-select select {
@@ -567,12 +555,12 @@
 
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px 12px;
 }
 
 .stat-grid .ui-field {
-  grid-template-columns: 42px minmax(0, 1fr);
+  grid-template-columns: 38px minmax(0, 1fr);
   align-items: center;
 }
 
@@ -582,31 +570,46 @@
 
 .stat-budget {
   display: grid;
-  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
   margin-top: 12px;
-  padding: 10px;
+  padding: 10px 12px;
   border: 1px solid rgb(125 211 252 / 0.14);
   border-radius: 8px;
   background: rgb(2 6 23 / 0.42);
 }
 
+.stat-budget div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+
 .stat-budget span {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  overflow: hidden;
   color: rgb(226 246 255 / 0.64);
   font-size: 0.78rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .stat-budget strong {
   color: var(--ice);
   font-family: var(--font-rune);
+  font-size: 1rem;
+  font-weight: 950;
 }
 
 .stat-budget small {
+  grid-column: 1 / -1;
+  justify-self: end;
   color: rgb(125 211 252 / 0.72);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
+  font-weight: 800;
 }
 
 .calc-buff-picker {
