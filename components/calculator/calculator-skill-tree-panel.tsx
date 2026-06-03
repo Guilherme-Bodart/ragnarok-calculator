@@ -150,7 +150,7 @@ export function CalculatorSkillTreePanel({
               learnedCount={learnedCount}
             />
 
-            <div className="skill-tree-groups">
+            <div className="skill-tree-groups ui-scrollarea">
               {visibleSkillGroups.map((group) => (
                 <section className="skill-tree-group" key={group.key}>
                   <CalculatorSkillTreeGroupHeading

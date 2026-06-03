@@ -399,3 +399,28 @@
   image-rendering: pixelated;
 }
 
+.ui-scrollarea {
+  scrollbar-color: rgb(167 239 255 / 0.52) rgb(2 6 18 / 0.46);
+  scrollbar-width: thin;
+}
+
+.ui-scrollarea::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.ui-scrollarea::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgb(2 6 18 / 0.46);
+}
+
+.ui-scrollarea::-webkit-scrollbar-thumb {
+  border: 2px solid rgb(2 6 18 / 0.46);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgb(167 239 255 / 0.7), rgb(14 165 233 / 0.44));
+}
+
+.ui-scrollarea::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgb(167 239 255 / 0.95), rgb(14 165 233 / 0.62));
+}
+

@@ -255,6 +255,12 @@
   font-size: 1.75rem;
 }
 
+.skill-tree-modal-header .guild-panel-header {
+  margin-bottom: 0;
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
 .skill-tree-close {
   width: 38px;
   height: 38px;
@@ -506,33 +512,14 @@
 }
 
 .skill-info-tooltip {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-}
-
-.skill-info-tooltip:hover,
-.skill-info-tooltip:focus-within {
-  z-index: 40;
-}
-
-.skill-info-trigger {
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: 6px;
-  width: 100%;
+  display: inline-grid;
+  place-items: center;
 }
 
 .skill-info-popover {
-  position: absolute;
-  z-index: 50;
-  left: 50%;
-  bottom: calc(100% + 10px);
+  position: fixed;
+  z-index: 1200;
   width: min(320px, 82vw);
-  max-height: min(420px, 64vh);
-  overflow: auto;
-  scrollbar-width: thin;
   border: 1px solid rgb(167 239 255 / 0.26);
   border-radius: 8px;
   color: rgb(226 246 255 / 0.78);
@@ -542,16 +529,15 @@
   box-shadow: 0 24px 70px rgb(0 0 0 / 0.54);
   padding: 12px;
   text-align: left;
-  transform: translate(-50%, 6px);
+  transform: translate(-50%, -100%);
   opacity: 0;
   pointer-events: none;
   transition: opacity 140ms ease, transform 140ms ease;
 }
 
-.skill-info-tooltip:hover .skill-info-popover,
-.skill-info-tooltip:focus-within .skill-info-popover {
+.skill-info-popover[data-open="true"] {
   opacity: 1;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, calc(-100% - 8px));
 }
 
 .skill-info-popover header {

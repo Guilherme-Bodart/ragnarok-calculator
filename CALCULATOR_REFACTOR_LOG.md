@@ -285,3 +285,16 @@ Motivo: deixar classe/base/job/status como responsabilidade do personagem e prep
 - `npm run build`: passou.
 
 Motivo: enriquecer a leitura da arvore sem misturar dados de descricao dentro do layout da celula.
+
+### 2026-06-02 - Acabamento de tooltip e scroll da arvore
+
+- Tooltip de skill passou a abrir apenas ao passar mouse sobre o icone da skill.
+- Popover do tooltip agora renderiza em portal no `body`, acima da modal, para nao ser cortado pelo scroll da arvore.
+- Removido scroll interno do tooltip; a descricao ocupa o tamanho necessario.
+- Criado `ui-scrollarea` no design system para scrollbars compartilhadas com visual Nightmare.
+- A lista da arvore usa `ui-scrollarea` e a linha curta extra do header da modal foi removida nesse contexto.
+- `npm run test:calculator`: passou, 32 testes.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: evitar corte/transparencia por z-index/overflow e substituir scroll nativo seco por um padrao visual reutilizavel.
