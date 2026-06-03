@@ -40,34 +40,36 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
   const hasLoadedSavedBuildRef = useRef(false);
   const [buildName, setBuildName] = useState(savedBuild.name);
   const [selectedClassId, setSelectedClassId] = useState(
-    savedBuild.selectedClassId,
+    savedBuild.character.selectedClassId,
   );
   const [learnedSkills, setLearnedSkills] = useState<Record<string, number>>(
-    savedBuild.learnedSkills,
+    savedBuild.tree.learnedSkills,
   );
-  const [baseLevel, setBaseLevel] = useState(savedBuild.baseLevel);
-  const [jobLevel, setJobLevel] = useState(savedBuild.jobLevel);
-  const [stats, setStats] = useState(savedBuild.stats);
+  const [baseLevel, setBaseLevel] = useState(savedBuild.character.baseLevel);
+  const [jobLevel, setJobLevel] = useState(savedBuild.character.jobLevel);
+  const [stats, setStats] = useState(savedBuild.character.stats);
   const [selectedSkillId, setSelectedSkillId] = useState(
-    savedBuild.selectedSkillId,
+    savedBuild.attack.selectedSkillId,
   );
-  const [skillLevel, setSkillLevel] = useState(savedBuild.skillLevel);
+  const [skillLevel, setSkillLevel] = useState(savedBuild.attack.skillLevel);
   const [selectedMonsterId, setSelectedMonsterId] = useState(
-    savedBuild.selectedMonsterId,
+    savedBuild.target.selectedMonsterId,
   );
   const [activeBuffs, setActiveBuffs] = useState<Record<string, number>>(
-    savedBuild.activeBuffs,
+    savedBuild.buffs.activeBuffs,
   );
-  const [selectedBuffId, setSelectedBuffId] = useState(savedBuild.selectedBuffId);
+  const [selectedBuffId, setSelectedBuffId] = useState(
+    savedBuild.buffs.selectedBuffId,
+  );
   const [selectedItemsBySlot, setSelectedItemsBySlot] = useState<
     Partial<Record<EquipmentSlot, number>>
-  >(savedBuild.selectedItemsBySlot);
+  >(savedBuild.equipment.selectedItemsBySlot);
   const [selectedCardsBySlot, setSelectedCardsBySlot] = useState<
     Partial<Record<EquipmentSlot, number[]>>
-  >(savedBuild.selectedCardsBySlot);
+  >(savedBuild.equipment.selectedCardsBySlot);
   const [itemContexts, setItemContexts] = useState<
     Record<number, { refine?: number }>
-  >(savedBuild.itemContexts);
+  >(savedBuild.equipment.itemContexts);
   const [selectedItemDetails, setSelectedItemDetails] = useState<
     Record<number, CalculatorItemDetail>
   >({});
@@ -129,19 +131,31 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     () => ({
       version: calculatorBuildPayloadVersion,
       name: buildName,
-      activeBuffs,
-      baseLevel,
-      jobLevel,
-      learnedSkills,
-      selectedBuffId,
-      selectedClassId,
-      selectedMonsterId,
-      selectedSkillId,
-      skillLevel,
-      stats,
-      itemContexts,
-      selectedCardsBySlot,
-      selectedItemsBySlot,
+      character: {
+        selectedClassId,
+        baseLevel,
+        jobLevel,
+        stats,
+      },
+      attack: {
+        selectedSkillId,
+        skillLevel,
+      },
+      tree: {
+        learnedSkills,
+      },
+      equipment: {
+        itemContexts,
+        selectedCardsBySlot,
+        selectedItemsBySlot,
+      },
+      buffs: {
+        activeBuffs,
+        selectedBuffId,
+      },
+      target: {
+        selectedMonsterId,
+      },
     }),
     [
       activeBuffs,
@@ -179,19 +193,19 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
 
   function loadBuild(nextBuild: CalculatorBuildPayload) {
     setBuildName(nextBuild.name);
-    setSelectedClassId(nextBuild.selectedClassId);
-    setLearnedSkills(nextBuild.learnedSkills);
-    setBaseLevel(nextBuild.baseLevel);
-    setJobLevel(nextBuild.jobLevel);
-    setStats(nextBuild.stats);
-    setSelectedSkillId(nextBuild.selectedSkillId);
-    setSkillLevel(nextBuild.skillLevel);
-    setSelectedMonsterId(nextBuild.selectedMonsterId);
-    setActiveBuffs(nextBuild.activeBuffs);
-    setSelectedBuffId(nextBuild.selectedBuffId);
-    setSelectedItemsBySlot(nextBuild.selectedItemsBySlot);
-    setSelectedCardsBySlot(nextBuild.selectedCardsBySlot);
-    setItemContexts(nextBuild.itemContexts);
+    setSelectedClassId(nextBuild.character.selectedClassId);
+    setLearnedSkills(nextBuild.tree.learnedSkills);
+    setBaseLevel(nextBuild.character.baseLevel);
+    setJobLevel(nextBuild.character.jobLevel);
+    setStats(nextBuild.character.stats);
+    setSelectedSkillId(nextBuild.attack.selectedSkillId);
+    setSkillLevel(nextBuild.attack.skillLevel);
+    setSelectedMonsterId(nextBuild.target.selectedMonsterId);
+    setActiveBuffs(nextBuild.buffs.activeBuffs);
+    setSelectedBuffId(nextBuild.buffs.selectedBuffId);
+    setSelectedItemsBySlot(nextBuild.equipment.selectedItemsBySlot);
+    setSelectedCardsBySlot(nextBuild.equipment.selectedCardsBySlot);
+    setItemContexts(nextBuild.equipment.itemContexts);
     setSelectedItemDetails({});
     setSelectedMonsterDetail(null);
   }
@@ -289,7 +303,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     setLearnedSkills({});
     setBaseLevel(calculatorDemoInput.character.baseLevel);
     setJobLevel(calculatorDemoInput.character.jobLevel);
-    setStats(createDefaultCalculatorBuild().stats);
+    setStats(createDefaultCalculatorBuild().character.stats);
     setSelectedSkillId(nextSkills[0]?.id ?? calculatorDemoInput.skillId);
     setSkillLevel(calculatorDemoInput.skillLevel);
     setSelectedMonsterId(calculatorDemoInput.monsterId);

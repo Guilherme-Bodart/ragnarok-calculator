@@ -27,7 +27,7 @@ Comandos principais:
 - `npm run dev`: roda o frontend.
 - `npm run dev:api`: roda a API.
 - `npm run dev:all`: roda frontend e API.
-- `npm run test:calculator`: testes focados da calculadora.
+- `npm run test:calculator`: testes focados da calculadora, incluindo core de dano e payload salvo.
 - `npm run lint`: ESLint.
 - `npm run build`: build Next.
 - `npm run data:skill-tooltips`: gera tooltips de skills a partir do raw iRO local.
@@ -136,13 +136,14 @@ Funcionando:
 - Buffs manuais e buffs de skill existem, ainda simples.
 - Saves locais via localStorage.
 - Saves por conta via API NestJS `calculator/builds`.
+- Payload salvo esta na versao 2 com secoes `character`, `attack`, `tree`, `equipment`, `buffs` e `target`.
+- Payload v1 flat e migrado automaticamente ao carregar.
 - Testes focados da calculadora existem em `npm run test:calculator`.
 
 Ainda incompleto para V1:
 
 - Core marca formulas especificas como `validated` e fallback generico como `prototype`.
 - Poucas formulas especificas de skill estao validadas; fallback generico cobre o resto.
-- Payload precisa evoluir para secoes nomeadas com migracao local.
 - Buff catalog precisa ficar versionado e mais claro.
 - Paperdoll precisa mostrar melhor nome curto/cartas equipadas.
 

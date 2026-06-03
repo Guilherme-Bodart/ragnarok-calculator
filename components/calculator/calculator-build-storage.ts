@@ -1,6 +1,6 @@
 import {
   calculatorBuildPayloadVersion,
-  isCalculatorBuildPayload,
+  migrateCalculatorBuildPayload,
   type CalculatorBuildPayload,
 } from "./calculator-build-payload";
 import { calculatorDemoInput } from "./calculator-demo-data";
@@ -11,19 +11,31 @@ export function createDefaultCalculatorBuild(): CalculatorBuildPayload {
   return {
     version: calculatorBuildPayloadVersion,
     name: "Build local",
-    activeBuffs: {},
-    baseLevel: calculatorDemoInput.character.baseLevel,
-    jobLevel: calculatorDemoInput.character.jobLevel,
-    learnedSkills: {},
-    itemContexts: {},
-    selectedBuffId: "",
-    selectedCardsBySlot: {},
-    selectedClassId: calculatorDemoInput.character.classId ?? "Dragon_Knight",
-    selectedItemsBySlot: {},
-    selectedMonsterId: calculatorDemoInput.monsterId,
-    selectedSkillId: calculatorDemoInput.skillId,
-    skillLevel: calculatorDemoInput.skillLevel,
-    stats: { ...calculatorDemoInput.character.stats },
+    character: {
+      selectedClassId: calculatorDemoInput.character.classId ?? "Dragon_Knight",
+      baseLevel: calculatorDemoInput.character.baseLevel,
+      jobLevel: calculatorDemoInput.character.jobLevel,
+      stats: { ...calculatorDemoInput.character.stats },
+    },
+    attack: {
+      selectedSkillId: calculatorDemoInput.skillId,
+      skillLevel: calculatorDemoInput.skillLevel,
+    },
+    tree: {
+      learnedSkills: {},
+    },
+    equipment: {
+      itemContexts: {},
+      selectedCardsBySlot: {},
+      selectedItemsBySlot: {},
+    },
+    buffs: {
+      activeBuffs: {},
+      selectedBuffId: "",
+    },
+    target: {
+      selectedMonsterId: calculatorDemoInput.monsterId,
+    },
   };
 }
 
@@ -41,8 +53,10 @@ export function readSavedCalculatorBuild(): CalculatorBuildPayload {
   try {
     const parsedBuild = JSON.parse(rawBuild) as unknown;
 
-    if (isCalculatorBuildPayload(parsedBuild)) {
-      return parsedBuild;
+    const migratedBuild = migrateCalculatorBuildPayload(parsedBuild);
+
+    if (migratedBuild) {
+      return migratedBuild;
     }
   } catch {
     // Fall through to the default build.

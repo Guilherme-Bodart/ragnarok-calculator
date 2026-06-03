@@ -55,6 +55,20 @@ Motivo: separar responsabilidades do fluxo da calculadora e preparar o proximo p
 
 Motivo: deixar transparente quando a calculadora esta usando formula validada ou prototipo, sem esconder statements ainda nao suportados.
 
+### 2026-06-03 - Payload V2 em secoes
+
+- `CalculatorBuildPayload` evoluiu para `version: 2`.
+- Payload agora separa `character`, `attack`, `tree`, `equipment`, `buffs` e `target`.
+- `migrateCalculatorBuildPayload` converte builds V1 flat para V2.
+- LocalStorage e API de builds carregam payload antigo via migracao.
+- API de builds salva `classId` a partir de `payload.character.selectedClassId`.
+- Testes cobrem payload V2 valido, dados malformados e migracao V1.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: preparar multiplos personagens/builds por conta e facilitar evolucao do payload sem quebrar saves antigos.
+
 ### 2026-05-29 - Check inicial
 
 - `git status --short`: limpo.

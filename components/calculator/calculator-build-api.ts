@@ -1,5 +1,5 @@
 import {
-  isCalculatorBuildPayload,
+  migrateCalculatorBuildPayload,
   type CalculatorBuildPayload,
 } from "./calculator-build-payload";
 
@@ -40,7 +40,7 @@ export async function listCalculatorAccountBuilds() {
 export async function saveCalculatorAccountBuild(payload: CalculatorBuildPayload) {
   const response = await fetch(`${apiBaseUrl}/calculator/builds`, {
     body: JSON.stringify({
-      classId: payload.selectedClassId,
+      classId: payload.character.selectedClassId,
       name: payload.name,
       payload,
     }),
@@ -71,7 +71,7 @@ export async function updateCalculatorAccountBuild(
 ) {
   const response = await fetch(`${apiBaseUrl}/calculator/builds/${buildId}`, {
     body: JSON.stringify({
-      classId: payload.selectedClassId,
+      classId: payload.character.selectedClassId,
       name: payload.name,
       payload,
     }),
@@ -121,13 +121,15 @@ function toAccountBuild(value: unknown): CalculatorAccountBuild | null {
     updatedAt?: unknown;
   };
 
+  const payload = migrateCalculatorBuildPayload(build.payloadJson);
+
   if (
     typeof build.id !== "string" ||
     typeof build.name !== "string" ||
     typeof build.classId !== "string" ||
     typeof build.createdAt !== "string" ||
     typeof build.updatedAt !== "string" ||
-    !isCalculatorBuildPayload(build.payloadJson)
+    !payload
   ) {
     return null;
   }
@@ -137,7 +139,7 @@ function toAccountBuild(value: unknown): CalculatorAccountBuild | null {
     createdAt: build.createdAt,
     id: build.id,
     name: build.name,
-    payload: build.payloadJson,
+    payload,
     updatedAt: build.updatedAt,
   };
 }
