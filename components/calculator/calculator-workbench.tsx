@@ -7,9 +7,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
+import { CalculatorAttackPanel } from "./calculator-attack-panel";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorBuildsModal } from "./calculator-builds-modal";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
@@ -29,15 +30,22 @@ export function CalculatorWorkbench() {
   const copy = dictionary.calculator;
   const [isBuildsModalOpen, setIsBuildsModalOpen] = useState(false);
   const build = useCalculatorBuildState(copy);
+  const {
+    selectedSkillId,
+    setSelectedSkillId,
+    setSkillLevel,
+    skillLevel,
+  } = build;
   const calculatorDataset = useCalculatorDataset({
     selectedCalculatorItems: build.selectedCalculatorItems,
     selectedClassSkills: build.selectedClassSkills,
     selectedMonsterDetail: build.selectedMonsterDetail,
   });
   const selectedSkill =
-    calculatorDataset.skills.find((skill) => skill.id === build.selectedSkillId) ??
+    calculatorDataset.skills.find((skill) => skill.id === selectedSkillId) ??
     build.selectedClassSkills[0] ??
     calculatorDataset.skills[0];
+  const effectiveSkillLevel = Math.min(skillLevel, selectedSkill.maxLevel);
   const result = useCalculatorResult({
     activeBuffItemIds: build.activeBuffItemIds,
     baseLevel: build.baseLevel,
@@ -50,9 +58,35 @@ export function CalculatorWorkbench() {
     selectedClassId: build.selectedClassId,
     selectedMonsterId: build.selectedMonsterId,
     selectedSkillId: selectedSkill.id,
-    skillLevel: build.skillLevel,
+    skillLevel: effectiveSkillLevel,
     stats: build.stats,
   });
+
+  useEffect(() => {
+    if (selectedSkill.id !== selectedSkillId) {
+      setSelectedSkillId(selectedSkill.id);
+    }
+
+    if (skillLevel !== effectiveSkillLevel) {
+      setSkillLevel(effectiveSkillLevel);
+    }
+  }, [
+    effectiveSkillLevel,
+    selectedSkillId,
+    selectedSkill.id,
+    setSelectedSkillId,
+    setSkillLevel,
+    skillLevel,
+  ]);
+
+  function handleSkillChange(skillId: string) {
+    const nextSkill =
+      build.selectedClassSkills.find((skill) => skill.id === skillId) ??
+      selectedSkill;
+
+    setSelectedSkillId(nextSkill.id);
+    setSkillLevel(Math.min(skillLevel, nextSkill.maxLevel));
+  }
 
   return (
     <main className="calculator-page">
@@ -113,6 +147,15 @@ export function CalculatorWorkbench() {
 
       <section className="calculator-workspace" aria-label={copy.workspaceAria}>
         <div className="calculator-character-column">
+          <CalculatorAttackPanel
+            availableSkills={build.selectedClassSkills}
+            result={result}
+            resultMeta={result.meta}
+            selectedSkill={selectedSkill}
+            skillLevel={effectiveSkillLevel}
+            onSkillChange={handleSkillChange}
+            onSkillLevelChange={setSkillLevel}
+          />
           <CalculatorBuffsPanel
             activeBuffs={build.activeBuffs}
             buffSkills={build.buffSkills}

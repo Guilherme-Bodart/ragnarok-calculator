@@ -30,6 +30,18 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 Motivo: remover a dependencia do alvo em `calculatorDemoDataset.monsters` e preparar a V1 para monstros reais sem jogar dados grandes no bundle client.
 
+### 2026-06-03 - Card de ataque separado
+
+- Criado `components/calculator/calculator-attack-panel.tsx`.
+- O personagem fica focado em classe, base/job e status; skill/nivel foram para o card de ataque.
+- O card lista as skills de dano/cura da classe selecionada usando o filtro atual.
+- O card mostra icone, tipo, elemento, hits, multiplicador e aviso de precisao.
+- O workbench sincroniza skill/nivel para nao calcular acima do maximo permitido pela skill.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+
+Motivo: separar responsabilidades do fluxo da calculadora e preparar o proximo passo de warnings/formulaId no resultado.
+
 ### 2026-05-29 - Check inicial
 
 - `git status --short`: limpo.

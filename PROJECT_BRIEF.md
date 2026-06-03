@@ -127,6 +127,7 @@ Funcionando:
 - Card de personagem com classe, base/job, status regular e trait.
 - Arvore de skill por classe, com layout compacto, pontos por classe e tooltip de skill.
 - Tooltip de skill usa portal para nao ser cortado pelo scroll.
+- Card de ataque separado escolhe skill/nivel e mostra tipo, elemento, hits, multiplicador e aviso de precisao.
 - Select de classe usa `RichSelect` do design system.
 - Itens/cartas carregam por API local leve.
 - Modal de item tem preview e suporte a refino/cartas.
@@ -138,7 +139,6 @@ Funcionando:
 
 Ainda incompleto para V1:
 
-- Card de ataque separado para skill/nivel.
 - Resultado precisa mostrar `precision`, warnings e `formulaId`.
 - Core ainda marca calculo como `prototype`.
 - Poucas formulas especificas de skill estao validadas; fallback generico cobre o resto.
