@@ -21,6 +21,10 @@ import {
   type CalculatorItemDetail,
 } from "./calculator-item-data";
 import {
+  getCalculatorMonsterDetail,
+  type CalculatorMonsterDetail,
+} from "./calculator-monster-data";
+import {
   getCalculatorClassBuffSkills,
   getCalculatorClassSkills,
 } from "./calculator-skill-classification";
@@ -67,6 +71,8 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
   const [selectedItemDetails, setSelectedItemDetails] = useState<
     Record<number, CalculatorItemDetail>
   >({});
+  const [selectedMonsterDetail, setSelectedMonsterDetail] =
+    useState<CalculatorMonsterDetail | null>(null);
 
   const selectedClassSkills = useMemo(
     () => getCalculatorClassSkills(calculatorSkillTreeCatalog, selectedClassId),
@@ -187,6 +193,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     setSelectedCardsBySlot(nextBuild.selectedCardsBySlot);
     setItemContexts(nextBuild.itemContexts);
     setSelectedItemDetails({});
+    setSelectedMonsterDetail(null);
   }
 
   function renameBuild(nextName: string) {
@@ -218,6 +225,22 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
       isCurrent = false;
     };
   }, [cardItemIds, equipmentItemIds, selectedItemDetails]);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    getCalculatorMonsterDetail(selectedMonsterId)
+      .then((monster) => {
+        if (isCurrent) {
+          setSelectedMonsterDetail(monster);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [selectedMonsterId]);
 
   function handleClassChange(classId: string) {
     const isFourthJob = isFourthJobClassId(classId);
@@ -276,6 +299,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     setSelectedCardsBySlot({});
     setItemContexts({});
     setSelectedItemDetails({});
+    setSelectedMonsterDetail(null);
   }
 
   return {
@@ -303,6 +327,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     selectedClassSkills,
     selectedItemDetails,
     selectedItemsBySlot,
+    selectedMonsterDetail,
     selectedMonsterId,
     selectedSkillId,
     setActiveBuffs,

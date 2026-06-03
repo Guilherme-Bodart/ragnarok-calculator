@@ -49,11 +49,10 @@ Estes endpoints rodam no app Next e servem dados leves para o browser:
   - Busca indice leve de itens por slot ou cartas.
 - `GET /api/calculator/items/:itemId`
   - Retorna detalhe completo de item normalizado para a calculadora.
-
-Pendente para V1:
-
 - `GET /api/calculator/monsters?q=&limit=`
+  - Busca indice leve de monstros.
 - `GET /api/calculator/monsters/:monsterId`
+  - Retorna detalhe completo de monstro normalizado para a calculadora.
 
 ## Endpoints API NestJS
 
@@ -115,9 +114,6 @@ Dados gerados leves ficam em `nightmare-data/generated/calculator`:
 
 - `items-by-slot/*.json`
 - `cards-index.json`
-
-Pendente:
-
 - `monsters-index.json`.
 
 Raw local ignorado pelo git:
@@ -134,6 +130,7 @@ Funcionando:
 - Select de classe usa `RichSelect` do design system.
 - Itens/cartas carregam por API local leve.
 - Modal de item tem preview e suporte a refino/cartas.
+- Monstros carregam por API local leve e o alvo injeta o detalhe escolhido no dataset de calculo.
 - Buffs manuais e buffs de skill existem, ainda simples.
 - Saves locais via localStorage.
 - Saves por conta via API NestJS `calculator/builds`.
@@ -142,7 +139,6 @@ Funcionando:
 Ainda incompleto para V1:
 
 - Card de ataque separado para skill/nivel.
-- Monstros reais no frontend; alvo ainda depende de dataset demo.
 - Resultado precisa mostrar `precision`, warnings e `formulaId`.
 - Core ainda marca calculo como `prototype`.
 - Poucas formulas especificas de skill estao validadas; fallback generico cobre o resto.

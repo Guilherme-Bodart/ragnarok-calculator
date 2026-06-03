@@ -32,6 +32,7 @@ export function CalculatorWorkbench() {
   const calculatorDataset = useCalculatorDataset({
     selectedCalculatorItems: build.selectedCalculatorItems,
     selectedClassSkills: build.selectedClassSkills,
+    selectedMonsterDetail: build.selectedMonsterDetail,
   });
   const selectedSkill =
     calculatorDataset.skills.find((skill) => skill.id === build.selectedSkillId) ??
@@ -134,6 +135,7 @@ export function CalculatorWorkbench() {
         <CalculatorTargetPanel
           copy={copy}
           result={result}
+          selectedMonster={build.selectedMonsterDetail}
           selectedMonsterId={build.selectedMonsterId}
           onMonsterChange={build.setSelectedMonsterId}
         />

@@ -1,17 +1,23 @@
 "use client";
 
 import { Swords } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { Field } from "@/components/ui/field";
 import { PanelHeader } from "@/components/ui/panel-header";
 import { RichSelect } from "@/components/ui/rich-select";
 import type { CalculateDamageResult } from "@/packages/calculator-core/src";
-import { calculatorDemoDataset } from "./calculator-demo-data";
 import type { CalculatorDictionary } from "./calculator-i18n";
+import {
+  searchCalculatorMonsters,
+  type CalculatorMonsterDetail,
+  type CalculatorMonsterIndexOption,
+} from "./calculator-monster-data";
 import { getBreakdownValue } from "./calculator-utils";
 
 type CalculatorTargetPanelProps = {
   copy: CalculatorDictionary;
   result: CalculateDamageResult;
+  selectedMonster: CalculatorMonsterDetail | null;
   selectedMonsterId: number;
   onMonsterChange: (monsterId: number) => void;
 };
@@ -19,9 +25,14 @@ type CalculatorTargetPanelProps = {
 export function CalculatorTargetPanel({
   copy,
   result,
+  selectedMonster,
   selectedMonsterId,
   onMonsterChange,
 }: CalculatorTargetPanelProps) {
+  const [monsterQuery, setMonsterQuery] = useState("");
+  const [monsterOptions, setMonsterOptions] = useState<
+    CalculatorMonsterIndexOption[]
+  >([]);
   const totalDamage = result.damage.total.toLocaleString();
   const averageDamage = result.damage.average.toLocaleString();
   const hitCount = getBreakdownValue(result.breakdown, "hits") || result.skill.hitCount;
@@ -31,6 +42,44 @@ export function CalculatorTargetPanel({
     result.breakdown,
     "defenseMultiplier",
   );
+  const options = useMemo(() => {
+    const optionById = new Map(
+      monsterOptions.map((monster) => [monster.id, monster]),
+    );
+
+    if (selectedMonster && !optionById.has(selectedMonster.id)) {
+      optionById.set(selectedMonster.id, {
+        id: selectedMonster.id,
+        name: selectedMonster.name,
+        level: selectedMonster.level,
+        race: selectedMonster.race,
+        size: selectedMonster.size,
+        element: selectedMonster.element,
+        elementLevel: selectedMonster.elementLevel,
+        hp: selectedMonster.hp,
+        defense: selectedMonster.defense,
+        magicDefense: selectedMonster.magicDefense,
+      });
+    }
+
+    return Array.from(optionById.values());
+  }, [monsterOptions, selectedMonster]);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    searchCalculatorMonsters({ limit: 80, query: monsterQuery })
+      .then((monsters) => {
+        if (isCurrent) {
+          setMonsterOptions(monsters);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [monsterQuery]);
 
   return (
     <aside className="calc-panel calc-target">
@@ -44,18 +93,34 @@ export function CalculatorTargetPanel({
         <RichSelect
           value={String(selectedMonsterId)}
           onChange={(monsterId) => onMonsterChange(Number(monsterId))}
+          searchValue={monsterQuery}
+          onSearchChange={setMonsterQuery}
           searchPlaceholder="Filtrar monstro"
           groups={[
             {
               label: copy.target.monsterLabel,
-              options: calculatorDemoDataset.monsters.map((monster) => ({
+              options: options.map((monster) => ({
                 id: String(monster.id),
-                label: monster.name,
+                label: `${monster.name}${monster.level ? ` Lv. ${monster.level}` : ""}`,
               })),
             },
           ]}
         />
       </Field>
+
+      {selectedMonster ? (
+        <div className="target-monster-summary">
+          <span>Lv. {selectedMonster.level}</span>
+          <span>{selectedMonster.race}</span>
+          <span>{selectedMonster.size}</span>
+          <span>
+            {selectedMonster.element} {selectedMonster.elementLevel}
+          </span>
+          <span>HP {selectedMonster.hp.toLocaleString()}</span>
+          <span>DEF {selectedMonster.defense}</span>
+          <span>MDEF {selectedMonster.magicDefense}</span>
+        </div>
+      ) : null}
 
       <div className="damage-card">
         <span>{copy.target.totalDamage}</span>

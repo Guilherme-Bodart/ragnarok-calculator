@@ -15,6 +15,21 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-03 - Monstros reais por API local
+
+- Criado `scripts/generate-calculator-monster-index.mjs`.
+- Gerado `nightmare-data/generated/calculator/monsters-index.json` com indice leve de monstros.
+- Criados endpoints:
+  - `GET /api/calculator/monsters?q=poring`
+  - `GET /api/calculator/monsters/:monsterId`
+- Criado `components/calculator/calculator-monster-data.ts`.
+- O painel de alvo usa busca real via `RichSelect` e carrega detalhe do monstro selecionado.
+- O dataset da calculadora passa a receber o monstro selecionado sem importar o catalogo completo no client.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+
+Motivo: remover a dependencia do alvo em `calculatorDemoDataset.monsters` e preparar a V1 para monstros reais sem jogar dados grandes no bundle client.
+
 ### 2026-05-29 - Check inicial
 
 - `git status --short`: limpo.
