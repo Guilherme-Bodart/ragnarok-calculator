@@ -42,6 +42,19 @@ Motivo: remover a dependencia do alvo em `calculatorDemoDataset.monsters` e prep
 
 Motivo: separar responsabilidades do fluxo da calculadora e preparar o proximo passo de warnings/formulaId no resultado.
 
+### 2026-06-03 - Resultado com precisao e formulaId
+
+- `CalculationMeta` agora inclui `formulaId`.
+- O core marca formulas especificas como `validated` e fallback generico como `prototype`.
+- O painel de alvo mostra precisao, formula, elemento, tamanho e contagem de modificadores nao suportados.
+- O script `test:calculator` passou a incluir `calculate-damage-from-dataset.spec.ts`.
+- Ajustados testes do core para validar `static:SM_BASH` e fallback `generic`.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: deixar transparente quando a calculadora esta usando formula validada ou prototipo, sem esconder statements ainda nao suportados.
+
 ### 2026-05-29 - Check inicial
 
 - `git status --short`: limpo.

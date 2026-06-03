@@ -54,6 +54,7 @@ export type DamageFormulaResult = {
     total: number;
   };
   breakdown: DamageBreakdownLine[];
+  formulaId: string;
 };
 
 type DamageFormulaContext = {
@@ -65,6 +66,7 @@ type DamageFormulaContext = {
   traitFinalRate: number;
   modifierFinalRate: number;
   finalRateMultiplier: number;
+  formulaId: string;
   weaponRefinePower: number;
   weaponSizeMultiplier: number;
   elementMultiplier: number;
@@ -92,6 +94,7 @@ export class DamageFormulaPipeline {
         total,
       },
       breakdown: this.createBreakdown(input, context),
+      formulaId: context.formulaId,
     };
   }
 
@@ -161,6 +164,7 @@ export class DamageFormulaPipeline {
       traitFinalRate,
       modifierFinalRate,
       finalRateMultiplier,
+      formulaId: skillFormula.formulaId,
       weaponRefinePower,
       weaponSizeMultiplier,
       elementMultiplier,

@@ -106,6 +106,7 @@ export function CalculatorAttackPanel({
 
       {resultMeta.warnings.length > 0 || hasPrototypeWarning ? (
         <div className="attack-warning">
+          <span>Formula: {resultMeta.formulaId}</span>
           {hasPrototypeWarning ? <span>{resultMeta.note}</span> : null}
           {resultMeta.warnings.map((warning) => (
             <span key={warning}>{warning}</span>

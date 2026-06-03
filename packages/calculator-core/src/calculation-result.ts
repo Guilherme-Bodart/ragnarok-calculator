@@ -5,6 +5,7 @@ import type { RoMonster, RoSkill } from "./ro-types";
 export type CalculationPrecision = "prototype" | "validated" | "server-specific";
 
 export type CalculationMeta = {
+  formulaId: string;
   precision: CalculationPrecision;
   note: string;
   warnings: string[];

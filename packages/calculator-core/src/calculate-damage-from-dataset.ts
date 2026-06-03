@@ -86,8 +86,12 @@ export function calculateDamageFromDataset(
 
   return {
     meta: {
-      precision: "prototype",
-      note: "Initial calculator engine. Renewal/iRO rounding and skill exceptions will be added per class tree.",
+      formulaId: result.formulaId,
+      precision: result.formulaId === "generic" ? "prototype" : "validated",
+      note:
+        result.formulaId === "generic"
+          ? "Generic skill formula. Renewal/iRO rounding and skill exceptions still need validation."
+          : "Validated static skill formula for the selected skill.",
       warnings: createWarnings(modifierEffects.unsupportedStatements.length),
     },
     characterStatus,

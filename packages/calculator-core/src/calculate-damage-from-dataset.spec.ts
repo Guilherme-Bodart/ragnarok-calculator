@@ -92,10 +92,11 @@ describe("calculateDamageFromDataset", () => {
   it("calculates damage through the shared core flow", () => {
     const result = calculateDamageFromDataset(input, dataset);
 
-    expect(result.damage.average).toBe(500);
-    expect(result.damage.total).toBe(500);
+    expect(result.damage.average).toBe(2000);
+    expect(result.damage.total).toBe(2000);
     expect(result.meta).toMatchObject({
-      precision: "prototype",
+      formulaId: "static:SM_BASH",
+      precision: "validated",
       warnings: [],
     });
     expect(result.characterStatus).toMatchObject({
@@ -145,7 +146,7 @@ describe("calculateDamageFromDataset", () => {
       },
     );
 
-    expect(result.damage.average).toBe(510);
+    expect(result.damage.average).toBe(2040);
   });
 
   it("rejects skill levels above the selected skill max level", () => {
@@ -189,5 +190,29 @@ describe("calculateDamageFromDataset", () => {
     expect(result.meta.warnings).toEqual([
       "1 item modifier statement(s) were not applied.",
     ]);
+  });
+
+  it("keeps generic skill formulas marked as prototype", () => {
+    const result = calculateDamageFromDataset(
+      {
+        ...input,
+        skillId: "GENERIC_TEST_SKILL",
+      },
+      {
+        ...dataset,
+        skills: [
+          {
+            ...skill,
+            id: "GENERIC_TEST_SKILL",
+            name: "Generic Test Skill",
+          },
+        ],
+      },
+    );
+
+    expect(result.meta).toMatchObject({
+      formulaId: "generic",
+      precision: "prototype",
+    });
   });
 });

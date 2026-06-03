@@ -132,6 +132,7 @@ Funcionando:
 - Itens/cartas carregam por API local leve.
 - Modal de item tem preview e suporte a refino/cartas.
 - Monstros carregam por API local leve e o alvo injeta o detalhe escolhido no dataset de calculo.
+- Resultado mostra `precision`, `formulaId`, warnings, multiplicadores principais e mods nao suportados.
 - Buffs manuais e buffs de skill existem, ainda simples.
 - Saves locais via localStorage.
 - Saves por conta via API NestJS `calculator/builds`.
@@ -139,8 +140,7 @@ Funcionando:
 
 Ainda incompleto para V1:
 
-- Resultado precisa mostrar `precision`, warnings e `formulaId`.
-- Core ainda marca calculo como `prototype`.
+- Core marca formulas especificas como `validated` e fallback generico como `prototype`.
 - Poucas formulas especificas de skill estao validadas; fallback generico cobre o resto.
 - Payload precisa evoluir para secoes nomeadas com migracao local.
 - Buff catalog precisa ficar versionado e mais claro.

@@ -17,7 +17,7 @@
     "start": "next start",
     "test": "npm run test:calculator",
     "test:all": "vitest run",
-    "test:calculator": "vitest run components/calculator packages/calculator-core/src/calculator-equipment-flow.spec.ts packages/calculator-core/src/modifiers/rathena-script-parser.spec.ts packages/calculator-core/src/modifiers/rathena-expression.spec.ts",
+    "test:calculator": "vitest run components/calculator packages/calculator-core/src/calculate-damage-from-dataset.spec.ts packages/calculator-core/src/calculator-equipment-flow.spec.ts packages/calculator-core/src/modifiers/rathena-script-parser.spec.ts packages/calculator-core/src/modifiers/rathena-expression.spec.ts",
     "lint": "eslint",
     "lint:api": "npm --prefix api run lint"
   },

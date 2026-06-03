@@ -42,6 +42,15 @@ export function CalculatorTargetPanel({
     result.breakdown,
     "defenseMultiplier",
   );
+  const elementMultiplier = getBreakdownValue(result.breakdown, "elementMultiplier");
+  const weaponSizeMultiplier = getBreakdownValue(
+    result.breakdown,
+    "weaponSizeMultiplier",
+  );
+  const unsupportedModifierStatements = getBreakdownValue(
+    result.breakdown,
+    "unsupportedModifierStatements",
+  );
   const options = useMemo(() => {
     const optionById = new Map(
       monsterOptions.map((monster) => [monster.id, monster]),
@@ -133,6 +142,14 @@ export function CalculatorTargetPanel({
 
       <div className="breakdown-list">
         <div>
+          <span>Precisao</span>
+          <strong>{result.meta.precision}</strong>
+        </div>
+        <div>
+          <span>Formula</span>
+          <strong>{result.meta.formulaId}</strong>
+        </div>
+        <div>
           <span>{copy.target.basePower}</span>
           <strong>{basePower}</strong>
         </div>
@@ -145,10 +162,30 @@ export function CalculatorTargetPanel({
           <strong>{defenseMultiplier.toFixed(3)}x</strong>
         </div>
         <div>
+          <span>Elemento</span>
+          <strong>{elementMultiplier.toFixed(3)}x</strong>
+        </div>
+        <div>
+          <span>Tamanho</span>
+          <strong>{weaponSizeMultiplier.toFixed(3)}x</strong>
+        </div>
+        <div>
+          <span>Mods nao suportados</span>
+          <strong>{unsupportedModifierStatements}</strong>
+        </div>
+        <div>
           <span>{copy.target.source}</span>
           <strong>{copy.target.sourceValue}</strong>
         </div>
       </div>
+
+      {result.meta.warnings.length > 0 ? (
+        <div className="target-warning-list">
+          {result.meta.warnings.map((warning) => (
+            <span key={warning}>{warning}</span>
+          ))}
+        </div>
+      ) : null}
     </aside>
   );
 }
