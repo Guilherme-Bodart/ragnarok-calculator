@@ -15,7 +15,11 @@ type TabButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export function Tabs({ children, label, variant = "bar" }: TabsProps) {
   return (
     <div
-      className={cn("ui-tabs", variant === "segmented" && "segmented")}
+      className={cn(
+        "ui-tabs",
+        variant === "bar" && "ui-scrollarea",
+        variant === "segmented" && "segmented",
+      )}
       role="tablist"
       aria-label={label}
     >

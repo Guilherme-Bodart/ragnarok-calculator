@@ -27,6 +27,16 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 Motivo: fechar o fluxo de saves por conta com carregar, salvar como, atualizar, duplicar e excluir.
 
+### 2026-06-03 - ScrollArea padronizado
+
+- A arvore de skills passou a usar o componente `ScrollArea` do design system.
+- `Tabs` em modo barra passa a receber `ui-scrollarea`.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: reduzir scroll nativo seco e centralizar o comportamento visual em componentes/classes `ui-*`.
+
 ### 2026-06-03 - Buff catalog e select em portal
 
 - Criado catalogo versionado inicial de buffs com grupos manual/consumivel.

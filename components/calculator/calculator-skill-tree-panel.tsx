@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
 import { PanelHeader } from "@/components/ui/panel-header";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorSkillTreeBoard } from "./calculator-skill-tree-board";
 import {
@@ -150,7 +151,7 @@ export function CalculatorSkillTreePanel({
               learnedCount={learnedCount}
             />
 
-            <div className="skill-tree-groups ui-scrollarea">
+            <ScrollArea className="skill-tree-groups">
               {visibleSkillGroups.map((group) => (
                 <section className="skill-tree-group" key={group.key}>
                   <CalculatorSkillTreeGroupHeading
@@ -167,7 +168,7 @@ export function CalculatorSkillTreePanel({
                   />
                 </section>
               ))}
-            </div>
+            </ScrollArea>
           </section>
         </div>
       ) : null}
