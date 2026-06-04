@@ -13,6 +13,16 @@ const staticSkillFormulas: Record<
     multiplier: (100 + input.skillLevel * 30) / 100,
     hitCount: 1,
   }),
+  SM_MAGNUM: (input) => ({
+    formulaId: "static:SM_MAGNUM",
+    multiplier: (100 + input.skillLevel * 20) / 100,
+    hitCount: 1,
+  }),
+  KN_BOWLINGBASH: (input) => ({
+    formulaId: "static:KN_BOWLINGBASH",
+    multiplier: (100 + input.skillLevel * 40) / 100,
+    hitCount: 2,
+  }),
   MG_COLDBOLT: calculateBoltSkill("MG_COLDBOLT"),
   MG_FIREBOLT: calculateBoltSkill("MG_FIREBOLT"),
   MG_LIGHTNINGBOLT: calculateBoltSkill("MG_LIGHTNINGBOLT"),

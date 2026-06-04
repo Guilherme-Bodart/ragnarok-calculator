@@ -77,6 +77,38 @@ describe("SkillFormulaRegistry", () => {
     });
   });
 
+  it("uses static swordman and knight formulas validated from tooltip data", () => {
+    expect(
+      new SkillFormulaRegistry().calculate({
+        ...input,
+        skill: {
+          ...input.skill,
+          id: "SM_MAGNUM",
+        },
+        skillLevel: 10,
+      }),
+    ).toEqual({
+      formulaId: "static:SM_MAGNUM",
+      multiplier: 3,
+      hitCount: 1,
+    });
+
+    expect(
+      new SkillFormulaRegistry().calculate({
+        ...input,
+        skill: {
+          ...input.skill,
+          id: "KN_BOWLINGBASH",
+        },
+        skillLevel: 10,
+      }),
+    ).toEqual({
+      formulaId: "static:KN_BOWLINGBASH",
+      multiplier: 5,
+      hitCount: 2,
+    });
+  });
+
   it.each(["MG_COLDBOLT", "MG_FIREBOLT", "MG_LIGHTNINGBOLT"])(
     "uses static bolt formula for %s",
     (skillId) => {

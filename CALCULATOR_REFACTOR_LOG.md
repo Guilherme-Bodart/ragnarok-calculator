@@ -37,6 +37,18 @@ Motivo: fechar o fluxo de saves por conta com carregar, salvar como, atualizar, 
 
 Motivo: reduzir scroll nativo seco e centralizar o comportamento visual em componentes/classes `ui-*`.
 
+### 2026-06-03 - Formulas estaticas Swordman/Knight
+
+- `StaticSkillFormula` passou a cobrir `SM_MAGNUM` e `KN_BOWLINGBASH`.
+- `SM_MAGNUM` usa ATK 120%-300% conforme tooltip.
+- `KN_BOWLINGBASH` usa ATK 140%-500% com 2 hits no caso padrao.
+- Testes cobrem multiplicador e hit count dessas formulas.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: aumentar cobertura validada de Swordman/Knight usando dados confirmados do tooltip local, sem modelar excecoes de multi-alvo ainda.
+
 ### 2026-06-03 - Buff catalog e select em portal
 
 - Criado catalogo versionado inicial de buffs com grupos manual/consumivel.
