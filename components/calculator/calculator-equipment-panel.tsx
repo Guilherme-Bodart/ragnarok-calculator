@@ -70,6 +70,7 @@ export function CalculatorEquipmentPanel({
       <CalculatorEquipmentPaperdoll
         activeTab={activeTab}
         copy={copy}
+        selectedCardsBySlot={selectedCardsBySlot}
         selectedItemDetails={selectedItemDetails}
         selectedItemsBySlot={selectedItemsBySlot}
         slots={activeSlots}

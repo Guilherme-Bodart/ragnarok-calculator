@@ -8,7 +8,11 @@ import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import { CalculatorCardSelectGrid } from "./calculator-card-select-grid";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorItemPreview } from "./calculator-item-preview";
-import { selectedItemHasModifiers } from "./calculator-item-picker-utils";
+import {
+  getCardSlotCount,
+  getValidCardsForItem,
+  selectedItemHasModifiers,
+} from "./calculator-item-picker-utils";
 import { CalculatorItemSelectFields } from "./calculator-item-select-fields";
 import {
   searchCalculatorItems,
@@ -54,7 +58,7 @@ export function CalculatorItemPickerModal({
     slotOptions.find((item) => item.id === selectedItemId) ??
     (selectedItemId ? selectedItemDetails[selectedItemId] : undefined);
   const selectedCards = selectedCardsBySlot[editingSlot] ?? [];
-  const cardSlotCount = Math.min(selectedItem?.cardSlots ?? 0, 4);
+  const cardSlotCount = getCardSlotCount(selectedItem);
 
   useEffect(() => {
     let isCurrent = true;
@@ -99,17 +103,37 @@ export function CalculatorItemPickerModal({
   function selectItem(slotId: EquipmentSlot, itemId: string) {
     const nextItems = { ...selectedItemsBySlot };
     const nextCards = { ...selectedCardsBySlot };
+    const nextContexts = { ...itemContexts };
+    const previousItemId = selectedItemsBySlot[slotId];
 
     if (itemId === "empty") {
       delete nextItems[slotId];
       delete nextCards[slotId];
+      if (previousItemId) delete nextContexts[previousItemId];
     } else {
-      nextItems[slotId] = Number(itemId);
-      nextCards[slotId] = [];
+      const nextItemId = Number(itemId);
+      const nextSelectedItem =
+        slotOptions.find((item) => item.id === nextItemId) ??
+        selectedItemDetails[nextItemId];
+      const validCards = getValidCardsForItem(
+        selectedCardsBySlot[slotId] ?? [],
+        nextSelectedItem,
+      );
+
+      nextItems[slotId] = nextItemId;
+      if (validCards.length > 0) {
+        nextCards[slotId] = validCards;
+      } else {
+        delete nextCards[slotId];
+      }
+      if (previousItemId && previousItemId !== nextItemId) {
+        delete nextContexts[previousItemId];
+      }
     }
 
     onSelectedItemsBySlotChange(nextItems);
     onSelectedCardsBySlotChange(nextCards);
+    onItemContextsChange(nextContexts);
   }
 
   function selectCard(slotId: EquipmentSlot, index: number, itemId: string) {

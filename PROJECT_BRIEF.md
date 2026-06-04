@@ -131,6 +131,8 @@ Funcionando:
 - Select de classe usa `RichSelect` do design system.
 - Itens/cartas carregam por API local leve.
 - Modal de item tem preview e suporte a refino/cartas.
+- Troca de item preserva apenas cartas validas para o novo numero de slots.
+- Paperdoll mostra nome curto do item equipado e quantidade de cartas.
 - Monstros carregam por API local leve e o alvo injeta o detalhe escolhido no dataset de calculo.
 - Resultado mostra `precision`, `formulaId`, warnings, multiplicadores principais e mods nao suportados.
 - Buffs usam catalogo versionado inicial, com grupos manual/consumivel e preview de efeitos reconhecidos.
@@ -145,7 +147,7 @@ Ainda incompleto para V1:
 - Core marca formulas especificas como `validated` e fallback generico como `prototype`.
 - Poucas formulas especificas de skill estao validadas; fallback generico cobre o resto.
 - Buffs de skill da classe ainda precisam virar catalogo mais completo.
-- Paperdoll precisa mostrar melhor nome curto/cartas equipadas.
+- UX visual do modal de item ainda pode ganhar imagens dos equipamentos no futuro.
 
 ## Core Da Calculadora
 

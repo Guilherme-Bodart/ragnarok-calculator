@@ -41,3 +41,24 @@ export function selectedItemHasModifiers(
     ("rawScript" in item && Boolean(item.rawScript))
   );
 }
+
+export function getCardSlotCount(
+  item: CalculatorItemIndexOption | CalculatorItemDetail | undefined,
+) {
+  return Math.min(item?.cardSlots ?? 0, 4);
+}
+
+export function getValidCardsForItem(
+  selectedCards: number[],
+  item: CalculatorItemIndexOption | CalculatorItemDetail | undefined,
+) {
+  return selectedCards.slice(0, getCardSlotCount(item)).filter(Boolean);
+}
+
+export function getShortItemName(name: string, maxLength = 18) {
+  if (name.length <= maxLength) {
+    return name;
+  }
+
+  return `${name.slice(0, Math.max(0, maxLength - 1)).trim()}…`;
+}

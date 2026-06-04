@@ -30,6 +30,19 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 Motivo: deixar buffs mais rastreaveis no payload/resultado e corrigir dropdowns cortados por overflow de modal sem espalhar CSS local.
 
+### 2026-06-03 - Equipamentos com cartas validas
+
+- Troca de item agora preserva apenas cartas que cabem no novo numero de slots.
+- Ao remover/trocar item, contexto de refino antigo e limpo quando nao deve mais ser usado.
+- Paperdoll mostra nome curto do item equipado e quantidade de cartas.
+- Preview do item ficou mais compacto para reduzir espaco gasto com slots/ATK/MATK/DEF/refino.
+- Testes cobrem limite de cartas por slot e nome curto no paperdoll.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: fechar comportamento funcional de equipamentos/cartas/refino antes de investir em imagens/UX mais rica.
+
 ### 2026-06-03 - Monstros reais por API local
 
 - Criado `scripts/generate-calculator-monster-index.mjs`.
