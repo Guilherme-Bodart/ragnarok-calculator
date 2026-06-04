@@ -49,6 +49,17 @@ Motivo: reduzir scroll nativo seco e centralizar o comportamento visual em compo
 
 Motivo: aumentar cobertura validada de Swordman/Knight usando dados confirmados do tooltip local, sem modelar excecoes de multi-alvo ainda.
 
+### 2026-06-03 - Labels de ataque/resultado no i18n
+
+- Card de ataque deixou de usar labels hardcoded.
+- Painel de alvo/resultado deixou de usar labels hardcoded para busca, precisao, formula, elemento, tamanho, mods e buffs.
+- Textos adicionados em PT/EN/ES.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: manter a calculadora pronta para troca de idioma e evitar refactor de UX em textos espalhados.
+
 ### 2026-06-03 - Buff catalog e select em portal
 
 - Criado catalogo versionado inicial de buffs com grupos manual/consumivel.

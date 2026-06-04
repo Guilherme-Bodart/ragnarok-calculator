@@ -105,7 +105,7 @@ export function CalculatorTargetPanel({
           onChange={(monsterId) => onMonsterChange(Number(monsterId))}
           searchValue={monsterQuery}
           onSearchChange={setMonsterQuery}
-          searchPlaceholder="Filtrar monstro"
+          searchPlaceholder={copy.target.searchPlaceholder}
           groups={[
             {
               label: copy.target.monsterLabel,
@@ -143,11 +143,11 @@ export function CalculatorTargetPanel({
 
       <div className="breakdown-list">
         <div>
-          <span>Precisao</span>
+          <span>{copy.target.precision}</span>
           <strong>{result.meta.precision}</strong>
         </div>
         <div>
-          <span>Formula</span>
+          <span>{copy.target.formula}</span>
           <strong>{result.meta.formulaId}</strong>
         </div>
         <div>
@@ -163,19 +163,19 @@ export function CalculatorTargetPanel({
           <strong>{defenseMultiplier.toFixed(3)}x</strong>
         </div>
         <div>
-          <span>Elemento</span>
+          <span>{copy.target.elementMultiplier}</span>
           <strong>{elementMultiplier.toFixed(3)}x</strong>
         </div>
         <div>
-          <span>Tamanho</span>
+          <span>{copy.target.sizeMultiplier}</span>
           <strong>{weaponSizeMultiplier.toFixed(3)}x</strong>
         </div>
         <div>
-          <span>Mods nao suportados</span>
+          <span>{copy.target.unsupportedModifiers}</span>
           <strong>{unsupportedModifierStatements}</strong>
         </div>
         <div>
-          <span>Buffs ativos</span>
+          <span>{copy.target.activeBuffs}</span>
           <strong>{activeBuffItems}</strong>
         </div>
         <div>

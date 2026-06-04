@@ -10,6 +10,7 @@ import type {
   CalculationMeta,
   RoSkill,
 } from "@/packages/calculator-core/src";
+import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorSkillIcon } from "./calculator-skill-icon";
 
 export type CalculatorAttackSkill = RoSkill & {
@@ -18,6 +19,7 @@ export type CalculatorAttackSkill = RoSkill & {
 
 type CalculatorAttackPanelProps = {
   availableSkills: CalculatorAttackSkill[];
+  copy: CalculatorDictionary;
   resultMeta: CalculationMeta;
   selectedSkill: CalculatorAttackSkill;
   skillLevel: number;
@@ -28,6 +30,7 @@ type CalculatorAttackPanelProps = {
 
 export function CalculatorAttackPanel({
   availableSkills,
+  copy,
   resultMeta,
   selectedSkill,
   skillLevel,
@@ -47,19 +50,19 @@ export function CalculatorAttackPanel({
     <aside className="calc-panel calc-attack">
       <PanelHeader
         icon={<Crosshair size={17} />}
-        title="Ataque"
-        meta={hasPrototypeWarning ? "Formula prototipo" : resultMeta.precision}
+        title={copy.attack.title}
+        meta={hasPrototypeWarning ? copy.attack.prototypeMeta : resultMeta.precision}
       />
 
       <div className="attack-picker-grid">
-        <Field label="Habilidade">
+        <Field label={copy.attack.skillLabel}>
           <RichSelect
             value={selectedSkill.id}
             onChange={onSkillChange}
-            searchPlaceholder="Filtrar skill"
+            searchPlaceholder={copy.attack.searchPlaceholder}
             groups={[
               {
-                label: "Skills",
+                label: copy.attack.skillGroup,
                 options: availableSkills.map((skill) => ({
                   id: skill.id,
                   label: skill.name,
@@ -75,7 +78,7 @@ export function CalculatorAttackPanel({
           />
         </Field>
 
-        <Field label="Nivel">
+        <Field label={copy.attack.levelLabel}>
           <NumberSelect
             max={selectedSkill.maxLevel}
             prefix="Lv."
@@ -88,30 +91,36 @@ export function CalculatorAttackPanel({
       <div className="attack-summary">
         <span>
           <strong>{selectedSkill.damageType}</strong>
-          Tipo
+          {copy.attack.damageTypeLabel}
         </span>
         <span>
           <strong>{selectedSkill.element ?? "weapon"}</strong>
-          Elemento
+          {copy.attack.elementLabel}
         </span>
         <span>
           <strong>{hitCount}</strong>
-          Hits
+          {copy.attack.hitsLabel}
         </span>
         <span>
           <strong>{(multiplier / 100).toFixed(2)}x</strong>
-          Multiplicador
+          {copy.attack.multiplierLabel}
         </span>
       </div>
 
       {resultMeta.warnings.length > 0 || hasPrototypeWarning ? (
         <div className="attack-warning">
-          <span>Formula: {resultMeta.formulaId}</span>
+          <span>
+            {copy.attack.formulaLabel}: {resultMeta.formulaId}
+          </span>
           {hasPrototypeWarning ? <span>{resultMeta.note}</span> : null}
           {resultMeta.warnings.map((warning) => (
             <span key={warning}>{warning}</span>
           ))}
-          {result ? <span>Alvo: {result.target.name}</span> : null}
+          {result ? (
+            <span>
+              {copy.attack.targetLabel}: {result.target.name}
+            </span>
+          ) : null}
         </div>
       ) : null}
     </aside>

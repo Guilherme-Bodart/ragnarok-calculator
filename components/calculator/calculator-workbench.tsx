@@ -149,6 +149,7 @@ export function CalculatorWorkbench() {
         <div className="calculator-character-column">
           <CalculatorAttackPanel
             availableSkills={build.selectedClassSkills}
+            copy={copy}
             result={result}
             resultMeta={result.meta}
             selectedSkill={selectedSkill}
