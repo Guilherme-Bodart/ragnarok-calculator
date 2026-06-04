@@ -1,5 +1,3 @@
-import rawSkillTree from "@/nightmare-data/normalized/skills/skill-tree.json";
-import rawSkills from "@/nightmare-data/normalized/skills/skills.en.json";
 import {
   createSkillTreeCatalog,
   type SkillTreeRawDataset,
@@ -10,9 +8,19 @@ export {
   isTranscendentEquivalentClassId,
 } from "./calculator-class-rules";
 
+// Keep the large JSON files out of TypeScript's structural type inference.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const rawSkillTree = require(
+  "../../nightmare-data/normalized/skills/skill-tree.json",
+) as SkillTreeRawDataset;
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const rawSkills = require(
+  "../../nightmare-data/normalized/skills/skills.en.json",
+) as SkillTreeRawSkillInfo[];
+
 export const calculatorSkillTreeCatalog = createSkillTreeCatalog(
-  rawSkillTree as SkillTreeRawDataset,
-  rawSkills as SkillTreeRawSkillInfo[],
+  rawSkillTree,
+  rawSkills,
 );
 
 export const calculatorSkillTreeClassOptions =

@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "components/**/*.spec.ts",
+    "components/**/*.spec.tsx",
+    "components/**/*.test.ts",
+    "components/**/*.test.tsx",
+    "packages/**/*.spec.ts",
+    "packages/**/*.spec.tsx",
+    "packages/**/*.test.ts",
+    "packages/**/*.test.tsx"
+  ],
+  "exclude": ["node_modules", "api", "scripts"]
+}

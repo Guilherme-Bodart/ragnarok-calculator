@@ -1,5 +1,3 @@
-import rawSkillTooltips from "@/nightmare-data/normalized/skills/skill-tooltips.en.json";
-
 export type CalculatorSkillTooltipInfo = {
   skillId: number;
   skillCode: string;
@@ -16,8 +14,11 @@ type CalculatorSkillTooltipDataset = {
   bySkillCode: Record<string, CalculatorSkillTooltipInfo | undefined>;
 };
 
-const skillTooltipDataset =
-  rawSkillTooltips as CalculatorSkillTooltipDataset;
+// Keep the large JSON out of TypeScript's structural type inference.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const skillTooltipDataset = require(
+  "../../nightmare-data/normalized/skills/skill-tooltips.en.json",
+) as CalculatorSkillTooltipDataset;
 
 export function getCalculatorSkillTooltip(skillCode: string) {
   return skillTooltipDataset.bySkillCode[skillCode];

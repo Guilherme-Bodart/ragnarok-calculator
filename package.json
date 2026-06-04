@@ -18,6 +18,8 @@
     "test": "npm run test:calculator",
     "test:all": "vitest run",
     "test:calculator": "vitest run components/calculator packages/calculator-core/src/calculate-damage-from-dataset.spec.ts packages/calculator-core/src/calculator-equipment-flow.spec.ts packages/calculator-core/src/skills/skill-formula-registry.spec.ts packages/calculator-core/src/modifiers/rathena-script-parser.spec.ts packages/calculator-core/src/modifiers/rathena-expression.spec.ts",
+    "typecheck": "tsc --noEmit --pretty false",
+    "typecheck:test": "tsc -p tsconfig.test.json --noEmit --pretty false",
     "lint": "eslint",
     "lint:api": "npm --prefix api run lint"
   },

@@ -1,4 +1,3 @@
-import rawSkills from "@/nightmare-data/normalized/skills/skills.en.json";
 import {
   resolveSkillTreeJob,
   type RoSkill,
@@ -22,8 +21,14 @@ type NormalizedSkillInfo = RathenaNormalizedSkill & {
   rawDamageFlags?: Record<string, boolean> | null;
 };
 
+// Keep the large JSON out of TypeScript's structural type inference.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const rawSkills = require(
+  "../../nightmare-data/normalized/skills/skills.en.json",
+) as NormalizedSkillInfo[];
+
 const rawSkillById = new Map(
-  (rawSkills as NormalizedSkillInfo[]).map((skill) => [skill.name, skill]),
+  rawSkills.map((skill) => [skill.name, skill]),
 );
 
 export function getCalculatorClassSkills(

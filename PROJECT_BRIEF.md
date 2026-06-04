@@ -1,6 +1,6 @@
 # Nightmare Project Brief
 
-Ultima atualizacao: 2026-06-03
+Ultima atualizacao: 2026-06-04
 
 Este arquivo e um resumo rapido para outro chat/agente entender o projeto sem precisar redescobrir tudo do zero. Atualize quando mudar arquitetura, endpoints, dados normalizados, fluxo principal ou status da calculadora.
 
@@ -28,9 +28,16 @@ Comandos principais:
 - `npm run dev:api`: roda a API.
 - `npm run dev:all`: roda frontend e API.
 - `npm run test:calculator`: testes focados da calculadora, incluindo core de dano e payload salvo.
+- `npm run typecheck`: checa os tipos do frontend usado pelo build.
+- `npm run typecheck:test`: checa separadamente os tipos dos testes.
 - `npm run lint`: ESLint.
 - `npm run build`: build Next.
 - `npm run data:skill-tooltips`: gera tooltips de skills a partir do raw iRO local.
+
+O `tsconfig.json` do frontend cobre apenas codigo da aplicacao. Testes usam
+`tsconfig.test.json`; scripts ficam fora do typecheck do build. JSONs
+grandes da calculadora usam contratos TypeScript explicitos para evitar inferencia
+estrutural de mais de um milhao de linhas durante cada build.
 
 ## Rotas Frontend
 
@@ -115,6 +122,10 @@ Dados gerados leves ficam em `nightmare-data/generated/calculator`:
 - `items-by-slot/*.json`
 - `cards-index.json`
 - `monsters-index.json`.
+
+Os endpoints Next leem os datasets completos de itens/monstros apenas no servidor.
+Os JSONs grandes de skills continuam empacotados para a calculadora, mas nao entram
+na inferencia estrutural do TypeScript.
 
 Raw local ignorado pelo git:
 

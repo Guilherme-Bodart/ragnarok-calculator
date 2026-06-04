@@ -15,6 +15,22 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-04 - Build sem inferencia estrutural dos datasets grandes
+
+- O `tsconfig.json` do frontend passou a cobrir apenas codigo da aplicacao; testes usam o novo `tsconfig.test.json` e scripts ficam fora do build.
+- Imports dos JSONs grandes de skills agora usam contratos TypeScript explicitos, evitando inferir toda a estrutura dos datasets.
+- Endpoints locais de itens e monstros passaram a ler os datasets completos apenas no servidor.
+- Typecheck diagnostico caiu de 204s/2 GB/1.019.708 linhas JSON para 5,8s/344 MB/1.230 linhas JSON.
+- Build completo caiu de 252,8s para 16,5s; etapa TypeScript caiu de cerca de 240s para 6,5s.
+- `npm run test:calculator`: passou, 58 testes.
+- `npm run typecheck`: passou.
+- `npm run typecheck:test`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+- Calculadora e endpoints locais de itens/monstros responderam HTTP 200 apos o build.
+
+Motivo: impedir que o TypeScript transforme e infira datasets enormes em todo build sem perder os contratos usados pela aplicacao.
+
 ### 2026-06-03 - Multiplicadores vindos dos tooltips
 
 - Criado parser leve para linhas de tooltip com `[Lv X]`, `ATK/MATK n%` e `X ntimes`.
@@ -449,3 +465,14 @@ Motivo: enriquecer a leitura da arvore sem misturar dados de descricao dentro do
 - `npm run build`: passou.
 
 Motivo: evitar corte/transparencia por z-index/overflow e substituir scroll nativo seco por um padrao visual reutilizavel.
+
+### 2026-06-04 - Filtro do RichSelect sem loop de renderizacao
+
+- O posicionamento do menu do `RichSelect` deixou de depender das opcoes filtradas, que recebiam uma nova referencia a cada render.
+- Atualizacoes de posicao identicas agora preservam o estado atual em vez de iniciar outro render.
+- A abertura de outro select deixou de disparar eventos dentro do setter de estado.
+- `npm run test:calculator`: passou, 58 testes.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: corrigir o React error #185 ao digitar no filtro de selects com busca local ou remota.

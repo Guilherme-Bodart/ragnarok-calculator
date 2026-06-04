@@ -1,15 +1,41 @@
 import { describe, expect, it } from "vitest";
-import { calculateDamageFromDataset } from "./calculate-damage-from-dataset";
+import {
+  calculateDamageFromDataset,
+  type CalculateDamageInput,
+} from "./calculate-damage-from-dataset";
+import type { CalculateDamageResult } from "./calculation-result";
 import { createCalculatorDatasetFromRathenaNormalized } from "./datasets";
+import type { RathenaNormalizedDataset } from "./datasets/rathena-normalized";
 import reference from "./reference-scenarios/starter-reference.json";
 
-const dataset = createCalculatorDatasetFromRathenaNormalized(reference.dataset);
+type ReferenceExpected = {
+  damage: Partial<CalculateDamageResult["damage"]>;
+  breakdown: Record<string, number>;
+};
+
+type ReferenceScenario = {
+  id: string;
+  input: Pick<CalculateDamageInput, "monsterId" | "skillId" | "skillLevel">;
+  expected: ReferenceExpected;
+  tongCalc: {
+    expected: ReferenceExpected | null;
+  };
+};
+
+type ReferenceFile = {
+  dataset: RathenaNormalizedDataset;
+  baseInput: Omit<CalculateDamageInput, "monsterId" | "skillId" | "skillLevel">;
+  cases: ReferenceScenario[];
+};
+
+const typedReference = reference as unknown as ReferenceFile;
+const dataset = createCalculatorDatasetFromRathenaNormalized(typedReference.dataset);
 
 describe("calculator reference scenarios", () => {
-  it.each(reference.cases)("$id matches the local reference JSON", (scenario) => {
+  it.each(typedReference.cases)("$id matches the local reference JSON", (scenario) => {
     const result = calculateDamageFromDataset(
       {
-        ...reference.baseInput,
+        ...typedReference.baseInput,
         ...scenario.input,
       },
       dataset,
@@ -20,12 +46,12 @@ describe("calculator reference scenarios", () => {
       .toMatchObject(scenario.expected.breakdown);
   });
 
-  it.each(reference.cases.filter((scenario) => scenario.tongCalc.expected))(
+  it.each(typedReference.cases.filter(hasTongCalculatorExpected))(
     "$id matches confirmed Tong Calculator values",
     (scenario) => {
       const result = calculateDamageFromDataset(
         {
-          ...reference.baseInput,
+          ...typedReference.baseInput,
           ...scenario.input,
         },
         dataset,
@@ -38,3 +64,11 @@ describe("calculator reference scenarios", () => {
     },
   );
 });
+
+function hasTongCalculatorExpected(
+  scenario: ReferenceScenario,
+): scenario is ReferenceScenario & {
+  tongCalc: { expected: ReferenceExpected };
+} {
+  return scenario.tongCalc.expected !== null;
+}

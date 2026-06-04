@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import rawItems from "@/nightmare-data/normalized/items/items.en.json";
 import {
   toRoItem,
   type RathenaNormalizedItem,
@@ -11,7 +10,12 @@ const generatedDir = path.join(
   "nightmare-data/generated/calculator",
 );
 const slotDir = path.join(generatedDir, "items-by-slot");
-const normalizedItems = rawItems as RathenaNormalizedItem[];
+const normalizedItems = readJsonFile<RathenaNormalizedItem[]>(
+  path.join(
+    process.cwd(),
+    "nightmare-data/normalized/items/items.en.json",
+  ),
+);
 const itemById = new Map(normalizedItems.map((item) => [item.itemId, item]));
 
 export type CalculatorItemIndexEntry = {
@@ -79,6 +83,10 @@ function readIndexFile(filePath: string) {
   }
 
   return JSON.parse(fs.readFileSync(filePath, "utf8")) as CalculatorItemIndexEntry[];
+}
+
+function readJsonFile<T>(filePath: string) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8")) as T;
 }
 
 function normalizeSearch(value: string) {

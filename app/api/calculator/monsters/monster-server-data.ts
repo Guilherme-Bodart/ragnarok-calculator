@@ -1,11 +1,22 @@
-import monstersIndex from "@/nightmare-data/generated/calculator/monsters-index.json";
-import rawMonsters from "@/nightmare-data/normalized/monsters/monsters.en.json";
+import fs from "fs";
+import path from "path";
 import {
   toRoMonster,
   type RathenaNormalizedMonster,
 } from "@/packages/calculator-core/src/datasets/rathena-normalized";
 
-const normalizedMonsters = rawMonsters as RathenaNormalizedMonster[];
+const normalizedMonsters = readJsonFile<RathenaNormalizedMonster[]>(
+  path.join(
+    process.cwd(),
+    "nightmare-data/normalized/monsters/monsters.en.json",
+  ),
+);
+const monstersIndex = readJsonFile<CalculatorMonsterIndexEntry[]>(
+  path.join(
+    process.cwd(),
+    "nightmare-data/generated/calculator/monsters-index.json",
+  ),
+);
 const monsterById = new Map(
   normalizedMonsters.map((monster) => [monster.monsterId, monster]),
 );
@@ -30,7 +41,7 @@ export function searchMonsterIndex({
   limit: number;
   query?: string;
 }) {
-  const source = monstersIndex as CalculatorMonsterIndexEntry[];
+  const source = monstersIndex;
   const normalizedQuery = normalizeSearch(query ?? "");
   const filteredMonsters = normalizedQuery
     ? source.filter((monster) =>
@@ -49,6 +60,10 @@ export function getMonsterDetail(monsterId: number) {
   }
 
   return toRoMonster(monster);
+}
+
+function readJsonFile<T>(filePath: string) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8")) as T;
 }
 
 function normalizeSearch(value: string) {

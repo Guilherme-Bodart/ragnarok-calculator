@@ -25,8 +25,15 @@ const option: CalculatorItemIndexOption = {
 };
 
 const detail: CalculatorItemDetail = {
-  ...option,
+  id: option.id,
+  name: option.name,
+  kind: option.kind,
+  cardSlots: option.cardSlots ?? undefined,
+  attack: option.attack ?? undefined,
+  magicAttack: option.magicAttack ?? undefined,
+  defense: option.defense ?? undefined,
   bonuses: [],
+  refineable: option.refineable,
   rawScript: "bonus bAtk,10;",
   source: "manual",
 };
