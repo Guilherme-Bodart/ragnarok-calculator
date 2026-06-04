@@ -14,6 +14,22 @@ import {
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 
+const menuPositionKeys = [
+  "left",
+  "maxHeight",
+  "position",
+  "top",
+  "bottom",
+  "width",
+] as const;
+
+function hasSameMenuPosition(
+  current: CSSProperties,
+  next: CSSProperties,
+) {
+  return menuPositionKeys.every((key) => current[key] === next[key]);
+}
+
 export type RichSelectOption = {
   id: string;
   label: string;
@@ -173,14 +189,18 @@ export function RichSelect({
         window.innerWidth - width - viewportPadding,
       );
 
-      setMenuStyle({
+      const nextMenuStyle: CSSProperties = {
         left,
         maxHeight,
         position: "fixed",
         top: shouldOpenAbove ? undefined : rect.bottom + gap,
         bottom: shouldOpenAbove ? window.innerHeight - rect.top + gap : undefined,
         width,
-      });
+      };
+
+      setMenuStyle((current) =>
+        hasSameMenuPosition(current, nextMenuStyle) ? current : nextMenuStyle,
+      );
     }
 
     updateMenuPosition();
@@ -191,7 +211,7 @@ export function RichSelect({
       window.removeEventListener("resize", updateMenuPosition);
       window.removeEventListener("scroll", updateMenuPosition, true);
     };
-  }, [isOpen, visibleGroups]);
+  }, [isOpen]);
 
   function selectOption(nextValue: string) {
     onChange(nextValue);
@@ -200,21 +220,18 @@ export function RichSelect({
   }
 
   function toggleOpen() {
-    setIsOpen((current) => {
-      const nextOpen = !current;
+    if (isOpen) {
+      updateQuery("");
+      setIsOpen(false);
+      return;
+    }
 
-      if (nextOpen) {
-        rootRef.current?.dispatchEvent(
-          new CustomEvent("ui-rich-select-open", {
-            bubbles: true,
-          }),
-        );
-      } else {
-        updateQuery("");
-      }
-
-      return nextOpen;
-    });
+    rootRef.current?.dispatchEvent(
+      new CustomEvent("ui-rich-select-open", {
+        bubbles: true,
+      }),
+    );
+    setIsOpen(true);
   }
 
   return (
