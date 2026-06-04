@@ -15,6 +15,18 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-03 - Multiplicadores vindos dos tooltips
+
+- Criado parser leve para linhas de tooltip com `[Lv X]`, `ATK/MATK n%` e `X ntimes`.
+- O mapeamento de skills da calculadora agora prefere multiplicadores/hits extraidos de `skill-tooltips.en.json`.
+- Fallback generico continua `prototype`, mas usa dados por nivel melhores quando disponiveis.
+- Testes cobrem parser puro e integracao com skills da arvore.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: usar dados reais por level dos tooltips sem inventar uma formula final individual para cada skill.
+
 ### 2026-06-03 - Builds com duplicar
 
 - Modal de builds ganhou acao explicita para duplicar uma build salva da conta.

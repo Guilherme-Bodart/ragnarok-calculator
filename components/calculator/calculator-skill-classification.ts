@@ -10,6 +10,8 @@ import {
   type RathenaNormalizedSkill,
 } from "@/packages/calculator-core/src/datasets/rathena-normalized";
 import type { CalculatorPanelSkill } from "./calculator-character-panel";
+import { getCalculatorSkillTooltip } from "./calculator-skill-tooltip-data";
+import { getSkillTooltipFormulaData } from "./calculator-skill-tooltip-formula";
 
 export type CalculatorSkillKind = "damage" | "heal" | "buff" | "passive" | "utility";
 
@@ -87,6 +89,14 @@ export function classifyCalculatorSkill(skill: SkillTreeSkill): CalculatorSkillK
 function toCalculatorPanelSkill(skill: SkillTreeSkill): CalculatorPanelSkill {
   const normalizedSkill = rawSkillById.get(skill.id);
   const roSkill = normalizedSkill ? toRoSkill(normalizedSkill) : null;
+  const tooltipFormula = getSkillTooltipFormulaData(
+    getCalculatorSkillTooltip(skill.id)?.descriptionLines ?? [],
+  );
+  const tooltipMultipliers = tooltipFormula?.baseMultiplierByLevel ?? {};
+  const baseMultiplierByLevel =
+    Object.keys(tooltipMultipliers).length > 0
+      ? tooltipMultipliers
+      : roSkill?.baseMultiplierByLevel ?? createDefaultMultipliers(skill.maxLevel);
 
   return {
     id: skill.id,
@@ -96,17 +106,21 @@ function toCalculatorPanelSkill(skill: SkillTreeSkill): CalculatorPanelSkill {
     damageType: roSkill?.damageType ?? "physical",
     element: roSkill?.element ?? "neutral",
     maxLevel: skill.maxLevel,
-    hitCount: roSkill?.hitCount ?? 1,
-    hitCountByLevel: roSkill?.hitCountByLevel,
-    baseMultiplierByLevel: roSkill?.baseMultiplierByLevel ?? Object.fromEntries(
-      Array.from({ length: skill.maxLevel }, (_, index) => {
-        const level = index + 1;
-
-        return [String(level), 100 + level * 10];
-      }),
-    ),
+    hitCount: tooltipFormula?.hitCount ?? roSkill?.hitCount ?? 1,
+    hitCountByLevel: tooltipFormula?.hitCountByLevel ?? roSkill?.hitCountByLevel,
+    baseMultiplierByLevel,
     source: "rathena",
   };
+}
+
+function createDefaultMultipliers(maxLevel: number) {
+  return Object.fromEntries(
+    Array.from({ length: maxLevel }, (_, index) => {
+      const level = index + 1;
+
+      return [String(level), 100 + level * 10];
+    }),
+  );
 }
 
 export function mergeCalculatorSkills(
