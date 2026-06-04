@@ -43,6 +43,18 @@ Motivo: deixar buffs mais rastreaveis no payload/resultado e corrigir dropdowns 
 
 Motivo: fechar comportamento funcional de equipamentos/cartas/refino antes de investir em imagens/UX mais rica.
 
+### 2026-06-03 - Formulas estaticas de bolts
+
+- `StaticSkillFormula` passou a cobrir `MG_FIREBOLT` e `MG_LIGHTNINGBOLT`, alem de `MG_COLDBOLT`.
+- Bolts usam multiplicador 1 por hit e hit count igual ao nivel da skill no pipeline atual.
+- `test:calculator` passou a incluir `skill-formula-registry.spec.ts`.
+- Testes cobrem formulas estaticas dos tres bolts e preservam fallback generico.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: aumentar cobertura validada de formulas sem marcar como precisa uma skill complexa que ainda nao foi conferida.
+
 ### 2026-06-03 - Monstros reais por API local
 
 - Criado `scripts/generate-calculator-monster-index.mjs`.

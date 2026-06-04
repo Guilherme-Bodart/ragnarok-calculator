@@ -145,7 +145,7 @@ Funcionando:
 Ainda incompleto para V1:
 
 - Core marca formulas especificas como `validated` e fallback generico como `prototype`.
-- Poucas formulas especificas de skill estao validadas; fallback generico cobre o resto.
+- Formulas especificas iniciais incluem `SM_BASH`, `MG_COLDBOLT`, `MG_FIREBOLT` e `MG_LIGHTNINGBOLT`; fallback generico cobre o resto.
 - Buffs de skill da classe ainda precisam virar catalogo mais completo.
 - UX visual do modal de item ainda pode ganhar imagens dos equipamentos no futuro.
 
@@ -166,7 +166,7 @@ Responsabilidades:
 Estado de precisao:
 
 - `calculateDamageFromDataset` retorna `meta.precision: "prototype"`.
-- `StaticSkillFormula` tem formulas especificas iniciais como `SM_BASH` e `MG_COLDBOLT`.
+- `StaticSkillFormula` tem formulas especificas iniciais como `SM_BASH` e bolts de mago.
 - `GenericSkillFormula` e fallback.
 - Unsupported item script statements sao preservados e devem ser exibidos ao usuario.
 

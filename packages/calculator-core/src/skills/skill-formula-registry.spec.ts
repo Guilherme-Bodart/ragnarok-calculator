@@ -77,12 +77,35 @@ describe("SkillFormulaRegistry", () => {
     });
   });
 
+  it.each(["MG_COLDBOLT", "MG_FIREBOLT", "MG_LIGHTNINGBOLT"])(
+    "uses static bolt formula for %s",
+    (skillId) => {
+      expect(
+        new SkillFormulaRegistry().calculate({
+          ...input,
+          skill: {
+            ...input.skill,
+            id: skillId,
+            damageType: "magical",
+            maxLevel: 10,
+          },
+          skillLevel: 7,
+        }),
+      ).toEqual({
+        formulaId: `static:${skillId}`,
+        multiplier: 1,
+        hitCount: 7,
+      });
+    },
+  );
+
   it("uses per-level hit counts when skill data provides them", () => {
     expect(
       new SkillFormulaRegistry().calculate({
         ...input,
         skill: {
           ...input.skill,
+          id: "GENERIC_TEST",
           hitCount: 10,
           hitCountByLevel: {
             "1": 1,
