@@ -15,6 +15,18 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-03 - Builds com duplicar
+
+- Modal de builds ganhou acao explicita para duplicar uma build salva da conta.
+- Duplicar usa o payload salvo daquela linha, cria nova build via `POST /calculator/builds` e nao altera a build atual aberta.
+- Textos adicionados em PT/EN/ES.
+- Lista de builds agora comporta acoes de duplicar e remover por linha.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: fechar o fluxo de saves por conta com carregar, salvar como, atualizar, duplicar e excluir.
+
 ### 2026-06-03 - Buff catalog e select em portal
 
 - Criado catalogo versionado inicial de buffs com grupos manual/consumivel.

@@ -138,6 +138,7 @@ Funcionando:
 - Buffs usam catalogo versionado inicial, com grupos manual/consumivel e preview de efeitos reconhecidos.
 - Saves locais via localStorage.
 - Saves por conta via API NestJS `calculator/builds`.
+- Modal de builds carrega, salva como nova, atualiza, duplica e exclui builds da conta.
 - Payload salvo esta na versao 2 com secoes `character`, `attack`, `tree`, `equipment`, `buffs` e `target`.
 - Payload v1 flat e migrado automaticamente ao carregar.
 - Testes focados da calculadora existem em `npm run test:calculator`.

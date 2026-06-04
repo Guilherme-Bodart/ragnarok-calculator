@@ -132,7 +132,9 @@
       "nameLabel": "Build name",
       "updateAction": "Update",
       "saveAsAction": "Save as new",
+      "duplicateAction": "Duplicate",
       "deleteAction": "Delete",
+      "duplicateSuffix": "copy",
       "selectedPrefix": "Selected:",
       "loading": "Loading builds...",
       "empty": "No account builds saved yet.",
@@ -140,9 +142,11 @@
       "loadError": "Could not load account builds.",
       "savedMessage": "Build saved as new.",
       "updatedMessage": "Build updated.",
+      "duplicatedMessage": "Build duplicated.",
       "deletedMessage": "Build deleted.",
       "saveError": "Could not save. Check that you are logged in.",
       "updateError": "Could not update the build.",
+      "duplicateError": "Could not duplicate the build.",
       "deleteError": "Could not delete the build."
     },
     "skillTree": {

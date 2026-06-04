@@ -138,6 +138,30 @@ export function CalculatorBuildsModal({
     }
   }
 
+  async function handleDuplicate(build: CalculatorAccountBuild) {
+    setStatus("saving");
+    setMessage("");
+
+    try {
+      const payload = cloneBuildPayload(build.payload);
+      payload.name = `${build.name} ${t.duplicateSuffix}`;
+      const savedBuild = await saveCalculatorAccountBuild(payload);
+
+      setBuilds((currentBuilds) => [
+        savedBuild,
+        ...currentBuilds.filter(
+          (currentBuild) => currentBuild.id !== savedBuild.id,
+        ),
+      ]);
+      setSelectedBuildId(savedBuild.id);
+      setStatus("idle");
+      setMessage(t.duplicatedMessage);
+    } catch {
+      setStatus("error");
+      setMessage(t.duplicateError);
+    }
+  }
+
   return (
     <Modal
       ariaLabel={t.aria}
@@ -205,6 +229,14 @@ export function CalculatorBuildsModal({
                   </span>
                 </button>
                 <IconButton
+                  label={`${t.duplicateAction} ${build.name}`}
+                  type="button"
+                  disabled={isBusy}
+                  onClick={() => handleDuplicate(build)}
+                >
+                  <CopyPlus size={16} />
+                </IconButton>
+                <IconButton
                   label={`${t.deleteAction} ${build.name}`}
                   type="button"
                   disabled={isBusy}
@@ -229,4 +261,8 @@ function formatBuildDate(value: string) {
     dateStyle: "short",
     timeStyle: "short",
   }).format(new Date(value));
+}
+
+function cloneBuildPayload(payload: CalculatorBuildPayload): CalculatorBuildPayload {
+  return JSON.parse(JSON.stringify(payload)) as CalculatorBuildPayload;
 }

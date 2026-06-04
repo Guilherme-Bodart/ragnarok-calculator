@@ -132,7 +132,9 @@
       "nameLabel": "Nombre de la build",
       "updateAction": "Actualizar",
       "saveAsAction": "Guardar como nueva",
+      "duplicateAction": "Duplicar",
       "deleteAction": "Eliminar",
+      "duplicateSuffix": "copia",
       "selectedPrefix": "Seleccionada:",
       "loading": "Cargando builds...",
       "empty": "Todavia no hay builds guardadas en la cuenta.",
@@ -140,9 +142,11 @@
       "loadError": "No se pudieron cargar las builds de la cuenta.",
       "savedMessage": "Build guardada como nueva.",
       "updatedMessage": "Build actualizada.",
+      "duplicatedMessage": "Build duplicada.",
       "deletedMessage": "Build eliminada.",
       "saveError": "No se pudo guardar. Verifica que hayas iniciado sesion.",
       "updateError": "No se pudo actualizar la build.",
+      "duplicateError": "No se pudo duplicar la build.",
       "deleteError": "No se pudo eliminar la build."
     },
     "skillTree": {
