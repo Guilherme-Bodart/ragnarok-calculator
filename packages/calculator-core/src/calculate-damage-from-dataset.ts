@@ -98,7 +98,16 @@ export function calculateDamageFromDataset(
     target: monster,
     skill,
     damage: result.damage,
-    breakdown: result.breakdown,
+    breakdown: [
+      ...result.breakdown,
+      {
+        key: "activeBuffItems",
+        label: "Active buff items",
+        value: input.buffItemIds.length,
+        group: "modifier",
+        unit: "count",
+      },
+    ],
   };
 }
 

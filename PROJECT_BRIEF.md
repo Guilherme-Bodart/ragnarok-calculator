@@ -133,7 +133,7 @@ Funcionando:
 - Modal de item tem preview e suporte a refino/cartas.
 - Monstros carregam por API local leve e o alvo injeta o detalhe escolhido no dataset de calculo.
 - Resultado mostra `precision`, `formulaId`, warnings, multiplicadores principais e mods nao suportados.
-- Buffs manuais e buffs de skill existem, ainda simples.
+- Buffs usam catalogo versionado inicial, com grupos manual/consumivel e preview de efeitos reconhecidos.
 - Saves locais via localStorage.
 - Saves por conta via API NestJS `calculator/builds`.
 - Payload salvo esta na versao 2 com secoes `character`, `attack`, `tree`, `equipment`, `buffs` e `target`.
@@ -144,7 +144,7 @@ Ainda incompleto para V1:
 
 - Core marca formulas especificas como `validated` e fallback generico como `prototype`.
 - Poucas formulas especificas de skill estao validadas; fallback generico cobre o resto.
-- Buff catalog precisa ficar versionado e mais claro.
+- Buffs de skill da classe ainda precisam virar catalogo mais completo.
 - Paperdoll precisa mostrar melhor nome curto/cartas equipadas.
 
 ## Core Da Calculadora
@@ -187,6 +187,8 @@ Componentes compartilhados em `components/ui`:
 Estilos compartilhados em `app/styles/ui.css`.
 
 Regra importante: novos controles reutilizaveis devem ir para `components/ui` e usar classes `ui-*`. CSS local deve ficar para layout/composicao do dominio.
+
+`RichSelect` renderiza menu em portal para nao ser cortado por modal/painel com overflow.
 
 ## Roadmap Atual
 

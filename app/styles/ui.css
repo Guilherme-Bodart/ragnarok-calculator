@@ -76,7 +76,7 @@
   width: 100%;
   min-height: 42px;
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr) 18px;
+  grid-template-columns: 32px minmax(0, 1fr) 34px;
   align-items: center;
   gap: 10px;
   border: 1px solid rgb(167 239 255 / 0.16);
@@ -93,7 +93,7 @@
 }
 
 .ui-rich-select-trigger[data-has-icons="false"] {
-  grid-template-columns: minmax(0, 1fr) 18px;
+  grid-template-columns: minmax(0, 1fr) 34px;
   padding-left: 12px;
 }
 
@@ -117,7 +117,7 @@
 
 .ui-rich-select-menu {
   position: absolute;
-  z-index: 200;
+  z-index: 900;
   top: calc(100% + 6px);
   left: 0;
   width: 100%;
@@ -379,7 +379,7 @@
   position: relative;
   width: min(560px, 100%);
   max-height: min(720px, calc(100vh - 36px));
-  overflow: auto;
+  overflow: hidden;
   border: 1px solid rgb(125 211 252 / 0.22);
   border-radius: 10px;
   background:
@@ -387,6 +387,12 @@
     rgb(2 6 23 / 0.96);
   box-shadow: 0 28px 90px rgb(0 0 0 / 0.5);
   padding: 18px;
+}
+
+.ui-modal-body {
+  max-height: calc(min(720px, calc(100vh - 36px)) - 76px);
+  overflow: auto;
+  padding-right: 4px;
 }
 
 .ui-modal-close {

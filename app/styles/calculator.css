@@ -779,12 +779,28 @@
   padding: 7px;
 }
 
-.calc-buff-row strong {
+.calc-buff-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.calc-buff-copy strong,
+.calc-buff-copy small {
   overflow: hidden;
-  color: var(--ice);
-  font-size: 0.82rem;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.calc-buff-copy strong {
+  color: var(--ice);
+  font-size: 0.82rem;
+}
+
+.calc-buff-copy small {
+  color: rgb(226 246 255 / 0.56);
+  font-size: 0.68rem;
+  font-weight: 800;
 }
 
 .calc-buff-row .ui-rich-select {

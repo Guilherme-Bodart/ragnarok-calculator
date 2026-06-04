@@ -15,6 +15,21 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-03 - Buff catalog e select em portal
+
+- Criado catalogo versionado inicial de buffs com grupos manual/consumivel.
+- Buffs manuais continuam usando `BUFF_900001+`, mas agora possuem preview pelo parser/modifier core.
+- Resultado da calculadora adiciona `activeBuffItems` no breakdown.
+- `RichSelect` renderiza o menu em portal/fixed para nao criar scroll interno no modal.
+- `Modal` usa `ScrollArea` do design system para scroll proprio quando o conteudo realmente excede a tela.
+- Removido o meta visual do modal de equipamento para nao parecer texto grudado no botao de fechar.
+- Testes cobrem catalogo de buffs, preview e contagem de buffs no resultado.
+- `npm run test:calculator`: passou.
+- `npm run lint`: passou.
+- `npm run build`: passou.
+
+Motivo: deixar buffs mais rastreaveis no payload/resultado e corrigir dropdowns cortados por overflow de modal sem espalhar CSS local.
+
 ### 2026-06-03 - Monstros reais por API local
 
 - Criado `scripts/generate-calculator-monster-index.mjs`.

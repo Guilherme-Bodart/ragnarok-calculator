@@ -145,7 +145,6 @@ export function CalculatorItemPickerModal({
       closeLabel={copy.equipment.closeAction}
       icon={<Shield size={17} />}
       title={copy.equipment.modalTitle}
-      meta={copy.equipment.slots[editingSlot]}
       onClose={onClose}
     >
         <CalculatorItemSelectFields

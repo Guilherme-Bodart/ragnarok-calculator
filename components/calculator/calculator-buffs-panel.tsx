@@ -11,6 +11,10 @@ import { RichSelect } from "@/components/ui/rich-select";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import type { CalculatorPanelSkill } from "./calculator-character-panel";
 import { CalculatorSkillIcon } from "./calculator-skill-icon";
+import {
+  getCalculatorBuffGroup,
+  getCalculatorBuffPreview,
+} from "./calculator-buff-data";
 
 type ActiveBuffLevels = Record<string, number>;
 
@@ -117,7 +121,13 @@ export function CalculatorBuffsPanel({
           {activeBuffEntries.map(({ level, skill }) => (
             <div className="calc-buff-row" key={skill.id}>
               <CalculatorSkillIcon name={skill.name} numericId={skill.numericId} />
-              <strong>{skill.name}</strong>
+              <span className="calc-buff-copy">
+                <strong>{skill.name}</strong>
+                <small>
+                  {getCalculatorBuffGroup(skill.id)} ·{" "}
+                  {getCalculatorBuffPreview(skill.id)}
+                </small>
+              </span>
               <NumberSelect
                 max={skill.maxLevel}
                 prefix="Lv."

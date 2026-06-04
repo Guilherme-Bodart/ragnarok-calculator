@@ -192,6 +192,23 @@ describe("calculateDamageFromDataset", () => {
     ]);
   });
 
+  it("adds active buff item count to the result breakdown", () => {
+    const result = calculateDamageFromDataset(
+      {
+        ...input,
+        buffItemIds: [item.id],
+      },
+      dataset,
+    );
+
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "activeBuffItems",
+        value: 1,
+      }),
+    );
+  });
+
   it("keeps generic skill formulas marked as prototype", () => {
     const result = calculateDamageFromDataset(
       {

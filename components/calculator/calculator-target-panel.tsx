@@ -51,6 +51,7 @@ export function CalculatorTargetPanel({
     result.breakdown,
     "unsupportedModifierStatements",
   );
+  const activeBuffItems = getBreakdownValue(result.breakdown, "activeBuffItems");
   const options = useMemo(() => {
     const optionById = new Map(
       monsterOptions.map((monster) => [monster.id, monster]),
@@ -172,6 +173,10 @@ export function CalculatorTargetPanel({
         <div>
           <span>Mods nao suportados</span>
           <strong>{unsupportedModifierStatements}</strong>
+        </div>
+        <div>
+          <span>Buffs ativos</span>
+          <strong>{activeBuffItems}</strong>
         </div>
         <div>
           <span>{copy.target.source}</span>

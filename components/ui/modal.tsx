@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IconButton } from "./icon-button";
 import { PanelHeader } from "./panel-header";
+import { ScrollArea } from "./scroll-area";
 
 type ModalProps = {
   ariaLabel: string;
@@ -42,7 +43,7 @@ export function Modal({
         >
           <X size={17} />
         </IconButton>
-        {children}
+        <ScrollArea className="ui-modal-body">{children}</ScrollArea>
       </section>
     </div>
   );

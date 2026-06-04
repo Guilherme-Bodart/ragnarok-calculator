@@ -5,11 +5,13 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 
 export type RichSelectOption = {
@@ -50,7 +52,9 @@ export function RichSelect({
   const [internalQuery, setInternalQuery] = useState("");
   const listboxId = useId();
   const rootRef = useRef<HTMLSpanElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const [menuStyle, setMenuStyle] = useState<CSSProperties>({});
   const query = searchValue ?? internalQuery;
   const options = groups.flatMap((group) => group.options);
   const selectedOption =
@@ -111,7 +115,9 @@ export function RichSelect({
     }
 
     function handlePointerDown(event: PointerEvent) {
-      if (root?.contains(event.target as Node)) {
+      const target = event.target as Node;
+
+      if (root?.contains(target) || menuRef.current?.contains(target)) {
         return;
       }
 
@@ -137,6 +143,55 @@ export function RichSelect({
       elevatedPanel?.removeAttribute("data-overlay-open");
     };
   }, [isOpen, isSearchable, updateQuery]);
+
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    function updateMenuPosition() {
+      const root = rootRef.current;
+
+      if (!root) {
+        return;
+      }
+
+      const rect = root.getBoundingClientRect();
+      const gap = 6;
+      const viewportPadding = 12;
+      const availableBelow = window.innerHeight - rect.bottom - viewportPadding;
+      const availableAbove = rect.top - viewportPadding;
+      const shouldOpenAbove =
+        availableBelow < 180 && availableAbove > availableBelow;
+      const maxHeight = Math.max(
+        160,
+        Math.min(320, shouldOpenAbove ? availableAbove - gap : availableBelow - gap),
+      );
+      const width = Math.min(250, Math.max(rect.width, 92));
+      const left = Math.min(
+        Math.max(viewportPadding, rect.left),
+        window.innerWidth - width - viewportPadding,
+      );
+
+      setMenuStyle({
+        left,
+        maxHeight,
+        position: "fixed",
+        top: shouldOpenAbove ? undefined : rect.bottom + gap,
+        bottom: shouldOpenAbove ? window.innerHeight - rect.top + gap : undefined,
+        width,
+      });
+    }
+
+    updateMenuPosition();
+    window.addEventListener("resize", updateMenuPosition);
+    window.addEventListener("scroll", updateMenuPosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updateMenuPosition);
+      window.removeEventListener("scroll", updateMenuPosition, true);
+    };
+  }, [isOpen, visibleGroups]);
 
   function selectOption(nextValue: string) {
     onChange(nextValue);
@@ -187,8 +242,15 @@ export function RichSelect({
         </span>
       </button>
 
-      {isOpen ? (
-        <div className="ui-rich-select-menu" id={listboxId} role="listbox">
+      {isOpen
+        ? createPortal(
+        <div
+          className="ui-rich-select-menu"
+          id={listboxId}
+          ref={menuRef}
+          role="listbox"
+          style={menuStyle}
+        >
           {isSearchable ? (
             <label className="ui-rich-select-search">
               <Search aria-hidden size={15} />
@@ -227,8 +289,10 @@ export function RichSelect({
           ) : (
             <span className="ui-rich-select-empty">Nenhuma opção</span>
           )}
-        </div>
-      ) : null}
+        </div>,
+        document.body,
+      )
+        : null}
     </span>
   );
 }
