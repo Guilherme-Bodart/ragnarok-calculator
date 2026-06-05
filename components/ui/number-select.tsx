@@ -1,6 +1,8 @@
 import { RichSelect } from "./rich-select";
 
 type NumberSelectProps = {
+  disabled?: boolean;
+  fit?: "auto" | "fill";
   max: number;
   min?: number;
   prefix?: string;
@@ -9,6 +11,8 @@ type NumberSelectProps = {
 };
 
 export function NumberSelect({
+  disabled,
+  fit,
   max,
   min = 1,
   prefix,
@@ -32,7 +36,9 @@ export function NumberSelect({
             },
           ),
         },
-      ]}
+    ]}
+      disabled={disabled}
+      fit={fit}
       searchPlaceholder="Filtrar"
       value={String(value)}
       onChange={(nextValue) => onChange(Number(nextValue))}

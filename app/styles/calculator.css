@@ -846,9 +846,18 @@
 .calc-item-modal-grid,
 .calc-card-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 96px;
   gap: 12px;
   margin-top: 14px;
+}
+
+.calc-item-select-field,
+.calc-refine-select-field {
+  min-width: 0;
+}
+
+.calc-refine-select-field .ui-rich-select {
+  width: 96px;
 }
 
 .calc-card-grid {

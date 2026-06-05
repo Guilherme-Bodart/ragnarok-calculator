@@ -39,10 +39,15 @@ export function CalculatorItemSelectFields({
   onRefineChange,
   onSelectItem,
 }: CalculatorItemSelectFieldsProps) {
+  const canRefineSelectedItem = Boolean(selectedItem?.refineable);
+  const selectedRefineValue =
+    selectedItem && canRefineSelectedItem ? itemContexts[selectedItem.id]?.refine ?? 0 : 0;
+
   return (
     <div className="calc-item-modal-grid">
-      <Field label={copy.equipment.itemLabel}>
+      <Field className="calc-item-select-field" label={copy.equipment.itemLabel}>
         <RichSelect
+          fit="fill"
           groups={[
             {
               label: copy.equipment.itemLabel,
@@ -69,17 +74,20 @@ export function CalculatorItemSelectFields({
         />
       </Field>
 
-      {selectedItem?.refineable ? (
-        <Field label={copy.equipment.refineLabel}>
-          <NumberSelect
-            min={0}
-            max={20}
-            prefix="+"
-            value={itemContexts[selectedItem.id]?.refine ?? 0}
-            onChange={(refine) => onRefineChange(selectedItem, refine)}
-          />
-        </Field>
-      ) : null}
+      <Field className="calc-refine-select-field" label={copy.equipment.refineLabel}>
+        <NumberSelect
+          disabled={!canRefineSelectedItem}
+          min={0}
+          max={20}
+          prefix="+"
+          value={selectedRefineValue}
+          onChange={(refine) => {
+            if (selectedItem && canRefineSelectedItem) {
+              onRefineChange(selectedItem, refine);
+            }
+          }}
+        />
+      </Field>
     </div>
   );
 }

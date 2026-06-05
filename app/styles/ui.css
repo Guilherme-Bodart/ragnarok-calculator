@@ -68,6 +68,11 @@
   isolation: isolate;
 }
 
+.ui-rich-select[data-fit="fill"] {
+  display: block;
+  max-width: none;
+}
+
 .ui-rich-select:has(.ui-rich-select-menu) {
   z-index: 300;
 }
@@ -90,6 +95,11 @@
   font-weight: 900;
   text-align: left;
   cursor: pointer;
+}
+
+.ui-rich-select-trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
 }
 
 .ui-rich-select-trigger[data-has-icons="false"] {

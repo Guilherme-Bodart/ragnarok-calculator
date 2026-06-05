@@ -46,6 +46,8 @@ type RichSelectProps = {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  disabled?: boolean;
+  fit?: "auto" | "fill";
   menuSize?: "default" | "compact";
   searchable?: boolean | "auto";
   searchValue?: string;
@@ -59,6 +61,8 @@ export function RichSelect({
   value,
   onChange,
   className,
+  disabled = false,
+  fit = "auto",
   menuSize = "default",
   onSearchChange,
   searchable = "auto",
@@ -90,7 +94,7 @@ export function RichSelect({
     ),
   );
   const selectStyle = {
-    "--rich-select-width": `${estimatedWidth}px`,
+    "--rich-select-width": fit === "fill" ? "100%" : `${estimatedWidth}px`,
   } as CSSProperties;
   const isSearchable =
     searchable === "auto" ? options.length >= 10 : searchable;
@@ -216,12 +220,20 @@ export function RichSelect({
   }, [isOpen]);
 
   function selectOption(nextValue: string) {
+    if (disabled) {
+      return;
+    }
+
     onChange(nextValue);
     updateQuery("");
     setIsOpen(false);
   }
 
   function toggleOpen() {
+    if (disabled) {
+      return;
+    }
+
     if (isOpen) {
       updateQuery("");
       setIsOpen(false);
@@ -240,6 +252,7 @@ export function RichSelect({
     <span
       className={cn("ui-rich-select", className)}
       data-open={isOpen}
+      data-fit={fit}
       data-menu-size={menuSize}
       ref={rootRef}
       style={selectStyle}
@@ -247,9 +260,11 @@ export function RichSelect({
       <button
         type="button"
         aria-controls={listboxId}
+        aria-disabled={disabled}
         aria-expanded={isOpen}
         className="ui-rich-select-trigger"
         data-has-icons={hasIcons}
+        disabled={disabled}
         onClick={toggleOpen}
       >
         {selectedOption?.icon ? (
