@@ -3,6 +3,8 @@ import type { RoItem } from "@/packages/calculator-core/src";
 export type CalculatorItemIndexOption = {
   id: number;
   name: string;
+  sourceName?: string | null;
+  searchText?: string | null;
   kind: RoItem["kind"];
   cardSlots: number | null;
   refineable: boolean;

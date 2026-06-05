@@ -16,11 +16,19 @@ const normalizedItems = readJsonFile<RathenaNormalizedItem[]>(
     "nightmare-data/normalized/items/items.en.json",
   ),
 );
+const localizedItems = readOptionalLocalizedItems(
+  path.join(
+    process.cwd(),
+    "nightmare-data/normalized/items/items.br.json",
+  ),
+);
 const itemById = new Map(normalizedItems.map((item) => [item.itemId, item]));
 
 export type CalculatorItemIndexEntry = {
   id: number;
   name: string;
+  sourceName?: string | null;
+  searchText?: string | null;
   kind: string;
   cardSlots: number | null;
   refineable: boolean;
@@ -55,7 +63,9 @@ export function searchItemIndex({
   const normalizedQuery = normalizeSearch(query ?? "");
   const filteredItems = normalizedQuery
     ? source.filter((item) =>
-        normalizeSearch(`${item.name} ${item.id}`).includes(normalizedQuery),
+        normalizeSearch(
+          `${item.searchText ?? ""} ${item.name} ${item.sourceName ?? ""} ${item.id}`,
+        ).includes(normalizedQuery),
       )
     : source;
 
@@ -71,6 +81,7 @@ export function getItemDetail(itemId: number) {
 
   return {
     ...toRoItem(item),
+    name: localizedItems.get(item.itemId)?.name ?? item.name,
     refineable: Boolean((item as { refineable?: boolean }).refineable),
     rawType: item.type,
     rawSubType: item.subType,
@@ -87,6 +98,28 @@ function readIndexFile(filePath: string) {
 
 function readJsonFile<T>(filePath: string) {
   return JSON.parse(fs.readFileSync(filePath, "utf8")) as T;
+}
+
+function readOptionalLocalizedItems(filePath: string) {
+  if (!fs.existsSync(filePath)) {
+    return new Map<number, { name: string; unidName?: string | null }>();
+  }
+
+  const rawItems = readJsonFile<
+    Record<string, { id?: number; name?: string; unidName?: string | null }>
+  >(filePath);
+
+  return new Map(
+    Object.values(rawItems)
+      .filter((item) => typeof item.id === "number" && item.name)
+      .map((item) => [
+        item.id as number,
+        {
+          name: item.name as string,
+          unidName: item.unidName ?? null,
+        },
+      ]),
+  );
 }
 
 function normalizeSearch(value: string) {

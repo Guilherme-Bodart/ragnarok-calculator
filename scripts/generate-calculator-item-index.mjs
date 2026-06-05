@@ -3,6 +3,10 @@ import path from "path";
 
 const root = process.cwd();
 const inputPath = path.join(root, "nightmare-data/normalized/items/items.en.json");
+const localizedInputPath = path.join(
+  root,
+  "nightmare-data/normalized/items/items.br.json",
+);
 const outputDir = path.join(root, "nightmare-data/generated/calculator");
 const bySlotDir = path.join(outputDir, "items-by-slot");
 
@@ -55,13 +59,26 @@ const locationToSlot = {
 fs.mkdirSync(bySlotDir, { recursive: true });
 
 const items = JSON.parse(fs.readFileSync(inputPath, "utf8"));
+const localizedItems = readLocalizedItems(localizedInputPath);
 const bySlot = new Map(equipmentSlots.map((slot) => [slot, []]));
 const cards = [];
 
 for (const item of items) {
+  const localizedItem = localizedItems.get(item.itemId);
+  const localizedName = localizedItem?.name;
   const indexItem = {
     id: item.itemId,
-    name: item.name,
+    name: localizedName ?? item.name,
+    sourceName: localizedName ? item.name : null,
+    searchText: [
+      localizedName,
+      localizedItem?.unidName,
+      item.name,
+      item.aegisName,
+      item.itemId,
+    ]
+      .filter(Boolean)
+      .join(" "),
     kind: getItemKind(item.type),
     cardSlots: item.slots ?? null,
     refineable: Boolean(item.refineable),
@@ -119,5 +136,25 @@ function getItemKind(type) {
 function sortByName(itemsToSort) {
   return itemsToSort.sort((first, second) =>
     first.name.localeCompare(second.name, "en"),
+  );
+}
+
+function readLocalizedItems(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return new Map();
+  }
+
+  const rawItems = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+  return new Map(
+    Object.values(rawItems)
+      .filter((item) => Number.isInteger(item?.id) && item?.name)
+      .map((item) => [
+        item.id,
+        {
+          name: item.name,
+          unidName: item.unidName ?? null,
+        },
+      ]),
   );
 }
