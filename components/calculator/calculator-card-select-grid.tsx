@@ -14,6 +14,7 @@ type CalculatorCardSelectGridProps = {
   cardOptions: CalculatorItemIndexOption[];
   cardQuery: string;
   cardSlotCount: number;
+  isCardSearchReady: boolean;
   copy: CalculatorDictionary;
   editingSlot: EquipmentSlot;
   selectedCards: number[];
@@ -26,6 +27,7 @@ export function CalculatorCardSelectGrid({
   cardOptions,
   cardQuery,
   cardSlotCount,
+  isCardSearchReady,
   copy,
   editingSlot,
   selectedCards,
@@ -61,6 +63,11 @@ export function CalculatorCardSelectGrid({
             searchable
             searchValue={cardQuery}
             searchPlaceholder={copy.equipment.searchCardPlaceholder}
+            emptyText={
+              isCardSearchReady
+                ? copy.equipment.noSearchResults
+                : copy.equipment.searchMinLengthHint
+            }
             value={String(selectedCards[index] ?? "empty")}
             onChange={(itemId) => onSelectCard(editingSlot, index, itemId)}
             onSearchChange={onCardQueryChange}

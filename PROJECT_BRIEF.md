@@ -111,6 +111,7 @@ Health:
 Dados normalizados ficam em `nightmare-data/normalized`:
 
 - `items/items.en.json`: itens completos, arquivo grande.
+- `items/items.br.json`: nomes/descricoes LATAM usados como camada localizada quando houver o mesmo `itemId`.
 - `monsters/monsters.en.json`: monstros completos.
 - `skills/skills.en.json`: skills rAthena normalizadas.
 - `skills/skill-tree.json`: arvore de skill ajustada para a calculadora.
@@ -126,6 +127,8 @@ Dados gerados leves ficam em `nightmare-data/generated/calculator`:
 Os endpoints Next leem os datasets completos de itens/monstros apenas no servidor.
 Os JSONs grandes de skills continuam empacotados para a calculadora, mas nao entram
 na inferencia estrutural do TypeScript.
+Busca de equipamentos/cartas exige pelo menos 3 caracteres e usa debounce de 500ms
+no modal para evitar carregar catalogos grandes ao abrir o select.
 
 Raw local ignorado pelo git:
 

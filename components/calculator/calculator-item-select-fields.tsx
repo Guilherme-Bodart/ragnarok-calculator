@@ -16,6 +16,7 @@ type CalculatorItemSelectFieldsProps = {
   editingSlot: EquipmentSlot;
   itemContexts: Record<number, { refine?: number }>;
   itemQuery: string;
+  isItemSearchReady: boolean;
   selectedItem: CalculatorItemIndexOption | CalculatorItemDetail | undefined;
   slotOptions: CalculatorItemIndexOption[];
   onItemQueryChange: (query: string) => void;
@@ -31,6 +32,7 @@ export function CalculatorItemSelectFields({
   editingSlot,
   itemContexts,
   itemQuery,
+  isItemSearchReady,
   selectedItem,
   slotOptions,
   onItemQueryChange,
@@ -56,6 +58,11 @@ export function CalculatorItemSelectFields({
           searchable
           searchValue={itemQuery}
           searchPlaceholder={copy.equipment.searchItemPlaceholder}
+          emptyText={
+            isItemSearchReady
+              ? copy.equipment.noSearchResults
+              : copy.equipment.searchMinLengthHint
+          }
           value={selectedItem ? String(selectedItem.id) : "empty"}
           onChange={(itemId) => onSelectItem(editingSlot, itemId)}
           onSearchChange={onItemQueryChange}

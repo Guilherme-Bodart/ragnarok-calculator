@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
+import {
+  CALCULATOR_ITEM_SEARCH_DEBOUNCE_MS,
+  isCalculatorItemSearchReady,
+  normalizeCalculatorItemSearchQuery,
+} from "@/lib/calculator-item-search";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import { CalculatorCardSelectGrid } from "./calculator-card-select-grid";
 import type { CalculatorDictionary } from "./calculator-i18n";
@@ -19,6 +24,7 @@ import {
   type CalculatorItemDetail,
   type CalculatorItemIndexOption,
 } from "./calculator-item-data";
+import { useDebouncedValue } from "./use-debounced-value";
 
 type CalculatorItemPickerModalProps = {
   copy: CalculatorDictionary;
@@ -49,56 +55,95 @@ export function CalculatorItemPickerModal({
   onSelectedCardsBySlotChange,
   onSelectedItemsBySlotChange,
 }: CalculatorItemPickerModalProps) {
-  const [cardOptions, setCardOptions] = useState<CalculatorItemIndexOption[]>([]);
+  const [cardSearchResult, setCardSearchResult] = useState<{
+    options: CalculatorItemIndexOption[];
+    query: string;
+  }>({ options: [], query: "" });
   const [cardQuery, setCardQuery] = useState("");
   const [itemQuery, setItemQuery] = useState("");
-  const [slotOptions, setSlotOptions] = useState<CalculatorItemIndexOption[]>([]);
+  const [slotSearchResult, setSlotSearchResult] = useState<{
+    options: CalculatorItemIndexOption[];
+    query: string;
+    slot: EquipmentSlot;
+  }>({ options: [], query: "", slot: editingSlot });
+  const debouncedItemQuery = useDebouncedValue(
+    itemQuery,
+    CALCULATOR_ITEM_SEARCH_DEBOUNCE_MS,
+  );
+  const debouncedCardQuery = useDebouncedValue(
+    cardQuery,
+    CALCULATOR_ITEM_SEARCH_DEBOUNCE_MS,
+  );
+  const isItemSearchReady = isCalculatorItemSearchReady(itemQuery);
+  const isCardSearchReady = isCalculatorItemSearchReady(cardQuery);
+  const normalizedItemQuery = normalizeCalculatorItemSearchQuery(itemQuery);
+  const normalizedCardQuery = normalizeCalculatorItemSearchQuery(cardQuery);
+  const effectiveSlotOptions =
+    isItemSearchReady &&
+    slotSearchResult.query === normalizedItemQuery &&
+    slotSearchResult.slot === editingSlot
+      ? slotSearchResult.options
+      : [];
   const selectedItemId = selectedItemsBySlot[editingSlot];
   const selectedItem =
-    slotOptions.find((item) => item.id === selectedItemId) ??
+    effectiveSlotOptions.find((item) => item.id === selectedItemId) ??
     (selectedItemId ? selectedItemDetails[selectedItemId] : undefined);
   const selectedCards = selectedCardsBySlot[editingSlot] ?? [];
   const cardSlotCount = getCardSlotCount(selectedItem);
+  const effectiveCardOptions =
+    isCardSearchReady &&
+    cardSlotCount > 0 &&
+    cardSearchResult.query === normalizedCardQuery
+      ? cardSearchResult.options
+      : [];
 
   useEffect(() => {
+    if (!isCalculatorItemSearchReady(debouncedItemQuery)) {
+      return;
+    }
+
     let isCurrent = true;
-    const timeoutId = window.setTimeout(() => {
-      searchCalculatorItems({ limit: 80, query: itemQuery, slot: editingSlot })
-        .then((items) => {
-          if (isCurrent) setSlotOptions(items);
-        })
-        .catch(() => {
-          if (isCurrent) setSlotOptions([]);
-        });
-    }, 180);
+
+    const query = normalizeCalculatorItemSearchQuery(debouncedItemQuery);
+
+    searchCalculatorItems({ limit: 80, query, slot: editingSlot })
+      .then((items) => {
+        if (isCurrent) setSlotSearchResult({ options: items, query, slot: editingSlot });
+      })
+      .catch(() => {
+        if (isCurrent) setSlotSearchResult({ options: [], query, slot: editingSlot });
+      });
 
     return () => {
       isCurrent = false;
-      window.clearTimeout(timeoutId);
     };
-  }, [editingSlot, itemQuery]);
+  }, [debouncedItemQuery, editingSlot]);
 
   useEffect(() => {
     if (cardSlotCount <= 0) {
       return;
     }
 
+    if (!isCalculatorItemSearchReady(debouncedCardQuery)) {
+      return;
+    }
+
     let isCurrent = true;
-    const timeoutId = window.setTimeout(() => {
-      searchCalculatorItems({ kind: "card", limit: 80, query: cardQuery })
-        .then((items) => {
-          if (isCurrent) setCardOptions(items);
-        })
-        .catch(() => {
-          if (isCurrent) setCardOptions([]);
-        });
-    }, 180);
+
+    const query = normalizeCalculatorItemSearchQuery(debouncedCardQuery);
+
+    searchCalculatorItems({ kind: "card", limit: 80, query })
+      .then((items) => {
+        if (isCurrent) setCardSearchResult({ options: items, query });
+      })
+      .catch(() => {
+        if (isCurrent) setCardSearchResult({ options: [], query });
+      });
 
     return () => {
       isCurrent = false;
-      window.clearTimeout(timeoutId);
     };
-  }, [cardQuery, cardSlotCount]);
+  }, [cardSlotCount, debouncedCardQuery]);
 
   function selectItem(slotId: EquipmentSlot, itemId: string) {
     const nextItems = { ...selectedItemsBySlot };
@@ -113,7 +158,7 @@ export function CalculatorItemPickerModal({
     } else {
       const nextItemId = Number(itemId);
       const nextSelectedItem =
-        slotOptions.find((item) => item.id === nextItemId) ??
+        effectiveSlotOptions.find((item) => item.id === nextItemId) ??
         selectedItemDetails[nextItemId];
       const validCards = getValidCardsForItem(
         selectedCardsBySlot[slotId] ?? [],
@@ -176,15 +221,16 @@ export function CalculatorItemPickerModal({
           editingSlot={editingSlot}
           itemContexts={itemContexts}
           itemQuery={itemQuery}
+          isItemSearchReady={isItemSearchReady}
           selectedItem={selectedItem}
-          slotOptions={slotOptions}
+          slotOptions={effectiveSlotOptions}
           onItemQueryChange={setItemQuery}
           onRefineChange={setRefine}
           onSelectItem={selectItem}
         />
 
         <CalculatorItemPreview
-          cardOptions={cardOptions}
+          cardOptions={effectiveCardOptions}
           copy={copy}
           item={selectedItem}
           itemContexts={itemContexts}
@@ -193,11 +239,12 @@ export function CalculatorItemPickerModal({
         />
 
         <CalculatorCardSelectGrid
-          cardOptions={cardOptions}
+          cardOptions={effectiveCardOptions}
           cardQuery={cardQuery}
           cardSlotCount={cardSlotCount}
           copy={copy}
           editingSlot={editingSlot}
+          isCardSearchReady={isCardSearchReady}
           selectedCards={selectedCards}
           selectedItemDetails={selectedItemDetails}
           onCardQueryChange={setCardQuery}

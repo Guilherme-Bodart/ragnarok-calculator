@@ -50,6 +50,7 @@ type RichSelectProps = {
   searchable?: boolean | "auto";
   searchValue?: string;
   searchPlaceholder?: string;
+  emptyText?: string;
   onSearchChange?: (query: string) => void;
 };
 
@@ -63,6 +64,7 @@ export function RichSelect({
   searchable = "auto",
   searchValue,
   searchPlaceholder = "Filtrar",
+  emptyText = "Nenhuma opção",
 }: RichSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [internalQuery, setInternalQuery] = useState("");
@@ -304,7 +306,7 @@ export function RichSelect({
               </section>
             ))
           ) : (
-            <span className="ui-rich-select-empty">Nenhuma opção</span>
+            <span className="ui-rich-select-empty">{emptyText}</span>
           )}
         </div>,
         document.body,

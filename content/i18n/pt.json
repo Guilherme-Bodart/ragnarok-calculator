@@ -208,6 +208,8 @@
       "noModifiers": "Sem modificadores conhecidos neste item.",
       "searchItemPlaceholder": "Filtrar item",
       "searchCardPlaceholder": "Filtrar carta",
+      "searchMinLengthHint": "Digite pelo menos 3 letras",
+      "noSearchResults": "Nenhum resultado encontrado",
       "doneAction": "Concluir",
       "preview": {
         "emptyTitle": "Nenhum item selecionado",

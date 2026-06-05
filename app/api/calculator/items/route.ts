@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isCalculatorItemSearchReady } from "@/lib/calculator-item-search";
 import { searchItemIndex } from "./item-server-data";
 
 export function GET(request: Request) {
@@ -7,6 +8,10 @@ export function GET(request: Request) {
   const slot = searchParams.get("slot");
   const query = searchParams.get("q") ?? undefined;
   const limit = clampLimit(Number(searchParams.get("limit") ?? 80));
+
+  if (!isCalculatorItemSearchReady(query)) {
+    return NextResponse.json([]);
+  }
 
   return NextResponse.json(
     searchItemIndex({

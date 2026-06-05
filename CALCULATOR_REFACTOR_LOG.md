@@ -15,6 +15,21 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-04 - Busca sob demanda de equipamentos e cartas
+
+- Selects de item/carta agora so disparam busca depois de 3 caracteres.
+- Busca remota de equipamento/carta usa debounce de 500ms no modal.
+- A rota `GET /api/calculator/items` retorna lista vazia para query curta, evitando varrer indices grandes ao abrir o select.
+- `RichSelect` ganhou texto vazio configuravel pelo design system.
+- O indice de itens passa a usar `items.br.json` como camada de nome/search quando o ID existe, mantendo o nome rAthena em `sourceName`.
+- Detalhe de item tambem exibe nome localizado quando disponivel, sem trocar a fonte mecanica do calculo.
+- `npm run test:calculator`: passou, 60 testes.
+- `npm run typecheck`: passou.
+- `npm run typecheck:test`: passou.
+- `npm run lint`: passou.
+
+Motivo: deixar a escolha de equipamentos/cartas escalavel para catalogos grandes e permitir busca por nomes em portugues.
+
 ### 2026-06-04 - Build sem inferencia estrutural dos datasets grandes
 
 - O `tsconfig.json` do frontend passou a cobrir apenas codigo da aplicacao; testes usam o novo `tsconfig.test.json` e scripts ficam fora do build.

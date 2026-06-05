@@ -208,6 +208,8 @@
       "noModifiers": "No known modifiers on this item.",
       "searchItemPlaceholder": "Filter item",
       "searchCardPlaceholder": "Filter card",
+      "searchMinLengthHint": "Type at least 3 letters",
+      "noSearchResults": "No results found",
       "doneAction": "Done",
       "preview": {
         "emptyTitle": "No item selected",
