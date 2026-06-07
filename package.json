@@ -9,6 +9,7 @@
     "data:skill-tooltips": "tsx scripts/generate-skill-tooltips.ts",
     "data:monster-index": "node scripts/generate-calculator-monster-index.mjs",
     "sprite:costume": "node scripts/generate-costume-walker.mjs",
+    "sprite:manifest": "node scripts/generate-costume-walker.mjs --refresh-manifest",
     "build": "next build",
     "build:api": "npm --prefix api run build",
     "render:api:build": "npm install --include=dev && npm --prefix api install --include=dev && npm --prefix api run prisma:generate && npm --prefix api run prisma:deploy && npm --prefix api run build",

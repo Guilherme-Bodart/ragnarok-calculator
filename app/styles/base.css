@@ -1,6 +1,7 @@
 @theme {
   --font-sans: var(--font-body);
   --font-mono: var(--font-rune);
+  --font-pixel: var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New", monospace;
 
   --color-night-950: #020612;
   --color-night-900: #061122;
@@ -16,6 +17,7 @@
   --font-body: var(--font-inter), "Segoe UI", Arial, sans-serif;
   --font-display: var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
   --font-title: var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-pixel: var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New", monospace;
   --font-rune: var(--font-jetbrains-mono), "Courier New", monospace;
   --shell: 1120px;
   --narrow: 720px;
@@ -29,6 +31,8 @@ html {
 }
 
 body {
+  --font-pixel: var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New", monospace;
+
   min-height: 100%;
   overflow-x: hidden;
   color: var(--foreground);

@@ -1,14 +1,20 @@
 {
   "gender": 1,
-  "job": ["4255"],
+  "job": [
+    "4255"
+  ],
   "head": 25,
   "headPalette": 6,
-  "headdir": 7,
-  "headgear": [349, 1250, 1418],
+  "headdir": 0,
+  "headgear": [
+    1250,
+    349,
+    1418
+  ],
   "garment": 55,
-  "bodyPalette": 7,
+  "bodyPalette": 6,
   "madogearType": 0,
-  "action": 7,
-  "canvas": "200x200+100+150",
-  "outfit": 1
+  "action": 15,
+  "canvas": "160x160+80+130",
+  "outfit": 0
 }

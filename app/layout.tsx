@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Sora } from "next/font/google";
+import { Inter, JetBrains_Mono, Pixelify_Sans, Sora } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -20,6 +20,12 @@ const jetBrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const pixelifySans = Pixelify_Sans({
+  subsets: ["latin"],
+  variable: "--font-pixelify-sans",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Nightmare Clan",
   description:
@@ -33,7 +39,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.variable} ${sora.variable} ${jetBrainsMono.variable}`}>
+      <body
+        className={`${inter.variable} ${sora.variable} ${jetBrainsMono.variable} ${pixelifySans.variable}`}
+      >
         {children}
       </body>
     </html>

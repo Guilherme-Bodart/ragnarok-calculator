@@ -18,11 +18,7 @@ import { SpriteStage } from "@/components/site/sprite-stage";
 
 const storageKey = "nightmare-locale";
 
-function getInitialLocale() {
-  if (typeof window === "undefined") {
-    return defaultLocale;
-  }
-
+function getSavedLocale() {
   const savedLocale = window.localStorage.getItem(storageKey);
   if (savedLocale && isLocale(savedLocale)) {
     return savedLocale;
@@ -33,7 +29,13 @@ function getInitialLocale() {
 }
 
 export function NightmareLanding() {
-  const [locale, setLocale] = useState<Locale>(getInitialLocale);
+  const [locale, setLocale] = useState<Locale>(defaultLocale);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      setLocale(getSavedLocale());
+    });
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = locale === "pt" ? "pt-BR" : locale;

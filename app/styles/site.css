@@ -903,27 +903,51 @@
   bottom: 0;
   left: 0;
   z-index: 120;
-  height: clamp(86px, 12vw, 150px);
+  height: 240px;
   overflow: visible;
   pointer-events: none;
 }
 
-.walking-footer-sprite {
+.walking-footer-character {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: clamp(78px, 8vw, 124px);
-  height: auto;
-  --walker-offset: 0px;
-  transform: translateX(calc(-150px + var(--walker-offset))) translateY(0);
-  filter:
-    drop-shadow(0 0 10px rgb(125 211 252 / 0.72))
-    drop-shadow(0 0 24px rgb(14 165 233 / 0.32));
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  --walker-index: 0;
+  --walker-width: clamp(112px, 10vw, 200px);
+  --walker-gap: calc(var(--walker-width) * 0.75);
+  --walker-offset: calc(var(--walker-index) * var(--walker-gap));
+  transform: translateX(calc((var(--walker-width) * -1) - 20px + var(--walker-offset))) translateY(0);
   animation: footer-sprite-walk 22s linear infinite;
 }
 
-.walking-footer-sprite-companion {
-  --walker-offset: clamp(58px, 6vw, 92px);
+.walking-footer-chat {
+  margin-bottom: -12px;
+  padding: 5px 10px;
+  border: 1px solid rgb(125 211 252 / 0.34);
+  border-radius: 999px;
+  background: rgb(2 10 24 / 0.82);
+  color: #f2fbff;
+  font-family: var(--font-pixel);
+  font-size: clamp(0.64rem, 0.85vw, 0.9rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow:
+    0 0 0 1px rgb(8 47 73 / 0.48),
+    0 8px 18px rgb(0 0 0 / 0.3);
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.75);
+}
+
+.walking-footer-sprite {
+  width: var(--walker-width);
+  height: auto;
+  filter:
+    drop-shadow(0 0 10px rgb(125 211 252 / 0.72))
+    drop-shadow(0 0 24px rgb(14 165 233 / 0.32));
 }
 
 .sprite-stage::after {
@@ -1058,7 +1082,7 @@
 
 @keyframes footer-sprite-walk {
   0% {
-    transform: translateX(calc(-150px + var(--walker-offset))) translateY(0);
+    transform: translateX(calc((var(--walker-width) * -1) - 20px + var(--walker-offset))) translateY(0);
   }
 
   25% {
@@ -1074,14 +1098,13 @@
   }
 
   100% {
-    transform: translateX(calc(100vw + 150px + var(--walker-offset))) translateY(0);
+    transform: translateX(calc(100vw + var(--walker-width) + 20px + var(--walker-offset))) translateY(0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .walking-footer-sprite {
+  .walking-footer-character {
     animation: none;
     transform: translateX(18px);
   }
 }
-
