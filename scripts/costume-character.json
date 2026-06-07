@@ -3,12 +3,12 @@
   "job": ["4255"],
   "head": 25,
   "headPalette": 6,
-  "headdir": 1,
+  "headdir": 7,
   "headgear": [349, 1250, 1418],
   "garment": 55,
   "bodyPalette": 7,
   "madogearType": 0,
-  "action": 15,
+  "action": 7,
   "canvas": "200x200+100+150",
   "outfit": 1
 }
