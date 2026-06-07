@@ -11,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const customCharacterPath = path.join(__dirname, "costume-character.json");
 const exampleCharacterPath = path.join(__dirname, "costume-character.example.json");
-const outputPath = path.join(rootDir, "public", "sprites", "nightmare-walker.gif");
+const defaultOutputPath = path.join(rootDir, "public", "sprites", "nightmare-walker.gif");
 
 const endpoint =
   "https://api.costume.irowiki.org/render?downloadimage&accesstoken=3iznpprsozjn3nh6rvdvqn2fl89mo1jd";
@@ -26,7 +26,7 @@ async function fetchFrame(character, frame) {
     },
     body: JSON.stringify({
       ...character,
-      action: 8,
+      action: character.action ?? 8,
       frame,
     }),
   });
@@ -76,9 +76,15 @@ function createGif(frames) {
 }
 
 async function main() {
-  const characterPath = existsSync(customCharacterPath)
-    ? customCharacterPath
-    : exampleCharacterPath;
+  const args = parseArgs(process.argv.slice(2));
+  const characterPath = args.config
+    ? path.resolve(args.config)
+    : existsSync(customCharacterPath)
+      ? customCharacterPath
+      : exampleCharacterPath;
+  const outputPath = args.output
+    ? path.resolve(args.output)
+    : defaultOutputPath;
   const character = JSON.parse(await readFile(characterPath, "utf8"));
   const frames = [];
 
@@ -88,7 +94,27 @@ async function main() {
 
   await mkdir(path.dirname(outputPath), { recursive: true });
   await writeFile(outputPath, createGif(frames));
-  console.log(`Generated ${path.relative(rootDir, outputPath)} from ${frames.length} walk frames.`);
+  console.log(
+    `Generated ${path.relative(rootDir, outputPath)} from ${frames.length} walk frames using ${path.relative(rootDir, characterPath)}.`,
+  );
+}
+
+function parseArgs(args) {
+  const parsed = {};
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+
+    if (arg === "--config") {
+      parsed.config = args[index + 1];
+      index += 1;
+    } else if (arg === "--output") {
+      parsed.output = args[index + 1];
+      index += 1;
+    }
+  }
+
+  return parsed;
 }
 
 main().catch((error) => {

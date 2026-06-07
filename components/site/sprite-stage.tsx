@@ -11,8 +11,16 @@ export function SpriteStage() {
         To customize it, create scripts/costume-character.json and rerun the script.
       */}
       <Image
-        className="walking-footer-sprite pixelated"
+        className="walking-footer-sprite walking-footer-sprite-primary pixelated"
         src="/sprites/nightmare-walker.gif"
+        alt=""
+        width={124}
+        height={85}
+        unoptimized
+      />
+      <Image
+        className="walking-footer-sprite walking-footer-sprite-companion pixelated"
+        src="/sprites/nightmare-shadow-cross-walker.gif"
         alt=""
         width={124}
         height={85}

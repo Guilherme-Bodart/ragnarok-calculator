@@ -5,8 +5,10 @@ Guia rapido para o proximo chat atualizar o boneco andando da landing.
 ## Onde fica
 
 - Config do personagem: `scripts/costume-character.json`
+- Config alternativa Shadow Cross: `scripts/costume-character-shadow-cross.json`
 - Gerador do GIF: `scripts/generate-costume-walker.mjs`
 - GIF final usado na landing: `public/sprites/nightmare-walker.gif`
+- GIF alternativo usado na landing: `public/sprites/nightmare-shadow-cross-walker.gif`
 - Comando para gerar: `npm run sprite:costume`
 - Componente que usa o GIF: `components/site/sprite-stage.tsx`
 
@@ -55,7 +57,8 @@ Notas:
 - `bodyPalette`: cor da roupa. No visual atual, roupa `7`.
 - `outfit`: `1` liga roupa jRO. `0` volta para a roupa antiga.
 - `action`: deixar `8`. Isso e a acao de walk.
-- O GIF anda porque o script usa `frame: 0..7` com `action: 8` fixa.
+- `action`: direcao e animacao do corpo. `8` e frente; `15` e diagonal frente-direita no fluxo atual.
+- O GIF anda porque o script usa `frame: 0..7` com `action` fixa da config.
 
 ## Atencao aos IDs
 
@@ -110,7 +113,13 @@ Tambem da para abrir os metadata manualmente:
 npm run sprite:costume
 ```
 
-4. Conferir `public/sprites/nightmare-walker.gif`.
+Para gerar outro personagem sem substituir o principal:
+
+```powershell
+node scripts/generate-costume-walker.mjs --config scripts/costume-character-shadow-cross.json --output public/sprites/nightmare-shadow-cross-walker.gif
+```
+
+4. Conferir o GIF em `public/sprites`.
 5. Rodar:
 
 ```powershell
