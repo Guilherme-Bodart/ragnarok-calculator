@@ -16,7 +16,7 @@ const defaultOutputPath = path.join(rootDir, "public", "sprites", "nightmare-wal
 const endpoint =
   "https://api.costume.irowiki.org/render?downloadimage&accesstoken=3iznpprsozjn3nh6rvdvqn2fl89mo1jd";
 
-const walkFrameIndexes = [0, 1, 2, 3, 4, 5, 6, 7];
+const defaultFrameCount = 8;
 
 async function fetchFrame(character, frame) {
   const response = await fetch(endpoint, {
@@ -44,30 +44,43 @@ async function fetchFrame(character, frame) {
   return PNG.sync.read(buffer);
 }
 
-function createGif(frames) {
-  const width = frames[0].width;
-  const height = frames[0].height;
-  const rgbaFrames = frames.map((frame) => frame.data);
-  const combined = Buffer.concat(rgbaFrames);
-  const palette = quantize(combined, 256, {
+function createPalette(rgba) {
+  return quantize(rgba, 256, {
     format: "rgba4444",
     oneBitAlpha: 1,
   });
-  const transparentIndex = Math.max(
+}
+
+function getTransparentIndex(palette) {
+  return Math.max(
     0,
     palette.findIndex((color) => color[3] === 0),
   );
+}
+
+function createGif(frames, { paletteMode }) {
+  const width = frames[0].width;
+  const height = frames[0].height;
+  const rgbaFrames = frames.map((frame) => frame.data);
+  const globalPalette =
+    paletteMode === "frame" ? null : createPalette(Buffer.concat(rgbaFrames));
+  const globalTransparentIndex = globalPalette
+    ? getTransparentIndex(globalPalette)
+    : 0;
 
   const gif = GIFEncoder();
 
   for (const rgba of rgbaFrames) {
+    const palette = globalPalette ?? createPalette(rgba);
     const indexed = applyPalette(rgba, palette, "rgba4444");
     gif.writeFrame(indexed, width, height, {
       palette,
       delay: 90,
       repeat: 0,
       transparent: true,
-      transparentIndex,
+      transparentIndex: globalPalette
+        ? globalTransparentIndex
+        : getTransparentIndex(palette),
     });
   }
 
@@ -85,17 +98,21 @@ async function main() {
   const outputPath = args.output
     ? path.resolve(args.output)
     : defaultOutputPath;
+  const frameCount = Number.isInteger(args.frames)
+    ? Math.max(1, args.frames)
+    : defaultFrameCount;
+  const paletteMode = args.palette === "frame" ? "frame" : "global";
   const character = JSON.parse(await readFile(characterPath, "utf8"));
   const frames = [];
 
-  for (const frame of walkFrameIndexes) {
+  for (let frame = 0; frame < frameCount; frame += 1) {
     frames.push(await fetchFrame(character, frame));
   }
 
   await mkdir(path.dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, createGif(frames));
+  await writeFile(outputPath, createGif(frames, { paletteMode }));
   console.log(
-    `Generated ${path.relative(rootDir, outputPath)} from ${frames.length} walk frames using ${path.relative(rootDir, characterPath)}.`,
+    `Generated ${path.relative(rootDir, outputPath)} from ${frames.length} walk frames using ${path.relative(rootDir, characterPath)} (${paletteMode} palette).`,
   );
 }
 
@@ -110,6 +127,12 @@ function parseArgs(args) {
       index += 1;
     } else if (arg === "--output") {
       parsed.output = args[index + 1];
+      index += 1;
+    } else if (arg === "--frames") {
+      parsed.frames = Number(args[index + 1]);
+      index += 1;
+    } else if (arg === "--palette") {
+      parsed.palette = args[index + 1];
       index += 1;
     }
   }

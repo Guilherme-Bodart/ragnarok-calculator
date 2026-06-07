@@ -119,6 +119,15 @@ Para gerar outro personagem sem substituir o principal:
 node scripts/generate-costume-walker.mjs --config scripts/costume-character-shadow-cross.json --output public/sprites/nightmare-shadow-cross-walker.gif
 ```
 
+Opcoes uteis:
+
+```powershell
+node scripts/generate-costume-walker.mjs --config scripts/costume-character.json --output public/sprites/nightmare-walker.gif --frames 8 --palette frame
+```
+
+- `--frames`: quantidade de frames solicitados na API. Para walk/action atual, `8` e o valor correto; `16` foi testado e os frames `8..15` vieram vazios.
+- `--palette frame`: usa uma paleta por frame no GIF. Ajuda a preservar brilhos/acessorios animados melhor que uma paleta global.
+
 4. Conferir o GIF em `public/sprites`.
 5. Rodar:
 
