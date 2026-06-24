@@ -1104,5 +1104,37 @@ Proximo bloco recomendado:
 
 - Escolher entre:
   - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, separados de dano causado.
-  - Heal/crit inicial para `bHealPower` e `bCritAtkRate`.
   - Engine inicial de cast/DPS consumindo os campos de cast/delay ja agregados.
+
+## Bloco Fechado: Critico E Cura Vindos De Itens
+
+Data: 2026-06-24.
+
+Implementado:
+
+- Parser rAthena reconhece:
+  - `bonus bCritAtkRate`
+  - `bonus bHealPower`
+- `CalculatorModifierEffectsFactory` agrega:
+  - `criticalDamageRate`
+  - `healPower`
+- Testes cobrem parser e agregacao desses modificadores.
+
+Observacao:
+
+- Este bloco captura os efeitos no core. Dano critico final e formulas de cura ainda precisam de engine propria para usar esses campos no resultado.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 5.056 -> 5.349.
+- Scripts parcialmente suportados: 5.776 -> 5.599.
+- Unsupported statements: 28.010 -> 27.133.
+- Modifiers extraidos: 39.691 -> 40.568.
+- `bCritAtkRate` e `bHealPower` sairam do top unsupported.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, separados de dano causado.
+  - Engine inicial de cast/DPS consumindo os campos de cast/delay ja agregados.
+  - Engine inicial de cura/critico consumindo `healPower` e `criticalDamageRate`.

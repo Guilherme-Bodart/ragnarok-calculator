@@ -113,6 +113,8 @@ describe("ModifierNormalizer", () => {
       bonus bSpl,9;
       bonus bPAtk,4;
       bonus bSMatk,5;
+      bonus bCritAtkRate,25;
+      bonus bHealPower,30;
       bonus bVariableCastrate,-12;
       bonus bFixedCastrate,-5;
       bonus bFixedCast,-200;
@@ -178,6 +180,18 @@ describe("ModifierNormalizer", () => {
         stat: "smatk",
         operator: "addFlat",
         value: 5,
+        target: { type: "self" },
+      },
+      {
+        stat: "criticalDamageRate",
+        operator: "addPercent",
+        value: 25,
+        target: { type: "self" },
+      },
+      {
+        stat: "healPower",
+        operator: "addPercent",
+        value: 30,
         target: { type: "self" },
       },
       {

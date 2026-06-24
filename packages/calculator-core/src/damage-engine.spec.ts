@@ -61,6 +61,8 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   hit: 0,
   flee: 0,
   crit: 0,
+  criticalDamageRate: 0,
+  healPower: 0,
   aspd: 0,
   aspdRate: 0,
   variableCastRate: 0,

@@ -113,6 +113,8 @@ export const normalizedModifierSchema = z.object({
     "hit",
     "flee",
     "crit",
+    "criticalDamageRate",
+    "healPower",
     "aspd",
     "aspdRate",
     "variableCastRate",

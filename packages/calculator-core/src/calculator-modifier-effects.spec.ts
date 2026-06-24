@@ -252,6 +252,8 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus bHit,15;
         bonus bFlee,20;
         bonus bCritical,7;
+        bonus bCritAtkRate,25;
+        bonus bHealPower,30;
         bonus bAspd,1;
         bonus bAspdRate,10;
         bonus bVariableCastrate,-12;
@@ -276,6 +278,8 @@ describe("CalculatorModifierEffectsFactory", () => {
       hit: 15,
       flee: 20,
       crit: 7,
+      criticalDamageRate: 25,
+      healPower: 30,
       aspd: 1,
       aspdRate: 10,
       variableCastRate: -12,

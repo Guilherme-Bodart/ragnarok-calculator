@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 5056,
-  "partiallySupportedItemScripts": 5776,
-  "unsupportedItemScripts": 14981,
-  "itemScriptsWithModifiers": 10832,
-  "totalModifiers": 39691,
-  "unsupportedStatements": 28010,
+  "fullySupportedItemScripts": 5349,
+  "partiallySupportedItemScripts": 5599,
+  "unsupportedItemScripts": 14688,
+  "itemScriptsWithModifiers": 10948,
+  "totalModifiers": 40568,
+  "unsupportedStatements": 27133,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -234,38 +234,6 @@
           "itemId": 2051,
           "itemName": "Illusion Survivor's Staff",
           "rawLine": "bonus2 bSubEle,Ele_Water,15;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bCritAtkRate",
-      "reason": "unsupported-bonus-code",
-      "count": 639,
-      "examples": [
-        {
-          "itemId": 1184,
-          "itemName": "Valorous Assaulter's Katzbalger",
-          "rawLine": "bonus bCritAtkRate,20;"
-        },
-        {
-          "itemId": 1198,
-          "itemName": "Cutlass",
-          "rawLine": "bonus bCritAtkRate,50;"
-        },
-        {
-          "itemId": 1280,
-          "itemName": "Valorous Carnage Katar",
-          "rawLine": "bonus bCritAtkRate,20;"
-        },
-        {
-          "itemId": 1282,
-          "itemName": "Glorious Jamadhar",
-          "rawLine": "bonus bCritAtkRate,20;"
-        },
-        {
-          "itemId": 1292,
-          "itemName": "Upgrade Katar",
-          "rawLine": "bonus bCritAtkRate,(.@r*2);"
         }
       ]
     },
@@ -522,38 +490,6 @@
           "itemId": 1443,
           "itemName": "Crimson Spear",
           "rawLine": "bonus bBaseAtk,((max(0,BaseLevel-70)/10)*5);"
-        }
-      ]
-    },
-    {
-      "command": "bonus bHealPower",
-      "reason": "unsupported-bonus-code",
-      "count": 327,
-      "examples": [
-        {
-          "itemId": 1334,
-          "itemName": "Grinder Axe",
-          "rawLine": "bonus bHealPower,10;"
-        },
-        {
-          "itemId": 1548,
-          "itemName": "Veteran Hammer",
-          "rawLine": "bonus bHealPower,getskilllv(\"AL_DP\");"
-        },
-        {
-          "itemId": 1586,
-          "itemName": "Vellum Bible",
-          "rawLine": "bonus bHealPower,5+BaseLevel/10;"
-        },
-        {
-          "itemId": 1591,
-          "itemName": "TE Woe Book",
-          "rawLine": "bonus bHealPower,5;"
-        },
-        {
-          "itemId": 1599,
-          "itemName": "Angra Manyu",
-          "rawLine": "bonus bHealPower,200;"
         }
       ]
     },
@@ -2926,6 +2862,38 @@
       ]
     },
     {
+      "command": "bonus bCritAtkRate",
+      "reason": "unsupported-bonus-code",
+      "count": 49,
+      "examples": [
+        {
+          "itemId": 1743,
+          "itemName": "Glorious Hunter Bow",
+          "rawLine": "bonus bCritAtkRate,min(10,.@r)*2;"
+        },
+        {
+          "itemId": 2577,
+          "itemName": "Sapha Hood",
+          "rawLine": "bonus bCritAtkRate,getrefine();"
+        },
+        {
+          "itemId": 2589,
+          "itemName": "Fallen Angel Wing",
+          "rawLine": "bonus bCritAtkRate,readparam(bLuk)/20;"
+        },
+        {
+          "itemId": 4594,
+          "itemName": "Petal Card",
+          "rawLine": "bonus bCritAtkRate,2*(readparam(bLuk)/10);"
+        },
+        {
+          "itemId": 4662,
+          "itemName": "Big Eggring Card",
+          "rawLine": "bonus bCritAtkRate,10-2*min(readparam(bLuk)/10,5);"
+        }
+      ]
+    },
+    {
       "command": "bonus bSplashRange",
       "reason": "unsupported-bonus-code",
       "count": 49,
@@ -3210,6 +3178,38 @@
           "itemId": 5560,
           "itemName": "Bullock Helm",
           "rawLine": "bonus bNoKnockback;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bHealPower",
+      "reason": "unsupported-bonus-code",
+      "count": 40,
+      "examples": [
+        {
+          "itemId": 1548,
+          "itemName": "Veteran Hammer",
+          "rawLine": "bonus bHealPower,getskilllv(\"AL_DP\");"
+        },
+        {
+          "itemId": 1625,
+          "itemName": "Healing Staff",
+          "rawLine": "bonus bHealPower,(getrefine()/2)*3;"
+        },
+        {
+          "itemId": 1641,
+          "itemName": "Glorious Cure Wand",
+          "rawLine": "bonus bHealPower,5+(min(14,.@r)-5)*2;"
+        },
+        {
+          "itemId": 1666,
+          "itemName": "Healing Staff",
+          "rawLine": "bonus bHealPower,(getrefine()*3/2);"
+        },
+        {
+          "itemId": 15883,
+          "itemName": "Nezuko's Eyes (OSM)",
+          "rawLine": "bonus bHealPower,.@a;"
         }
       ]
     },

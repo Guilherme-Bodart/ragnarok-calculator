@@ -15,6 +15,15 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Critico e cura de itens no modifier core
+
+- Parser rAthena passou a reconhecer `bCritAtkRate` e `bHealPower`.
+- `CalculatorModifierEffectsFactory` agrega `criticalDamageRate` e `healPower` para uso futuro por dano critico e formulas de cura.
+- Auditoria do parser subiu de 5.056 para 5.349 scripts totalmente suportados e reduziu unsupported statements para 27.133.
+- Testes focados cobrem normalizacao e agregacao.
+
+Motivo: equipamentos de dano critico e cura eram comuns no top unsupported; capturar esses efeitos melhora a rastreabilidade do resultado e prepara engines especificos.
+
 ### 2026-06-24 - Cast e delay de itens no modifier core
 
 - Parser rAthena passou a reconhecer `bVariableCastrate`, `bFixedCastrate`, `bFixedCast` e `bDelayrate`.

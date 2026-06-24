@@ -76,6 +76,10 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("flee", "addFlat", command, conditions, variables),
   bCritical: (command, conditions, variables) =>
     createModifier("crit", "addFlat", command, conditions, variables),
+  bCritAtkRate: (command, conditions, variables) =>
+    createModifier("criticalDamageRate", "addPercent", command, conditions, variables),
+  bHealPower: (command, conditions, variables) =>
+    createModifier("healPower", "addPercent", command, conditions, variables),
   bAspd: (command, conditions, variables) =>
     createModifier("aspd", "addFlat", command, conditions, variables),
   bAspdRate: (command, conditions, variables) =>
@@ -308,6 +312,8 @@ function createModifier(
     | "hit"
     | "flee"
     | "crit"
+    | "criticalDamageRate"
+    | "healPower"
     | "aspd"
     | "aspdRate"
     | "variableCastRate"

@@ -30,6 +30,8 @@ export type CalculatorModifierEffects = {
   hit: number;
   flee: number;
   crit: number;
+  criticalDamageRate: number;
+  healPower: number;
   aspd: number;
   aspdRate: number;
   variableCastRate: number;
@@ -92,6 +94,8 @@ export class CalculatorModifierEffectsFactory {
       hit: 0,
       flee: 0,
       crit: 0,
+      criticalDamageRate: 0,
+      healPower: 0,
       aspd: 0,
       aspdRate: 0,
       variableCastRate: 0,
@@ -234,6 +238,19 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "crit" && bucket.target.type === "self") {
           effects.crit += bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "criticalDamageRate" &&
+          bucket.target.type === "self"
+        ) {
+          effects.criticalDamageRate += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "healPower" && bucket.target.type === "self") {
+          effects.healPower += bucket.value;
           continue;
         }
 

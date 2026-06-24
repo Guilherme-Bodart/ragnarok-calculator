@@ -159,6 +159,7 @@ Funcionando:
 - Testes focados da calculadora existem em `npm run test:calculator`.
 - Core reconhece traits vindos de scripts de item (`bPow`, `bSta`, `bWis`, `bSpl`, `bCon`, `bCrt`) e aplica esses bonus nos status derivados.
 - Core reconhece modificadores de cast/delay vindos de itens, incluindo variantes por skill, mas o calculo final de cast/DPS ainda e proximo passo.
+- Core reconhece modificadores de dano critico e poder de cura vindos de itens, mas engines finais de critico/cura ainda sao proximos passos.
 
 Ainda incompleto para V1:
 
