@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 5349,
-  "partiallySupportedItemScripts": 5599,
-  "unsupportedItemScripts": 14688,
-  "itemScriptsWithModifiers": 10948,
-  "totalModifiers": 40568,
-  "unsupportedStatements": 27133,
+  "fullySupportedItemScripts": 5698,
+  "partiallySupportedItemScripts": 5687,
+  "unsupportedItemScripts": 14339,
+  "itemScriptsWithModifiers": 11385,
+  "totalModifiers": 42598,
+  "unsupportedStatements": 25103,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -74,38 +74,6 @@
           "itemId": 1173,
           "itemName": "Muramasa",
           "rawLine": "if (vip_status(VIP_STATUS_ACTIVE)) {\n   bonus bBaseAtk,10;\n   bonus bMatk,10;\n};"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bSubRace",
-      "reason": "unsupported-bonus-code",
-      "count": 1577,
-      "examples": [
-        {
-          "itemId": 1169,
-          "itemName": "Executioner",
-          "rawLine": "bonus2 bSubRace,RC_DemiHuman,-10;"
-        },
-        {
-          "itemId": 1169,
-          "itemName": "Executioner",
-          "rawLine": "bonus2 bSubRace,RC_Player_Human,-10;"
-        },
-        {
-          "itemId": 1174,
-          "itemName": "Executioner",
-          "rawLine": "bonus2 bSubRace,RC_DemiHuman,-10;"
-        },
-        {
-          "itemId": 1174,
-          "itemName": "Executioner",
-          "rawLine": "bonus2 bSubRace,RC_Player_Human,-10;"
-        },
-        {
-          "itemId": 1179,
-          "itemName": "Executioner",
-          "rawLine": "bonus2 bSubRace,RC_DemiHuman,-10;"
         }
       ]
     },
@@ -202,38 +170,6 @@
           "itemId": 2108,
           "itemName": "Mirror Shield",
           "rawLine": "bonus bMdef,5;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bSubEle",
-      "reason": "unsupported-bonus-code",
-      "count": 875,
-      "examples": [
-        {
-          "itemId": 1477,
-          "itemName": "Spectral Spear",
-          "rawLine": "bonus2 bSubEle,Ele_Dark,10;"
-        },
-        {
-          "itemId": 1479,
-          "itemName": "Spectral Spear",
-          "rawLine": "bonus2 bSubEle,Ele_Dark,10;"
-        },
-        {
-          "itemId": 1557,
-          "itemName": "Book of the Apocalypse",
-          "rawLine": "bonus2 bSubEle,Ele_Holy,-5;"
-        },
-        {
-          "itemId": 1730,
-          "itemName": "Burning Bow",
-          "rawLine": "bonus2 bSubEle,Ele_Fire,10;"
-        },
-        {
-          "itemId": 2051,
-          "itemName": "Illusion Survivor's Staff",
-          "rawLine": "bonus2 bSubEle,Ele_Water,15;"
         }
       ]
     },
@@ -426,6 +362,38 @@
           "itemId": 1380,
           "itemName": "Brave Insane Battle Axe",
           "rawLine": "autobonus \"{ bonus bBreakArmorRate,10000; }\",20,3000,BF_WEAPON,\"{ specialeffect2 EF_POTION_BERSERK; }\";"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bSubRace",
+      "reason": "unsupported-bonus-code",
+      "count": 385,
+      "examples": [
+        {
+          "itemId": 1331,
+          "itemName": "Abyss Axe",
+          "rawLine": "bonus2 bSubRace,RC_Player_Doram,5;"
+        },
+        {
+          "itemId": 1331,
+          "itemName": "Abyss Axe",
+          "rawLine": "bonus2 bSubRace,RC_Player_Doram,5;"
+        },
+        {
+          "itemId": 1672,
+          "itemName": "Safety Rod",
+          "rawLine": "bonus2 bSubRace,RC_DemiHuman,5+.@val;"
+        },
+        {
+          "itemId": 1672,
+          "itemName": "Safety Rod",
+          "rawLine": "bonus2 bSubRace,RC_Player_Human,5+.@val;"
+        },
+        {
+          "itemId": 2178,
+          "itemName": "TE Woe Buckler",
+          "rawLine": "bonus2 bSubRace,RC_Player_Doram,15;"
         }
       ]
     },
@@ -3402,6 +3370,38 @@
           "itemId": 310511,
           "itemName": "Wolf Orb (Reflection Reject) Level 1",
           "rawLine": "bonus bReduceDamageReturn,2;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bSubEle",
+      "reason": "unsupported-bonus-code",
+      "count": 37,
+      "examples": [
+        {
+          "itemId": 2168,
+          "itemName": "Immune Shield",
+          "rawLine": "bonus2 bSubEle,Ele_Neutral,min(.@r,12)-4;"
+        },
+        {
+          "itemId": 2589,
+          "itemName": "Fallen Angel Wing",
+          "rawLine": "bonus2 bSubEle,Ele_Neutral,readparam(bVit)/20;"
+        },
+        {
+          "itemId": 4375,
+          "itemName": "Orc Baby Card",
+          "rawLine": "bonus2 bSubEle,Ele_Neutral,.@i;"
+        },
+        {
+          "itemId": 15090,
+          "itemName": "Armor of Gray",
+          "rawLine": "bonus2 bSubEle,Ele_Holy,10+getrefine()*2;"
+        },
+        {
+          "itemId": 15091,
+          "itemName": "Gray Robe",
+          "rawLine": "bonus2 bSubEle,Ele_Holy,10+getrefine()*2;"
         }
       ]
     },

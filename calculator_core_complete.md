@@ -1199,6 +1199,36 @@ Impacto:
 Proximo bloco recomendado:
 
 - Escolher entre:
-  - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, separados de dano causado.
+  - Engine inicial de cura/critico consumindo `healPower` e `criticalDamageRate`.
+  - Mostrar cast detalhado no card de resultado/ataque, alem de ciclo e DPS.
+
+## Bloco Fechado: Reducoes Defensivas Por Raca E Elemento
+
+Data: 2026-06-24.
+
+Implementado:
+
+- Parser rAthena reconhece:
+  - `bonus2 bSubRace`
+  - `bonus2 bSubEle`
+- `CalculatorModifierEffectsFactory` agrega esses efeitos em campos defensivos:
+  - `incomingRaceDamageReductionRate`
+  - `incomingElementDamageReductionRate`
+- Esses efeitos nao entram no calculo de dano causado, para evitar misturar dano ofensivo com dano recebido.
+- Testes cobrem parser e agregacao.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 5.349 -> 5.698.
+- Scripts parcialmente suportados: 5.599 -> 5.687.
+- Unsupported statements: 27.133 -> 25.103.
+- Modifiers extraidos: 40.568 -> 42.598.
+- `bonus2 bSubEle` saiu do top unsupported.
+- `bonus2 bSubRace` caiu de 1.577 para 385, restando principalmente alvos especiais ainda nao mapeados.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Completar conversores para raças/classes especiais (`RC_Player_Doram`, `RC2_*`, `Class_All`).
   - Engine inicial de cura/critico consumindo `healPower` e `criticalDamageRate`.
   - Mostrar cast detalhado no card de resultado/ataque, alem de ciclo e DPS.

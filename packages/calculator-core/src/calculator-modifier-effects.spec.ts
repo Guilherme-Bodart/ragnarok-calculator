@@ -142,6 +142,8 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus bMatkRate,10;
         bonus2 bAddSize,Size_Medium,5;
         bonus2 bAddEle,Ele_Neutral,7;
+        bonus2 bSubRace,RC_DemiHuman,6;
+        bonus2 bSubEle,Ele_Neutral,8;
         bonus2 bMagicAddRace,RC_DemiHuman,11;
         bonus2 bMagicAddEle,Ele_Neutral,13;
         bonus2 bMagicAddSize,Size_All,19;
@@ -160,6 +162,8 @@ describe("CalculatorModifierEffectsFactory", () => {
       matkRate: 10,
       sizeDamageRate: { medium: 5 },
       elementDamageRate: { neutral: 7 },
+      incomingRaceDamageReductionRate: { demihuman: 6 },
+      incomingElementDamageReductionRate: { neutral: 8 },
       magicRaceDamageRate: { demihuman: 11 },
       magicElementDamageRate: { neutral: 13 },
       magicSizeDamageRate: { all: 19 },

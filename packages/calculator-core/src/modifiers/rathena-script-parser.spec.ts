@@ -254,6 +254,8 @@ describe("ModifierNormalizer", () => {
     const result = normalizer.fromRawScript(`
       bonus2 bAddSize,Size_Large,5;
       bonus2 bAddEle,Ele_Fire,7;
+      bonus2 bSubRace,RC_DemiHuman,8;
+      bonus2 bSubEle,Ele_Fire,9;
       bonus2 bMagicAddRace,RC_DemiHuman,9;
       bonus2 bMagicAddEle,Ele_Ghost,11;
       bonus2 bMagicAddSize,Size_All,12;
@@ -271,6 +273,18 @@ describe("ModifierNormalizer", () => {
         stat: "elementDamageRate",
         operator: "addPercent",
         value: 7,
+        target: { type: "element", elementId: "fire" },
+      },
+      {
+        stat: "incomingRaceDamageReductionRate",
+        operator: "addPercent",
+        value: 8,
+        target: { type: "race", raceId: "demihuman" },
+      },
+      {
+        stat: "incomingElementDamageReductionRate",
+        operator: "addPercent",
+        value: 9,
         target: { type: "element", elementId: "fire" },
       },
       {

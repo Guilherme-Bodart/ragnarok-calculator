@@ -58,6 +58,8 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   magicElementAttackRate: {},
   ignoreDefenseRate: {},
   ignoreMagicDefenseRate: {},
+  incomingRaceDamageReductionRate: {},
+  incomingElementDamageReductionRate: {},
   unsupportedStatements: [],
 };
 

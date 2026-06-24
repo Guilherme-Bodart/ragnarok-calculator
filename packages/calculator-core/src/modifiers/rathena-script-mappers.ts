@@ -129,6 +129,40 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
       numericValue,
     );
   },
+  bSubRace: (command, conditions, variables) => {
+    const [, rathenaRaceId, value] = command.args;
+    const raceId = toInternalRaceId(rathenaRaceId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!raceId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "incomingRaceDamageReductionRate",
+      { type: "race", raceId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bSubEle: (command, conditions, variables) => {
+    const [, rathenaElementId, value] = command.args;
+    const elementId = toInternalElementId(rathenaElementId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!elementId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "incomingElementDamageReductionRate",
+      { type: "element", elementId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
   bAddSize: (command, conditions, variables) => {
     const [, rathenaSizeId, value] = command.args;
     const sizeId = toInternalSizeId(rathenaSizeId);
@@ -360,6 +394,8 @@ function createTargetedModifier(
     | "magicElementAttackRate"
     | "ignoreDefenseRate"
     | "ignoreMagicDefenseRate"
+    | "incomingRaceDamageReductionRate"
+    | "incomingElementDamageReductionRate"
     | "skillVariableCastRate"
     | "skillFixedCastRate"
     | "skillFixedCast",

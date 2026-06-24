@@ -15,6 +15,15 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Reducoes defensivas por raca e elemento
+
+- Parser rAthena passou a reconhecer `bonus2 bSubRace` e `bonus2 bSubEle`.
+- Efeitos sao agregados em campos defensivos separados de dano causado: `incomingRaceDamageReductionRate` e `incomingElementDamageReductionRate`.
+- Auditoria do parser subiu de 5.349 para 5.698 scripts totalmente suportados e reduziu unsupported statements para 25.103.
+- `bSubRace` caiu de 1.577 para 385 entradas restantes; `bSubEle` saiu do top unsupported.
+
+Motivo: reducoes defensivas aparecem muito nos itens, mas precisam ficar separadas do calculo ofensivo para nao contaminar o dano causado.
+
 ### 2026-06-24 - Cast e cooldown base das skills rAthena
 
 - Adapter `rathena-normalized` mapeia `CastTime`, `FixedCastTime`, `AfterCastActDelay` e `Cooldown` para os campos opcionais de `RoSkill`.

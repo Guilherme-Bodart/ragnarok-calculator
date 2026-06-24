@@ -51,6 +51,8 @@ export type CalculatorModifierEffects = {
   magicElementAttackRate: Partial<Record<ModifierElementId, number>>;
   ignoreDefenseRate: Partial<Record<ModifierRaceId, number>>;
   ignoreMagicDefenseRate: Partial<Record<ModifierRaceId, number>>;
+  incomingRaceDamageReductionRate: Partial<Record<ModifierRaceId, number>>;
+  incomingElementDamageReductionRate: Partial<Record<ModifierElementId, number>>;
   unsupportedStatements: string[];
 };
 
@@ -115,6 +117,8 @@ export class CalculatorModifierEffectsFactory {
       magicElementAttackRate: {},
       ignoreDefenseRate: {},
       ignoreMagicDefenseRate: {},
+      incomingRaceDamageReductionRate: {},
+      incomingElementDamageReductionRate: {},
       unsupportedStatements: [],
     };
 
@@ -355,6 +359,31 @@ export class CalculatorModifierEffectsFactory {
             effects.magicRaceDamageRate[bucket.target.raceId] ?? 0;
           effects.magicRaceDamageRate[bucket.target.raceId] =
             current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "incomingRaceDamageReductionRate" &&
+          bucket.target.type === "race"
+        ) {
+          const current =
+            effects.incomingRaceDamageReductionRate[bucket.target.raceId] ?? 0;
+          effects.incomingRaceDamageReductionRate[bucket.target.raceId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "incomingElementDamageReductionRate" &&
+          bucket.target.type === "element"
+        ) {
+          const current =
+            effects.incomingElementDamageReductionRate[
+              bucket.target.elementId
+            ] ?? 0;
+          effects.incomingElementDamageReductionRate[
+            bucket.target.elementId
+          ] = current + bucket.value;
           continue;
         }
 
