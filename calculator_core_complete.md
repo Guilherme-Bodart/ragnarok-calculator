@@ -20,6 +20,17 @@ No final, o usuario deve conseguir:
 - Ver avisos claros quando algum item, buff, skill ou formula ainda nao esta validado.
 - Comparar builds e exportar/importar payloads.
 
+## Regra De Performance Do Front
+
+A calculadora precisa responder imediatamente quando o usuario troca status, skill, item, carta, buff ou monstro. Por isso:
+
+- O calculo interativo deve rodar no front usando `packages/calculator-core`, de forma pura e sincrona.
+- O front nao deve importar datasets gigantes completos.
+- Busca de item/monstro/carta deve usar indices leves ou API local.
+- Ao selecionar uma opcao, o front deve manter em memoria apenas os detalhes necessarios para o build atual.
+- Scripts pesados de normalizacao ficam em build/sync/auditoria, nunca no fluxo de clique do usuario.
+- O core pode crescer em precisao, mas cada etapa deve preservar baixo custo por recalculo.
+
 ## Estado Atual Do Projeto
 
 Arquivos relevantes:
