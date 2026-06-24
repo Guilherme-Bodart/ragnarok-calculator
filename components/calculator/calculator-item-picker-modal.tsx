@@ -29,12 +29,14 @@ import { useDebouncedValue } from "./use-debounced-value";
 type CalculatorItemPickerModalProps = {
   copy: CalculatorDictionary;
   editingSlot: EquipmentSlot;
-  itemContexts: Record<number, { refine?: number }>;
+  itemContexts: Record<number, { refine?: number; grade?: number }>;
   selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
   selectedItemDetails: Record<number, CalculatorItemDetail>;
   selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
   onClose: () => void;
-  onItemContextsChange: (contexts: Record<number, { refine?: number }>) => void;
+  onItemContextsChange: (
+    contexts: Record<number, { refine?: number; grade?: number }>,
+  ) => void;
   onSelectedCardsBySlotChange: (
     cardsBySlot: Partial<Record<EquipmentSlot, number[]>>,
   ) => void;

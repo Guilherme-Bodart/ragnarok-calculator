@@ -55,6 +55,23 @@ export function createRefineCondition(
   };
 }
 
+export function createGradeCondition(
+  operator: string,
+  value: string,
+): ModifierCondition | null {
+  const numericValue = toEnchantGradeValue(value);
+
+  if (numericValue === null || !isRathenaConditionOperator(operator)) {
+    return null;
+  }
+
+  return {
+    type: "grade",
+    operator,
+    value: numericValue,
+  };
+}
+
 export function createSkillLevelConditions(conditionText: string) {
   const conditions: ModifierCondition[] = [];
   const skillLevelPattern =
@@ -109,4 +126,22 @@ function isRathenaConditionOperator(
   operator: string,
 ): operator is ModifierCondition["operator"] {
   return [">", ">=", "<", "<=", "==", "!="].includes(operator);
+}
+
+function toEnchantGradeValue(value: string) {
+  const gradeByConstant: Record<string, number> = {
+    ENCHANTGRADE_NONE: 0,
+    ENCHANTGRADE_D: 1,
+    ENCHANTGRADE_C: 2,
+    ENCHANTGRADE_B: 3,
+    ENCHANTGRADE_A: 4,
+  };
+
+  if (value in gradeByConstant) {
+    return gradeByConstant[value];
+  }
+
+  const numericValue = Number(value);
+
+  return Number.isInteger(numericValue) ? numericValue : null;
 }

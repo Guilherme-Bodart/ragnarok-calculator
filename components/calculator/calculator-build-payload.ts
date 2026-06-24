@@ -19,7 +19,7 @@ export type CalculatorBuildPayload = {
     learnedSkills: Record<string, number>;
   };
   equipment: {
-    itemContexts: Record<number, { refine?: number }>;
+    itemContexts: Record<number, { refine?: number; grade?: number }>;
     selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
     selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
   };
@@ -39,7 +39,7 @@ type CalculatorBuildPayloadV1 = {
   baseLevel: number;
   jobLevel: number;
   learnedSkills: Record<string, number>;
-  itemContexts: Record<number, { refine?: number }>;
+  itemContexts: Record<number, { refine?: number; grade?: number }>;
   selectedBuffId: string;
   selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
   selectedClassId: string;
@@ -201,7 +201,8 @@ function isItemContextRecord(
     Object.values(value).every(
       (context) =>
         isRecord(context) &&
-        (!("refine" in context) || isFiniteNumber(context.refine)),
+        (!("refine" in context) || isFiniteNumber(context.refine)) &&
+        (!("grade" in context) || isFiniteNumber(context.grade)),
     )
   );
 }

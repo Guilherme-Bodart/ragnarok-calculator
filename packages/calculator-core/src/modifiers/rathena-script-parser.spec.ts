@@ -248,6 +248,38 @@ describe("ModifierNormalizer", () => {
     expect(result.unsupportedStatements).toEqual([]);
   });
 
+  it("supports simple enchant grade conditions using a grade variable", () => {
+    const result = normalizer.fromRawScript(`
+      .@g = getenchantgrade();
+      if (.@g >= ENCHANTGRADE_D) {
+        bonus bPAtk,2;
+      }
+    `);
+
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "pAtk",
+        value: 2,
+        conditions: [{ type: "grade", operator: ">=", value: 1 }],
+      },
+    ]);
+    expect(result.unsupportedStatements).toEqual([]);
+  });
+
+  it("attaches simple enchant grade conditions to inline commands", () => {
+    const result = normalizer.fromRawScript(
+      "if (getenchantgrade()>=ENCHANTGRADE_B) bonus bAtkRate,5;",
+    );
+
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "atkRate",
+        value: 5,
+        conditions: [{ type: "grade", operator: ">=", value: 3 }],
+      },
+    ]);
+  });
+
   it("extracts refine blocks without breaking nested unsupported blocks", () => {
     const result = normalizer.fromRawScript(`
       .@r = getrefine();

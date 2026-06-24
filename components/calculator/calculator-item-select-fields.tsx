@@ -14,7 +14,7 @@ import { ensureSelectedOption } from "./calculator-item-picker-utils";
 type CalculatorItemSelectFieldsProps = {
   copy: CalculatorDictionary;
   editingSlot: EquipmentSlot;
-  itemContexts: Record<number, { refine?: number }>;
+  itemContexts: Record<number, { refine?: number; grade?: number }>;
   itemQuery: string;
   isItemSearchReady: boolean;
   selectedItem: CalculatorItemIndexOption | CalculatorItemDetail | undefined;

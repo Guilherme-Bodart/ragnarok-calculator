@@ -46,6 +46,24 @@ describe("ModifierResolver", () => {
     expect(resolver.resolve(parsed.modifiers)).toEqual([]);
   });
 
+  it("resolves enchant grade conditions only when the item grade matches", () => {
+    const parsed = normalizer.fromRawScript(`
+      .@g = getenchantgrade();
+      if (.@g >= ENCHANTGRADE_C) {
+        bonus bPAtk,2;
+      }
+    `);
+
+    expect(resolver.resolve(parsed.modifiers)).toEqual([]);
+    expect(resolver.resolve(parsed.modifiers, { grade: 1 })).toEqual([]);
+    expect(resolver.resolve(parsed.modifiers, { grade: 2 })).toMatchObject([
+      {
+        stat: "pAtk",
+        value: 2,
+      },
+    ]);
+  });
+
   it("requires every condition on a modifier to match", () => {
     const parsed = normalizer.fromRawScript(
       "if (getrefine()>=7) bonus bAtkRate,5;",

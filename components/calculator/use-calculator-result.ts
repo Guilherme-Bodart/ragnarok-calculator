@@ -29,7 +29,7 @@ export function useCalculatorResult({
   baseLevel: number;
   calculatorDataset: CalculatorDataset;
   effectiveLearnedSkills: CalculatorInput["learnedSkills"];
-  itemContexts: Record<number, { refine?: number }>;
+  itemContexts: Record<number, { refine?: number; grade?: number }>;
   jobLevel: number;
   resolvedCardItemIds: number[];
   resolvedEquipmentItemIds: number[];
@@ -59,6 +59,7 @@ export function useCalculatorResult({
           itemContexts: Object.entries(itemContexts).map(([itemId, context]) => ({
             itemId: Number(itemId),
             refine: context.refine,
+            grade: context.grade,
           })),
           monsterId: selectedMonsterId,
           skillId: selectedSkillId,

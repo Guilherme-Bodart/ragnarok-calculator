@@ -149,6 +149,31 @@ describe("calculateDamageFromDataset", () => {
     expect(result.damage.average).toBe(2040);
   });
 
+  it("resolves item enchant grade conditions before damage", () => {
+    const gradeItem: RoItem = {
+      ...item,
+      rawScript: `
+        .@g = getenchantgrade();
+        if (.@g>=ENCHANTGRADE_D) bonus bBaseAtk,50;
+      `,
+    };
+
+    const result = calculateDamageFromDataset(
+      {
+        ...input,
+        equipmentItemIds: [gradeItem.id],
+        itemContexts: [{ itemId: gradeItem.id, grade: 1 }],
+      },
+      {
+        ...dataset,
+        items: [gradeItem],
+      },
+    );
+
+    expect(result.characterStatus.atk).toBe(350);
+    expect(result.meta.warnings).toEqual([]);
+  });
+
   it("rejects skill levels above the selected skill max level", () => {
     expect(() =>
       calculateDamageFromDataset(

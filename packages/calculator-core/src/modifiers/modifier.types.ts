@@ -63,6 +63,11 @@ export const modifierConditionSchema = z.discriminatedUnion("type", [
     value: z.number().int(),
   }),
   z.object({
+    type: z.literal("grade"),
+    operator: z.enum([">", ">=", "<", "<=", "==", "!="]),
+    value: z.number().int().min(0),
+  }),
+  z.object({
     type: z.literal("skillLevel"),
     skillId: z.string().min(1),
     operator: z.enum([">", ">=", "<", "<=", "==", "!="]),
@@ -143,6 +148,7 @@ export const modifierAggregationResultSchema = z.object({
 export const modifierResolutionContextSchema = z.object({
   classId: z.string().min(1).optional(),
   refine: z.number().int().min(0).optional(),
+  grade: z.number().int().min(0).optional(),
   learnedSkills: z.record(z.string(), z.number().int().min(0)).optional(),
   ruleset: rulesetContextSchema.optional(),
 });

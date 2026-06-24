@@ -13,4 +13,5 @@ export type ScriptSegment = {
 
 export type ParserVariables = {
   refine?: number;
+  grade?: number;
 };

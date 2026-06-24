@@ -68,7 +68,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     Partial<Record<EquipmentSlot, number[]>>
   >(savedBuild.equipment.selectedCardsBySlot);
   const [itemContexts, setItemContexts] = useState<
-    Record<number, { refine?: number }>
+    Record<number, { refine?: number; grade?: number }>
   >(savedBuild.equipment.itemContexts);
   const [selectedItemDetails, setSelectedItemDetails] = useState<
     Record<number, CalculatorItemDetail>

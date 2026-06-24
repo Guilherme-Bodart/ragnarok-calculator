@@ -8,7 +8,7 @@ type CalculatorItemPreviewProps = {
   cardOptions: CalculatorItemIndexOption[];
   copy: CalculatorDictionary;
   item: CalculatorItemIndexOption | CalculatorItemDetail | undefined;
-  itemContexts: Record<number, { refine?: number }>;
+  itemContexts: Record<number, { refine?: number; grade?: number }>;
   selectedCards: number[];
   selectedItemDetails: Record<number, CalculatorItemDetail>;
 };

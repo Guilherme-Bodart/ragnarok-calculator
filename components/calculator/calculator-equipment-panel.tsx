@@ -15,12 +15,14 @@ import { CalculatorItemPickerModal } from "./calculator-item-picker-modal";
 import type { CalculatorItemDetail } from "./calculator-item-data";
 
 type CalculatorEquipmentPanelProps = {
-  itemContexts: Record<number, { refine?: number }>;
+  itemContexts: Record<number, { refine?: number; grade?: number }>;
   selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
   selectedItemDetails: Record<number, CalculatorItemDetail>;
   selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
   copy: CalculatorDictionary;
-  onItemContextsChange: (contexts: Record<number, { refine?: number }>) => void;
+  onItemContextsChange: (
+    contexts: Record<number, { refine?: number; grade?: number }>,
+  ) => void;
   onSelectedCardsBySlotChange: (
     cardsBySlot: Partial<Record<EquipmentSlot, number[]>>,
   ) => void;

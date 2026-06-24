@@ -8,6 +8,7 @@ import type { CalculatorCharacter, RoItem, RoMonster, RoSkill } from "./ro-types
 export type CalculatorItemContext = {
   itemId: number;
   refine?: number;
+  grade?: number;
 };
 
 export type CalculateDamageInput = {
@@ -123,7 +124,10 @@ function createWarnings(unsupportedStatementCount: number) {
 
 function createItemContextMap(itemContexts: CalculatorItemContext[]) {
   return new Map(
-    itemContexts.map((context) => [context.itemId, { refine: context.refine }]),
+    itemContexts.map((context) => [
+      context.itemId,
+      { refine: context.refine, grade: context.grade },
+    ]),
   );
 }
 

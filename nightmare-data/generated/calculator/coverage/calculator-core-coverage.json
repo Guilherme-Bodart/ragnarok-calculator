@@ -1,0 +1,365 @@
+{
+  "generatedAt": "2026-06-23T23:59:50.777Z",
+  "sources": {
+    "items": "nightmare-data\\normalized\\items\\items.en.json",
+    "monsters": "nightmare-data\\normalized\\monsters\\monsters.en.json",
+    "skills": "nightmare-data\\normalized\\skills\\skills.en.json",
+    "skillTree": "nightmare-data\\normalized\\skills\\skill-tree.json",
+    "skillTooltips": "nightmare-data\\normalized\\skills\\skill-tooltips.en.json",
+    "staticSkillFormulas": "packages\\calculator-core\\src\\skills\\static-skill-formulas.ts"
+  },
+  "items": {
+    "total": 29356,
+    "withRawScript": 20037,
+    "refineable": 6947,
+    "cards": {
+      "total": 5633,
+      "withRawScript": 5095
+    },
+    "topScriptCommands": [
+      {
+        "key": "bonus",
+        "count": 25719
+      },
+      {
+        "key": "bonus2",
+        "count": 18325
+      },
+      {
+        "key": "if",
+        "count": 12662
+      },
+      {
+        "key": "unknown",
+        "count": 6834
+      },
+      {
+        "key": "assignment",
+        "count": 6778
+      },
+      {
+        "key": "getgroupitem",
+        "count": 2795
+      },
+      {
+        "key": "blockClose",
+        "count": 1986
+      },
+      {
+        "key": "getitem",
+        "count": 1524
+      },
+      {
+        "key": "bonus3",
+        "count": 656
+      },
+      {
+        "key": "sc_start",
+        "count": 646
+      },
+      {
+        "key": "skill",
+        "count": 492
+      },
+      {
+        "key": "autobonus",
+        "count": 334
+      },
+      {
+        "key": "itemheal",
+        "count": 248
+      },
+      {
+        "key": "percentheal",
+        "count": 234
+      },
+      {
+        "key": "laphine_synthesis",
+        "count": 231
+      },
+      {
+        "key": "hateffect",
+        "count": 212
+      },
+      {
+        "key": "specialeffect2",
+        "count": 180
+      },
+      {
+        "key": "laphine_upgrade",
+        "count": 150
+      },
+      {
+        "key": "sc_end",
+        "count": 148
+      },
+      {
+        "key": "else",
+        "count": 139
+      },
+      {
+        "key": "item_reform",
+        "count": 130
+      },
+      {
+        "key": "bonus4",
+        "count": 114
+      },
+      {
+        "key": "itemskill",
+        "count": 114
+      },
+      {
+        "key": "bonus5",
+        "count": 113
+      },
+      {
+        "key": "autobonus3",
+        "count": 109
+      }
+    ],
+    "topUnsupportedLikeStatements": [
+      {
+        "key": "getitem N,N;",
+        "count": 1515
+      },
+      {
+        "key": "percentheal N,N;",
+        "count": 234
+      },
+      {
+        "key": "laphine_synthesis();",
+        "count": 231
+      },
+      {
+        "key": "}\";",
+        "count": 208
+      },
+      {
+        "key": "laphine_upgrade();",
+        "count": 150
+      },
+      {
+        "key": "item_reform();",
+        "count": 130
+      },
+      {
+        "key": "itemheal rand(N,N),N;",
+        "count": 115
+      },
+      {
+        "key": "}\",N,N,BF_WEAPON;",
+        "count": 108
+      },
+      {
+        "key": "} } } if (.@g>=ENCHANTGRADE_D) { bonus bPAtk,N;",
+        "count": 88
+      },
+      {
+        "key": "itemheal N,N;",
+        "count": 81
+      },
+      {
+        "key": "}\",N,N,BF_MAGIC;",
+        "count": 80
+      },
+      {
+        "key": "} if (.@r>=N) { bonus bMaxHPrate,N;",
+        "count": 77
+      },
+      {
+        "key": "} if (.@r>=N) { bonus bBaseAtk,N;",
+        "count": 73
+      },
+      {
+        "key": "pet;",
+        "count": 67
+      },
+      {
+        "key": "rentitem N,N;",
+        "count": 66
+      },
+      {
+        "key": "bonus3 bAddMonsterIdDropItem,N,N,N;",
+        "count": 62
+      },
+      {
+        "key": "mercenary_create N,N;",
+        "count": 59
+      },
+      {
+        "key": "} if (.@r>=N) { bonus bDelayrate,-N;",
+        "count": 53
+      },
+      {
+        "key": "} if (.@r>=N) { bonus2 bAddSize,Size_All,N;",
+        "count": 49
+      },
+      {
+        "key": "} if (.@r>=N) { bonus bVariableCastrate,-N;",
+        "count": 48
+      },
+      {
+        "key": "autobonus \"{ bonus bUseSPrate,-N;",
+        "count": 46
+      },
+      {
+        "key": "skill \"AL_HEAL\",N;",
+        "count": 44
+      },
+      {
+        "key": "specialeffect2 EF_POTION_BERSERK;",
+        "count": 44
+      },
+      {
+        "key": "} } } bonus bBaseAtk,N*(.@r/N);",
+        "count": 43
+      },
+      {
+        "key": "} } } if (.@g>=ENCHANTGRADE_D) { bonus bSMatk,N;",
+        "count": 41
+      },
+      {
+        "key": ".@r = getequiprefinerycnt(EQI_HEAD_TOP);",
+        "count": 38
+      },
+      {
+        "key": "} } } if (.@g >= ENCHANTGRADE_D) { bonus bAtkRate,N;",
+        "count": 38
+      },
+      {
+        "key": "skill \"AL_TELEPORT\",N;",
+        "count": 38
+      },
+      {
+        "key": "} if (.@r>=N) { bonus bLongAtkRate,N;",
+        "count": 36
+      },
+      {
+        "key": "} if (.@r>=N) { bonus bAspdRate,N;",
+        "count": 33
+      }
+    ]
+  },
+  "monsters": {
+    "total": 2675,
+    "withRace": 2671,
+    "withElement": 2671,
+    "withDefense": 2338,
+    "withMagicDefense": 2278
+  },
+  "skills": {
+    "normalizedTotal": 1635,
+    "tree": {
+      "jobs": 175,
+      "uniqueSkills": 1142
+    },
+    "actionSkills": {
+      "total": 334,
+      "staticFormulaCoverage": 5,
+      "tooltipInferredCoverage": 114,
+      "fallbackLikely": 219,
+      "sampleFallbackSkillIds": [
+        "AC_CHARGEARROW",
+        "AL_HOLYLIGHT",
+        "MC_MAMMONITE",
+        "MC_CARTREVOLUTION",
+        "TF_POISON",
+        "TF_SPRINKLESAND",
+        "TF_THROWSTONE",
+        "KN_CHARGEATK",
+        "PR_TURNUNDEAD",
+        "WZ_EARTHSPIKE",
+        "HT_LANDMINE",
+        "HT_FREEZINGTRAP",
+        "HT_BLASTMINE",
+        "HT_CLAYMORETRAP",
+        "HT_PHANTASMIC",
+        "HT_POWER",
+        "AS_VENOMKNIFE",
+        "MO_EXTREMITYFIST",
+        "MO_BALKYOUNG",
+        "GS_FLING",
+        "GS_TRIPLEACTION",
+        "GS_BULLSEYE",
+        "GS_TRACKING",
+        "GS_DISARM",
+        "GS_PIERCINGSHOT"
+      ]
+    },
+    "formulas": {
+      "static": {
+        "total": 6,
+        "skillIds": [
+          "KN_BOWLINGBASH",
+          "MG_COLDBOLT",
+          "MG_FIREBOLT",
+          "MG_LIGHTNINGBOLT",
+          "SM_BASH",
+          "SM_MAGNUM"
+        ]
+      },
+      "tooltipInferred": {
+        "total": 168,
+        "sampleSkillIds": [
+          "ABC_ABYSS_DAGGER",
+          "ABC_ABYSS_STRIKE",
+          "ABC_CHAIN_REACTION_SHOT",
+          "ABC_DEFT_STAB",
+          "ABC_FRENZY_SHOT",
+          "ABC_FROM_THE_ABYSS",
+          "ABC_UNLUCKY_RUSH",
+          "AB_PRAEFATIO",
+          "AC_DOUBLE",
+          "AC_SHOWER",
+          "AG_ALL_BLOOM",
+          "AG_ASTRAL_STRIKE",
+          "AG_CRIMSON_ARROW",
+          "AG_CRYSTAL_IMPACT",
+          "AG_DEADLY_PROJECTION",
+          "AG_DESTRUCTIVE_HURRICANE",
+          "AG_FLORAL_FLARE_ROAD",
+          "AG_FROZEN_SLASH",
+          "AG_MYSTERY_ILLUSION",
+          "AG_RAIN_OF_CRYSTAL",
+          "AG_ROCK_DOWN",
+          "AG_SOUL_VC_STRIKE",
+          "AG_STORM_CANNON",
+          "AG_STRANTUM_TREMOR",
+          "AG_TORNADO_STORM",
+          "AG_VIOLENT_QUAKE",
+          "AM_ACIDTERROR",
+          "ASC_BREAKER",
+          "ASC_METEORASSAULT",
+          "AS_GRIMTOOTH",
+          "AS_POISONREACT",
+          "AS_SONICBLOW",
+          "AS_SPLASHER",
+          "BA_DISSONANCE",
+          "BA_MUSICALLESSON",
+          "BA_MUSICALSTRIKE",
+          "BO_ACIDIFIED_ZONE_FIRE",
+          "BO_ACIDIFIED_ZONE_GROUND",
+          "BO_ACIDIFIED_ZONE_WATER",
+          "BO_ACIDIFIED_ZONE_WIND",
+          "BO_EXPLOSIVE_POWDER",
+          "BO_MAYHEMIC_THORNS",
+          "CD_EFFLIGO",
+          "CD_PNEUMATICUS_PROCELLA",
+          "CG_ARROWVULCAN",
+          "CH_CHAINCRUSH",
+          "CH_PALMSTRIKE",
+          "CH_TIGERFIST",
+          "CR_ACIDDEMONSTRATION",
+          "CR_GRANDCROSS"
+        ]
+      }
+    }
+  },
+  "nextRecommendedWork": [
+    "Implementar mappers para os comandos/statements mais frequentes em items.topScriptCommands e items.topUnsupportedLikeStatements.",
+    "Gerar catalogo detalhado de cartas separado de itens comuns.",
+    "Expandir inferencia de formulas a partir de skill-tooltips para reduzir fallback generico.",
+    "Criar relatorio de buffs/enchants quando as fontes estiverem normalizadas."
+  ]
+}

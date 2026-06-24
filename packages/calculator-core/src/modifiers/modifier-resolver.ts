@@ -27,6 +27,10 @@ export class ModifierResolver {
       return this.compare(context.refine, condition.operator, condition.value);
     }
 
+    if (condition.type === "grade") {
+      return this.compare(context.grade, condition.operator, condition.value);
+    }
+
     if (condition.type === "skillLevel") {
       return this.compare(
         context.learnedSkills?.[condition.skillId],
