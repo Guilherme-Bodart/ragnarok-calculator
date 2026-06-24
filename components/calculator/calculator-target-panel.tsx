@@ -52,6 +52,8 @@ export function CalculatorTargetPanel({
     "unsupportedModifierStatements",
   );
   const activeBuffItems = getBreakdownValue(result.breakdown, "activeBuffItems");
+  const cycleTimeMs = getBreakdownValue(result.breakdown, "cycleTimeMs");
+  const dps = getBreakdownValue(result.breakdown, "dps");
   const options = useMemo(() => {
     const optionById = new Map(
       monsterOptions.map((monster) => [monster.id, monster]),
@@ -177,6 +179,14 @@ export function CalculatorTargetPanel({
         <div>
           <span>{copy.target.activeBuffs}</span>
           <strong>{activeBuffItems}</strong>
+        </div>
+        <div>
+          <span>{copy.target.cycleTime}</span>
+          <strong>{(cycleTimeMs / 1000).toFixed(2)}s</strong>
+        </div>
+        <div>
+          <span>{copy.target.dps}</span>
+          <strong>{dps.toLocaleString()}</strong>
         </div>
         <div>
           <span>{copy.target.source}</span>

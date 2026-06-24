@@ -126,6 +126,10 @@ export type RoSkill = {
   maxLevel: number;
   hitCount: number;
   hitCountByLevel?: Record<string, number>;
+  variableCastMsByLevel?: Record<string, number>;
+  fixedCastMsByLevel?: Record<string, number>;
+  afterCastDelayMsByLevel?: Record<string, number>;
+  cooldownMsByLevel?: Record<string, number>;
   baseMultiplierByLevel: Record<string, number>;
   source: "manual" | "irowiki" | "rathena";
   sourceUrl?: string;

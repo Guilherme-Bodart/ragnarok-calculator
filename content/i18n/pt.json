@@ -270,6 +270,8 @@
       "sizeMultiplier": "Tamanho",
       "unsupportedModifiers": "Mods nao suportados",
       "activeBuffs": "Buffs ativos",
+      "cycleTime": "Ciclo",
+      "dps": "DPS",
       "defenseMitigation": "Mitigação da Defesa",
       "source": "Fonte",
       "sourceValue": "Core local"

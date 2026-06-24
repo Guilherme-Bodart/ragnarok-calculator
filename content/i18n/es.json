@@ -270,6 +270,8 @@
       "sizeMultiplier": "Tamano",
       "unsupportedModifiers": "Mods no soportados",
       "activeBuffs": "Buffs activos",
+      "cycleTime": "Ciclo",
+      "dps": "DPS",
       "defenseMitigation": "Mitigación de Defensa",
       "source": "Fuente",
       "sourceValue": "Core local"

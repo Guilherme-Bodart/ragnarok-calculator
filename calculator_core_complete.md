@@ -1136,5 +1136,43 @@ Proximo bloco recomendado:
 
 - Escolher entre:
   - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, separados de dano causado.
-  - Engine inicial de cast/DPS consumindo os campos de cast/delay ja agregados.
+  - Engine inicial de cura/critico consumindo `healPower` e `criticalDamageRate`.
+
+## Bloco Fechado: Engine Inicial De Cast E DPS
+
+Data: 2026-06-24.
+
+Implementado:
+
+- Criado `CastTimingEngine`.
+- `RoSkill` agora aceita campos opcionais por level:
+  - `variableCastMsByLevel`
+  - `fixedCastMsByLevel`
+  - `afterCastDelayMsByLevel`
+  - `cooldownMsByLevel`
+- `DamageFormulaPipeline` calcula:
+  - cast variavel final
+  - cast fixo final
+  - pos-conjuracao final
+  - cooldown
+  - tempo de ciclo
+  - DPS estimado
+- Breakdown agora expoe:
+  - `variableCastMs`
+  - `fixedCastMs`
+  - `afterCastDelayMs`
+  - `cooldownMs`
+  - `cycleTimeMs`
+  - `dps`
+- `npm run test:calculator` passou a incluir `cast-timing.spec.ts`.
+
+Observacao:
+
+- Como os datasets atuais ainda nao trazem cast base real por skill, muitas skills seguem com ciclo zero e DPS igual ao dano total instantaneo. Quando normalizarmos cast/cooldown real, o pipeline ja consome automaticamente.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Normalizar cast/cooldown base a partir de dados reais de skill.
+  - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, separados de dano causado.
   - Engine inicial de cura/critico consumindo `healPower` e `criticalDamageRate`.

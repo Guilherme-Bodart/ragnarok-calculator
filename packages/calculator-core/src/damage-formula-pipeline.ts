@@ -1,4 +1,5 @@
 import type { CalculatorModifierEffects } from "./calculator-modifier-effects";
+import { CastTimingEngine, type CastTimingResult } from "./cast-timing";
 import type { EffectiveCharacter } from "./effective-character";
 import {
   getDefenseMultiplier,
@@ -34,7 +35,7 @@ export type DamageBreakdownLine = {
   label: string;
   value: number;
   group: DamageBreakdownGroup;
-  unit?: "flat" | "percent" | "multiplier" | "count";
+  unit?: "flat" | "percent" | "multiplier" | "count" | "milliseconds" | "dps";
 };
 
 export type DamageFormulaInput = {
@@ -55,6 +56,7 @@ export type DamageFormulaResult = {
   };
   breakdown: DamageBreakdownLine[];
   formulaId: string;
+  castTiming: CastTimingResult;
 };
 
 type DamageFormulaContext = {
@@ -75,10 +77,15 @@ type DamageFormulaContext = {
   preDefenseDamage: number;
   singleHitDamage: number;
   hitCount: number;
+  castTiming: CastTimingResult;
+  dps: number;
 };
 
 export class DamageFormulaPipeline {
-  constructor(private readonly skillFormulaRegistry = new SkillFormulaRegistry()) {}
+  constructor(
+    private readonly skillFormulaRegistry = new SkillFormulaRegistry(),
+    private readonly castTimingEngine = new CastTimingEngine(),
+  ) {}
 
   calculate(input: DamageFormulaInput): DamageFormulaResult {
     const context = this.createContext(input);
@@ -96,6 +103,7 @@ export class DamageFormulaPipeline {
       },
       breakdown: this.createBreakdown(input, context),
       formulaId: context.formulaId,
+      castTiming: context.castTiming,
     };
   }
 
@@ -159,6 +167,16 @@ export class DamageFormulaPipeline {
         elementMultiplier,
     );
     const singleHitDamage = Math.floor(preDefenseDamage * defenseMultiplier);
+    const castTiming = this.castTimingEngine.calculate({
+      skill: input.skill,
+      skillLevel: input.skillLevel,
+      modifierEffects: input.modifierEffects,
+    });
+    const totalDamage = singleHitDamage * skillFormula.hitCount;
+    const dps =
+      castTiming.cycleTimeMs > 0
+        ? Math.floor(totalDamage / (castTiming.cycleTimeMs / 1000))
+        : totalDamage;
 
     return {
       basePower,
@@ -178,6 +196,8 @@ export class DamageFormulaPipeline {
       preDefenseDamage,
       singleHitDamage,
       hitCount: skillFormula.hitCount,
+      castTiming,
+      dps,
     };
   }
 
@@ -297,6 +317,48 @@ export class DamageFormulaPipeline {
         value: context.hitCount,
         group: "skill",
         unit: "count",
+      },
+      {
+        key: "variableCastMs",
+        label: "Variable cast",
+        value: context.castTiming.variableCastMs,
+        group: "skill",
+        unit: "milliseconds",
+      },
+      {
+        key: "fixedCastMs",
+        label: "Fixed cast",
+        value: context.castTiming.fixedCastMs,
+        group: "skill",
+        unit: "milliseconds",
+      },
+      {
+        key: "afterCastDelayMs",
+        label: "After-cast delay",
+        value: context.castTiming.afterCastDelayMs,
+        group: "skill",
+        unit: "milliseconds",
+      },
+      {
+        key: "cooldownMs",
+        label: "Cooldown",
+        value: context.castTiming.cooldownMs,
+        group: "skill",
+        unit: "milliseconds",
+      },
+      {
+        key: "cycleTimeMs",
+        label: "Cycle time",
+        value: context.castTiming.cycleTimeMs,
+        group: "result",
+        unit: "milliseconds",
+      },
+      {
+        key: "dps",
+        label: "DPS",
+        value: context.dps,
+        group: "result",
+        unit: "dps",
       },
       {
         key: "unsupportedModifierStatements",

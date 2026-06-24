@@ -270,6 +270,8 @@
       "sizeMultiplier": "Size",
       "unsupportedModifiers": "Unsupported mods",
       "activeBuffs": "Active buffs",
+      "cycleTime": "Cycle",
+      "dps": "DPS",
       "defenseMitigation": "Defense Mitigation",
       "source": "Source",
       "sourceValue": "Local core"

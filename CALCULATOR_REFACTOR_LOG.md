@@ -15,6 +15,16 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Engine inicial de cast e DPS
+
+- Criado `CastTimingEngine` no core.
+- `RoSkill` ganhou campos opcionais por nivel para cast variavel, cast fixo, pos-conjuracao e cooldown.
+- `DamageFormulaPipeline` calcula tempo de ciclo e DPS estimado quando a skill possui dados de tempo.
+- Breakdown passou a expor cast/delay/cooldown/cycle/DPS.
+- `test:calculator` inclui o spec de cast timing.
+
+Motivo: transformar os modificadores de cast/delay capturados no bloco anterior em dados consumiveis pelo resultado, preparando DPS real sem custo alto no frontend.
+
 ### 2026-06-24 - Critico e cura de itens no modifier core
 
 - Parser rAthena passou a reconhecer `bCritAtkRate` e `bHealPower`.

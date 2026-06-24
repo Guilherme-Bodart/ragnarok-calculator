@@ -345,4 +345,45 @@ describe("DamageFormulaPipeline", () => {
       }),
     );
   });
+
+  it("exposes cast timing and dps in the breakdown", () => {
+    const castingSkill: RoSkill = {
+      ...magicalSkill,
+      variableCastMsByLevel: { "10": 2000 },
+      fixedCastMsByLevel: { "10": 1000 },
+      afterCastDelayMsByLevel: { "10": 500 },
+    };
+
+    const result = pipeline.calculate({
+      character,
+      items: [],
+      modifierEffects: {
+        ...emptyModifierEffects,
+        variableCastRate: -50,
+        fixedCast: -250,
+      },
+      monster: neutralTarget,
+      skill: castingSkill,
+      skillLevel: 10,
+    });
+
+    expect(result.castTiming).toMatchObject({
+      variableCastMs: 1000,
+      fixedCastMs: 750,
+      afterCastDelayMs: 500,
+      cycleTimeMs: 2250,
+    });
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "cycleTimeMs",
+        value: 2250,
+      }),
+    );
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "dps",
+        value: Math.floor(result.damage.total / 2.25),
+      }),
+    );
+  });
 });
