@@ -15,6 +15,17 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Modificadores por classe de monstro
+
+- Parser rAthena passou a reconhecer `bonus2 bAddClass`, `bonus2 bMagicAddClass` e `bonus2 bSubClass`.
+- Os alvos `Class_All`, `Class_Normal` e `Class_Boss` viram ids internos `all`, `normal` e `boss`.
+- Efeitos ofensivos entram em `classDamageRate` e `magicClassDamageRate`; reducoes defensivas entram em `incomingClassDamageReductionRate`.
+- `RoMonster` ganhou `classType` opcional para diferenciar normal/boss quando o dataset tiver esse dado.
+- Auditoria do parser subiu de 5.698 para 5.852 scripts totalmente suportados e reduziu unsupported statements para 24.465.
+- `bonus2 bAddClass` e `bonus2 bMagicAddClass` sairam do top unsupported.
+
+Motivo: dano contra todos/boss/normal aparece em muitos equipamentos modernos. Capturar isso melhora o calculo ofensivo sem depender de hacks no componente React.
+
 ### 2026-06-24 - Reducoes defensivas por raca e elemento
 
 - Parser rAthena passou a reconhecer `bonus2 bSubRace` e `bonus2 bSubEle`.

@@ -260,6 +260,9 @@ describe("ModifierNormalizer", () => {
       bonus2 bMagicAddEle,Ele_Ghost,11;
       bonus2 bMagicAddSize,Size_All,12;
       bonus2 bMagicAtkEle,Ele_Wind,13;
+      bonus2 bAddClass,Class_All,14;
+      bonus2 bMagicAddClass,Class_Boss,15;
+      bonus2 bSubClass,Class_Normal,16;
     `);
 
     expect(result.modifiers).toMatchObject([
@@ -310,6 +313,24 @@ describe("ModifierNormalizer", () => {
         operator: "addPercent",
         value: 13,
         target: { type: "element", elementId: "wind" },
+      },
+      {
+        stat: "classDamageRate",
+        operator: "addPercent",
+        value: 14,
+        target: { type: "class", classId: "all" },
+      },
+      {
+        stat: "magicClassDamageRate",
+        operator: "addPercent",
+        value: 15,
+        target: { type: "class", classId: "boss" },
+      },
+      {
+        stat: "incomingClassDamageReductionRate",
+        operator: "addPercent",
+        value: 16,
+        target: { type: "class", classId: "normal" },
       },
     ]);
   });

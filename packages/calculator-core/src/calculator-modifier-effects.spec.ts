@@ -148,6 +148,9 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus2 bMagicAddEle,Ele_Neutral,13;
         bonus2 bMagicAddSize,Size_All,19;
         bonus2 bMagicAtkEle,Ele_Neutral,17;
+        bonus2 bAddClass,Class_All,23;
+        bonus2 bMagicAddClass,Class_Boss,29;
+        bonus2 bSubClass,Class_Normal,31;
         bonus2 bIgnoreDefRaceRate,RC_DemiHuman,30;
         bonus2 bIgnoreMdefRaceRate,RC_All,40;
       `,
@@ -168,6 +171,9 @@ describe("CalculatorModifierEffectsFactory", () => {
       magicElementDamageRate: { neutral: 13 },
       magicSizeDamageRate: { all: 19 },
       magicElementAttackRate: { neutral: 17 },
+      classDamageRate: { all: 23 },
+      magicClassDamageRate: { boss: 29 },
+      incomingClassDamageReductionRate: { normal: 31 },
       ignoreDefenseRate: { demihuman: 30 },
       ignoreMagicDefenseRate: { all: 40 },
     });
@@ -179,15 +185,15 @@ describe("CalculatorModifierEffectsFactory", () => {
         demihumanMonster,
         physicalSkill,
       ),
-    ).toBe(12);
+    ).toBe(35);
     expect(
       factory.getPercentPower(
         effects,
         "magical",
-        demihumanMonster,
+        { ...demihumanMonster, classType: "boss" },
         magicalNeutralSkill,
       ),
-    ).toBe(75);
+    ).toBe(104);
   });
 
   it("applies all targets and skill-specific damage", () => {

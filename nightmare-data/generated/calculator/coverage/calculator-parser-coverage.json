@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 5698,
-  "partiallySupportedItemScripts": 5687,
-  "unsupportedItemScripts": 14339,
-  "itemScriptsWithModifiers": 11385,
-  "totalModifiers": 42598,
-  "unsupportedStatements": 25103,
+  "fullySupportedItemScripts": 5852,
+  "partiallySupportedItemScripts": 5595,
+  "unsupportedItemScripts": 14185,
+  "itemScriptsWithModifiers": 11447,
+  "totalModifiers": 43236,
+  "unsupportedStatements": 24465,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -462,38 +462,6 @@
       ]
     },
     {
-      "command": "bonus2 bAddClass",
-      "reason": "unsupported-bonus-code",
-      "count": 327,
-      "examples": [
-        {
-          "itemId": 1140,
-          "itemName": "Byeollungum",
-          "rawLine": "bonus2 bAddClass,Class_Boss,50;"
-        },
-        {
-          "itemId": 1177,
-          "itemName": "Muramash",
-          "rawLine": "bonus2 bAddClass,Class_All,50;"
-        },
-        {
-          "itemId": 1272,
-          "itemName": "Scratcher",
-          "rawLine": "bonus2 bAddClass,Class_All,50;"
-        },
-        {
-          "itemId": 1423,
-          "itemName": "Pole XO",
-          "rawLine": "bonus2 bAddClass,Class_All,50;"
-        },
-        {
-          "itemId": 1474,
-          "itemName": "Gae Bolg",
-          "rawLine": "bonus2 bAddClass,Class_Boss,10;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bSkillAtk",
       "reason": "unsupported-bonus-code",
       "count": 326,
@@ -618,38 +586,6 @@
           "itemId": 1138,
           "itemName": "Mysteltainn",
           "rawLine": "bonus bAtkEle,Ele_Dark;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bSubClass",
-      "reason": "unsupported-bonus-code",
-      "count": 260,
-      "examples": [
-        {
-          "itemId": 1140,
-          "itemName": "Byeollungum",
-          "rawLine": "bonus2 bSubClass,Class_Normal,-10;"
-        },
-        {
-          "itemId": 1150,
-          "itemName": "Libra's Krasnaya",
-          "rawLine": "bonus2 bSubClass,Class_Boss,50;"
-        },
-        {
-          "itemId": 2127,
-          "itemName": "Secular Mission",
-          "rawLine": "bonus2 bSubClass,Class_All,25;"
-        },
-        {
-          "itemId": 2169,
-          "itemName": "Kalasag",
-          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/3;"
-        },
-        {
-          "itemId": 2170,
-          "itemName": "Bayani Kalasag",
-          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/3;"
         }
       ]
     },
@@ -2090,38 +2026,6 @@
           "itemId": 4376,
           "itemName": "Lady Tanee Card",
           "rawLine": "bonus2 bAddItemHealRate,513,100;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bMagicAddClass",
-      "reason": "unsupported-bonus-code",
-      "count": 71,
-      "examples": [
-        {
-          "itemId": 2177,
-          "itemName": "Shield Of Death",
-          "rawLine": "bonus2 bMagicAddClass,Class_Boss,2;"
-        },
-        {
-          "itemId": 5965,
-          "itemName": "Riot Chip",
-          "rawLine": "bonus2 bMagicAddClass,Class_All,.@r;"
-        },
-        {
-          "itemId": 15196,
-          "itemName": "Sea Dragon Armor",
-          "rawLine": "bonus2 bMagicAddClass,Class_Boss,10;"
-        },
-        {
-          "itemId": 15196,
-          "itemName": "Sea Dragon Armor",
-          "rawLine": "bonus2 bMagicAddClass,Class_Boss,10;"
-        },
-        {
-          "itemId": 15345,
-          "itemName": "Blue Dragon Armor",
-          "rawLine": "bonus2 bMagicAddClass,Class_All,10;"
         }
       ]
     },
@@ -4878,6 +4782,38 @@
       ]
     },
     {
+      "command": "bonus2 bAddClass",
+      "reason": "unsupported-bonus-code",
+      "count": 13,
+      "examples": [
+        {
+          "itemId": 2184,
+          "itemName": "Bunker Shield",
+          "rawLine": "bonus2 bAddClass,Class_All,4+max(0,.@r-4);"
+        },
+        {
+          "itemId": 4535,
+          "itemName": "Sealed Randgris Card",
+          "rawLine": "bonus2 bAddClass,Class_All,(getrefine()>=15?8:5);"
+        },
+        {
+          "itemId": 4562,
+          "itemName": "Champion Chen Card",
+          "rawLine": "bonus2 bAddClass,Class_All,(readparam(bAgi)>=110)?14:7;"
+        },
+        {
+          "itemId": 15110,
+          "itemName": "Supplement Part Str",
+          "rawLine": "bonus2 bAddClass,Class_All,5+getrefine()/4;"
+        },
+        {
+          "itemId": 15343,
+          "itemName": "Supplement Part STR",
+          "rawLine": "bonus2 bAddClass,Class_All,5+(getrefine()/4);"
+        }
+      ]
+    },
+    {
       "command": "bonus bBreakArmorRate",
       "reason": "unsupported-bonus-code",
       "count": 12,
@@ -5770,6 +5706,38 @@
           "itemId": 19469,
           "itemName": "Sacred Crown",
           "rawLine": "bonus bNoGemStone;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bSubClass",
+      "reason": "unsupported-bonus-code",
+      "count": 7,
+      "examples": [
+        {
+          "itemId": 2169,
+          "itemName": "Kalasag",
+          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/3;"
+        },
+        {
+          "itemId": 2170,
+          "itemName": "Bayani Kalasag",
+          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/3;"
+        },
+        {
+          "itemId": 5271,
+          "itemName": "Phoenix Crown",
+          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine();"
+        },
+        {
+          "itemId": 15051,
+          "itemName": "Bakunawa Scale Armor",
+          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/2;"
+        },
+        {
+          "itemId": 15052,
+          "itemName": "Bayani Bakunawa Scale Armor",
+          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/2;"
         }
       ]
     },

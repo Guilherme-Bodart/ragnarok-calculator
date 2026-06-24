@@ -1,6 +1,7 @@
 import type { ModifierCondition, NormalizedModifier } from "./modifier.types";
 import { evaluateRathenaExpression } from "./rathena-expression";
 import {
+  toInternalClassId,
   toInternalElementId,
   toInternalRaceId,
   toInternalSizeId,
@@ -231,6 +232,57 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
       numericValue,
     );
   },
+  bAddClass: (command, conditions, variables) => {
+    const [, rathenaClassId, value] = command.args;
+    const classId = toInternalClassId(rathenaClassId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!classId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "classDamageRate",
+      { type: "class", classId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bMagicAddClass: (command, conditions, variables) => {
+    const [, rathenaClassId, value] = command.args;
+    const classId = toInternalClassId(rathenaClassId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!classId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "magicClassDamageRate",
+      { type: "class", classId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bSubClass: (command, conditions, variables) => {
+    const [, rathenaClassId, value] = command.args;
+    const classId = toInternalClassId(rathenaClassId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!classId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "incomingClassDamageReductionRate",
+      { type: "class", classId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
   bSkillAtk: (command, conditions, variables) => {
     const [, rawSkillId, value] = command.args;
     const skillId = normalizeScriptString(rawSkillId);
@@ -391,11 +443,14 @@ function createTargetedModifier(
     | "magicRaceDamageRate"
     | "magicElementDamageRate"
     | "magicSizeDamageRate"
+    | "classDamageRate"
+    | "magicClassDamageRate"
     | "magicElementAttackRate"
     | "ignoreDefenseRate"
     | "ignoreMagicDefenseRate"
     | "incomingRaceDamageReductionRate"
     | "incomingElementDamageReductionRate"
+    | "incomingClassDamageReductionRate"
     | "skillVariableCastRate"
     | "skillFixedCastRate"
     | "skillFixedCast",

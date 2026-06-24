@@ -158,6 +158,8 @@ Funcionando:
 - Payload v1 flat e migrado automaticamente ao carregar.
 - Testes focados da calculadora existem em `npm run test:calculator`.
 - Core reconhece traits vindos de scripts de item (`bPow`, `bSta`, `bWis`, `bSpl`, `bCon`, `bCrt`) e aplica esses bonus nos status derivados.
+- Core reconhece dano por classe de monstro (`bAddClass`, `bMagicAddClass`) e reducao defensiva por classe (`bSubClass`), com `Class_All` sempre aplicavel e `Class_Normal`/`Class_Boss` dependentes de `monster.classType`.
+- Core calcula cast/cooldown/DPS estimado quando a skill possui tempos por nivel.
 - Core reconhece modificadores de cast/delay vindos de itens, incluindo variantes por skill, mas o calculo final de cast/DPS ainda e proximo passo.
 - Core reconhece modificadores de dano critico e poder de cura vindos de itens, mas engines finais de critico/cura ainda sao proximos passos.
 - Core possui engine inicial de cast/DPS; quando `RoSkill` traz cast/cooldown por level, o resultado expoe ciclo e DPS no breakdown.

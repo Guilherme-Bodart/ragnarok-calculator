@@ -27,6 +27,7 @@ export type MonsterRace =
   | "demihuman"
   | "angel"
   | "dragon";
+export type MonsterClass = "normal" | "boss";
 
 export type WeaponType =
   | "bareHand"
@@ -112,6 +113,7 @@ export type RoMonster = {
   defense: number;
   magicDefense: number;
   hp: number;
+  classType?: MonsterClass;
   source: "manual" | "iwdb" | "rathena";
   sourceUrl?: string;
 };

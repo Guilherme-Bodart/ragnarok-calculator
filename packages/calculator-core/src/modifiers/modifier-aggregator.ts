@@ -59,6 +59,10 @@ export class ModifierAggregator {
       return `${target.type}:${target.sizeId}`;
     }
 
+    if (target.type === "class") {
+      return `${target.type}:${target.classId}`;
+    }
+
     return `${target.type}:${target.skillId}`;
   }
 }

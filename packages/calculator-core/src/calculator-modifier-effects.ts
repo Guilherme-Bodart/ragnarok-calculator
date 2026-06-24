@@ -1,5 +1,6 @@
 import { ItemModifierPipeline } from "./modifiers";
 import type {
+  ModifierClassId,
   ModifierElementId,
   ModifierRaceId,
   ModifierResolutionContext,
@@ -48,11 +49,14 @@ export type CalculatorModifierEffects = {
   magicRaceDamageRate: Partial<Record<ModifierRaceId, number>>;
   magicElementDamageRate: Partial<Record<ModifierElementId, number>>;
   magicSizeDamageRate: Partial<Record<ModifierSizeId, number>>;
+  classDamageRate: Partial<Record<ModifierClassId, number>>;
+  magicClassDamageRate: Partial<Record<ModifierClassId, number>>;
   magicElementAttackRate: Partial<Record<ModifierElementId, number>>;
   ignoreDefenseRate: Partial<Record<ModifierRaceId, number>>;
   ignoreMagicDefenseRate: Partial<Record<ModifierRaceId, number>>;
   incomingRaceDamageReductionRate: Partial<Record<ModifierRaceId, number>>;
   incomingElementDamageReductionRate: Partial<Record<ModifierElementId, number>>;
+  incomingClassDamageReductionRate: Partial<Record<ModifierClassId, number>>;
   unsupportedStatements: string[];
 };
 
@@ -114,11 +118,14 @@ export class CalculatorModifierEffectsFactory {
       magicRaceDamageRate: {},
       magicElementDamageRate: {},
       magicSizeDamageRate: {},
+      classDamageRate: {},
+      magicClassDamageRate: {},
       magicElementAttackRate: {},
       ignoreDefenseRate: {},
       ignoreMagicDefenseRate: {},
       incomingRaceDamageReductionRate: {},
       incomingElementDamageReductionRate: {},
+      incomingClassDamageReductionRate: {},
       unsupportedStatements: [],
     };
 
@@ -362,6 +369,23 @@ export class CalculatorModifierEffectsFactory {
           continue;
         }
 
+        if (bucket.stat === "classDamageRate" && bucket.target.type === "class") {
+          const current = effects.classDamageRate[bucket.target.classId] ?? 0;
+          effects.classDamageRate[bucket.target.classId] = current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "magicClassDamageRate" &&
+          bucket.target.type === "class"
+        ) {
+          const current =
+            effects.magicClassDamageRate[bucket.target.classId] ?? 0;
+          effects.magicClassDamageRate[bucket.target.classId] =
+            current + bucket.value;
+          continue;
+        }
+
         if (
           bucket.stat === "incomingRaceDamageReductionRate" &&
           bucket.target.type === "race"
@@ -369,6 +393,17 @@ export class CalculatorModifierEffectsFactory {
           const current =
             effects.incomingRaceDamageReductionRate[bucket.target.raceId] ?? 0;
           effects.incomingRaceDamageReductionRate[bucket.target.raceId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "incomingClassDamageReductionRate" &&
+          bucket.target.type === "class"
+        ) {
+          const current =
+            effects.incomingClassDamageReductionRate[bucket.target.classId] ?? 0;
+          effects.incomingClassDamageReductionRate[bucket.target.classId] =
             current + bucket.value;
           continue;
         }
@@ -470,6 +505,7 @@ export class CalculatorModifierEffectsFactory {
         this.getTargetedRate(effects.magicRaceDamageRate, monster.race) +
         this.getTargetedRate(effects.magicElementDamageRate, monster.element) +
         this.getTargetedRate(effects.magicSizeDamageRate, monster.size) +
+        this.getTargetedRate(effects.magicClassDamageRate, monster.classType) +
         this.getTargetedRate(effects.magicElementAttackRate, skill.element)
       );
     }
@@ -481,7 +517,8 @@ export class CalculatorModifierEffectsFactory {
       skillRate +
       this.getTargetedRate(effects.raceDamageRate, monster.race) +
       this.getTargetedRate(effects.elementDamageRate, monster.element) +
-      this.getTargetedRate(effects.sizeDamageRate, monster.size)
+      this.getTargetedRate(effects.sizeDamageRate, monster.size) +
+      this.getTargetedRate(effects.classDamageRate, monster.classType)
     );
   }
 

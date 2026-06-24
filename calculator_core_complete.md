@@ -58,8 +58,16 @@ Funcionando hoje:
 - Payload versionado V2.
 - Parser rAthena incremental para subset de scripts.
 - Pipeline de dano com breakdown.
+- Core ja captura traits, cast/delay, critico/cura, reducoes defensivas por raca/elemento e modificadores por classe de monstro (`Class_All`, `Class_Normal`, `Class_Boss`).
 - Algumas formulas estaticas: `SM_BASH`, `SM_MAGNUM`, `KN_BOWLINGBASH`, bolts basicos de mago.
 - Fallback generico para skills.
+
+### 2026-06-24 - Progresso recente do parser
+
+- `bonus2 bAddClass`, `bonus2 bMagicAddClass` e `bonus2 bSubClass` foram normalizados para mapas por classe de monstro.
+- Auditoria atual: `itemScripts=20037`, `fullySupported=5852`, `partiallySupported=5595`, `unsupportedStatements=24465`, `modifiers=43236`.
+- `Class_All` ja afeta o calculo ofensivo mesmo sem `monster.classType`; `Class_Normal` e `Class_Boss` precisam do alvo classificado.
+- As reducoes `bSubClass` ficam separadas para futuro calculo defensivo e nao contaminam dano causado.
 
 Principais lacunas atuais:
 

@@ -1,4 +1,5 @@
 import type {
+  ModifierClassId,
   ModifierElementId,
   ModifierRaceId,
   ModifierSizeId,
@@ -69,4 +70,20 @@ export function toInternalSizeId(
   };
 
   return sizeIds[rathenaSizeId] ?? null;
+}
+
+export function toInternalClassId(
+  rathenaClassId: string | undefined,
+): ModifierClassId | null {
+  if (!rathenaClassId) {
+    return null;
+  }
+
+  const classIds: Record<string, ModifierClassId> = {
+    Class_All: "all",
+    Class_Normal: "normal",
+    Class_Boss: "boss",
+  };
+
+  return classIds[rathenaClassId] ?? null;
 }

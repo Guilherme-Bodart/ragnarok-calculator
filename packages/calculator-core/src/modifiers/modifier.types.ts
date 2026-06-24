@@ -35,6 +35,7 @@ export const modifierElementIdSchema = z.enum([
 ]);
 
 export const modifierSizeIdSchema = z.enum(["all", "small", "medium", "large"]);
+export const modifierClassIdSchema = z.enum(["all", "normal", "boss"]);
 
 export const modifierTargetSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("self") }),
@@ -49,6 +50,10 @@ export const modifierTargetSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("size"),
     sizeId: modifierSizeIdSchema,
+  }),
+  z.object({
+    type: z.literal("class"),
+    classId: modifierClassIdSchema,
   }),
   z.object({
     type: z.literal("skill"),
@@ -131,11 +136,14 @@ export const normalizedModifierSchema = z.object({
     "magicRaceDamageRate",
     "magicElementDamageRate",
     "magicSizeDamageRate",
+    "classDamageRate",
+    "magicClassDamageRate",
     "magicElementAttackRate",
     "ignoreDefenseRate",
     "ignoreMagicDefenseRate",
     "incomingRaceDamageReductionRate",
     "incomingElementDamageReductionRate",
+    "incomingClassDamageReductionRate",
   ]),
   operator: modifierOperatorSchema,
   value: z.number(),
@@ -191,6 +199,7 @@ export type ModifierOperator = z.infer<typeof modifierOperatorSchema>;
 export type ModifierRaceId = z.infer<typeof modifierRaceIdSchema>;
 export type ModifierElementId = z.infer<typeof modifierElementIdSchema>;
 export type ModifierSizeId = z.infer<typeof modifierSizeIdSchema>;
+export type ModifierClassId = z.infer<typeof modifierClassIdSchema>;
 export type ModifierTarget = z.infer<typeof modifierTargetSchema>;
 export type ModifierCondition = z.infer<typeof modifierConditionSchema>;
 export type NormalizedModifier = z.infer<typeof normalizedModifierSchema>;
