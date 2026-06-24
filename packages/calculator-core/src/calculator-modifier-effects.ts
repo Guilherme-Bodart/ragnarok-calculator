@@ -36,6 +36,8 @@ export type CalculatorModifierEffects = {
   magicElementDamageRate: Partial<Record<ModifierElementId, number>>;
   magicSizeDamageRate: Partial<Record<ModifierSizeId, number>>;
   magicElementAttackRate: Partial<Record<ModifierElementId, number>>;
+  ignoreDefenseRate: Partial<Record<ModifierRaceId, number>>;
+  ignoreMagicDefenseRate: Partial<Record<ModifierRaceId, number>>;
   unsupportedStatements: string[];
 };
 
@@ -81,6 +83,8 @@ export class CalculatorModifierEffectsFactory {
       magicElementDamageRate: {},
       magicSizeDamageRate: {},
       magicElementAttackRate: {},
+      ignoreDefenseRate: {},
+      ignoreMagicDefenseRate: {},
       unsupportedStatements: [],
     };
 
@@ -270,6 +274,28 @@ export class CalculatorModifierEffectsFactory {
           const current =
             effects.magicElementAttackRate[bucket.target.elementId] ?? 0;
           effects.magicElementAttackRate[bucket.target.elementId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "ignoreDefenseRate" &&
+          bucket.target.type === "race"
+        ) {
+          const current =
+            effects.ignoreDefenseRate[bucket.target.raceId] ?? 0;
+          effects.ignoreDefenseRate[bucket.target.raceId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "ignoreMagicDefenseRate" &&
+          bucket.target.type === "race"
+        ) {
+          const current =
+            effects.ignoreMagicDefenseRate[bucket.target.raceId] ?? 0;
+          effects.ignoreMagicDefenseRate[bucket.target.raceId] =
             current + bucket.value;
         }
       }

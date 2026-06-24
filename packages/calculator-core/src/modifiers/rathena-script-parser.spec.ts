@@ -56,6 +56,35 @@ describe("ModifierNormalizer", () => {
     ]);
   });
 
+  it("normalizes race-targeted defense ignore bonus2 commands", () => {
+    const result = normalizer.fromRawScript(`
+      bonus2 bIgnoreDefRaceRate,RC_DemiHuman,30;
+      bonus2 bIgnoreMdefRaceRate,RC_All,40;
+    `);
+
+    expect(result.unsupportedStatements).toEqual([]);
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "ignoreDefenseRate",
+        operator: "addPercent",
+        value: 30,
+        target: {
+          type: "race",
+          raceId: "demihuman",
+        },
+      },
+      {
+        stat: "ignoreMagicDefenseRate",
+        operator: "addPercent",
+        value: 40,
+        target: {
+          type: "race",
+          raceId: "all",
+        },
+      },
+    ]);
+  });
+
   it("normalizes flat attack and magic attack bonus commands", () => {
     const result = normalizer.fromRawScript(`
       bonus bAtk,25;

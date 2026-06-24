@@ -106,6 +106,8 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus2 bMagicAddEle,Ele_Neutral,13;
         bonus2 bMagicAddSize,Size_All,19;
         bonus2 bMagicAtkEle,Ele_Neutral,17;
+        bonus2 bIgnoreDefRaceRate,RC_DemiHuman,30;
+        bonus2 bIgnoreMdefRaceRate,RC_All,40;
       `,
       source: "manual",
     };
@@ -122,6 +124,8 @@ describe("CalculatorModifierEffectsFactory", () => {
       magicElementDamageRate: { neutral: 13 },
       magicSizeDamageRate: { all: 19 },
       magicElementAttackRate: { neutral: 17 },
+      ignoreDefenseRate: { demihuman: 30 },
+      ignoreMagicDefenseRate: { all: 40 },
     });
     expect(factory.getFlatPower(effects, "magical")).toBe(50);
     expect(

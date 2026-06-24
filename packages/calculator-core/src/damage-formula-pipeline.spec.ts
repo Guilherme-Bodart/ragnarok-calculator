@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { CalculatorModifierEffects } from "./calculator-modifier-effects";
 import { DamageFormulaPipeline } from "./damage-formula-pipeline";
 import { EffectiveCharacterBuilder } from "./effective-character";
+import { getHardDefMultiplier } from "./formulas";
 import type { RoItem, RoMonster, RoSkill } from "./ro-types";
 
 const emptyModifierEffects: CalculatorModifierEffects = {
@@ -38,6 +39,8 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   magicElementDamageRate: {},
   magicSizeDamageRate: {},
   magicElementAttackRate: {},
+  ignoreDefenseRate: {},
+  ignoreMagicDefenseRate: {},
   unsupportedStatements: [],
 };
 
@@ -124,7 +127,7 @@ describe("DamageFormulaPipeline", () => {
       skillLevel: 10,
     });
 
-    expect(result.damage.average).toBe(512);
+    expect(result.damage.average).toBe(2050);
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "finalRateMultiplier",
@@ -134,7 +137,7 @@ describe("DamageFormulaPipeline", () => {
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "preDefenseDamage",
-        value: 512,
+        value: 2050,
       }),
     );
   });
@@ -179,6 +182,38 @@ describe("DamageFormulaPipeline", () => {
       expect.objectContaining({
         key: "defenseMultiplier",
         value: 0.55,
+      }),
+    );
+  });
+
+  it("applies race-targeted defense ignore modifiers", () => {
+    const sturdyTarget: RoMonster = {
+      ...neutralTarget,
+      defense: 500,
+    };
+
+    const result = pipeline.calculate({
+      character,
+      items: [],
+      modifierEffects: {
+        ...emptyModifierEffects,
+        ignoreDefenseRate: { demihuman: 50 },
+      },
+      monster: sturdyTarget,
+      skill: physicalSkill,
+      skillLevel: 10,
+    });
+
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "defenseIgnoreRate",
+        value: 50,
+      }),
+    );
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "defenseMultiplier",
+        value: getHardDefMultiplier(250),
       }),
     );
   });
@@ -230,7 +265,7 @@ describe("DamageFormulaPipeline", () => {
       skillLevel: 10,
     });
 
-    expect(result.damage.average).toBe(344);
+    expect(result.damage.average).toBe(1377);
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "weaponRefinePower",

@@ -70,6 +70,7 @@ type DamageFormulaContext = {
   weaponRefinePower: number;
   weaponSizeMultiplier: number;
   elementMultiplier: number;
+  defenseIgnoreRate: number;
   defenseMultiplier: number;
   preDefenseDamage: number;
   singleHitDamage: number;
@@ -142,9 +143,13 @@ export class DamageFormulaPipeline {
       ? 1
       : getWeaponSizeMultiplier(input.character.weaponType, input.monster.size);
     const elementMultiplier = getElementMultiplier(input.skill, input.monster);
+    const defenseIgnoreRate = magical
+      ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseRate, input.monster.race)
+      : getTargetedRate(input.modifierEffects.ignoreDefenseRate, input.monster.race);
     const defenseMultiplier = getDefenseMultiplier(
       input.monster,
       input.skill.damageType,
+      defenseIgnoreRate,
     );
     const preDefenseDamage = Math.floor(
       (basePower + equipmentPower + modifierFlatPower + weaponRefinePower) *
@@ -168,6 +173,7 @@ export class DamageFormulaPipeline {
       weaponRefinePower,
       weaponSizeMultiplier,
       elementMultiplier,
+      defenseIgnoreRate,
       defenseMultiplier,
       preDefenseDamage,
       singleHitDamage,
@@ -258,6 +264,13 @@ export class DamageFormulaPipeline {
         unit: "multiplier",
       },
       {
+        key: "defenseIgnoreRate",
+        label: "Defense ignore rate",
+        value: context.defenseIgnoreRate,
+        group: "modifier",
+        unit: "percent",
+      },
+      {
         key: "defenseMultiplier",
         label: "Defense multiplier",
         value: context.defenseMultiplier,
@@ -294,4 +307,11 @@ export class DamageFormulaPipeline {
       },
     ];
   }
+}
+
+function getTargetedRate<TTarget extends string>(
+  rates: Partial<Record<TTarget | "all", number>>,
+  target: TTarget | undefined,
+) {
+  return (target ? rates[target] ?? 0 : 0) + (rates.all ?? 0);
 }

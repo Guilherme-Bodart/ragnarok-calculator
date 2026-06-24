@@ -203,6 +203,40 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
       numericValue,
     );
   },
+  bIgnoreDefRaceRate: (command, conditions, variables) => {
+    const [, rathenaRaceId, value] = command.args;
+    const raceId = toInternalRaceId(rathenaRaceId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!raceId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "ignoreDefenseRate",
+      { type: "race", raceId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bIgnoreMdefRaceRate: (command, conditions, variables) => {
+    const [, rathenaRaceId, value] = command.args;
+    const raceId = toInternalRaceId(rathenaRaceId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!raceId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "ignoreMagicDefenseRate",
+      { type: "race", raceId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
 };
 
 function createModifier(
@@ -269,7 +303,9 @@ function createTargetedModifier(
     | "magicRaceDamageRate"
     | "magicElementDamageRate"
     | "magicSizeDamageRate"
-    | "magicElementAttackRate",
+    | "magicElementAttackRate"
+    | "ignoreDefenseRate"
+    | "ignoreMagicDefenseRate",
   target: NormalizedModifier["target"],
   command: ParsedCommand,
   conditions: ModifierCondition[],

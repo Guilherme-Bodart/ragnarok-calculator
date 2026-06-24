@@ -115,6 +115,8 @@ export const normalizedModifierSchema = z.object({
     "magicElementDamageRate",
     "magicSizeDamageRate",
     "magicElementAttackRate",
+    "ignoreDefenseRate",
+    "ignoreMagicDefenseRate",
   ]),
   operator: modifierOperatorSchema,
   value: z.number(),

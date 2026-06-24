@@ -911,3 +911,26 @@ Testes adicionados:
 Observacao:
 
 - A auditoria barata ainda usa split estatico e pode listar pedaços de blocos aninhados no topo de unsupported. Isso virou um bloco separado: fazer a auditoria opcionalmente usar o parser real em amostras/top scripts, sem carregar dados grandes no chat.
+
+## Bloco Fechado: Ignore DEF/MDEF Por Raca
+
+Data: 2026-06-23.
+
+Implementado:
+
+- Parser/mappers reconhecem:
+  - `bonus2 bIgnoreDefRaceRate,...`
+  - `bonus2 bIgnoreMdefRaceRate,...`
+- Efeitos agregados agora carregam:
+  - `ignoreDefenseRate`
+  - `ignoreMagicDefenseRate`
+- Formula final aplica ignore DEF/MDEF antes da mitigacao hard DEF/MDEF.
+- Breakdown inclui `defenseIgnoreRate` para explicar o resultado.
+
+Testes adicionados/ajustados:
+
+- Parser normalizando ignore DEF/MDEF por raca.
+- `CalculatorModifierEffectsFactory` agregando os novos efeitos.
+- Formula de defesa aplicando ignore antes da reducao hard.
+- Pipeline aplicando ignore DEF por raca e exibindo no breakdown.
+- Specs antigos do pipeline foram atualizados para a formula validada atual de Bash.
