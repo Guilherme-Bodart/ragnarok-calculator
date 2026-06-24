@@ -126,7 +126,10 @@ export class RathenaScriptParser {
     return segments;
   }
 
-  private extractRefineBlocks(script: string) {
+  private extractRefineBlocks(
+    script: string,
+    inheritedConditions: ModifierCondition[] = [],
+  ) {
     const segments: ScriptSegment[] = [];
     const refineBlockPattern =
       /if\s*\(\s*(?:getrefine\(\)|\.@r)\s*(>=|>|<=|<|==|!=)\s*(-?\d+)\s*\)\s*\{/g;
@@ -134,6 +137,10 @@ export class RathenaScriptParser {
     let remainingScript = "";
 
     for (const match of script.matchAll(refineBlockPattern)) {
+      if (this.isInsideBlock(script, match.index)) {
+        continue;
+      }
+
       const braceStart = match.index + match[0].length - 1;
       const braceEnd = this.findMatchingBrace(script, braceStart);
 
@@ -149,10 +156,10 @@ export class RathenaScriptParser {
       if (condition) {
         const blockBody = script.slice(braceStart + 1, braceEnd);
         segments.push(
-          ...this.splitStatements(blockBody).map((statement) => ({
-            statement,
-            conditions: [condition],
-          })),
+          ...this.extractNestedConditionedSegments(blockBody, [
+            ...inheritedConditions,
+            condition,
+          ]),
         );
       }
 
@@ -167,7 +174,10 @@ export class RathenaScriptParser {
     };
   }
 
-  private extractGradeBlocks(script: string) {
+  private extractGradeBlocks(
+    script: string,
+    inheritedConditions: ModifierCondition[] = [],
+  ) {
     const segments: ScriptSegment[] = [];
     const gradeBlockPattern =
       /if\s*\(\s*(?:getenchantgrade\(\)|\.@g)\s*(>=|>|<=|<|==|!=)\s*(ENCHANTGRADE_[A-Z]+|-?\d+)\s*\)\s*\{/g;
@@ -175,6 +185,10 @@ export class RathenaScriptParser {
     let remainingScript = "";
 
     for (const match of script.matchAll(gradeBlockPattern)) {
+      if (this.isInsideBlock(script, match.index)) {
+        continue;
+      }
+
       const braceStart = match.index + match[0].length - 1;
       const braceEnd = this.findMatchingBrace(script, braceStart);
 
@@ -190,10 +204,10 @@ export class RathenaScriptParser {
       if (condition) {
         const blockBody = script.slice(braceStart + 1, braceEnd);
         segments.push(
-          ...this.splitStatements(blockBody).map((statement) => ({
-            statement,
-            conditions: [condition],
-          })),
+          ...this.extractNestedConditionedSegments(blockBody, [
+            ...inheritedConditions,
+            condition,
+          ]),
         );
       }
 
@@ -206,6 +220,37 @@ export class RathenaScriptParser {
       segments,
       remainingScript,
     };
+  }
+
+  private extractNestedConditionedSegments(
+    script: string,
+    inheritedConditions: ModifierCondition[],
+  ): ScriptSegment[] {
+    const segments: ScriptSegment[] = [];
+    let remainingScript = script;
+
+    const refineBlockExtraction = this.extractRefineBlocks(
+      remainingScript,
+      inheritedConditions,
+    );
+    segments.push(...refineBlockExtraction.segments);
+    remainingScript = refineBlockExtraction.remainingScript;
+
+    const gradeBlockExtraction = this.extractGradeBlocks(
+      remainingScript,
+      inheritedConditions,
+    );
+    segments.push(...gradeBlockExtraction.segments);
+    remainingScript = gradeBlockExtraction.remainingScript;
+
+    segments.push(
+      ...this.splitStatements(remainingScript).map((statement) => ({
+        statement,
+        conditions: inheritedConditions,
+      })),
+    );
+
+    return segments;
   }
 
   private extractSkillLevelBlocks(script: string) {
@@ -332,6 +377,50 @@ export class RathenaScriptParser {
     }
 
     return -1;
+  }
+
+  private isInsideBlock(script: string, index: number) {
+    let braceDepth = 0;
+    let quote: '"' | "'" | null = null;
+    let isEscaped = false;
+
+    for (let charIndex = 0; charIndex < index; charIndex += 1) {
+      const char = script[charIndex];
+
+      if (isEscaped) {
+        isEscaped = false;
+        continue;
+      }
+
+      if (char === "\\") {
+        isEscaped = true;
+        continue;
+      }
+
+      if (quote) {
+        if (char === quote) {
+          quote = null;
+        }
+
+        continue;
+      }
+
+      if (char === '"' || char === "'") {
+        quote = char;
+        continue;
+      }
+
+      if (char === "{") {
+        braceDepth += 1;
+        continue;
+      }
+
+      if (char === "}") {
+        braceDepth = Math.max(0, braceDepth - 1);
+      }
+    }
+
+    return braceDepth > 0;
   }
 
   private splitStatements(script: string): string[] {

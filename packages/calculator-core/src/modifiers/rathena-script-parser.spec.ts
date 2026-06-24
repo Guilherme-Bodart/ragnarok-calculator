@@ -421,6 +421,54 @@ describe("ModifierNormalizer", () => {
     ]);
   });
 
+  it("combines nested refine and enchant grade conditions", () => {
+    const result = normalizer.fromRawScript(`
+      .@r = getrefine();
+      .@g = getenchantgrade();
+      if (.@r>=9) {
+        if (.@g>=ENCHANTGRADE_D) {
+          bonus bPAtk,2;
+        }
+      }
+    `);
+
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "pAtk",
+        value: 2,
+        conditions: [
+          { type: "refine", operator: ">=", value: 9 },
+          { type: "grade", operator: ">=", value: 1 },
+        ],
+      },
+    ]);
+    expect(result.unsupportedStatements).toEqual([]);
+  });
+
+  it("combines nested enchant grade and refine conditions", () => {
+    const result = normalizer.fromRawScript(`
+      .@r = getrefine();
+      .@g = getenchantgrade();
+      if (.@g>=ENCHANTGRADE_C) {
+        if (.@r>=11) {
+          bonus bSMatk,3;
+        }
+      }
+    `);
+
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "smatk",
+        value: 3,
+        conditions: [
+          { type: "grade", operator: ">=", value: 2 },
+          { type: "refine", operator: ">=", value: 11 },
+        ],
+      },
+    ]);
+    expect(result.unsupportedStatements).toEqual([]);
+  });
+
   it("keeps unsupported statements visible for incremental parser work", () => {
     const result = normalizer.fromRawScript(`
       bonus bAtkRate,5;

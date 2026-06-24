@@ -890,3 +890,24 @@ Testes adicionados:
 Observacao:
 
 - O suporte atual cobre condicoes simples. Blocos aninhados refinados, combinando condicoes pai+filho, continuam como trabalho separado para nao misturar muitos riscos no mesmo commit.
+
+## Bloco Fechado: Condicoes Aninhadas
+
+Data: 2026-06-23.
+
+Implementado:
+
+- Parser agora preserva condicoes herdadas em blocos aninhados de refino e grade.
+- Extratores de blocos so capturam blocos no nivel atual; blocos internos ficam para a recursao com contexto correto.
+- Cenários cobertos:
+  - `if refine { if grade { bonus } }`
+  - `if grade { if refine { bonus } }`
+
+Testes adicionados:
+
+- Combina condicoes `refine + grade`.
+- Combina condicoes `grade + refine`.
+
+Observacao:
+
+- A auditoria barata ainda usa split estatico e pode listar pedaços de blocos aninhados no topo de unsupported. Isso virou um bloco separado: fazer a auditoria opcionalmente usar o parser real em amostras/top scripts, sem carregar dados grandes no chat.
