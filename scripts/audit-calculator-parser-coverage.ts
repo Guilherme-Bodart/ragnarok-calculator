@@ -29,15 +29,23 @@ const outputPath = path.join(outputDir, "calculator-parser-coverage.json");
 
 async function main() {
   const items = JSON.parse(await readFile(itemsPath, "utf8")) as NormalizedItem[];
-  const report = analyzeSamples({
-    items: items.map((item) => ({
-      itemId: item.itemId,
-      name: item.name,
-      rawScript: item.rawScript ?? undefined,
-    })),
-    skills: [],
-    monsters: [],
-  });
+  const report = analyzeSamples(
+    {
+      items: items.map((item) => ({
+        itemId: item.itemId,
+        name: item.name,
+        rawScript: item.rawScript ?? undefined,
+      })),
+      skills: [],
+      monsters: [],
+    },
+    undefined,
+    {
+      baseLevel: 260,
+      refine: 12,
+      grade: 4,
+    },
+  );
 
   await mkdir(outputDir, { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`);

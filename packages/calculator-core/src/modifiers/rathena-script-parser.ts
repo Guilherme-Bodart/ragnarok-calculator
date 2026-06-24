@@ -11,6 +11,7 @@ import {
   createRefineCondition,
   createSkillLevelConditions,
 } from "./rathena-script-conditions";
+import { evaluateRathenaExpression } from "./rathena-expression";
 import { BONUS2_MAPPERS, BONUS_MAPPERS } from "./rathena-script-mappers";
 import type {
   ParsedCommand,
@@ -30,9 +31,11 @@ export class RathenaScriptParser {
     const variables: ParserVariables = {
       refine: context.refine,
       grade: context.grade,
+      baseLevel: context.baseLevel,
+      locals: {},
     };
 
-    for (const segment of this.extractSegments(rawScript)) {
+    for (const segment of this.extractSegments(rawScript, variables)) {
       const command = parseRathenaCommand(segment.statement);
 
       if (!command) {
@@ -53,7 +56,10 @@ export class RathenaScriptParser {
     return result;
   }
 
-  private extractSegments(rawScript: string): ScriptSegment[] {
+  private extractSegments(
+    rawScript: string,
+    variables: ParserVariables,
+  ): ScriptSegment[] {
     const compactScript = rawScript
       .replace(/\r\n/g, "\n")
       .replace(/\/\/.*$/gm, "")
@@ -64,7 +70,10 @@ export class RathenaScriptParser {
     }
 
     const segments: ScriptSegment[] = [];
-    let scriptWithoutBlocks = compactScript.replace(
+    let scriptWithoutBlocks = this.extractAssignments(
+      compactScript,
+      variables,
+    ).replace(
       /\.@r\s*=\s*getrefine\(\)\s*;/g,
       "",
     ).replace(
@@ -124,6 +133,43 @@ export class RathenaScriptParser {
     );
 
     return segments;
+  }
+
+  private extractAssignments(script: string, variables: ParserVariables) {
+    return script.replace(
+      /\.@([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([^;]+);/g,
+      (statement, variableName: string, expression: string) => {
+        const trimmedExpression = expression.trim();
+
+        if (trimmedExpression === "getrefine()") {
+          variables.locals = {
+            ...variables.locals,
+            [variableName]: variables.refine,
+          };
+          return "";
+        }
+
+        if (trimmedExpression === "getenchantgrade()") {
+          variables.locals = {
+            ...variables.locals,
+            [variableName]: variables.grade,
+          };
+          return "";
+        }
+
+        const value = evaluateRathenaExpression(trimmedExpression, variables);
+
+        if (value === null) {
+          return statement;
+        }
+
+        variables.locals = {
+          ...variables.locals,
+          [variableName]: value,
+        };
+        return "";
+      },
+    );
   }
 
   private extractRefineBlocks(

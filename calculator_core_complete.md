@@ -1009,3 +1009,37 @@ Proximo bloco recomendado:
   - aliases simples como `.@val = ...`
   - expressoes derivadas de `.@r` e `.@g`
 - Objetivo: reduzir unsupported de `bSkillAtk`, `bBaseAtk`, `bMatk` e `bMaxHP` sem adicionar custo no front.
+
+## Bloco Fechado: Expressoes Rathena Com Variaveis Locais
+
+Data: 2026-06-24.
+
+Implementado:
+
+- Evaluator rAthena reconhece `BaseLevel`.
+- Evaluator reconhece variaveis locais `. @nome`.
+- Parser calcula assignments simples como:
+  - `. @val = .@r * 5;`
+  - `. @val = BaseLevel / 10;`
+  - `. @g = getenchantgrade();`
+  - `. @r = getrefine();`
+- Contexto base do calculo passa `baseLevel` para o parser de item.
+- Auditoria real do parser roda com contexto representativo:
+  - `baseLevel: 260`
+  - `refine: 12`
+  - `grade: 4`
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 3.082 -> 4.108.
+- Scripts parcialmente suportados: 6.174 -> 6.413.
+- Unsupported statements: 39.633 -> 31.765.
+- Modifiers extraidos: 28.450 -> 35.936.
+- `bonus2 bSkillAtk` saiu do topo acionavel, indicando melhora grande em expressoes/variaveis.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Mapper defensivo para `bonus2 bSubRace`/`bonus2 bSubEle` em um modulo separado de dano recebido.
+  - Mappers/status para `bonus bPow`, `bSta`, `bWis`, `bSpl`, `bCon`, `bCrt`.
+  - Cast/delay inicial para `bVariableCastrate`, `bFixedCast`, `bDelayrate`.

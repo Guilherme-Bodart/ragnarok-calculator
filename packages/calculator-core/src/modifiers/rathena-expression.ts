@@ -1,10 +1,13 @@
 type ExpressionVariables = {
   refine?: number;
+  grade?: number;
+  baseLevel?: number;
+  locals?: Record<string, number | undefined>;
 };
 
 type Token =
   | { type: "number"; value: number }
-  | { type: "variable"; value: keyof ExpressionVariables }
+  | { type: "variable"; value: string }
   | {
       type: "operator";
       value: "+" | "-" | "*" | "/" | ">" | ">=" | "<" | "<=" | "==" | "!=";
@@ -53,9 +56,30 @@ function tokenizeExpression(expression: string): Token[] | null {
       continue;
     }
 
-    if (expression.startsWith(".@r", index)) {
-      tokens.push({ type: "variable", value: "refine" });
-      index += 3;
+    if (expression.startsWith("BaseLevel", index)) {
+      tokens.push({ type: "variable", value: "baseLevel" });
+      index += "BaseLevel".length;
+      continue;
+    }
+
+    if (expression.startsWith(".@", index)) {
+      const match = expression.slice(index).match(/^\.@([A-Za-z_][A-Za-z0-9_]*)/);
+
+      if (!match) {
+        return null;
+      }
+
+      const [, variableName] = match;
+      const knownVariables: Record<string, string> = {
+        r: "refine",
+        g: "grade",
+      };
+
+      tokens.push({
+        type: "variable",
+        value: knownVariables[variableName] ?? variableName,
+      });
+      index += match[0].length;
       continue;
     }
 
@@ -249,7 +273,7 @@ class ExpressionParser {
 
     if (token.type === "variable") {
       this.index += 1;
-      return this.variables[token.value] ?? null;
+      return this.getVariableValue(token.value);
     }
 
     if (this.matchSymbol("(")) {
@@ -303,5 +327,13 @@ class ExpressionParser {
 
   private peek() {
     return this.tokens[this.index];
+  }
+
+  private getVariableValue(variable: string) {
+    if (variable === "refine") return this.variables.refine ?? null;
+    if (variable === "grade") return this.variables.grade ?? null;
+    if (variable === "baseLevel") return this.variables.baseLevel ?? null;
+
+    return this.variables.locals?.[variable] ?? null;
   }
 }

@@ -14,4 +14,6 @@ export type ScriptSegment = {
 export type ParserVariables = {
   refine?: number;
   grade?: number;
+  baseLevel?: number;
+  locals?: Record<string, number | undefined>;
 };

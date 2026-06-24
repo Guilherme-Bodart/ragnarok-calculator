@@ -275,6 +275,35 @@ describe("ModifierNormalizer", () => {
     ]);
   });
 
+  it("evaluates BaseLevel and local assignment expressions", () => {
+    const result = normalizer.fromRawScript(
+      `
+        .@val = .@r * 5;
+        bonus bBaseAtk,50+BaseLevel;
+        bonus bMatk,(.@val);
+        bonus2 bSkillAtk,"NC_AXEBOOMERANG",(100+.@val);
+      `,
+      { baseLevel: 260, refine: 10 },
+    );
+
+    expect(result.unsupportedStatements).toEqual([]);
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "baseAtk",
+        value: 310,
+      },
+      {
+        stat: "matk",
+        value: 50,
+      },
+      {
+        stat: "skillDamageRate",
+        value: 150,
+        target: { type: "skill", skillId: "NC_AXEBOOMERANG" },
+      },
+    ]);
+  });
+
   it("supports simple refine conditions using a refine variable", () => {
     const result = normalizer.fromRawScript(`
       .@r = getrefine();

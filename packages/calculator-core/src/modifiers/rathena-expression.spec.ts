@@ -9,6 +9,16 @@ describe("evaluateRathenaExpression", () => {
     );
   });
 
+  it("evaluates base level, grade and local variables", () => {
+    expect(evaluateRathenaExpression("50+BaseLevel", { baseLevel: 260 })).toBe(
+      310,
+    );
+    expect(evaluateRathenaExpression(".@g+1", { grade: 4 })).toBe(5);
+    expect(
+      evaluateRathenaExpression("100+.@val", { locals: { val: 40 } }),
+    ).toBe(140);
+  });
+
   it("evaluates simple nested ternaries", () => {
     expect(
       evaluateRathenaExpression("(.@r>=8?70:(.@r>=6?50:30))", { refine: 9 }),

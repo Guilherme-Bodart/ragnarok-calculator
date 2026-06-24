@@ -153,6 +153,7 @@ export const modifierResolutionContextSchema = z.object({
   classId: z.string().min(1).optional(),
   refine: z.number().int().min(0).optional(),
   grade: z.number().int().min(0).optional(),
+  baseLevel: z.number().int().min(1).optional(),
   learnedSkills: z.record(z.string(), z.number().int().min(0)).optional(),
   ruleset: rulesetContextSchema.optional(),
 });

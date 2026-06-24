@@ -67,6 +67,7 @@ export function calculateDamageFromDataset(
     createItemContextMap(input.itemContexts),
     {
       classId: input.character.classId,
+      baseLevel: input.character.baseLevel,
       learnedSkills: input.learnedSkills,
       ruleset: input.ruleset,
     },
