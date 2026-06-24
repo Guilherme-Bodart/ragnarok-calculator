@@ -42,7 +42,7 @@ describe("calculator character utils", () => {
     expect(nextTraitStats.pow).toBe(110);
   });
 
-  it("keeps the current stats when the point budget would be exceeded", () => {
+  it("allows over-budget stats so the budget stays informational", () => {
     const nextStats = resolveNextCalculatorStats({
       baseLevel: 10,
       isFourthJob: false,
@@ -51,6 +51,6 @@ describe("calculator character utils", () => {
       stats: baseStats,
     });
 
-    expect(nextStats).toBe(baseStats);
+    expect(nextStats.str).toBe(130);
   });
 });

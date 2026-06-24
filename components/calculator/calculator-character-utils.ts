@@ -1,7 +1,4 @@
-import {
-  evaluateStatusPointBudget,
-  type CharacterStats,
-} from "@/packages/calculator-core/src";
+import type { CharacterStats } from "@/packages/calculator-core/src";
 
 export type VisibleCalculatorStat = {
   label: string;
@@ -108,9 +105,6 @@ export function getCalculatorPresetStats(
 }
 
 export function resolveNextCalculatorStats({
-  baseLevel,
-  isFourthJob,
-  isTranscendent,
   rawValue,
   stat,
   stats,
@@ -129,16 +123,6 @@ export function resolveNextCalculatorStats({
     ...stats,
     [stat.key]: nextValue,
   };
-  const nextBudget = evaluateStatusPointBudget({
-    baseLevel,
-    isTranscendent,
-    isFourthJob,
-    stats: nextStats,
-  });
-
-  if (!nextBudget.regular.isValid || !nextBudget.trait.isValid) {
-    return stats;
-  }
 
   return nextStats;
 }
