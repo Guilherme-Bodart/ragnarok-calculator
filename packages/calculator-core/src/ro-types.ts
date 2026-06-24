@@ -122,6 +122,7 @@ export type RoSkill = {
   classTree: string;
   damageType: DamageType;
   element?: ElementType;
+  attackRange?: number;
   maxLevel: number;
   hitCount: number;
   hitCountByLevel?: Record<string, number>;

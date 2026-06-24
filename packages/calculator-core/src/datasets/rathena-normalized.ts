@@ -148,6 +148,7 @@ export function toRoSkill(skill: RathenaNormalizedSkill): RoSkill | null {
     classTree: "unknown",
     damageType: getDamageType(skill.type),
     element,
+    attackRange: getSkillAttackRange(skill.raw?.Range),
     maxLevel: skill.maxLevel ?? 1,
     hitCount: hitCount.maximum,
     hitCountByLevel: hitCount.byLevel,
@@ -157,6 +158,10 @@ export function toRoSkill(skill: RathenaNormalizedSkill): RoSkill | null {
     ),
     source: "rathena",
   };
+}
+
+function getSkillAttackRange(range: unknown) {
+  return typeof range === "number" && Number.isFinite(range) ? range : undefined;
 }
 
 function isDamageSkill(skill: RathenaNormalizedSkill) {

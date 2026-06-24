@@ -17,6 +17,8 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   pAtk: 0,
   smatk: 0,
   atkRate: 0,
+  shortAttackRate: 0,
+  longAttackRate: 0,
   matkRate: 0,
   maxHp: 0,
   maxHpRate: 0,

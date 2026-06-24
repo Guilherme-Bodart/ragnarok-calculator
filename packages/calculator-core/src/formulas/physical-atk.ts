@@ -50,12 +50,19 @@ export function getPhysicalModifierFinalRate(
 
   return (
     effects.atkRate +
+    getPhysicalRangeRate(effects, skill) +
     effects.pAtk +
     skillRate +
     getTargetedRate(effects.raceDamageRate, monster.race) +
     getTargetedRate(effects.elementDamageRate, monster.element) +
     getTargetedRate(effects.sizeDamageRate, monster.size)
   );
+}
+
+function getPhysicalRangeRate(effects: CalculatorModifierEffects, skill: RoSkill) {
+  return Math.abs(skill.attackRange ?? 1) > 3
+    ? effects.longAttackRate
+    : effects.shortAttackRate;
 }
 
 function getApplicablePhysicalLegacyBonusRate(

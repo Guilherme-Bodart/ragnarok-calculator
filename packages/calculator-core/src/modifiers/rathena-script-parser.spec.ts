@@ -7,6 +7,8 @@ describe("ModifierNormalizer", () => {
   it("normalizes basic bonus commands", () => {
     const result = normalizer.fromRawScript(`
       bonus bAtkRate,5;
+      bonus bShortAtkRate,7;
+      bonus bLongAtkRate,9;
       bonus bMatkRate,10;
       bonus bBaseAtk,100;
     `);
@@ -17,6 +19,20 @@ describe("ModifierNormalizer", () => {
         stat: "atkRate",
         operator: "addPercent",
         value: 5,
+        target: { type: "self" },
+        conditions: [],
+      },
+      {
+        stat: "shortAttackRate",
+        operator: "addPercent",
+        value: 7,
+        target: { type: "self" },
+        conditions: [],
+      },
+      {
+        stat: "longAttackRate",
+        operator: "addPercent",
+        value: 9,
         target: { type: "self" },
         conditions: [],
       },
@@ -342,8 +358,22 @@ describe("ModifierNormalizer", () => {
       }
     `);
 
-    expect(result.modifiers).toMatchObject([
-      {
+    expect(result.modifiers).toContainEqual(
+      expect.objectContaining({
+        stat: "longAttackRate",
+        value: 50,
+        conditions: [
+          {
+            type: "skillLevel",
+            skillId: "RK_DRAGONBREATH",
+            operator: "==",
+            value: 10,
+          },
+        ],
+      }),
+    );
+    expect(result.modifiers).toContainEqual(
+      expect.objectContaining({
         stat: "skillDamageRate",
         value: 30,
         target: { type: "skill", skillId: "RK_DRAGONBREATH" },
@@ -355,9 +385,9 @@ describe("ModifierNormalizer", () => {
             value: 10,
           },
         ],
-      },
-    ]);
-    expect(result.unsupportedStatements).toEqual(["bonus bLongAtkRate,50;"]);
+      }),
+    );
+    expect(result.unsupportedStatements).toEqual([]);
   });
 
   it("attaches multiple skill level conditions to getskilllv conjunctions", () => {
@@ -519,8 +549,22 @@ describe("ModifierNormalizer", () => {
       }
     `);
 
-    expect(result.modifiers).toMatchObject([
-      {
+    expect(result.modifiers).toContainEqual(
+      expect.objectContaining({
+        stat: "longAttackRate",
+        value: 50,
+        conditions: [
+          {
+            type: "skillLevel",
+            skillId: "RK_DRAGONBREATH",
+            operator: "==",
+            value: 10,
+          },
+        ],
+      }),
+    );
+    expect(result.modifiers).toContainEqual(
+      expect.objectContaining({
         stat: "skillDamageRate",
         value: 30,
         conditions: [
@@ -531,10 +575,9 @@ describe("ModifierNormalizer", () => {
             value: 10,
           },
         ],
-      },
-    ]);
+      }),
+    );
     expect(result.unsupportedStatements).toEqual([
-      "bonus bLongAtkRate,50;",
       'autobonus3 "{ bonus bAtkRate,-50; bonus bNoKnockback; }",1000,5000;',
     ]);
   });

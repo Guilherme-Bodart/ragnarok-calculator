@@ -38,6 +38,10 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("smatk", "addFlat", command, conditions, variables),
   bAtkRate: (command, conditions, variables) =>
     createModifier("atkRate", "addPercent", command, conditions, variables),
+  bShortAtkRate: (command, conditions, variables) =>
+    createModifier("shortAttackRate", "addPercent", command, conditions, variables),
+  bLongAtkRate: (command, conditions, variables) =>
+    createModifier("longAttackRate", "addPercent", command, conditions, variables),
   bMatkRate: (command, conditions, variables) =>
     createModifier("matkRate", "addPercent", command, conditions, variables),
   bBaseAtk: (command, conditions, variables) =>
@@ -253,6 +257,8 @@ function createModifier(
     | "pAtk"
     | "smatk"
     | "atkRate"
+    | "shortAttackRate"
+    | "longAttackRate"
     | "matkRate"
     | "baseAtk"
     | "maxHp"

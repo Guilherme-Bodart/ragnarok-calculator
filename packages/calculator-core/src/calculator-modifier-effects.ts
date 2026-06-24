@@ -16,6 +16,8 @@ export type CalculatorModifierEffects = {
   pAtk: number;
   smatk: number;
   atkRate: number;
+  shortAttackRate: number;
+  longAttackRate: number;
   matkRate: number;
   maxHp: number;
   maxHpRate: number;
@@ -63,6 +65,8 @@ export class CalculatorModifierEffectsFactory {
       pAtk: 0,
       smatk: 0,
       atkRate: 0,
+      shortAttackRate: 0,
+      longAttackRate: 0,
       matkRate: 0,
       maxHp: 0,
       maxHpRate: 0,
@@ -142,6 +146,22 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "atkRate" && bucket.target.type === "self") {
           effects.atkRate += bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "shortAttackRate" &&
+          bucket.target.type === "self"
+        ) {
+          effects.shortAttackRate += bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "longAttackRate" &&
+          bucket.target.type === "self"
+        ) {
+          effects.longAttackRate += bucket.value;
           continue;
         }
 
@@ -334,6 +354,7 @@ export class CalculatorModifierEffectsFactory {
 
     return (
       effects.atkRate +
+      this.getPhysicalRangeRate(effects, skill) +
       effects.pAtk +
       skillRate +
       this.getTargetedRate(effects.raceDamageRate, monster.race) +
@@ -348,10 +369,24 @@ export class CalculatorModifierEffectsFactory {
   ) {
     return (target ? rates[target] ?? 0 : 0) + (rates.all ?? 0);
   }
+
+  private getPhysicalRangeRate(effects: CalculatorModifierEffects, skill: RoSkill) {
+    return isLongRangePhysicalSkill(skill)
+      ? effects.longAttackRate
+      : effects.shortAttackRate;
+  }
 }
 
 const baseStats: BaseStat[] = ["str", "agi", "vit", "int", "dex", "luk"];
 
 function isBaseStat(stat: string): stat is BaseStat {
   return baseStats.includes(stat as BaseStat);
+}
+
+function isLongRangePhysicalSkill(skill: RoSkill) {
+  if (skill.damageType !== "physical") {
+    return false;
+  }
+
+  return Math.abs(skill.attackRange ?? 1) > 3;
 }

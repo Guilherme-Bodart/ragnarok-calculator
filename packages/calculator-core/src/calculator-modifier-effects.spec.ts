@@ -53,6 +53,8 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus bAllStats,10;
         bonus bStr,5;
         bonus bAtkRate,10;
+        bonus bShortAtkRate,7;
+        bonus bLongAtkRate,9;
         bonus2 bAddRace,RC_DemiHuman,15;
       `,
       source: "manual",
@@ -72,6 +74,8 @@ describe("CalculatorModifierEffectsFactory", () => {
       flatAtk: 100,
       flatMatk: 0,
       atkRate: 10,
+      shortAttackRate: 7,
+      longAttackRate: 9,
       matkRate: 0,
       raceDamageRate: {
         demihuman: 15,
@@ -87,7 +91,7 @@ describe("CalculatorModifierEffectsFactory", () => {
         demihumanMonster,
         physicalSkill,
       ),
-    ).toBe(25);
+    ).toBe(32);
   });
 
   it("converts size, element, and magical targeted modifiers", () => {

@@ -934,3 +934,31 @@ Testes adicionados/ajustados:
 - Formula de defesa aplicando ignore antes da reducao hard.
 - Pipeline aplicando ignore DEF por raca e exibindo no breakdown.
 - Specs antigos do pipeline foram atualizados para a formula validada atual de Bash.
+
+## Bloco Fechado: Dano Fisico Curto/Longo Alcance
+
+Data: 2026-06-23.
+
+Implementado:
+
+- `RoSkill` agora carrega `attackRange` vindo do rAthena normalizado.
+- Parser/mappers reconhecem:
+  - `bonus bShortAtkRate,...`
+  - `bonus bLongAtkRate,...`
+- Efeitos agregados agora carregam:
+  - `shortAttackRate`
+  - `longAttackRate`
+- Formula fisica aplica short/long conforme `attackRange` da skill:
+  - `abs(attackRange) > 3` => long range.
+  - demais casos => short range.
+
+Testes adicionados/ajustados:
+
+- Dataset normalizado preservando `raw.Range`.
+- Parser normalizando short/long attack rate.
+- Efeitos agregando short/long.
+- Pipeline aplicando short ou long conforme alcance da skill.
+
+Observacao:
+
+- `bCritAtkRate` ficou fora deste bloco de proposito. Ele precisa de modelagem de critico/DPS para nao virar um bonus enganoso.

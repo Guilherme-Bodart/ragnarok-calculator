@@ -92,6 +92,7 @@ describe("rAthena normalized dataset adapter", () => {
         rawDamageFlags: null,
         raw: {
           HitCount: 1,
+          Range: -1,
         },
         source: "rathena",
       }),
@@ -100,6 +101,7 @@ describe("rAthena normalized dataset adapter", () => {
       name: "Bash",
       damageType: "physical",
       element: undefined,
+      attackRange: -1,
       maxLevel: 10,
       hitCount: 1,
       baseMultiplierByLevel: {

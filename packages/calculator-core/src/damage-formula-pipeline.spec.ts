@@ -19,6 +19,8 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   pAtk: 0,
   smatk: 0,
   atkRate: 0,
+  shortAttackRate: 0,
+  longAttackRate: 0,
   matkRate: 0,
   maxHp: 0,
   maxHpRate: 0,
@@ -63,10 +65,19 @@ const physicalSkill: RoSkill = {
   name: "Bash",
   classTree: "swordman",
   damageType: "physical",
+  attackRange: -1,
   maxLevel: 10,
   hitCount: 1,
   baseMultiplierByLevel: { "10": 100 },
   source: "manual",
+};
+
+const longRangePhysicalSkill: RoSkill = {
+  ...physicalSkill,
+  id: "AC_DOUBLE",
+  name: "Double Strafe",
+  classTree: "archer",
+  attackRange: -9,
 };
 
 const magicalSkill: RoSkill = {
@@ -214,6 +225,46 @@ describe("DamageFormulaPipeline", () => {
       expect.objectContaining({
         key: "defenseMultiplier",
         value: getHardDefMultiplier(250),
+      }),
+    );
+  });
+
+  it("applies short and long physical attack rates by skill range", () => {
+    const shortResult = pipeline.calculate({
+      character,
+      items: [],
+      modifierEffects: {
+        ...emptyModifierEffects,
+        shortAttackRate: 10,
+        longAttackRate: 30,
+      },
+      monster: neutralTarget,
+      skill: physicalSkill,
+      skillLevel: 10,
+    });
+    const longResult = pipeline.calculate({
+      character,
+      items: [],
+      modifierEffects: {
+        ...emptyModifierEffects,
+        shortAttackRate: 10,
+        longAttackRate: 30,
+      },
+      monster: neutralTarget,
+      skill: longRangePhysicalSkill,
+      skillLevel: 10,
+    });
+
+    expect(shortResult.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "modifierFinalRate",
+        value: 10,
+      }),
+    );
+    expect(longResult.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "modifierFinalRate",
+        value: 30,
       }),
     );
   });
