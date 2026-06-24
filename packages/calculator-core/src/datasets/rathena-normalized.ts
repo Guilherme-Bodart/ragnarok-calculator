@@ -50,6 +50,10 @@ export type RathenaNormalizedSkill = {
   raw?: {
     HitCount?: unknown;
     Range?: unknown;
+    CastTime?: unknown;
+    FixedCastTime?: unknown;
+    AfterCastActDelay?: unknown;
+    Cooldown?: unknown;
   } | null;
   source: "rathena";
 };
@@ -142,6 +146,7 @@ export function toRoSkill(skill: RathenaNormalizedSkill): RoSkill | null {
 
   const element = getSkillElement(skill.element);
   const hitCount = getHitCount(skill.raw?.HitCount);
+  const maxLevel = skill.maxLevel ?? 1;
 
   return {
     id: skill.name,
@@ -150,15 +155,60 @@ export function toRoSkill(skill: RathenaNormalizedSkill): RoSkill | null {
     damageType: getDamageType(skill.type),
     element,
     attackRange: getSkillAttackRange(skill.raw?.Range),
-    maxLevel: skill.maxLevel ?? 1,
+    maxLevel,
     hitCount: hitCount.maximum,
     hitCountByLevel: hitCount.byLevel,
+    variableCastMsByLevel: getSkillTimingByLevel(skill.raw?.CastTime, maxLevel),
+    fixedCastMsByLevel: getSkillTimingByLevel(
+      skill.raw?.FixedCastTime,
+      maxLevel,
+    ),
+    afterCastDelayMsByLevel: getSkillTimingByLevel(
+      skill.raw?.AfterCastActDelay,
+      maxLevel,
+    ),
+    cooldownMsByLevel: getSkillTimingByLevel(skill.raw?.Cooldown, maxLevel),
     baseMultiplierByLevel: getBaseMultiplierByLevel(
       skill.name,
-      skill.maxLevel ?? 1,
+      maxLevel,
     ),
     source: "rathena",
   };
+}
+
+function getSkillTimingByLevel(
+  timing: unknown,
+  maxLevel: number,
+): Record<string, number> | undefined {
+  if (typeof timing === "number" && Number.isFinite(timing)) {
+    return Object.fromEntries(
+      Array.from({ length: maxLevel }, (_, index) => [
+        String(index + 1),
+        Math.max(0, timing),
+      ]),
+    );
+  }
+
+  if (!Array.isArray(timing)) {
+    return undefined;
+  }
+
+  const byLevel: Record<string, number> = {};
+
+  for (const entry of timing) {
+    if (
+      typeof entry === "object" &&
+      entry !== null &&
+      "Level" in entry &&
+      "Time" in entry &&
+      typeof entry.Level === "number" &&
+      typeof entry.Time === "number"
+    ) {
+      byLevel[String(entry.Level)] = Math.max(0, entry.Time);
+    }
+  }
+
+  return Object.keys(byLevel).length > 0 ? byLevel : undefined;
 }
 
 function getSkillAttackRange(range: unknown) {

@@ -1173,6 +1173,32 @@ Observacao:
 Proximo bloco recomendado:
 
 - Escolher entre:
-  - Normalizar cast/cooldown base a partir de dados reais de skill.
   - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, separados de dano causado.
   - Engine inicial de cura/critico consumindo `healPower` e `criticalDamageRate`.
+
+## Bloco Fechado: Cast E Cooldown Base Das Skills Rathena
+
+Data: 2026-06-24.
+
+Implementado:
+
+- Adapter `rathena-normalized` agora mapeia tempos reais das skills:
+  - `CastTime` -> `variableCastMsByLevel`
+  - `FixedCastTime` -> `fixedCastMsByLevel`
+  - `AfterCastActDelay` -> `afterCastDelayMsByLevel`
+  - `Cooldown` -> `cooldownMsByLevel`
+- Campos com valor unico sao expandidos para todos os niveis da skill.
+- Campos em array `{ Level, Time }` viram mapa por nivel.
+- Testes cobrem arrays por nivel e valores fixos.
+
+Impacto:
+
+- O `CastTimingEngine` e o breakdown de DPS passam a usar dados reais quando as skills vêm do dataset rAthena normalizado.
+- Skills sem dados de cast/cooldown continuam com ciclo zero, sem quebrar calculo antigo.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, separados de dano causado.
+  - Engine inicial de cura/critico consumindo `healPower` e `criticalDamageRate`.
+  - Mostrar cast detalhado no card de resultado/ataque, alem de ciclo e DPS.

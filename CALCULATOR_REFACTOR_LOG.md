@@ -15,6 +15,14 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Cast e cooldown base das skills rAthena
+
+- Adapter `rathena-normalized` mapeia `CastTime`, `FixedCastTime`, `AfterCastActDelay` e `Cooldown` para os campos opcionais de `RoSkill`.
+- Valores fixos sao expandidos para todos os niveis; arrays `{ Level, Time }` viram mapa por nivel.
+- Testes cobrem a conversao e preservam compatibilidade com skills sem dados de tempo.
+
+Motivo: o engine de cast/DPS criado antes precisava de dados reais de skill para deixar de ser apenas estrutural.
+
 ### 2026-06-24 - Engine inicial de cast e DPS
 
 - Criado `CastTimingEngine` no core.

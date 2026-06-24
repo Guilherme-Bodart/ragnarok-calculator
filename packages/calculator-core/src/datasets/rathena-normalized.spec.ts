@@ -127,6 +127,13 @@ describe("rAthena normalized dataset adapter", () => {
             { Level: 2, Count: 2 },
             { Level: 10, Count: 10 },
           ],
+          CastTime: [
+            { Level: 1, Time: 500 },
+            { Level: 10, Time: 3200 },
+          ],
+          FixedCastTime: 1200,
+          AfterCastActDelay: 1400,
+          Cooldown: 300,
         },
         source: "rathena",
       }),
@@ -139,6 +146,22 @@ describe("rAthena normalized dataset adapter", () => {
         "1": 1,
         "2": 2,
         "10": 10,
+      },
+      variableCastMsByLevel: {
+        "1": 500,
+        "10": 3200,
+      },
+      fixedCastMsByLevel: {
+        "1": 1200,
+        "10": 1200,
+      },
+      afterCastDelayMsByLevel: {
+        "1": 1400,
+        "10": 1400,
+      },
+      cooldownMsByLevel: {
+        "1": 300,
+        "10": 300,
       },
     });
   });
