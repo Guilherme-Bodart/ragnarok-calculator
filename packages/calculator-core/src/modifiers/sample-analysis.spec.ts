@@ -8,7 +8,7 @@ import {
   type ItemScriptSample,
 } from "./sample-analysis";
 
-const sampleRoot = join(process.cwd(), "..", "nightmare-data");
+const sampleRoot = join(process.cwd(), "nightmare-data");
 
 describe("sample modifier analysis", () => {
   it("smoke tests item scripts from the real sample files", () => {
@@ -64,7 +64,14 @@ describe("sample modifier analysis", () => {
     expect(classifyUnsupportedCommand("bonus2 bAddMonsterDropItem")).toBe(
       "ignored-drop-effect",
     );
+    expect(classifyUnsupportedCommand("getitem")).toBe("ignored-drop-effect");
+    expect(classifyUnsupportedCommand("getgroupitem")).toBe(
+      "ignored-drop-effect",
+    );
     expect(classifyUnsupportedCommand("bonus2 bSkillCooldown")).toBe(
+      "unsupported-non-damage-effect",
+    );
+    expect(classifyUnsupportedCommand("itemheal")).toBe(
       "unsupported-non-damage-effect",
     );
     expect(classifyUnsupportedCommand("bonus bAllStats")).toBe(

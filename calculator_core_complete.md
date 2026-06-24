@@ -973,3 +973,39 @@ Testes adicionados/ajustados:
 Observacao:
 
 - `bCritAtkRate` ficou fora deste bloco de proposito. Ele precisa de modelagem de critico/DPS para nao virar um bonus enganoso.
+
+## Bloco Fechado: Auditoria Real Do Parser
+
+Data: 2026-06-24.
+
+Implementado:
+
+- Comando `npm run calculator:audit:parser`.
+- Script `scripts/audit-calculator-parser-coverage.ts`.
+- Relatorio `nightmare-data/generated/calculator/coverage/calculator-parser-coverage.json`.
+- O relatorio usa o parser real do core, nao apenas split textual barato.
+- Classificacao separa comandos ignoraveis de drop/caixa/consumivel dos comandos acionaveis para dano.
+
+Resultado atual:
+
+- Item scripts analisados: 20.037.
+- Scripts totalmente suportados: 3.082.
+- Scripts parcialmente suportados: 6.174.
+- Statements unsupported: 39.633.
+- Modifiers extraidos: 28.450.
+
+Top acionavel atual:
+
+1. `bonus2 bSkillAtk`: muitos casos falham por expressoes/variaveis como `.@val`.
+2. `bonus2 bSubRace` e `bonus2 bSubEle`: reducao de dano recebido/defensiva, provavelmente outro modulo.
+3. `bonus bBaseAtk`, `bonus bMatk`, `bonus bMaxHP`: muitos casos falham por expressoes com `BaseLevel` ou variaveis locais.
+4. `bonus bVariableCastrate`, `sc_start`, `bonus bDef`: importantes para VFinal, mas nao bloqueiam dano medio imediato.
+5. `bonus bCritAtkRate`: depende de modelagem de critico/DPS.
+
+Proximo bloco recomendado:
+
+- Melhorar evaluator de expressoes rAthena com variaveis comuns:
+  - `BaseLevel`
+  - aliases simples como `.@val = ...`
+  - expressoes derivadas de `.@r` e `.@g`
+- Objetivo: reduzir unsupported de `bSkillAtk`, `bBaseAtk`, `bMatk` e `bMaxHP` sem adicionar custo no front.

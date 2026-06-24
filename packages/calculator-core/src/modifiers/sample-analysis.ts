@@ -181,6 +181,8 @@ export function classifyUnsupportedCommand(
   }
 
   if (
+    command === "getitem" ||
+    command === "getgroupitem" ||
     command === "bonus2 bAddMonsterDropItem" ||
     command === "bonus3 bAddMonsterIdDropItem"
   ) {
@@ -189,6 +191,11 @@ export function classifyUnsupportedCommand(
 
   if (
     command === "skill" ||
+    command === "itemheal" ||
+    command === "percentheal" ||
+    command === "laphine_synthesis" ||
+    command === "laphine_upgrade" ||
+    command === "item_reform" ||
     command === "sc_end" ||
     command === "heal" ||
     command === "bonus2 bSkillCooldown" ||
@@ -209,8 +216,7 @@ export function classifyUnsupportedCommand(
     command === "bonus bMaxHPrate" ||
     command === "bonus bMaxSPrate" ||
     command === "bonus bInt" ||
-    command === "bonus bVit" ||
-    command === "bonus bLongAtkRate"
+    command === "bonus bVit"
   ) {
     return "unsupported-stat-effect";
   }

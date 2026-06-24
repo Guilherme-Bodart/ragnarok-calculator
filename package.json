@@ -7,6 +7,7 @@
     "dev:api": "npm --prefix api run dev",
     "dev:all": "concurrently -n web,api -c cyan,blue \"npm run dev\" \"npm run dev:api\"",
     "calculator:audit": "node scripts/audit-calculator-core.mjs",
+    "calculator:audit:parser": "tsx scripts/audit-calculator-parser-coverage.ts",
     "data:skill-tooltips": "tsx scripts/generate-skill-tooltips.ts",
     "data:monster-index": "node scripts/generate-calculator-monster-index.mjs",
     "sprite:costume": "node scripts/generate-costume-walker.mjs",
