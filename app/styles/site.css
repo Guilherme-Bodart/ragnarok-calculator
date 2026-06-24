@@ -254,6 +254,10 @@
   text-align: center;
 }
 
+.hero-section > .site-shell {
+  transform: translateY(-60px);
+}
+
 .hero-aura {
   position: absolute;
   inset: 0;
@@ -916,10 +920,11 @@
   display: grid;
   justify-items: center;
   --walker-index: 0;
+  --walker-lift: 0px;
   --walker-width: clamp(112px, 10vw, 200px);
   --walker-gap: calc(var(--walker-width) * 0.75);
   --walker-offset: calc(var(--walker-index) * var(--walker-gap));
-  transform: translateX(calc((var(--walker-width) * -1) - 20px + var(--walker-offset))) translateY(0);
+  transform: translateX(calc((var(--walker-width) * -1) - 20px + var(--walker-offset))) translateY(var(--walker-lift));
   animation: footer-sprite-walk 22s linear infinite;
 }
 
@@ -1082,29 +1087,29 @@
 
 @keyframes footer-sprite-walk {
   0% {
-    transform: translateX(calc((var(--walker-width) * -1) - 20px + var(--walker-offset))) translateY(0);
+    transform: translateX(calc((var(--walker-width) * -1) - 20px + var(--walker-offset))) translateY(var(--walker-lift));
   }
 
   25% {
-    transform: translateX(calc(25vw + var(--walker-offset))) translateY(-2px);
+    transform: translateX(calc(25vw + var(--walker-offset))) translateY(calc(var(--walker-lift) - 2px));
   }
 
   50% {
-    transform: translateX(calc(50vw + var(--walker-offset))) translateY(0);
+    transform: translateX(calc(50vw + var(--walker-offset))) translateY(var(--walker-lift));
   }
 
   75% {
-    transform: translateX(calc(75vw + var(--walker-offset))) translateY(-2px);
+    transform: translateX(calc(75vw + var(--walker-offset))) translateY(calc(var(--walker-lift) - 2px));
   }
 
   100% {
-    transform: translateX(calc(100vw + var(--walker-width) + 20px + var(--walker-offset))) translateY(0);
+    transform: translateX(calc(100vw + var(--walker-width) + 20px + var(--walker-offset))) translateY(var(--walker-lift));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .walking-footer-character {
     animation: none;
-    transform: translateX(18px);
+    transform: translateX(18px) translateY(var(--walker-lift));
   }
 }
