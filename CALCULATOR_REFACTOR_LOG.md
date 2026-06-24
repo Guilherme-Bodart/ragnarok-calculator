@@ -15,6 +15,16 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Cast e delay de itens no modifier core
+
+- Parser rAthena passou a reconhecer `bVariableCastrate`, `bFixedCastrate`, `bFixedCast` e `bDelayrate`.
+- Parser tambem reconhece variantes por skill via `bonus2 bVariableCastrate`, `bonus2 bFixedCastrate` e `bonus2 bSkillFixedCast`.
+- `CalculatorModifierEffectsFactory` agrega efeitos globais e por skill em campos dedicados para futuro engine de cast/DPS.
+- Auditoria do parser subiu de 4.250 para 5.056 scripts totalmente suportados e reduziu unsupported statements para 28.010.
+- Testes focados cobrem normalizacao e agregacao.
+
+Motivo: muitos itens modernos reduzem conjuracao e pos-conjuracao; capturar esses efeitos no core prepara DPS real sem precisar reprocessar scripts no frontend.
+
 ### 2026-06-24 - Trait stats de itens no core
 
 - Parser rAthena passou a reconhecer `bPow`, `bSta`, `bWis`, `bSpl`, `bCon` e `bCrt`.

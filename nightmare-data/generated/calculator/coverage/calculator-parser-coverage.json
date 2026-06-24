@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 4250,
-  "partiallySupportedItemScripts": 6363,
-  "unsupportedItemScripts": 15787,
-  "itemScriptsWithModifiers": 10613,
-  "totalModifiers": 36839,
-  "unsupportedStatements": 30862,
+  "fullySupportedItemScripts": 5056,
+  "partiallySupportedItemScripts": 5776,
+  "unsupportedItemScripts": 14981,
+  "itemScriptsWithModifiers": 10832,
+  "totalModifiers": 39691,
+  "unsupportedStatements": 28010,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -202,70 +202,6 @@
           "itemId": 2108,
           "itemName": "Mirror Shield",
           "rawLine": "bonus bMdef,5;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bVariableCastrate",
-      "reason": "unsupported-bonus-code",
-      "count": 1128,
-      "examples": [
-        {
-          "itemId": 1334,
-          "itemName": "Grinder Axe",
-          "rawLine": "bonus bVariableCastrate,-7;"
-        },
-        {
-          "itemId": 1577,
-          "itemName": "Glorious Apocalypse",
-          "rawLine": "bonus bVariableCastrate,-5;"
-        },
-        {
-          "itemId": 1616,
-          "itemName": "Wing Staff",
-          "rawLine": "bonus bVariableCastrate,-5;"
-        },
-        {
-          "itemId": 1640,
-          "itemName": "Glorious Arc Wand",
-          "rawLine": "bonus bVariableCastrate,-5;"
-        },
-        {
-          "itemId": 1642,
-          "itemName": "Staff Of Darkness",
-          "rawLine": "bonus bVariableCastrate,-5;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bDelayrate",
-      "reason": "unsupported-non-damage-effect",
-      "count": 1118,
-      "examples": [
-        {
-          "itemId": 1150,
-          "itemName": "Libra's Krasnaya",
-          "rawLine": "bonus bDelayrate,-10;"
-        },
-        {
-          "itemId": 1181,
-          "itemName": "Tae Goo Lyeon",
-          "rawLine": "bonus bDelayrate,-20;"
-        },
-        {
-          "itemId": 1339,
-          "itemName": "Hauyne Huuma",
-          "rawLine": "bonus bDelayrate,-5;"
-        },
-        {
-          "itemId": 1340,
-          "itemName": "Arcanite Hammer",
-          "rawLine": "bonus bDelayrate,-5;"
-        },
-        {
-          "itemId": 1577,
-          "itemName": "Glorious Apocalypse",
-          "rawLine": "bonus bDelayrate,-5;"
         }
       ]
     },
@@ -490,38 +426,6 @@
           "itemId": 1586,
           "itemName": "Vellum Bible",
           "rawLine": "bonus2 bSkillCooldown,\"AB_CLEARANCE\",-10000;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bFixedCast",
-      "reason": "unsupported-bonus-code",
-      "count": 477,
-      "examples": [
-        {
-          "itemId": 2016,
-          "itemName": "Vellum Arc Wand",
-          "rawLine": "bonus bFixedCast,-200;"
-        },
-        {
-          "itemId": 5412,
-          "itemName": "Sweet Candy",
-          "rawLine": "bonus bFixedCast,-100;"
-        },
-        {
-          "itemId": 5603,
-          "itemName": "RTC First Place",
-          "rawLine": "bonus bFixedCast,-500;"
-        },
-        {
-          "itemId": 5604,
-          "itemName": "RTC Second Place",
-          "rawLine": "bonus bFixedCast,-300;"
-        },
-        {
-          "itemId": 5605,
-          "itemName": "RTC Third Place",
-          "rawLine": "bonus bFixedCast,-100;"
         }
       ]
     },
@@ -1130,38 +1034,6 @@
           "itemId": 1648,
           "itemName": "Staff Of Bordeaux",
           "rawLine": "bonus bUseSPrate,-15;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bVariableCastrate",
-      "reason": "unsupported-bonus-code",
-      "count": 192,
-      "examples": [
-        {
-          "itemId": 1339,
-          "itemName": "Hauyne Huuma",
-          "rawLine": "bonus2 bVariableCastrate,\"NJ_HUUMA\",-10;"
-        },
-        {
-          "itemId": 1339,
-          "itemName": "Hauyne Huuma",
-          "rawLine": "bonus2 bVariableCastrate,\"NJ_HUUMA\",-20;"
-        },
-        {
-          "itemId": 1631,
-          "itemName": "Holy Stick",
-          "rawLine": "bonus2 bVariableCastrate,\"AL_HOLYLIGHT\",-25;"
-        },
-        {
-          "itemId": 1631,
-          "itemName": "Holy Stick",
-          "rawLine": "bonus2 bVariableCastrate,\"PR_TURNUNDEAD\",-25;"
-        },
-        {
-          "itemId": 1631,
-          "itemName": "Holy Stick",
-          "rawLine": "bonus2 bVariableCastrate,\"PR_MAGNUS\",-25;"
         }
       ]
     },
@@ -2446,6 +2318,38 @@
       ]
     },
     {
+      "command": "bonus bDelayrate",
+      "reason": "unsupported-non-damage-effect",
+      "count": 62,
+      "examples": [
+        {
+          "itemId": 2173,
+          "itemName": "Crescent Wrist Guard",
+          "rawLine": "bonus bDelayrate,-(getrefine()*2);"
+        },
+        {
+          "itemId": 4480,
+          "itemName": "Sealed Kiel Card",
+          "rawLine": "bonus bDelayrate,((getrefine()>14)?-20:-15);"
+        },
+        {
+          "itemId": 15405,
+          "itemName": "Fafnir Scale",
+          "rawLine": "bonus bDelayrate,-2*getskilllv(\"RK_DRAGONBREATH_WATER\");"
+        },
+        {
+          "itemId": 15407,
+          "itemName": "Whiteknight Armor",
+          "rawLine": "bonus bDelayrate,-5-(min(10,.@r)*2);"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bDelayrate,-.@d;"
+        }
+      ]
+    },
+    {
       "command": "bonus3 bAddMonsterIdDropItem",
       "reason": "ignored-drop-effect",
       "count": 62,
@@ -2506,6 +2410,38 @@
           "itemId": 4158,
           "itemName": "Sky Deleter Card",
           "rawLine": "bonus bHPGainValue,100;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bVariableCastrate",
+      "reason": "unsupported-bonus-code",
+      "count": 61,
+      "examples": [
+        {
+          "itemId": 4541,
+          "itemName": "Sealed High Wizard Card",
+          "rawLine": "bonus bVariableCastrate,.@rate;"
+        },
+        {
+          "itemId": 5226,
+          "itemName": "Mini Propeller",
+          "rawLine": "bonus bVariableCastrate,-getrefine();"
+        },
+        {
+          "itemId": 5622,
+          "itemName": "F Mini Propeller",
+          "rawLine": "bonus bVariableCastrate,-getrefine();"
+        },
+        {
+          "itemId": 5972,
+          "itemName": "Chatty Parrot",
+          "rawLine": "bonus bVariableCastrate,-readparam(bInt)/30;"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bVariableCastrate,-.@c;"
         }
       ]
     },
@@ -2634,38 +2570,6 @@
           "itemId": 12157,
           "itemName": "Bowman Scroll 5",
           "rawLine": "mercenary_create 6021,1800000;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bFixedCastrate",
-      "reason": "unsupported-non-damage-effect",
-      "count": 58,
-      "examples": [
-        {
-          "itemId": 1827,
-          "itemName": "Glorious Fist",
-          "rawLine": "bonus2 bFixedCastrate,\"MO_EXTREMITYFIST\",-100;"
-        },
-        {
-          "itemId": 1832,
-          "itemName": "Vellum Claw",
-          "rawLine": "bonus2 bFixedCastrate,\"MO_EXTREMITYFIST\",-100;"
-        },
-        {
-          "itemId": 1859,
-          "itemName": "Lesser Guild Member's Fist",
-          "rawLine": "bonus2 bFixedCastrate,\"MO_EXTREMITYFIST\",-30;"
-        },
-        {
-          "itemId": 5970,
-          "itemName": "Rune Helm",
-          "rawLine": "bonus2 bFixedCastrate,\"RK_REFRESH\",-100;"
-        },
-        {
-          "itemId": 15433,
-          "itemName": "Neptune's suit",
-          "rawLine": "bonus2 bFixedCastrate,\"SG_HATE\",-50;"
         }
       ]
     },
@@ -3246,38 +3150,6 @@
       ]
     },
     {
-      "command": "bonus bFixedCastrate",
-      "reason": "unsupported-bonus-code",
-      "count": 42,
-      "examples": [
-        {
-          "itemId": 1649,
-          "itemName": "Laphine Staff",
-          "rawLine": "bonus bFixedCastrate,-getrefine();"
-        },
-        {
-          "itemId": 1679,
-          "itemName": "Laphine Staff",
-          "rawLine": "bonus bFixedCastrate,-getrefine();"
-        },
-        {
-          "itemId": 2041,
-          "itemName": "Flame Thunder Witch's Wand",
-          "rawLine": "bonus bFixedCastrate,-70;"
-        },
-        {
-          "itemId": 2047,
-          "itemName": "Witch's Staff",
-          "rawLine": "bonus bFixedCastrate,-70;"
-        },
-        {
-          "itemId": 2907,
-          "itemName": "Bawaya Agimat Tattoo",
-          "rawLine": "bonus bFixedCastrate,-7;"
-        }
-      ]
-    },
-    {
       "command": "bonus bCritical",
       "reason": "unsupported-bonus-code",
       "count": 41,
@@ -3434,6 +3306,38 @@
           "itemId": 1832,
           "itemName": "Vellum Claw",
           "rawLine": "bonus2 bHPLossRate,500,3000;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bVariableCastrate",
+      "reason": "unsupported-bonus-code",
+      "count": 38,
+      "examples": [
+        {
+          "itemId": 19469,
+          "itemName": "Sacred Crown",
+          "rawLine": "bonus2 bVariableCastrate,\"AB_JUDEX\",-5*getskilllv(\"AB_ORATIO\");"
+        },
+        {
+          "itemId": 19469,
+          "itemName": "Sacred Crown",
+          "rawLine": "bonus2 bVariableCastrate,\"AB_ADORAMUS\",-5*getskilllv(\"AB_ORATIO\");"
+        },
+        {
+          "itemId": 22134,
+          "itemName": "Enforcer Shoes",
+          "rawLine": "bonus2 bVariableCastrate,\"ASC_METEORASSAULT\",-7*(.@a+.@b+.@c);"
+        },
+        {
+          "itemId": 22145,
+          "itemName": "Tengu's Shoes",
+          "rawLine": "bonus2 bVariableCastrate,\"MO_CALLSPIRITS\",-.@c*10;"
+        },
+        {
+          "itemId": 22145,
+          "itemName": "Tengu's Shoes",
+          "rawLine": "bonus2 bVariableCastrate,\"MO_STEELBODY\",-.@c*10;"
         }
       ]
     },
@@ -4014,38 +3918,6 @@
       ]
     },
     {
-      "command": "bonus2 bSkillFixedCast",
-      "reason": "unsupported-non-damage-effect",
-      "count": 26,
-      "examples": [
-        {
-          "itemId": 29429,
-          "itemName": "Sniper Stone (Middle)",
-          "rawLine": "bonus2 bSkillFixedCast,\"SN_SHARPSHOOTING\",-500;"
-        },
-        {
-          "itemId": 29433,
-          "itemName": "Professor Stone (Middle)",
-          "rawLine": "bonus2 bSkillFixedCast,\"PF_DOUBLECASTING\",-400;"
-        },
-        {
-          "itemId": 400177,
-          "itemName": "Fafnir Helm",
-          "rawLine": "bonus2 bSkillFixedCast,\"RK_DRAGONBREATH\",-200;"
-        },
-        {
-          "itemId": 400177,
-          "itemName": "Fafnir Helm",
-          "rawLine": "bonus2 bSkillFixedCast,\"RK_DRAGONBREATH_WATER\",-200;"
-        },
-        {
-          "itemId": 460064,
-          "itemName": "Rose Quartz Shield",
-          "rawLine": "bonus2 bSkillFixedCast,\"MG_FIREBALL\",-320;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bSPRegenRate",
       "reason": "unsupported-bonus-code",
       "count": 26,
@@ -4394,6 +4266,38 @@
           "itemId": 15053,
           "itemName": "Special Ninja Suit",
           "rawLine": "bonus bAgi,1+(getrefine()/3);"
+        }
+      ]
+    },
+    {
+      "command": "bonus bFixedCast",
+      "reason": "unsupported-bonus-code",
+      "count": 20,
+      "examples": [
+        {
+          "itemId": 19249,
+          "itemName": "Spell Circuit",
+          "rawLine": "bonus bFixedCast,-.@val*100;"
+        },
+        {
+          "itemId": 19263,
+          "itemName": "General's Helm",
+          "rawLine": "bonus bFixedCast,-.@val*100;"
+        },
+        {
+          "itemId": 19296,
+          "itemName": "Fancy Feather Hat",
+          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
+        },
+        {
+          "itemId": 19300,
+          "itemName": "Dog Officer",
+          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
+        },
+        {
+          "itemId": 19308,
+          "itemName": "Amistr Beret",
+          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
         }
       ]
     },
@@ -6350,6 +6254,33 @@
       ]
     },
     {
+      "command": "bonus bFixedCastrate",
+      "reason": "unsupported-bonus-code",
+      "count": 4,
+      "examples": [
+        {
+          "itemId": 1649,
+          "itemName": "Laphine Staff",
+          "rawLine": "bonus bFixedCastrate,-getrefine();"
+        },
+        {
+          "itemId": 1679,
+          "itemName": "Laphine Staff",
+          "rawLine": "bonus bFixedCastrate,-getrefine();"
+        },
+        {
+          "itemId": 5905,
+          "itemName": "Lyrica Hat",
+          "rawLine": "bonus bFixedCastrate,4*(getskilllv(\"WM_LESSON\"));"
+        },
+        {
+          "itemId": 480251,
+          "itemName": "Mystery Wing",
+          "rawLine": "bonus bFixedCastrate,-70*.@d;"
+        }
+      ]
+    },
+    {
       "command": "bonus bMdefRate",
       "reason": "unsupported-bonus-code",
       "count": 4,
@@ -6400,6 +6331,33 @@
           "itemId": 490277,
           "itemName": "Dimensional Wanderer's Lock",
           "rawLine": "bonus bSta,4*.@param;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bFixedCastrate",
+      "reason": "unsupported-non-damage-effect",
+      "count": 4,
+      "examples": [
+        {
+          "itemId": 22145,
+          "itemName": "Tengu's Shoes",
+          "rawLine": "bonus2 bFixedCastrate,\"CH_SOULCOLLECT\",-.@c*10;"
+        },
+        {
+          "itemId": 28236,
+          "itemName": "Metal Kingcobra",
+          "rawLine": "bonus2 bFixedCastrate,\"RL_AM_BLAST\",-10*getrefine();"
+        },
+        {
+          "itemId": 470027,
+          "itemName": "Juggernaut",
+          "rawLine": "bonus2 bFixedCastrate,\"RL_BANISHING_BUSTER\",-20*getskilllv(\"RL_BANISHING_BUSTER\");"
+        },
+        {
+          "itemId": 470028,
+          "itemName": "Juggernaut",
+          "rawLine": "bonus2 bFixedCastrate,\"RL_BANISHING_BUSTER\",-20*getskilllv(\"RL_BANISHING_BUSTER\");"
         }
       ]
     },

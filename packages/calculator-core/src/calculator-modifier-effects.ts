@@ -32,6 +32,13 @@ export type CalculatorModifierEffects = {
   crit: number;
   aspd: number;
   aspdRate: number;
+  variableCastRate: number;
+  fixedCastRate: number;
+  fixedCast: number;
+  afterCastDelayRate: number;
+  skillVariableCastRate: Record<string, number>;
+  skillFixedCastRate: Record<string, number>;
+  skillFixedCast: Record<string, number>;
   raceDamageRate: Partial<Record<ModifierRaceId, number>>;
   elementDamageRate: Partial<Record<ModifierElementId, number>>;
   sizeDamageRate: Partial<Record<ModifierSizeId, number>>;
@@ -87,6 +94,13 @@ export class CalculatorModifierEffectsFactory {
       crit: 0,
       aspd: 0,
       aspdRate: 0,
+      variableCastRate: 0,
+      fixedCastRate: 0,
+      fixedCast: 0,
+      afterCastDelayRate: 0,
+      skillVariableCastRate: {},
+      skillFixedCastRate: {},
+      skillFixedCast: {},
       raceDamageRate: {},
       elementDamageRate: {},
       sizeDamageRate: {},
@@ -233,6 +247,32 @@ export class CalculatorModifierEffectsFactory {
           continue;
         }
 
+        if (
+          bucket.stat === "variableCastRate" &&
+          bucket.target.type === "self"
+        ) {
+          effects.variableCastRate += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "fixedCastRate" && bucket.target.type === "self") {
+          effects.fixedCastRate += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "fixedCast" && bucket.target.type === "self") {
+          effects.fixedCast += bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "afterCastDelayRate" &&
+          bucket.target.type === "self"
+        ) {
+          effects.afterCastDelayRate += bucket.value;
+          continue;
+        }
+
         if (bucket.stat === "raceDamageRate" && bucket.target.type === "race") {
           const current = effects.raceDamageRate[bucket.target.raceId] ?? 0;
           effects.raceDamageRate[bucket.target.raceId] = current + bucket.value;
@@ -259,6 +299,34 @@ export class CalculatorModifierEffectsFactory {
         if (bucket.stat === "skillDamageRate" && bucket.target.type === "skill") {
           const current = effects.skillDamageRate[bucket.target.skillId] ?? 0;
           effects.skillDamageRate[bucket.target.skillId] = current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "skillVariableCastRate" &&
+          bucket.target.type === "skill"
+        ) {
+          const current =
+            effects.skillVariableCastRate[bucket.target.skillId] ?? 0;
+          effects.skillVariableCastRate[bucket.target.skillId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "skillFixedCastRate" &&
+          bucket.target.type === "skill"
+        ) {
+          const current = effects.skillFixedCastRate[bucket.target.skillId] ?? 0;
+          effects.skillFixedCastRate[bucket.target.skillId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "skillFixedCast" && bucket.target.type === "skill") {
+          const current = effects.skillFixedCast[bucket.target.skillId] ?? 0;
+          effects.skillFixedCast[bucket.target.skillId] =
+            current + bucket.value;
           continue;
         }
 

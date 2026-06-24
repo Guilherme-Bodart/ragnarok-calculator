@@ -254,6 +254,13 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus bCritical,7;
         bonus bAspd,1;
         bonus bAspdRate,10;
+        bonus bVariableCastrate,-12;
+        bonus bFixedCastrate,-5;
+        bonus bFixedCast,-200;
+        bonus bDelayrate,-15;
+        bonus2 bVariableCastrate,"WZ_STORMGUST",-8;
+        bonus2 bFixedCastrate,"WZ_STORMGUST",-3;
+        bonus2 bSkillFixedCast,"WZ_STORMGUST",-150;
       `,
       source: "manual",
     };
@@ -271,6 +278,13 @@ describe("CalculatorModifierEffectsFactory", () => {
       crit: 7,
       aspd: 1,
       aspdRate: 10,
+      variableCastRate: -12,
+      fixedCastRate: -5,
+      fixedCast: -200,
+      afterCastDelayRate: -15,
+      skillVariableCastRate: { WZ_STORMGUST: -8 },
+      skillFixedCastRate: { WZ_STORMGUST: -3 },
+      skillFixedCast: { WZ_STORMGUST: -150 },
     });
   });
 });

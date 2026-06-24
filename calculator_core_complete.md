@@ -1068,5 +1068,41 @@ Proximo bloco recomendado:
 
 - Escolher entre:
   - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, provavelmente separados de dano causado.
-  - Cast/delay inicial para `bVariableCastrate`, `bFixedCast`, `bDelayrate`.
   - Heal/crit inicial para `bHealPower` e `bCritAtkRate`.
+
+## Bloco Fechado: Cast E Delay Vindos De Itens
+
+Data: 2026-06-24.
+
+Implementado:
+
+- Parser rAthena reconhece efeitos globais:
+  - `bonus bVariableCastrate`
+  - `bonus bFixedCastrate`
+  - `bonus bFixedCast`
+  - `bonus bDelayrate`
+- Parser rAthena reconhece efeitos por skill:
+  - `bonus2 bVariableCastrate`
+  - `bonus2 bFixedCastrate`
+  - `bonus2 bSkillFixedCast`
+- `CalculatorModifierEffectsFactory` agrega cast/delay global e por skill em campos dedicados.
+- Testes cobrem parser e agregacao desses modificadores.
+
+Observacao:
+
+- Este bloco captura os efeitos no core, mas ainda nao calcula tempo de cast/DPS final. O proximo bloco de DPS deve consumir esses campos junto com dados base das skills.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 4.250 -> 5.056.
+- Scripts parcialmente suportados: 6.363 -> 5.776.
+- Unsupported statements: 30.862 -> 28.010.
+- Modifiers extraidos: 36.839 -> 39.691.
+- `bVariableCastrate`, `bFixedCast`, `bFixedCastrate` e `bDelayrate` sairam do top unsupported.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, separados de dano causado.
+  - Heal/crit inicial para `bHealPower` e `bCritAtkRate`.
+  - Engine inicial de cast/DPS consumindo os campos de cast/delay ja agregados.

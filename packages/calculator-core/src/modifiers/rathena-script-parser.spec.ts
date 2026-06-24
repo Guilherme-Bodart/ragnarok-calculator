@@ -113,6 +113,10 @@ describe("ModifierNormalizer", () => {
       bonus bSpl,9;
       bonus bPAtk,4;
       bonus bSMatk,5;
+      bonus bVariableCastrate,-12;
+      bonus bFixedCastrate,-5;
+      bonus bFixedCast,-200;
+      bonus bDelayrate,-15;
     `);
 
     expect(result.modifiers).toMatchObject([
@@ -175,6 +179,59 @@ describe("ModifierNormalizer", () => {
         operator: "addFlat",
         value: 5,
         target: { type: "self" },
+      },
+      {
+        stat: "variableCastRate",
+        operator: "addPercent",
+        value: -12,
+        target: { type: "self" },
+      },
+      {
+        stat: "fixedCastRate",
+        operator: "addPercent",
+        value: -5,
+        target: { type: "self" },
+      },
+      {
+        stat: "fixedCast",
+        operator: "addFlat",
+        value: -200,
+        target: { type: "self" },
+      },
+      {
+        stat: "afterCastDelayRate",
+        operator: "addPercent",
+        value: -15,
+        target: { type: "self" },
+      },
+    ]);
+  });
+
+  it("normalizes skill-specific cast bonus2 commands", () => {
+    const result = normalizer.fromRawScript(`
+      bonus2 bVariableCastrate,"WZ_STORMGUST",-8;
+      bonus2 bFixedCastrate,"WZ_STORMGUST",-3;
+      bonus2 bSkillFixedCast,"WZ_STORMGUST",-150;
+    `);
+
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "skillVariableCastRate",
+        operator: "addPercent",
+        value: -8,
+        target: { type: "skill", skillId: "WZ_STORMGUST" },
+      },
+      {
+        stat: "skillFixedCastRate",
+        operator: "addPercent",
+        value: -3,
+        target: { type: "skill", skillId: "WZ_STORMGUST" },
+      },
+      {
+        stat: "skillFixedCast",
+        operator: "addFlat",
+        value: -150,
+        target: { type: "skill", skillId: "WZ_STORMGUST" },
       },
     ]);
   });

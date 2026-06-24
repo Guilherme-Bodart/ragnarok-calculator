@@ -80,6 +80,14 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("aspd", "addFlat", command, conditions, variables),
   bAspdRate: (command, conditions, variables) =>
     createModifier("aspdRate", "addPercent", command, conditions, variables),
+  bVariableCastrate: (command, conditions, variables) =>
+    createModifier("variableCastRate", "addPercent", command, conditions, variables),
+  bFixedCastrate: (command, conditions, variables) =>
+    createModifier("fixedCastRate", "addPercent", command, conditions, variables),
+  bFixedCast: (command, conditions, variables) =>
+    createModifier("fixedCast", "addFlat", command, conditions, variables),
+  bDelayrate: (command, conditions, variables) =>
+    createModifier("afterCastDelayRate", "addPercent", command, conditions, variables),
 };
 
 export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
@@ -202,6 +210,18 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
       numericValue,
     );
   },
+  bVariableCastrate: (command, conditions, variables) =>
+    createSkillModifier("skillVariableCastRate", command, conditions, variables),
+  bFixedCastrate: (command, conditions, variables) =>
+    createSkillModifier("skillFixedCastRate", command, conditions, variables),
+  bSkillFixedCast: (command, conditions, variables) =>
+    createSkillModifier(
+      "skillFixedCast",
+      command,
+      conditions,
+      variables,
+      "addFlat",
+    ),
   bMagicAtkEle: (command, conditions, variables) => {
     const [, rathenaElementId, value] = command.args;
     const elementId = toInternalElementId(rathenaElementId);
@@ -289,7 +309,11 @@ function createModifier(
     | "flee"
     | "crit"
     | "aspd"
-    | "aspdRate",
+    | "aspdRate"
+    | "variableCastRate"
+    | "fixedCastRate"
+    | "fixedCast"
+    | "afterCastDelayRate",
   operator: "addFlat" | "addPercent",
   command: ParsedCommand,
   conditions: ModifierCondition[],
@@ -329,15 +353,19 @@ function createTargetedModifier(
     | "magicSizeDamageRate"
     | "magicElementAttackRate"
     | "ignoreDefenseRate"
-    | "ignoreMagicDefenseRate",
+    | "ignoreMagicDefenseRate"
+    | "skillVariableCastRate"
+    | "skillFixedCastRate"
+    | "skillFixedCast",
   target: NormalizedModifier["target"],
   command: ParsedCommand,
   conditions: ModifierCondition[],
   value: number,
+  operator: "addFlat" | "addPercent" = "addPercent",
 ): NormalizedModifier {
   return {
     stat,
-    operator: "addPercent",
+    operator,
     value,
     target,
     conditions,
@@ -348,6 +376,31 @@ function createTargetedModifier(
       args: command.args,
     },
   };
+}
+
+function createSkillModifier(
+  stat: "skillVariableCastRate" | "skillFixedCastRate" | "skillFixedCast",
+  command: ParsedCommand,
+  conditions: ModifierCondition[],
+  variables: ParserVariables,
+  operator: "addFlat" | "addPercent" = "addPercent",
+): NormalizedModifier | null {
+  const [, rawSkillId, value] = command.args;
+  const skillId = normalizeScriptString(rawSkillId);
+  const numericValue = evaluateModifierValue(value, variables);
+
+  if (!skillId || numericValue === null) {
+    return null;
+  }
+
+  return createTargetedModifier(
+    stat,
+    { type: "skill", skillId },
+    command,
+    conditions,
+    numericValue,
+    operator,
+  );
 }
 
 function evaluateModifierValue(
