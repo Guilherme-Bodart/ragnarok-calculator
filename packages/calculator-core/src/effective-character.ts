@@ -1,6 +1,6 @@
 import {
   CharacterStatusEngine,
-  type BaseStat,
+  type CharacterStat,
   type CharacterStatus,
 } from "./character-status-engine";
 import type { CalculatorCharacter } from "./ro-types";
@@ -12,7 +12,7 @@ export class EffectiveCharacterBuilder {
 
   build(
     character: CalculatorCharacter,
-    itemStatBonuses: Record<BaseStat, number>,
+    itemStatBonuses: Partial<Record<CharacterStat, number>>,
   ): EffectiveCharacter {
     return this.statusEngine.calculate({
       character,

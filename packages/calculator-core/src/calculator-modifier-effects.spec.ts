@@ -70,6 +70,12 @@ describe("CalculatorModifierEffectsFactory", () => {
         int: 10,
         dex: 10,
         luk: 10,
+        pow: 0,
+        sta: 0,
+        wis: 0,
+        spl: 0,
+        con: 0,
+        crt: 0,
       },
       flatAtk: 100,
       flatMatk: 0,
@@ -92,6 +98,36 @@ describe("CalculatorModifierEffectsFactory", () => {
         physicalSkill,
       ),
     ).toBe(32);
+  });
+
+  it("converts fourth job trait stats into item stat bonuses", () => {
+    const item: RoItem = {
+      id: 2,
+      name: "Trait Test Armor",
+      kind: "equipment",
+      bonuses: [],
+      rawScript: `
+        bonus bPow,3;
+        bonus bSta,4;
+        bonus bWis,5;
+        bonus bSpl,6;
+        bonus bCon,7;
+        bonus bCrt,8;
+      `,
+      source: "manual",
+    };
+
+    const effects = factory.fromItems([item]);
+
+    expect(effects.statBonuses).toMatchObject({
+      pow: 3,
+      sta: 4,
+      wis: 5,
+      spl: 6,
+      con: 7,
+      crt: 8,
+    });
+    expect(effects.unsupportedStatements).toEqual([]);
   });
 
   it("converts size, element, and magical targeted modifiers", () => {

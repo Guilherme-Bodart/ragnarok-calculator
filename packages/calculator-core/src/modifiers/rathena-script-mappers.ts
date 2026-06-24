@@ -30,6 +30,18 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("dex", "addFlat", command, conditions, variables),
   bLuk: (command, conditions, variables) =>
     createModifier("luk", "addFlat", command, conditions, variables),
+  bPow: (command, conditions, variables) =>
+    createModifier("pow", "addFlat", command, conditions, variables),
+  bSta: (command, conditions, variables) =>
+    createModifier("sta", "addFlat", command, conditions, variables),
+  bWis: (command, conditions, variables) =>
+    createModifier("wis", "addFlat", command, conditions, variables),
+  bSpl: (command, conditions, variables) =>
+    createModifier("spl", "addFlat", command, conditions, variables),
+  bCon: (command, conditions, variables) =>
+    createModifier("con", "addFlat", command, conditions, variables),
+  bCrt: (command, conditions, variables) =>
+    createModifier("crt", "addFlat", command, conditions, variables),
   bAllStats: (command, conditions, variables) =>
     createModifier("allStats", "addFlat", command, conditions, variables),
   bPAtk: (command, conditions, variables) =>
@@ -253,6 +265,12 @@ function createModifier(
     | "int"
     | "dex"
     | "luk"
+    | "pow"
+    | "sta"
+    | "wis"
+    | "spl"
+    | "con"
+    | "crt"
     | "allStats"
     | "pAtk"
     | "smatk"

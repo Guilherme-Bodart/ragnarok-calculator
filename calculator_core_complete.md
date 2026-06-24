@@ -1041,5 +1041,32 @@ Proximo bloco recomendado:
 
 - Escolher entre:
   - Mapper defensivo para `bonus2 bSubRace`/`bonus2 bSubEle` em um modulo separado de dano recebido.
-  - Mappers/status para `bonus bPow`, `bSta`, `bWis`, `bSpl`, `bCon`, `bCrt`.
   - Cast/delay inicial para `bVariableCastrate`, `bFixedCast`, `bDelayrate`.
+
+## Bloco Fechado: Trait Stats Vindos De Itens
+
+Data: 2026-06-24.
+
+Implementado:
+
+- Parser rAthena reconhece `bonus bPow`, `bSta`, `bWis`, `bSpl`, `bCon` e `bCrt`.
+- `CalculatorModifierEffectsFactory` agrega esses comandos em `statBonuses`.
+- `CharacterStatusEngine` aplica bonus de item aos 12 stats, nao apenas aos seis atributos classicos.
+- POW/SPL/CON/CRT vindos de item agora afetam derivados como status ATK, status MATK, HIT e FLEE.
+- `EffectiveCharacterBuilder` passou a aceitar bonus parciais de qualquer stat do personagem.
+- Testes cobrem parser, agregacao e impacto nos status derivados.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 4.108 -> 4.250.
+- Scripts parcialmente suportados: 6.413 -> 6.363.
+- Unsupported statements: 31.765 -> 30.862.
+- Modifiers extraidos: 35.936 -> 36.839.
+- `bonus bPow` saiu do top unsupported; proximos comandos acionaveis incluem `bSubRace`, `bVariableCastrate`, `bSubEle`, `bCritAtkRate`, `bDef`, `bFixedCast` e `bHealPower`.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Mappers defensivos para `bonus2 bSubRace`/`bonus2 bSubEle`, provavelmente separados de dano causado.
+  - Cast/delay inicial para `bVariableCastrate`, `bFixedCast`, `bDelayrate`.
+  - Heal/crit inicial para `bHealPower` e `bCritAtkRate`.

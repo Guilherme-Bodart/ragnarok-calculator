@@ -49,6 +49,7 @@ export type RathenaNormalizedSkill = {
   rawDamageFlags?: unknown;
   raw?: {
     HitCount?: unknown;
+    Range?: unknown;
   } | null;
   source: "rathena";
 };

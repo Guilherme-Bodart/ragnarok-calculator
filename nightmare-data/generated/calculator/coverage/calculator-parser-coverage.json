@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 4108,
-  "partiallySupportedItemScripts": 6413,
-  "unsupportedItemScripts": 15929,
-  "itemScriptsWithModifiers": 10521,
-  "totalModifiers": 35936,
-  "unsupportedStatements": 31765,
+  "fullySupportedItemScripts": 4250,
+  "partiallySupportedItemScripts": 6363,
+  "unsupportedItemScripts": 15787,
+  "itemScriptsWithModifiers": 10613,
+  "totalModifiers": 36839,
+  "unsupportedStatements": 30862,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -622,38 +622,6 @@
       ]
     },
     {
-      "command": "bonus bPow",
-      "reason": "unsupported-bonus-code",
-      "count": 331,
-      "examples": [
-        {
-          "itemId": 1341,
-          "itemName": "Destruction Axe",
-          "rawLine": "bonus bPow,2;"
-        },
-        {
-          "itemId": 21063,
-          "itemName": "Solid Claymore",
-          "rawLine": "bonus bPow,2;"
-        },
-        {
-          "itemId": 24751,
-          "itemName": "Physical Power Shadow Weapon",
-          "rawLine": "bonus bPow,(.@r/2);"
-        },
-        {
-          "itemId": 24752,
-          "itemName": "Physical Power Shadow Shield",
-          "rawLine": "bonus bPow,(.@r/2);"
-        },
-        {
-          "itemId": 310920,
-          "itemName": "Power of Varmundt Lv1",
-          "rawLine": "bonus bPow,1;"
-        }
-      ]
-    },
-    {
       "command": "bonus bHealPower",
       "reason": "unsupported-bonus-code",
       "count": 327,
@@ -810,70 +778,6 @@
           "itemId": 1176,
           "itemName": "Muscle Cutter",
           "rawLine": "bonus3 bAutoSpell,\"AL_DECAGI\",1,30;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bCon",
-      "reason": "unsupported-bonus-code",
-      "count": 275,
-      "examples": [
-        {
-          "itemId": 24755,
-          "itemName": "Concentration Shadow Weapon",
-          "rawLine": "bonus bCon,.@r;"
-        },
-        {
-          "itemId": 24756,
-          "itemName": "Concentration Shadow Shield",
-          "rawLine": "bonus bCon,.@r;"
-        },
-        {
-          "itemId": 310926,
-          "itemName": "Concentration of Varmundt Lv1",
-          "rawLine": "bonus bCon,1;"
-        },
-        {
-          "itemId": 310927,
-          "itemName": "Concentration of Varmundt Lv2",
-          "rawLine": "bonus bCon,2;"
-        },
-        {
-          "itemId": 310928,
-          "itemName": "Concentration of Varmundt Lv3",
-          "rawLine": "bonus bCon,3;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bSpl",
-      "reason": "unsupported-bonus-code",
-      "count": 264,
-      "examples": [
-        {
-          "itemId": 15282,
-          "itemName": "Rabbit Pattern Shirt",
-          "rawLine": "bonus bSpl,2;"
-        },
-        {
-          "itemId": 15282,
-          "itemName": "Rabbit Pattern Shirt",
-          "rawLine": "bonus bSpl,3;"
-        },
-        {
-          "itemId": 15282,
-          "itemName": "Rabbit Pattern Shirt",
-          "rawLine": "bonus bSpl,1;"
-        },
-        {
-          "itemId": 24753,
-          "itemName": "Magical Spell Shadow Weapon",
-          "rawLine": "bonus bSpl,(.@r/2);"
-        },
-        {
-          "itemId": 24754,
-          "itemName": "Magical Spell Shadow Shield",
-          "rawLine": "bonus bSpl,(.@r/2);"
         }
       ]
     },
@@ -2382,38 +2286,6 @@
       ]
     },
     {
-      "command": "bonus bCrt",
-      "reason": "unsupported-bonus-code",
-      "count": 71,
-      "examples": [
-        {
-          "itemId": 24761,
-          "itemName": "Creative Shadow Weapon",
-          "rawLine": "bonus bCrt,(.@r/2);"
-        },
-        {
-          "itemId": 24762,
-          "itemName": "Creative Shadow Shield",
-          "rawLine": "bonus bCrt,(.@r/2);"
-        },
-        {
-          "itemId": 300633,
-          "itemName": "Yggring Card",
-          "rawLine": "bonus bCrt,7;"
-        },
-        {
-          "itemId": 300634,
-          "itemName": "Leafeing Card",
-          "rawLine": "bonus bCrt,3;"
-        },
-        {
-          "itemId": 310929,
-          "itemName": "Creative of Varmundt Lv1",
-          "rawLine": "bonus bCrt,1;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bAddItemHealRate",
       "reason": "unsupported-bonus-code",
       "count": 71,
@@ -3502,38 +3374,6 @@
       ]
     },
     {
-      "command": "bonus bSta",
-      "reason": "unsupported-bonus-code",
-      "count": 39,
-      "examples": [
-        {
-          "itemId": 24759,
-          "itemName": "Stamina Shadow Weapon",
-          "rawLine": "bonus bSta,.@r;"
-        },
-        {
-          "itemId": 24760,
-          "itemName": "Stamina Shadow Shield",
-          "rawLine": "bonus bSta,.@r;"
-        },
-        {
-          "itemId": 310936,
-          "itemName": "Stamina of Varmundt Lv1",
-          "rawLine": "bonus bSta,1;"
-        },
-        {
-          "itemId": 310937,
-          "itemName": "Stamina of Varmundt Lv2",
-          "rawLine": "bonus bSta,2;"
-        },
-        {
-          "itemId": 310938,
-          "itemName": "Stamina of Varmundt Lv3",
-          "rawLine": "bonus bSta,3;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bCriticalAddRace",
       "reason": "unsupported-bonus-code",
       "count": 39,
@@ -3662,6 +3502,38 @@
       ]
     },
     {
+      "command": "bonus bCon",
+      "reason": "unsupported-bonus-code",
+      "count": 36,
+      "examples": [
+        {
+          "itemId": 311026,
+          "itemName": "Clockwork (CON)",
+          "rawLine": "bonus bCon,3+getenchantgrade();"
+        },
+        {
+          "itemId": 312326,
+          "itemName": "Fiery Earth Rune 2Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        },
+        {
+          "itemId": 312327,
+          "itemName": "Fiery Earth Rune 3Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        },
+        {
+          "itemId": 312328,
+          "itemName": "Fiery Earth Rune 4Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        },
+        {
+          "itemId": 312329,
+          "itemName": "Fiery Earth Rune 5Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        }
+      ]
+    },
+    {
       "command": "bonus bMagicHPGainValue",
       "reason": "unsupported-bonus-code",
       "count": 36,
@@ -3690,6 +3562,38 @@
           "itemId": 15245,
           "itemName": "Nature Suit",
           "rawLine": "bonus bMagicHPGainValue,50;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bPow",
+      "reason": "unsupported-bonus-code",
+      "count": 36,
+      "examples": [
+        {
+          "itemId": 311021,
+          "itemName": "Clockwork (POW)",
+          "rawLine": "bonus bPow,3+getenchantgrade();"
+        },
+        {
+          "itemId": 312326,
+          "itemName": "Fiery Earth Rune 2Lv",
+          "rawLine": "bonus bPow,2*.@str;"
+        },
+        {
+          "itemId": 312327,
+          "itemName": "Fiery Earth Rune 3Lv",
+          "rawLine": "bonus bPow,2*.@str;"
+        },
+        {
+          "itemId": 312328,
+          "itemName": "Fiery Earth Rune 4Lv",
+          "rawLine": "bonus bPow,2*.@str;"
+        },
+        {
+          "itemId": 312329,
+          "itemName": "Fiery Earth Rune 5Lv",
+          "rawLine": "bonus bPow,2*.@str;"
         }
       ]
     },
@@ -3850,38 +3754,6 @@
           "itemId": 4352,
           "itemName": "General Egnigem Cenia Card",
           "rawLine": "bonus2 bHPRegenRate,50,10000;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bWis",
-      "reason": "unsupported-bonus-code",
-      "count": 30,
-      "examples": [
-        {
-          "itemId": 24757,
-          "itemName": "Wisdom Shadow Weapon",
-          "rawLine": "bonus bWis,.@r;"
-        },
-        {
-          "itemId": 24758,
-          "itemName": "Wisdom Shadow Shield",
-          "rawLine": "bonus bWis,.@r;"
-        },
-        {
-          "itemId": 310933,
-          "itemName": "Wisdom of Varmundt Lv1",
-          "rawLine": "bonus bWis,1;"
-        },
-        {
-          "itemId": 310934,
-          "itemName": "Wisdom of Varmundt Lv2",
-          "rawLine": "bonus bWis,2;"
-        },
-        {
-          "itemId": 310935,
-          "itemName": "Wisdom of Varmundt Lv3",
-          "rawLine": "bonus bWis,3;"
         }
       ]
     },
@@ -4750,6 +4622,38 @@
       ]
     },
     {
+      "command": "bonus bSpl",
+      "reason": "unsupported-bonus-code",
+      "count": 17,
+      "examples": [
+        {
+          "itemId": 311022,
+          "itemName": "Clockwork (SPL)",
+          "rawLine": "bonus bSpl,3+getenchantgrade();"
+        },
+        {
+          "itemId": 312366,
+          "itemName": "Soul Purifying Rune 2Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        },
+        {
+          "itemId": 312367,
+          "itemName": "Soul Purifying Rune 3Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        },
+        {
+          "itemId": 312368,
+          "itemName": "Soul Purifying Rune 4Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        },
+        {
+          "itemId": 312369,
+          "itemName": "Soul Purifying Rune 5Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        }
+      ]
+    },
+    {
       "command": "bonus bUnbreakableGarment",
       "reason": "unsupported-bonus-code",
       "count": 17,
@@ -5130,6 +5034,38 @@
           "itemId": 19140,
           "itemName": "Squirrel Ears Hood Hat",
           "rawLine": "bonus bCriticalLong,20;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bCrt",
+      "reason": "unsupported-bonus-code",
+      "count": 12,
+      "examples": [
+        {
+          "itemId": 311025,
+          "itemName": "Clockwork (CRT)",
+          "rawLine": "bonus bCrt,3+getenchantgrade();"
+        },
+        {
+          "itemId": 312386,
+          "itemName": "Corrupted Poison Rune 2Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
+        },
+        {
+          "itemId": 312387,
+          "itemName": "Corrupted Poison Rune 3Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
+        },
+        {
+          "itemId": 312388,
+          "itemName": "Corrupted Poison Rune 4Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
+        },
+        {
+          "itemId": 312389,
+          "itemName": "Corrupted Poison Rune 5Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
         }
       ]
     },
@@ -6441,6 +6377,33 @@
       ]
     },
     {
+      "command": "bonus bSta",
+      "reason": "unsupported-bonus-code",
+      "count": 4,
+      "examples": [
+        {
+          "itemId": 311023,
+          "itemName": "Clockwork (STA)",
+          "rawLine": "bonus bSta,3+getenchantgrade();"
+        },
+        {
+          "itemId": 450201,
+          "itemName": "Varmundt Glade Rune Armor",
+          "rawLine": "bonus bSta,(readparam(bVit)/25);"
+        },
+        {
+          "itemId": 450243,
+          "itemName": "Rune Armor of Plain",
+          "rawLine": "bonus bSta,(readparam(bVit)/25);"
+        },
+        {
+          "itemId": 490277,
+          "itemName": "Dimensional Wanderer's Lock",
+          "rawLine": "bonus bSta,4*.@param;"
+        }
+      ]
+    },
+    {
       "command": "bonus3 bSPVanishRate",
       "reason": "unsupported-bonus-code",
       "count": 4,
@@ -6926,6 +6889,23 @@
           "itemId": 4128,
           "itemName": "Golden Thief Bug Card",
           "rawLine": "bonus bNoMagicDamage,100;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bWis",
+      "reason": "unsupported-bonus-code",
+      "count": 2,
+      "examples": [
+        {
+          "itemId": 311024,
+          "itemName": "Clockwork (WIS)",
+          "rawLine": "bonus bWis,3+getenchantgrade();"
+        },
+        {
+          "itemId": 490276,
+          "itemName": "Dimensional Wanderer's Key",
+          "rawLine": "bonus bWis,4*.@param;"
         }
       ]
     },

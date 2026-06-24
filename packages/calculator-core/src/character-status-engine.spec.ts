@@ -11,6 +11,12 @@ const emptyModifierEffects: CalculatorModifierEffects = {
     int: 0,
     dex: 0,
     luk: 0,
+    pow: 0,
+    sta: 0,
+    wis: 0,
+    spl: 0,
+    con: 0,
+    crt: 0,
   },
   flatAtk: 0,
   flatMatk: 0,
@@ -77,6 +83,12 @@ describe("CharacterStatusEngine", () => {
           int: 0,
           dex: 5,
           luk: 0,
+          pow: 0,
+          sta: 0,
+          wis: 0,
+          spl: 0,
+          con: 0,
+          crt: 0,
         },
         flatAtk: 25,
         maxHp: 100,
@@ -106,6 +118,74 @@ describe("CharacterStatusEngine", () => {
     expect(status.flee).toBe(134);
     expect(status.crit).toBe(6);
     expect(status.aspd).toBe(168.67);
+  });
+
+  it("applies item trait stat bonuses before derived combat stats", () => {
+    const baseline = engine.calculate({
+      character: {
+        classId: "Dragon_Knight",
+        baseLevel: 250,
+        jobLevel: 1,
+        stats: {
+          str: 1,
+          agi: 1,
+          vit: 1,
+          int: 1,
+          dex: 1,
+          luk: 1,
+          pow: 10,
+          sta: 0,
+          wis: 0,
+          spl: 10,
+          con: 10,
+          crt: 10,
+        },
+      },
+      modifierEffects: emptyModifierEffects,
+    });
+
+    const boosted = engine.calculate({
+      character: {
+        classId: "Dragon_Knight",
+        baseLevel: 250,
+        jobLevel: 1,
+        stats: {
+          str: 1,
+          agi: 1,
+          vit: 1,
+          int: 1,
+          dex: 1,
+          luk: 1,
+          pow: 10,
+          sta: 0,
+          wis: 0,
+          spl: 10,
+          con: 10,
+          crt: 10,
+        },
+      },
+      modifierEffects: {
+        ...emptyModifierEffects,
+        statBonuses: {
+          ...emptyModifierEffects.statBonuses,
+          pow: 5,
+          spl: 4,
+          con: 3,
+          crt: 2,
+        },
+      },
+    });
+
+    expect(boosted.effectiveStats).toMatchObject({
+      pow: baseline.effectiveStats.pow + 5,
+      spl: baseline.effectiveStats.spl + 4,
+      con: baseline.effectiveStats.con + 3,
+      crt: baseline.effectiveStats.crt + 2,
+    });
+    expect(boosted.statusAtk).toBeGreaterThan(baseline.statusAtk);
+    expect(boosted.statusMatk).toBeGreaterThan(baseline.statusMatk);
+    expect(boosted.hit).toBeGreaterThan(baseline.hit);
+    expect(boosted.flee).toBeGreaterThan(baseline.flee);
   });
 
   it("adds equipment power and flat modifiers to final attack values", () => {

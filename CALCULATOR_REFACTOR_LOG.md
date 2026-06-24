@@ -15,6 +15,16 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Trait stats de itens no core
+
+- Parser rAthena passou a reconhecer `bPow`, `bSta`, `bWis`, `bSpl`, `bCon` e `bCrt`.
+- Efeitos de item agora agregam os 12 stats do personagem, mantendo `bAllStats` restrito aos seis atributos classicos.
+- `CharacterStatusEngine` aplica traits vindos de item antes de calcular status ATK/MATK/HIT/FLEE.
+- Auditoria do parser subiu de 4.108 para 4.250 scripts totalmente suportados e reduziu unsupported statements para 30.862.
+- Testes focados cobrem parser, agregador, status engine e pipeline de dano.
+
+Motivo: itens de 4a classe e equipamentos modernos usam traits diretamente; ignorar esses comandos derrubava a precisao do dano mesmo quando a formula da skill estava correta.
+
 ### 2026-06-04 - Busca sob demanda de equipamentos e cartas
 
 - Selects de item/carta agora so disparam busca depois de 3 caracteres.

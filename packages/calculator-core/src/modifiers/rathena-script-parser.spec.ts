@@ -109,6 +109,8 @@ describe("ModifierNormalizer", () => {
       bonus bStr,5;
       bonus bInt,6;
       bonus bDex,7;
+      bonus bPow,8;
+      bonus bSpl,9;
       bonus bPAtk,4;
       bonus bSMatk,5;
     `);
@@ -148,6 +150,18 @@ describe("ModifierNormalizer", () => {
         stat: "dex",
         operator: "addFlat",
         value: 7,
+        target: { type: "self" },
+      },
+      {
+        stat: "pow",
+        operator: "addFlat",
+        value: 8,
+        target: { type: "self" },
+      },
+      {
+        stat: "spl",
+        operator: "addFlat",
+        value: 9,
         target: { type: "self" },
       },
       {

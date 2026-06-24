@@ -8,9 +8,11 @@ import type {
 import type { DamageType, RoItem, RoMonster, RoSkill } from "./ro-types";
 
 type BaseStat = "str" | "agi" | "vit" | "int" | "dex" | "luk";
+type TraitStat = "pow" | "sta" | "wis" | "spl" | "con" | "crt";
+type CharacterStat = BaseStat | TraitStat;
 
 export type CalculatorModifierEffects = {
-  statBonuses: Record<BaseStat, number>;
+  statBonuses: Record<CharacterStat, number>;
   flatAtk: number;
   flatMatk: number;
   pAtk: number;
@@ -59,6 +61,12 @@ export class CalculatorModifierEffectsFactory {
         int: 0,
         dex: 0,
         luk: 0,
+        pow: 0,
+        sta: 0,
+        wis: 0,
+        spl: 0,
+        con: 0,
+        crt: 0,
       },
       flatAtk: 0,
       flatMatk: 0,
@@ -107,8 +115,8 @@ export class CalculatorModifierEffectsFactory {
       effects.unsupportedStatements.push(...result.unsupportedStatements);
 
       for (const bucket of result.aggregation.buckets) {
-        if (bucket.target.type === "self" && isBaseStat(bucket.stat)) {
-          const stat = bucket.stat as BaseStat;
+        if (bucket.target.type === "self" && isCharacterStat(bucket.stat)) {
+          const stat = bucket.stat as CharacterStat;
           effects.statBonuses[stat] += bucket.value;
           continue;
         }
@@ -378,9 +386,11 @@ export class CalculatorModifierEffectsFactory {
 }
 
 const baseStats: BaseStat[] = ["str", "agi", "vit", "int", "dex", "luk"];
+const traitStats: TraitStat[] = ["pow", "sta", "wis", "spl", "con", "crt"];
+const characterStats: CharacterStat[] = [...baseStats, ...traitStats];
 
-function isBaseStat(stat: string): stat is BaseStat {
-  return baseStats.includes(stat as BaseStat);
+function isCharacterStat(stat: string): stat is CharacterStat {
+  return characterStats.includes(stat as CharacterStat);
 }
 
 function isLongRangePhysicalSkill(skill: RoSkill) {

@@ -157,6 +157,7 @@ Funcionando:
 - Payload salvo esta na versao 2 com secoes `character`, `attack`, `tree`, `equipment`, `buffs` e `target`.
 - Payload v1 flat e migrado automaticamente ao carregar.
 - Testes focados da calculadora existem em `npm run test:calculator`.
+- Core reconhece traits vindos de scripts de item (`bPow`, `bSta`, `bWis`, `bSpl`, `bCon`, `bCrt`) e aplica esses bonus nos status derivados.
 
 Ainda incompleto para V1:
 

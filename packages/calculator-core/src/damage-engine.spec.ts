@@ -37,6 +37,12 @@ const emptyModifierEffects: CalculatorModifierEffects = {
     int: 0,
     dex: 0,
     luk: 0,
+    pow: 0,
+    sta: 0,
+    wis: 0,
+    spl: 0,
+    con: 0,
+    crt: 0,
   },
   flatAtk: 0,
   flatMatk: 0,
@@ -74,7 +80,7 @@ describe("DamageEngine", () => {
   const engine = new DamageEngine();
   const characterBuilder = new EffectiveCharacterBuilder();
 
-  it("calculates prototype damage from normalized engine input", () => {
+  it("calculates damage from normalized engine input", () => {
     const item: RoItem = {
       id: 1,
       name: "Test Sword",
@@ -117,7 +123,7 @@ describe("DamageEngine", () => {
       skillLevel: 10,
     });
 
-    expect(result.damage.average).toBe(522);
+    expect(result.damage.average).toBe(2091);
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "hits",

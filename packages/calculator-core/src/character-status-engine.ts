@@ -7,12 +7,13 @@ import type { CalculatorModifierEffects } from "./calculator-modifier-effects";
 import { JobBasepointsFactory, type JobBasepoints } from "./job-basepoints";
 import {
   JobStatBonusFactory,
-  emptyStatBonus,
   type StatBonus,
 } from "./job-stats";
 import type { CalculatorCharacter, CharacterStats, RoItem } from "./ro-types";
 
 export type BaseStat = "str" | "agi" | "vit" | "int" | "dex" | "luk";
+export type TraitStat = "pow" | "sta" | "wis" | "spl" | "con" | "crt";
+export type CharacterStat = BaseStat | TraitStat;
 
 export type CharacterStatus = {
   baseLevel: number;
@@ -25,7 +26,7 @@ export type CharacterStatus = {
   weaponRefine: number;
   baseStats: StatBonus;
   jobStatBonuses: StatBonus;
-  itemStatBonuses: Pick<StatBonus, BaseStat>;
+  itemStatBonuses: StatBonus;
   effectiveStats: StatBonus;
   damageStats: Pick<StatBonus, BaseStat>;
   jobBasepoints: JobBasepoints;
@@ -47,7 +48,7 @@ export type CharacterStatusEngineInput = {
   character: CalculatorCharacter;
   items?: RoItem[];
   modifierEffects?: CalculatorModifierEffects;
-  itemStatBonuses?: Partial<Record<BaseStat, number>>;
+  itemStatBonuses?: Partial<Record<CharacterStat, number>>;
 };
 
 export class CharacterStatusEngine {
@@ -64,12 +65,12 @@ export class CharacterStatusEngine {
       input.character.classId,
       input.character.jobLevel,
     );
-    const itemStatBonuses = this.toBaseStatBonuses(
+    const itemStatBonuses = this.toItemStatBonuses(
       input.itemStatBonuses ?? input.modifierEffects?.statBonuses,
     );
     const effectiveStats = addStatBonuses(
       addStatBonuses(baseStats, jobStatBonuses),
-      this.baseStatsToStatBonus(itemStatBonuses),
+      itemStatBonuses,
     );
     const traitEffects = this.traitEffectsFactory.fromStats(effectiveStats);
     const jobBasepoints = this.jobBasepointsFactory.fromClassAndBaseLevel(
@@ -180,9 +181,9 @@ export class CharacterStatusEngine {
     };
   }
 
-  private toBaseStatBonuses(
-    bonuses: Partial<Record<BaseStat, number>> | undefined,
-  ): Pick<StatBonus, BaseStat> {
+  private toItemStatBonuses(
+    bonuses: Partial<Record<CharacterStat, number>> | undefined,
+  ): StatBonus {
     return {
       str: bonuses?.str ?? 0,
       agi: bonuses?.agi ?? 0,
@@ -190,13 +191,12 @@ export class CharacterStatusEngine {
       int: bonuses?.int ?? 0,
       dex: bonuses?.dex ?? 0,
       luk: bonuses?.luk ?? 0,
-    };
-  }
-
-  private baseStatsToStatBonus(stats: Pick<StatBonus, BaseStat>): StatBonus {
-    return {
-      ...emptyStatBonus,
-      ...stats,
+      pow: bonuses?.pow ?? 0,
+      sta: bonuses?.sta ?? 0,
+      wis: bonuses?.wis ?? 0,
+      spl: bonuses?.spl ?? 0,
+      con: bonuses?.con ?? 0,
+      crt: bonuses?.crt ?? 0,
     };
   }
 
