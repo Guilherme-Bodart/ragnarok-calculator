@@ -622,3 +622,12 @@ Motivo: corrigir o React error #185 ao digitar no filtro de selects com busca lo
 - `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7177 e unsupported statements cairam para 21533.
 
 Motivo: itens de 4th job usam RES/MRES com frequencia, e o status do personagem precisa refletir esses bonus antes de qualquer engine defensiva mais completa.
+
+### 2026-06-25 - Taxa de custo de SP de itens
+
+- Parser rAthena reconhece `bonus bUseSPrate`.
+- `CalculatorModifierEffectsFactory` agrega o valor em `spCostRate`.
+- Adicionado alias `bonus bMRes` para cobrir a grafia real dos itens do dataset.
+- `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7375 e unsupported statements cairam para 21195.
+
+Motivo: custo de SP nao muda dano direto, mas e parte do ciclo real de uso das skills e deve estar capturado para o card de ataque/recursos.

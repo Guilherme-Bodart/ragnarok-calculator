@@ -131,6 +131,7 @@ export const normalizedModifierSchema = z.object({
     "fixedCastRate",
     "fixedCast",
     "afterCastDelayRate",
+    "spCostRate",
     "skillVariableCastRate",
     "skillFixedCastRate",
     "skillFixedCast",

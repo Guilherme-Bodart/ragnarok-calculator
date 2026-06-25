@@ -49,6 +49,7 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   fixedCastRate: 0,
   fixedCast: 0,
   afterCastDelayRate: 0,
+  spCostRate: 0,
   skillVariableCastRate: {},
   skillFixedCastRate: {},
   skillFixedCast: {},

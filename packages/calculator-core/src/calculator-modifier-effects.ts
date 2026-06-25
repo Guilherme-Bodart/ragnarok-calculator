@@ -44,6 +44,7 @@ export type CalculatorModifierEffects = {
   fixedCastRate: number;
   fixedCast: number;
   afterCastDelayRate: number;
+  spCostRate: number;
   skillVariableCastRate: Record<string, number>;
   skillFixedCastRate: Record<string, number>;
   skillFixedCast: Record<string, number>;
@@ -118,6 +119,7 @@ export class CalculatorModifierEffectsFactory {
       fixedCastRate: 0,
       fixedCast: 0,
       afterCastDelayRate: 0,
+      spCostRate: 0,
       skillVariableCastRate: {},
       skillFixedCastRate: {},
       skillFixedCast: {},
@@ -337,6 +339,11 @@ export class CalculatorModifierEffectsFactory {
           bucket.target.type === "self"
         ) {
           effects.afterCastDelayRate += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "spCostRate" && bucket.target.type === "self") {
+          effects.spCostRate += bucket.value;
           continue;
         }
 

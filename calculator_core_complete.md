@@ -1287,6 +1287,38 @@ Proximo bloco recomendado:
   - Melhorar suporte de `bonus2 bSkillAtk` com expressoes dependentes de skill aprendida.
   - Completar conversores de raca/classe especiais se o alvo PvP virar prioridade.
 
+## Bloco Fechado: Taxa De Custo De SP De Itens
+
+Data: 2026-06-25.
+
+Implementado:
+
+- Parser rAthena reconhece:
+  - `bonus bUseSPrate`
+  - alias real `bonus bMRes`
+- `CalculatorModifierEffectsFactory` agrega:
+  - `spCostRate`
+- Testes cobrem parser e agregacao.
+
+Observacao:
+
+- `spCostRate` ainda nao altera dano/DPS. Ele fica disponivel para o card de ataque/recursos quando exibirmos custo real por skill.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 7.177 -> 7.375.
+- Scripts parcialmente suportados: 5.063 -> 4.895.
+- Unsupported statements: 21.533 -> 21.195.
+- Modifiers extraidos: 46.077 -> 46.415.
+- `bonus bUseSPrate` saiu do top unsupported.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Capturar `bonus bPerfectHitAddRate` para status/precisao ofensiva.
+  - Melhorar suporte de `bonus2 bSkillAtk` com expressoes dependentes de skill aprendida.
+  - Completar conversores de raca/classe especiais se o alvo PvP virar prioridade.
+
 ## Bloco Fechado: Reducoes Defensivas Por Raca E Elemento
 
 Data: 2026-06-24.

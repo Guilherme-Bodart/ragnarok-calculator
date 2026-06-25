@@ -65,6 +65,8 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("magicDefense", "addFlat", command, conditions, variables),
   bRes: (command, conditions, variables) =>
     createModifier("res", "addFlat", command, conditions, variables),
+  bMRes: (command, conditions, variables) =>
+    createModifier("mres", "addFlat", command, conditions, variables),
   bMres: (command, conditions, variables) =>
     createModifier("mres", "addFlat", command, conditions, variables),
   bAtkEle: (command, conditions) => {
@@ -118,6 +120,8 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("fixedCast", "addFlat", command, conditions, variables),
   bDelayrate: (command, conditions, variables) =>
     createModifier("afterCastDelayRate", "addPercent", command, conditions, variables),
+  bUseSPrate: (command, conditions, variables) =>
+    createModifier("spCostRate", "addPercent", command, conditions, variables),
 };
 
 export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
@@ -435,7 +439,8 @@ function createModifier(
     | "variableCastRate"
     | "fixedCastRate"
     | "fixedCast"
-    | "afterCastDelayRate",
+    | "afterCastDelayRate"
+    | "spCostRate",
   operator: "addFlat" | "addPercent",
   command: ParsedCommand,
   conditions: ModifierCondition[],

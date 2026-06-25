@@ -108,7 +108,7 @@ describe("ModifierNormalizer", () => {
       bonus bDef,11;
       bonus bMdef,12;
       bonus bRes,13;
-      bonus bMres,14;
+      bonus bMRes,14;
       bonus bAtkEle,Ele_Fire;
       bonus bAllStats,10;
       bonus bStr,5;
@@ -124,6 +124,7 @@ describe("ModifierNormalizer", () => {
       bonus bFixedCastrate,-5;
       bonus bFixedCast,-200;
       bonus bDelayrate,-15;
+      bonus bUseSPrate,-20;
     `);
 
     expect(result.modifiers).toMatchObject([
@@ -251,6 +252,12 @@ describe("ModifierNormalizer", () => {
         stat: "afterCastDelayRate",
         operator: "addPercent",
         value: -15,
+        target: { type: "self" },
+      },
+      {
+        stat: "spCostRate",
+        operator: "addPercent",
+        value: -20,
         target: { type: "self" },
       },
     ]);

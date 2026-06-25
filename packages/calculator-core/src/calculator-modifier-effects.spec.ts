@@ -53,7 +53,7 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus bDef,12;
         bonus bMdef,7;
         bonus bRes,13;
-        bonus bMres,14;
+        bonus bMRes,14;
         bonus bAtkEle,Ele_Fire;
         bonus bAllStats,10;
         bonus bStr,5;
@@ -280,6 +280,7 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus bFixedCastrate,-5;
         bonus bFixedCast,-200;
         bonus bDelayrate,-15;
+        bonus bUseSPrate,-20;
         bonus2 bVariableCastrate,"WZ_STORMGUST",-8;
         bonus2 bFixedCastrate,"WZ_STORMGUST",-3;
         bonus2 bSkillFixedCast,"WZ_STORMGUST",-150;
@@ -306,6 +307,7 @@ describe("CalculatorModifierEffectsFactory", () => {
       fixedCastRate: -5,
       fixedCast: -200,
       afterCastDelayRate: -15,
+      spCostRate: -20,
       skillVariableCastRate: { WZ_STORMGUST: -8 },
       skillFixedCastRate: { WZ_STORMGUST: -3 },
       skillFixedCast: { WZ_STORMGUST: -150 },

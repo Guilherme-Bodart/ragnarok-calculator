@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 7177,
-  "partiallySupportedItemScripts": 5063,
-  "unsupportedItemScripts": 12860,
-  "itemScriptsWithModifiers": 12240,
-  "totalModifiers": 46077,
-  "unsupportedStatements": 21533,
+  "fullySupportedItemScripts": 7375,
+  "partiallySupportedItemScripts": 4895,
+  "unsupportedItemScripts": 12662,
+  "itemScriptsWithModifiers": 12270,
+  "totalModifiers": 46415,
+  "unsupportedStatements": 21195,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -686,38 +686,6 @@
       ]
     },
     {
-      "command": "bonus bUseSPrate",
-      "reason": "unsupported-bonus-code",
-      "count": 202,
-      "examples": [
-        {
-          "itemId": 1181,
-          "itemName": "Tae Goo Lyeon",
-          "rawLine": "bonus bUseSPrate,-20;"
-        },
-        {
-          "itemId": 1370,
-          "itemName": "Doom Slayer",
-          "rawLine": "bonus bUseSPrate,100;"
-        },
-        {
-          "itemId": 1371,
-          "itemName": "Doom Slayer",
-          "rawLine": "bonus bUseSPrate,100;"
-        },
-        {
-          "itemId": 1386,
-          "itemName": "Doom Slayer",
-          "rawLine": "bonus bUseSPrate,100;"
-        },
-        {
-          "itemId": 1648,
-          "itemName": "Staff Of Bordeaux",
-          "rawLine": "bonus bUseSPrate,-15;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bSkillAtk",
       "reason": "unsupported-bonus-code",
       "count": 199,
@@ -906,38 +874,6 @@
           "itemId": 5262,
           "itemName": "Golden Tiara",
           "rawLine": "bonus bUnbreakableHelm;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bMRes",
-      "reason": "unsupported-stat-effect",
-      "count": 146,
-      "examples": [
-        {
-          "itemId": 24757,
-          "itemName": "Wisdom Shadow Weapon",
-          "rawLine": "bonus bMRes,30;"
-        },
-        {
-          "itemId": 24757,
-          "itemName": "Wisdom Shadow Weapon",
-          "rawLine": "bonus bMRes,30;"
-        },
-        {
-          "itemId": 24758,
-          "itemName": "Wisdom Shadow Shield",
-          "rawLine": "bonus bMRes,30;"
-        },
-        {
-          "itemId": 24758,
-          "itemName": "Wisdom Shadow Shield",
-          "rawLine": "bonus bMRes,30;"
-        },
-        {
-          "itemId": 24887,
-          "itemName": "Witty Shadow Pendant",
-          "rawLine": "bonus bMRes,15;"
         }
       ]
     },
@@ -5838,6 +5774,38 @@
       ]
     },
     {
+      "command": "bonus bMRes",
+      "reason": "unsupported-stat-effect",
+      "count": 5,
+      "examples": [
+        {
+          "itemId": 313040,
+          "itemName": "Star Cluster of Resistance 2Lv",
+          "rawLine": "bonus bMRes,20+5*.@wis;"
+        },
+        {
+          "itemId": 313041,
+          "itemName": "Star Cluster of Resistance 3Lv",
+          "rawLine": "bonus bMRes,30+5*.@wis;"
+        },
+        {
+          "itemId": 313042,
+          "itemName": "Star Cluster of Resistance 4Lv",
+          "rawLine": "bonus bMRes,40+5*.@wis;"
+        },
+        {
+          "itemId": 313043,
+          "itemName": "Star Cluster of Resistance 5Lv",
+          "rawLine": "bonus bMRes,50+10*.@wis;"
+        },
+        {
+          "itemId": 420343,
+          "itemName": "Survival Whistle-LT",
+          "rawLine": "bonus bMRes,.@b;"
+        }
+      ]
+    },
+    {
       "command": "bonus bNoMadoFuel",
       "reason": "unsupported-bonus-code",
       "count": 5,
@@ -5898,6 +5866,38 @@
           "itemId": 490037,
           "itemName": "Dark Ring",
           "rawLine": "bonus bStr,5+.@val;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bUseSPrate",
+      "reason": "unsupported-bonus-code",
+      "count": 5,
+      "examples": [
+        {
+          "itemId": 15984,
+          "itemName": "[Not For Sale] Heavenly Order",
+          "rawLine": "bonus bUseSPrate,-2*.@d;"
+        },
+        {
+          "itemId": 18803,
+          "itemName": "Rose Cascade",
+          "rawLine": "bonus bUseSPrate,-5-((.@dex >= 120)?5:0)-((.@dex >= 100)?5:0);"
+        },
+        {
+          "itemId": 19451,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bUseSPrate,-2*(.@d/18);"
+        },
+        {
+          "itemId": 19452,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bUseSPrate,-2*(.@d/18);"
+        },
+        {
+          "itemId": 300529,
+          "itemName": "Yortus Warlock Card",
+          "rawLine": "bonus bUseSPrate,3*(readparam(bDex)/10);"
         }
       ]
     },
