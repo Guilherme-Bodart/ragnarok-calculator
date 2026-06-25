@@ -150,7 +150,11 @@ export class DamageFormulaPipeline {
     const weaponSizeMultiplier = magical
       ? 1
       : getWeaponSizeMultiplier(input.character.weaponType, input.monster.size);
-    const elementMultiplier = getElementMultiplier(input.skill, input.monster);
+    const elementMultiplier = getElementMultiplier(
+      input.skill,
+      input.monster,
+      magical ? undefined : input.modifierEffects.weaponElement,
+    );
     const defenseIgnoreRate = magical
       ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseRate, input.monster.race)
       : getTargetedRate(input.modifierEffects.ignoreDefenseRate, input.monster.race);

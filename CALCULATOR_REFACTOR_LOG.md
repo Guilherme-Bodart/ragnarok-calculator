@@ -15,6 +15,16 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Elemento de arma via bAtkEle
+
+- Parser rAthena passou a reconhecer `bonus bAtkEle,Ele_*`.
+- O efeito final guarda `weaponElement` sem aceitar `Ele_All` como elemento real de arma.
+- `DamageFormulaPipeline` usa `weaponElement` como fallback elemental para skills fisicas sem elemento fixo.
+- Auditoria do parser subiu de 6.621 para 6.734 scripts totalmente suportados e reduziu unsupported statements para 22.335.
+- `bonus bAtkEle` saiu do top unsupported.
+
+Motivo: varias builds fisicas dependem do elemento da arma/endow. Sem esse fallback, skills fisicas sem elemento proprio sempre batiam como neutro.
+
 ### 2026-06-24 - DEF e MDEF de itens no status
 
 - Parser rAthena passou a reconhecer `bonus bDef` e `bonus bMdef`.

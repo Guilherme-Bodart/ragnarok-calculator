@@ -111,6 +111,7 @@ export const normalizedModifierSchema = z.object({
     "baseAtk",
     "defense",
     "magicDefense",
+    "weaponElement",
     "maxHp",
     "maxHpRate",
     "maxSp",

@@ -219,6 +219,33 @@ describe("DamageFormulaPipeline", () => {
     );
   });
 
+  it("uses weapon element modifiers for physical skills without a fixed element", () => {
+    const undeadTarget: RoMonster = {
+      ...neutralTarget,
+      element: "undead",
+      elementLevel: 1,
+    };
+
+    const result = pipeline.calculate({
+      character,
+      items: [],
+      modifierEffects: {
+        ...emptyModifierEffects,
+        weaponElement: "fire",
+      },
+      monster: undeadTarget,
+      skill: physicalSkill,
+      skillLevel: 10,
+    });
+
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "elementMultiplier",
+        value: 1.25,
+      }),
+    );
+  });
+
   it("applies race-targeted defense ignore modifiers", () => {
     const sturdyTarget: RoMonster = {
       ...neutralTarget,

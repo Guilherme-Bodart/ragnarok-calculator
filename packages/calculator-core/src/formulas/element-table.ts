@@ -1,7 +1,11 @@
 import type { ElementType, RoMonster, RoSkill } from "../ro-types";
 
-export function getElementMultiplier(skill: RoSkill, monster: RoMonster) {
-  const attackElement = skill.element ?? "neutral";
+export function getElementMultiplier(
+  skill: RoSkill,
+  monster: RoMonster,
+  fallbackElement?: ElementType,
+) {
+  const attackElement = skill.element ?? fallbackElement ?? "neutral";
   const attackRates = elementRateTable[attackElement] ?? {};
   const defenseLevels = attackRates[monster.element] ?? [100, 100, 100, 100];
   const level = clampElementLevel(monster.elementLevel);

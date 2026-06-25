@@ -76,6 +76,13 @@ Funcionando hoje:
 - Auditoria atual: `itemScripts=20037`, `fullySupported=6621`, `partiallySupported=5142`, `unsupportedStatements=22595`, `modifiers=45106`.
 - Isso prepara preview defensivo, buffs defensivos e calculos futuros sem reprocessar scripts no componente React.
 
+### 2026-06-24 - Elemento de arma
+
+- `bonus bAtkEle,Ele_*` agora gera `weaponElement`.
+- Skills fisicas sem elemento fixo usam `weaponElement` para o multiplicador elemental; skills com elemento proprio continuam usando o elemento da skill.
+- Auditoria atual: `itemScripts=20037`, `fullySupported=6734`, `partiallySupported=5170`, `unsupportedStatements=22335`, `modifiers=45366`.
+- Proximo passo natural: expor/editar endows e elementos de arma como buffs manuais/catalogados, usando o mesmo campo.
+
 Principais lacunas atuais:
 
 - Parser rAthena cobre pouco: basicamente `bonus`/`bonus2` e poucas familias.

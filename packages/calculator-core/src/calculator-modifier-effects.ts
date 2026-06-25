@@ -6,7 +6,7 @@ import type {
   ModifierResolutionContext,
   ModifierSizeId,
 } from "./modifiers";
-import type { DamageType, RoItem, RoMonster, RoSkill } from "./ro-types";
+import type { DamageType, ElementType, RoItem, RoMonster, RoSkill } from "./ro-types";
 
 type BaseStat = "str" | "agi" | "vit" | "int" | "dex" | "luk";
 type TraitStat = "pow" | "sta" | "wis" | "spl" | "con" | "crt";
@@ -18,6 +18,7 @@ export type CalculatorModifierEffects = {
   flatMatk: number;
   flatDefense: number;
   flatMagicDefense: number;
+  weaponElement?: ElementType;
   pAtk: number;
   smatk: number;
   atkRate: number;
@@ -89,6 +90,7 @@ export class CalculatorModifierEffectsFactory {
       flatMatk: 0,
       flatDefense: 0,
       flatMagicDefense: 0,
+      weaponElement: undefined,
       pAtk: 0,
       smatk: 0,
       atkRate: 0,
@@ -177,6 +179,15 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "magicDefense" && bucket.target.type === "self") {
           effects.flatMagicDefense += bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "weaponElement" &&
+          bucket.target.type === "element" &&
+          bucket.target.elementId !== "all"
+        ) {
+          effects.weaponElement = bucket.target.elementId;
           continue;
         }
 

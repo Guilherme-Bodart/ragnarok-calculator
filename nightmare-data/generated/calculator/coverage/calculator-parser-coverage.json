@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 6621,
-  "partiallySupportedItemScripts": 5142,
-  "unsupportedItemScripts": 13416,
-  "itemScriptsWithModifiers": 11763,
-  "totalModifiers": 45106,
-  "unsupportedStatements": 22595,
+  "fullySupportedItemScripts": 6734,
+  "partiallySupportedItemScripts": 5170,
+  "unsupportedItemScripts": 13303,
+  "itemScriptsWithModifiers": 11904,
+  "totalModifiers": 45366,
+  "unsupportedStatements": 22335,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -490,38 +490,6 @@
           "itemId": 1176,
           "itemName": "Muscle Cutter",
           "rawLine": "bonus3 bAutoSpell,\"AL_DECAGI\",1,30;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bAtkEle",
-      "reason": "unsupported-bonus-code",
-      "count": 260,
-      "examples": [
-        {
-          "itemId": 1131,
-          "itemName": "Ice Falchion",
-          "rawLine": "bonus bAtkEle,Ele_Water;"
-        },
-        {
-          "itemId": 1133,
-          "itemName": "Fireblend",
-          "rawLine": "bonus bAtkEle,Ele_Fire;"
-        },
-        {
-          "itemId": 1136,
-          "itemName": "Solar Sword",
-          "rawLine": "bonus bAtkEle,Ele_Fire;"
-        },
-        {
-          "itemId": 1137,
-          "itemName": "Excalibur",
-          "rawLine": "bonus bAtkEle,Ele_Holy;"
-        },
-        {
-          "itemId": 1138,
-          "itemName": "Mysteltainn",
-          "rawLine": "bonus bAtkEle,Ele_Dark;"
         }
       ]
     },

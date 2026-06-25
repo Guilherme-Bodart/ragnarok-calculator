@@ -107,6 +107,7 @@ describe("ModifierNormalizer", () => {
       bonus bMatk,30;
       bonus bDef,11;
       bonus bMdef,12;
+      bonus bAtkEle,Ele_Fire;
       bonus bAllStats,10;
       bonus bStr,5;
       bonus bInt,6;
@@ -147,6 +148,12 @@ describe("ModifierNormalizer", () => {
         operator: "addFlat",
         value: 12,
         target: { type: "self" },
+      },
+      {
+        stat: "weaponElement",
+        operator: "addFlat",
+        value: 1,
+        target: { type: "element", elementId: "fire" },
       },
       {
         stat: "allStats",
