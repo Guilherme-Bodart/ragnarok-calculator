@@ -159,6 +159,7 @@ Funcionando:
 - Testes focados da calculadora existem em `npm run test:calculator`.
 - Core reconhece traits vindos de scripts de item (`bPow`, `bSta`, `bWis`, `bSpl`, `bCon`, `bCrt`) e aplica esses bonus nos status derivados.
 - Core reconhece dano por classe de monstro (`bAddClass`, `bMagicAddClass`) e reducao defensiva por classe (`bSubClass`), com `Class_All` sempre aplicavel e `Class_Normal`/`Class_Boss` dependentes de `monster.classType`.
+- Pipeline aplica dano fisico/magico por classe de monstro no final rate quando o alvo tem `classType`.
 - Core reconhece `bDef`/`bMdef` em scripts de item e expoe `defense`/`magicDefense` no status calculado do personagem.
 - Core reconhece `bAtkEle` e usa o elemento da arma como fallback para skills fisicas sem elemento fixo.
 - Pipeline aplica elemento no fim do calculo ofensivo e suporta resistencia elemental opcional no alvo via `monster.elementResistanceRates`.

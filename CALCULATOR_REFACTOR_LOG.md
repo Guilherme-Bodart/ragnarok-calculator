@@ -15,6 +15,14 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Bonus ofensivo por classe no pipeline
+
+- `classDamageRate` e `magicClassDamageRate` agora entram no final rate fisico/magico do `DamageFormulaPipeline`.
+- `Class_All` aplica mesmo sem `monster.classType`; `Class_Normal` e `Class_Boss` aplicam quando o alvo traz essa classificacao.
+- Teste cobre dano fisico por `Class_All` e dano magico por `Class_Boss`.
+
+Motivo: o parser ja capturava `bAddClass`/`bMagicAddClass`, mas o pipeline principal ainda nao consumia esses mapas.
+
 ### 2026-06-24 - Formulas bRO de ASPD e conjuracao
 
 - `CastTimingEngine` passou a aplicar a reducao natural de conjuracao variavel por `DEX * 2 + INT`.

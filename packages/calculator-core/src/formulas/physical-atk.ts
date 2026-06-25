@@ -55,7 +55,8 @@ export function getPhysicalModifierFinalRate(
     skillRate +
     getTargetedRate(effects.raceDamageRate, monster.race) +
     getTargetedRate(effects.elementDamageRate, monster.element) +
-    getTargetedRate(effects.sizeDamageRate, monster.size)
+    getTargetedRate(effects.sizeDamageRate, monster.size) +
+    getTargetedRate(effects.classDamageRate, monster.classType)
   );
 }
 

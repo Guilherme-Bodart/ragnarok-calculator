@@ -104,6 +104,12 @@ Funcionando hoje:
 - Cap de ASPD: 190 ate base 99, 193 a partir do base 100.
 - Lacuna conhecida: ainda falta separar `STD/pocoes/habilidades positivas` em campo proprio; por enquanto `bAspd` fica como ponto fixo final e `bAspdRate` como percentual de equipamentos.
 
+### 2026-06-24 - Dano por classe de monstro no pipeline
+
+- `bAddClass`/`bMagicAddClass` ja normalizados agora afetam `modifierFinalRate`.
+- `Class_All` funciona para qualquer alvo; `Class_Normal` e `Class_Boss` dependem de `monster.classType`.
+- Proximo passo de dados: popular `classType` no adapter de monstros quando o dataset trouxer boss/normal.
+
 Principais lacunas atuais:
 
 - Parser rAthena cobre pouco: basicamente `bonus`/`bonus2` e poucas familias.

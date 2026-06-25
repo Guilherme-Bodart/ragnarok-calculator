@@ -55,6 +55,7 @@ export function getMagicalModifierFinalRate(
     getTargetedRate(effects.magicRaceDamageRate, monster.race) +
     getTargetedRate(effects.magicElementDamageRate, monster.element) +
     getTargetedRate(effects.magicSizeDamageRate, monster.size) +
+    getTargetedRate(effects.magicClassDamageRate, monster.classType) +
     getTargetedRate(effects.magicElementAttackRate, skill.element)
   );
 }

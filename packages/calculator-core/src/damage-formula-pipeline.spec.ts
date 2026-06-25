@@ -292,6 +292,49 @@ describe("DamageFormulaPipeline", () => {
     );
   });
 
+  it("applies physical and magical monster class damage modifiers", () => {
+    const bossTarget: RoMonster = {
+      ...neutralTarget,
+      classType: "boss",
+    };
+
+    const physicalResult = pipeline.calculate({
+      character,
+      items: [],
+      modifierEffects: {
+        ...emptyModifierEffects,
+        classDamageRate: { all: 10 },
+      },
+      monster: bossTarget,
+      skill: physicalSkill,
+      skillLevel: 10,
+    });
+    const magicalResult = pipeline.calculate({
+      character,
+      items: [],
+      modifierEffects: {
+        ...emptyModifierEffects,
+        magicClassDamageRate: { boss: 20 },
+      },
+      monster: bossTarget,
+      skill: magicalSkill,
+      skillLevel: 10,
+    });
+
+    expect(physicalResult.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "modifierFinalRate",
+        value: 10,
+      }),
+    );
+    expect(magicalResult.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "modifierFinalRate",
+        value: 20,
+      }),
+    );
+  });
+
   it("applies short and long physical attack rates by skill range", () => {
     const shortResult = pipeline.calculate({
       character,
