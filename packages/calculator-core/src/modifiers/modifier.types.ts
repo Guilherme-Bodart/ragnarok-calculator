@@ -16,6 +16,7 @@ export const modifierRaceIdSchema = z.enum([
   "fish",
   "demon",
   "demihuman",
+  "playerDoram",
   "angel",
   "dragon",
 ]);

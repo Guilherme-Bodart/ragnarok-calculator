@@ -640,3 +640,12 @@ Motivo: custo de SP nao muda dano direto, mas e parte do ciclo real de uso das s
 - `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7446 e unsupported statements cairam para 21030.
 
 Motivo: acerto perfeito nao aumenta dano bruto, mas e parte importante da precisao real contra alvos com esquiva alta.
+
+### 2026-06-25 - Alvo de raca Player Doram
+
+- Parser rAthena mapeia `RC_Player_Doram` para o alvo interno `playerDoram`.
+- `playerDoram` fica em `ModifierRaceId`, separado de `MonsterRace`, para nao aplicar bonus PvP em monstros comuns.
+- Documentacao dos modificadores atualizada com o novo alvo de raca.
+- `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7736 e unsupported statements cairam para 20182.
+
+Motivo: grande parte dos `bAddRace`/`bSubRace` restantes eram efeitos PvP contra Doram; capturar sem aplicar indevidamente melhora cobertura e preserva seguranca matematica.

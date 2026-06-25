@@ -72,6 +72,23 @@ describe("ModifierNormalizer", () => {
     ]);
   });
 
+  it("keeps player Doram as a distinct race target", () => {
+    const result = normalizer.fromRawScript("bonus2 bAddRace,RC_Player_Doram,15;");
+
+    expect(result.unsupportedStatements).toEqual([]);
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "raceDamageRate",
+        operator: "addPercent",
+        value: 15,
+        target: {
+          type: "race",
+          raceId: "playerDoram",
+        },
+      },
+    ]);
+  });
+
   it("normalizes race-targeted defense ignore bonus2 commands", () => {
     const result = normalizer.fromRawScript(`
       bonus2 bIgnoreDefRaceRate,RC_DemiHuman,30;

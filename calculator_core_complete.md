@@ -1352,6 +1352,35 @@ Proximo bloco recomendado:
   - Completar conversores de raca/classe especiais se o alvo PvP virar prioridade.
   - Capturar efeitos visuais/auto-spell como ignored runtime effects mais explicitos.
 
+## Bloco Fechado: Alvo De Raca Player Doram
+
+Data: 2026-06-25.
+
+Implementado:
+
+- Parser rAthena reconhece:
+  - `RC_Player_Doram`
+- `ModifierRaceId` ganhou:
+  - `playerDoram`
+- `MonsterRace` nao ganhou `playerDoram`, entao esses modificadores ficam capturados mas nao entram em calculo contra monstros comuns.
+- Documentacao de modificadores atualizada.
+- Teste cobre a conversao de `RC_Player_Doram`.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 7.446 -> 7.736.
+- Scripts parcialmente suportados: 4.832 -> 4.542.
+- Unsupported statements: 21.030 -> 20.182.
+- Modifiers extraidos: 46.580 -> 47.428.
+- `bonus2 bSubRace` e `bonus2 bAddRace` sairam do top unsupported.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Melhorar suporte de `bonus2 bSkillAtk` com expressoes dependentes de skill aprendida.
+  - Classificar efeitos visuais/auto-spell como ignorados explicitamente no preview.
+  - Capturar flags de item inquebravel como informacao defensiva/UX.
+
 ## Bloco Fechado: Reducoes Defensivas Por Raca E Elemento
 
 Data: 2026-06-24.

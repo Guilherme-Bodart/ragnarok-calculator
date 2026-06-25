@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 7446,
-  "partiallySupportedItemScripts": 4832,
-  "unsupportedItemScripts": 12591,
+  "fullySupportedItemScripts": 7736,
+  "partiallySupportedItemScripts": 4542,
+  "unsupportedItemScripts": 12301,
   "itemScriptsWithModifiers": 12278,
-  "totalModifiers": 46580,
-  "unsupportedStatements": 21030,
+  "totalModifiers": 47428,
+  "unsupportedStatements": 20182,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -302,38 +302,6 @@
       ]
     },
     {
-      "command": "bonus2 bSubRace",
-      "reason": "unsupported-bonus-code",
-      "count": 382,
-      "examples": [
-        {
-          "itemId": 1331,
-          "itemName": "Abyss Axe",
-          "rawLine": "bonus2 bSubRace,RC_Player_Doram,5;"
-        },
-        {
-          "itemId": 1331,
-          "itemName": "Abyss Axe",
-          "rawLine": "bonus2 bSubRace,RC_Player_Doram,5;"
-        },
-        {
-          "itemId": 1672,
-          "itemName": "Safety Rod",
-          "rawLine": "bonus2 bSubRace,RC_DemiHuman,5+.@val;"
-        },
-        {
-          "itemId": 1672,
-          "itemName": "Safety Rod",
-          "rawLine": "bonus2 bSubRace,RC_Player_Human,5+.@val;"
-        },
-        {
-          "itemId": 2178,
-          "itemName": "TE Woe Buckler",
-          "rawLine": "bonus2 bSubRace,RC_Player_Doram,15;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bResEff",
       "reason": "unsupported-bonus-code",
       "count": 349,
@@ -362,38 +330,6 @@
           "itemId": 1720,
           "itemName": "Rudra Bow",
           "rawLine": "bonus2 bResEff,Eff_Blind,5000;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bAddRace",
-      "reason": "unsupported-bonus-code",
-      "count": 311,
-      "examples": [
-        {
-          "itemId": 1187,
-          "itemName": "Glorious Claymore",
-          "rawLine": "bonus2 bAddRace,RC_DemiHuman,pow(min(14,.@r)-3,2);"
-        },
-        {
-          "itemId": 1187,
-          "itemName": "Glorious Claymore",
-          "rawLine": "bonus2 bAddRace,RC_Player_Human,pow(min(14,.@r)-3,2);"
-        },
-        {
-          "itemId": 1281,
-          "itemName": "Glorious Bloody Roar",
-          "rawLine": "bonus2 bAddRace,RC_DemiHuman,pow(min(14,.@r)-4,2);"
-        },
-        {
-          "itemId": 1281,
-          "itemName": "Glorious Bloody Roar",
-          "rawLine": "bonus2 bAddRace,RC_Player_Human,pow(min(14,.@r)-4,2);"
-        },
-        {
-          "itemId": 1282,
-          "itemName": "Glorious Jamadhar",
-          "rawLine": "bonus2 bAddRace,RC_DemiHuman,pow(min(14,.@r)-4,2);"
         }
       ]
     },
@@ -974,38 +910,6 @@
       ]
     },
     {
-      "command": "bonus2 bIgnoreDefRaceRate",
-      "reason": "unsupported-bonus-code",
-      "count": 134,
-      "examples": [
-        {
-          "itemId": 1329,
-          "itemName": "Lesser Guild Member's Cleaver",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
-        },
-        {
-          "itemId": 1329,
-          "itemName": "Lesser Guild Member's Cleaver",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
-        },
-        {
-          "itemId": 1396,
-          "itemName": "Vellum Guillotine",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,30;"
-        },
-        {
-          "itemId": 1587,
-          "itemName": "Vellum Great Encyclopedia",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,30;"
-        },
-        {
-          "itemId": 1859,
-          "itemName": "Lesser Guild Member's Fist",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
-        }
-      ]
-    },
-    {
       "command": "sc_end",
       "reason": "unsupported-non-damage-effect",
       "count": 133,
@@ -1294,38 +1198,6 @@
       ]
     },
     {
-      "command": "bonus2 bMagicAddRace",
-      "reason": "unsupported-bonus-code",
-      "count": 112,
-      "examples": [
-        {
-          "itemId": 1591,
-          "itemName": "TE Woe Book",
-          "rawLine": "bonus2 bMagicAddRace,RC_Player_Doram,5;"
-        },
-        {
-          "itemId": 1667,
-          "itemName": "TE Woe Staff",
-          "rawLine": "bonus2 bMagicAddRace,RC_Player_Doram,10;"
-        },
-        {
-          "itemId": 2016,
-          "itemName": "Vellum Arc Wand",
-          "rawLine": "bonus2 bMagicAddRace,RC_Player_Doram,25;"
-        },
-        {
-          "itemId": 2019,
-          "itemName": "TE Woe Two Hand Staff",
-          "rawLine": "bonus2 bMagicAddRace,RC_Player_Doram,20;"
-        },
-        {
-          "itemId": 2052,
-          "itemName": "Lesser Guild Member's Destruction Staff",
-          "rawLine": "bonus2 bMagicAddRace,RC_Player_Doram,5;"
-        }
-      ]
-    },
-    {
       "command": "bonus bLongAtkRate",
       "reason": "unsupported-bonus-code",
       "count": 110,
@@ -1482,6 +1354,38 @@
           "itemId": 310675,
           "itemName": "Star Cluster of Power Lv2",
           "rawLine": "bonus bPAtk,2*.@param;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bAddRace",
+      "reason": "unsupported-bonus-code",
+      "count": 89,
+      "examples": [
+        {
+          "itemId": 1187,
+          "itemName": "Glorious Claymore",
+          "rawLine": "bonus2 bAddRace,RC_DemiHuman,pow(min(14,.@r)-3,2);"
+        },
+        {
+          "itemId": 1187,
+          "itemName": "Glorious Claymore",
+          "rawLine": "bonus2 bAddRace,RC_Player_Human,pow(min(14,.@r)-3,2);"
+        },
+        {
+          "itemId": 1281,
+          "itemName": "Glorious Bloody Roar",
+          "rawLine": "bonus2 bAddRace,RC_DemiHuman,pow(min(14,.@r)-4,2);"
+        },
+        {
+          "itemId": 1281,
+          "itemName": "Glorious Bloody Roar",
+          "rawLine": "bonus2 bAddRace,RC_Player_Human,pow(min(14,.@r)-4,2);"
+        },
+        {
+          "itemId": 1282,
+          "itemName": "Glorious Jamadhar",
+          "rawLine": "bonus2 bAddRace,RC_DemiHuman,pow(min(14,.@r)-4,2);"
         }
       ]
     },
@@ -2378,38 +2282,6 @@
           "itemId": 310674,
           "itemName": "Star Cluster of Power Lv1",
           "rawLine": "bonus bShortAtkRate,.@param;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bIgnoreMdefRaceRate",
-      "reason": "unsupported-bonus-code",
-      "count": 50,
-      "examples": [
-        {
-          "itemId": 1682,
-          "itemName": "Shadow Staff",
-          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_All,min(10,.@r)*5;"
-        },
-        {
-          "itemId": 2016,
-          "itemName": "Vellum Arc Wand",
-          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_Player_Doram,25;"
-        },
-        {
-          "itemId": 2052,
-          "itemName": "Lesser Guild Member's Destruction Staff",
-          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_Player_Doram,10;"
-        },
-        {
-          "itemId": 2052,
-          "itemName": "Lesser Guild Member's Destruction Staff",
-          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_Player_Doram,10;"
-        },
-        {
-          "itemId": 15446,
-          "itemName": "Cetrion's Ring (OSM)",
-          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_All,10*.@a;"
         }
       ]
     },
@@ -4174,6 +4046,38 @@
       ]
     },
     {
+      "command": "bonus2 bIgnoreDefRaceRate",
+      "reason": "unsupported-bonus-code",
+      "count": 17,
+      "examples": [
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_All,10*.@f;"
+        },
+        {
+          "itemId": 19328,
+          "itemName": "Spider's Winks",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_All,readparam(bStr)/12;"
+        },
+        {
+          "itemId": 22134,
+          "itemName": "Enforcer Shoes",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_All,20*.@c;"
+        },
+        {
+          "itemId": 22207,
+          "itemName": "Imperial Boots",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_All,20*getskilllv(\"LG_PINPOINTATTACK\");"
+        },
+        {
+          "itemId": 470036,
+          "itemName": "Illusion Military Boots",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_All,20*getskilllv(\"NC_MAGMA_ERUPTION\");"
+        }
+      ]
+    },
+    {
       "command": "bonus2 bWeaponDamageRate",
       "reason": "unsupported-bonus-code",
       "count": 17,
@@ -4526,6 +4430,38 @@
       ]
     },
     {
+      "command": "bonus2 bMagicAddRace",
+      "reason": "unsupported-bonus-code",
+      "count": 14,
+      "examples": [
+        {
+          "itemId": 15109,
+          "itemName": "Egregori Mail",
+          "rawLine": "bonus2 bMagicAddRace,RC_Angel,3+max(0,(.@r-5));"
+        },
+        {
+          "itemId": 15113,
+          "itemName": "Exorcist Mail",
+          "rawLine": "bonus2 bMagicAddRace,RC_Undead,3+max(0,(.@r-5));"
+        },
+        {
+          "itemId": 19364,
+          "itemName": "Engineer Cap",
+          "rawLine": "bonus2 bMagicAddRace,RC_Formless,min(.@r-10,15);"
+        },
+        {
+          "itemId": 313737,
+          "itemName": "Spirit Handler Stone II (Garment)",
+          "rawLine": "bonus2 bMagicAddRace,RC_All,3*(getskilllv(\"SH_MYSTICAL_CREATURE_MASTERY\")/2);"
+        },
+        {
+          "itemId": 313737,
+          "itemName": "Spirit Handler Stone II (Garment)",
+          "rawLine": "bonus2 bMagicAddRace,RC_Player_Human,-3*(getskilllv(\"SH_MYSTICAL_CREATURE_MASTERY\")/2);"
+        }
+      ]
+    },
+    {
       "command": "showscript",
       "reason": "unsupported-bonus-code",
       "count": 14,
@@ -4810,6 +4746,38 @@
           "itemId": 400723,
           "itemName": "Yorscalp Crown of Execution",
           "rawLine": "bonus2 bIgnoreResRaceRate,RC_Player_Human,-5;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bSubRace",
+      "reason": "unsupported-bonus-code",
+      "count": 12,
+      "examples": [
+        {
+          "itemId": 1672,
+          "itemName": "Safety Rod",
+          "rawLine": "bonus2 bSubRace,RC_DemiHuman,5+.@val;"
+        },
+        {
+          "itemId": 1672,
+          "itemName": "Safety Rod",
+          "rawLine": "bonus2 bSubRace,RC_Player_Human,5+.@val;"
+        },
+        {
+          "itemId": 19261,
+          "itemName": "2017 RTC Symbols",
+          "rawLine": "bonus2 bSubRace,RC_DemiHuman,6+(min(15,.@r)/3);"
+        },
+        {
+          "itemId": 19261,
+          "itemName": "2017 RTC Symbols",
+          "rawLine": "bonus2 bSubRace,RC_Player_Human,6+(min(15,.@r)/3);"
+        },
+        {
+          "itemId": 19261,
+          "itemName": "2017 RTC Symbols",
+          "rawLine": "bonus2 bSubRace,RC_Player_Doram,6+(min(15,.@r)/3);"
         }
       ]
     },
@@ -5290,6 +5258,38 @@
           "itemId": 470028,
           "itemName": "Juggernaut",
           "rawLine": "bonus2 bAddClass,Class_All,4*getskilllv(\"RL_FIREDANCE\");"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bIgnoreMdefRaceRate",
+      "reason": "unsupported-bonus-code",
+      "count": 9,
+      "examples": [
+        {
+          "itemId": 1682,
+          "itemName": "Shadow Staff",
+          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_All,min(10,.@r)*5;"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_All,10*.@a;"
+        },
+        {
+          "itemId": 28565,
+          "itemName": "Perverse Demon Mask",
+          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_All,15*(.@s/18);"
+        },
+        {
+          "itemId": 490288,
+          "itemName": "Record of Mage",
+          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_All,10*(getskilllv(\"MG_SAFETYWALL\")/2);"
+        },
+        {
+          "itemId": 490288,
+          "itemName": "Record of Mage",
+          "rawLine": "bonus2 bIgnoreMdefRaceRate,RC_Player_Human,-10*(getskilllv(\"MG_SAFETYWALL\")/2);"
         }
       ]
     },

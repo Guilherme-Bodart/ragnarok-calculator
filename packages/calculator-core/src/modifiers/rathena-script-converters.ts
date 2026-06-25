@@ -24,6 +24,7 @@ export function toInternalRaceId(
     RC_Demon: "demon",
     RC_DemiHuman: "demihuman",
     RC_Player_Human: "demihuman",
+    RC_Player_Doram: "playerDoram",
     RC_Angel: "angel",
     RC_Dragon: "dragon",
   };

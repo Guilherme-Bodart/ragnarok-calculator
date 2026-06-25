@@ -223,6 +223,7 @@ handled later by resolver/engine rules.
 | `RC_Fish` | `fish` |
 | `RC_Demon` | `demon` |
 | `RC_DemiHuman`, `RC_Player_Human` | `demihuman` |
+| `RC_Player_Doram` | `playerDoram` |
 | `RC_Angel` | `angel` |
 | `RC_Dragon` | `dragon` |
 
