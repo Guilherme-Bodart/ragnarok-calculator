@@ -612,3 +612,13 @@ Motivo: evitar corte/transparencia por z-index/overflow e substituir scroll nati
 - `npm run build`: passou.
 
 Motivo: corrigir o React error #185 ao digitar no filtro de selects com busca local ou remota.
+
+### 2026-06-25 - RES/MRES de itens no status
+
+- Parser rAthena reconhece `bonus bRes` e `bonus bMres`.
+- `CalculatorModifierEffectsFactory` agrega esses valores em `flatRes` e `flatMres`.
+- `CharacterStatusEngine` expoe `res` e `mres` somando trait base e bonus de itens.
+- Esses valores ainda nao entram no dano causado; sao status defensivos para calculos de dano recebido/futuros painels.
+- `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7177 e unsupported statements cairam para 21533.
+
+Motivo: itens de 4th job usam RES/MRES com frequencia, e o status do personagem precisa refletir esses bonus antes de qualquer engine defensiva mais completa.

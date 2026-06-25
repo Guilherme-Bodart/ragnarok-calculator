@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 7149,
-  "partiallySupportedItemScripts": 5089,
-  "unsupportedItemScripts": 12888,
-  "itemScriptsWithModifiers": 12238,
-  "totalModifiers": 45901,
-  "unsupportedStatements": 21709,
+  "fullySupportedItemScripts": 7177,
+  "partiallySupportedItemScripts": 5063,
+  "unsupportedItemScripts": 12860,
+  "itemScriptsWithModifiers": 12240,
+  "totalModifiers": 46077,
+  "unsupportedStatements": 21533,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -682,38 +682,6 @@
           "itemId": 15842,
           "itemName": "Costume Magic Time",
           "rawLine": "hateffect HAT_EF_C_Disapear_Time_TW,true;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bRes",
-      "reason": "unsupported-bonus-code",
-      "count": 211,
-      "examples": [
-        {
-          "itemId": 24759,
-          "itemName": "Stamina Shadow Weapon",
-          "rawLine": "bonus bRes,30;"
-        },
-        {
-          "itemId": 24759,
-          "itemName": "Stamina Shadow Weapon",
-          "rawLine": "bonus bRes,30;"
-        },
-        {
-          "itemId": 24760,
-          "itemName": "Stamina Shadow Shield",
-          "rawLine": "bonus bRes,30;"
-        },
-        {
-          "itemId": 24760,
-          "itemName": "Stamina Shadow Shield",
-          "rawLine": "bonus bRes,30;"
-        },
-        {
-          "itemId": 24878,
-          "itemName": "Stout Shadow Pendant",
-          "rawLine": "bonus bRes,15;"
         }
       ]
     },
@@ -3114,6 +3082,38 @@
           "itemId": 15245,
           "itemName": "Nature Suit",
           "rawLine": "bonus bMagicHPGainValue,50;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bRes",
+      "reason": "unsupported-bonus-code",
+      "count": 35,
+      "examples": [
+        {
+          "itemId": 310677,
+          "itemName": "Star Cluster of Stamina Lv1",
+          "rawLine": "bonus bRes,2*.@param;"
+        },
+        {
+          "itemId": 310677,
+          "itemName": "Star Cluster of Stamina Lv1",
+          "rawLine": "bonus bRes,.@param;"
+        },
+        {
+          "itemId": 310677,
+          "itemName": "Star Cluster of Stamina Lv1",
+          "rawLine": "bonus bRes,.@param;"
+        },
+        {
+          "itemId": 310677,
+          "itemName": "Star Cluster of Stamina Lv1",
+          "rawLine": "bonus bRes,.@param;"
+        },
+        {
+          "itemId": 310677,
+          "itemName": "Star Cluster of Stamina Lv1",
+          "rawLine": "bonus bRes,.@param;"
         }
       ]
     },

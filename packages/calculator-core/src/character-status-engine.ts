@@ -39,6 +39,8 @@ export type CharacterStatus = {
   matk: number;
   defense: number;
   magicDefense: number;
+  res: number;
+  mres: number;
   hit: number;
   flee: number;
   crit: number;
@@ -141,6 +143,8 @@ export class CharacterStatusEngine {
       matk: statusMatk + equipmentMatk + flatMatk,
       defense: equipmentDefense + (input.modifierEffects?.flatDefense ?? 0),
       magicDefense: input.modifierEffects?.flatMagicDefense ?? 0,
+      res: traitEffects.res + (input.modifierEffects?.flatRes ?? 0),
+      mres: traitEffects.mres + (input.modifierEffects?.flatMres ?? 0),
       hit:
         Math.floor(
           input.character.baseLevel +

@@ -1251,6 +1251,42 @@ Proximo bloco recomendado:
   - Engine inicial de cura/critico consumindo `healPower` e `criticalDamageRate`.
   - Mostrar cast detalhado no card de resultado/ataque, alem de ciclo e DPS.
 
+## Bloco Fechado: RES/MRES De Itens No Status
+
+Data: 2026-06-25.
+
+Implementado:
+
+- Parser rAthena reconhece:
+  - `bonus bRes`
+  - `bonus bMres`
+- `CalculatorModifierEffectsFactory` agrega:
+  - `flatRes`
+  - `flatMres`
+- `CharacterStatusEngine` expoe:
+  - `res = traitEffects.res + flatRes`
+  - `mres = traitEffects.mres + flatMres`
+- Testes cobrem parser, agregacao e status final.
+
+Observacao:
+
+- RES/MRES sao status defensivos de 4th job. Este bloco apenas captura e mostra os valores no personagem; a aplicacao em dano recebido fica para uma engine defensiva propria.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 7.149 -> 7.177.
+- Scripts parcialmente suportados: 5.089 -> 5.063.
+- Unsupported statements: 21.709 -> 21.533.
+- Modifiers extraidos: 45.901 -> 46.077.
+- `bonus bRes` saiu do top unsupported.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Capturar custo de SP (`bonus bUseSPrate`) para futuro painel de recursos.
+  - Melhorar suporte de `bonus2 bSkillAtk` com expressoes dependentes de skill aprendida.
+  - Completar conversores de raca/classe especiais se o alvo PvP virar prioridade.
+
 ## Bloco Fechado: Reducoes Defensivas Por Raca E Elemento
 
 Data: 2026-06-24.

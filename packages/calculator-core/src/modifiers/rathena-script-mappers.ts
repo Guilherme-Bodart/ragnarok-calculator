@@ -63,6 +63,10 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("defense", "addFlat", command, conditions, variables),
   bMdef: (command, conditions, variables) =>
     createModifier("magicDefense", "addFlat", command, conditions, variables),
+  bRes: (command, conditions, variables) =>
+    createModifier("res", "addFlat", command, conditions, variables),
+  bMres: (command, conditions, variables) =>
+    createModifier("mres", "addFlat", command, conditions, variables),
   bAtkEle: (command, conditions) => {
     const [, rathenaElementId] = command.args;
     const elementId = toInternalElementId(rathenaElementId);
@@ -412,6 +416,8 @@ function createModifier(
     | "baseAtk"
     | "defense"
     | "magicDefense"
+    | "res"
+    | "mres"
     | "weaponElement"
     | "maxHp"
     | "maxHpRate"

@@ -18,6 +18,8 @@ export type CalculatorModifierEffects = {
   flatMatk: number;
   flatDefense: number;
   flatMagicDefense: number;
+  flatRes: number;
+  flatMres: number;
   weaponElement?: ElementType;
   pAtk: number;
   smatk: number;
@@ -90,6 +92,8 @@ export class CalculatorModifierEffectsFactory {
       flatMatk: 0,
       flatDefense: 0,
       flatMagicDefense: 0,
+      flatRes: 0,
+      flatMres: 0,
       weaponElement: undefined,
       pAtk: 0,
       smatk: 0,
@@ -179,6 +183,16 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "magicDefense" && bucket.target.type === "self") {
           effects.flatMagicDefense += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "res" && bucket.target.type === "self") {
+          effects.flatRes += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "mres" && bucket.target.type === "self") {
+          effects.flatMres += bucket.value;
           continue;
         }
 

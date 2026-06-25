@@ -48,6 +48,8 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   flatMatk: 0,
   flatDefense: 0,
   flatMagicDefense: 0,
+  flatRes: 0,
+  flatMres: 0,
   pAtk: 0,
   smatk: 0,
   atkRate: 0,

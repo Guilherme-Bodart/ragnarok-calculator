@@ -22,6 +22,8 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   flatMatk: 0,
   flatDefense: 0,
   flatMagicDefense: 0,
+  flatRes: 0,
+  flatMres: 0,
   pAtk: 0,
   smatk: 0,
   atkRate: 0,
@@ -109,6 +111,8 @@ describe("CharacterStatusEngine", () => {
         flatAtk: 25,
         flatDefense: 15,
         flatMagicDefense: 9,
+        flatRes: 6,
+        flatMres: 7,
         maxHp: 100,
         maxHpRate: 10,
         maxSpRate: 5,
@@ -134,6 +138,8 @@ describe("CharacterStatusEngine", () => {
     expect(status.atk).toBe(370);
     expect(status.defense).toBe(15);
     expect(status.magicDefense).toBe(9);
+    expect(status.res).toBe(6);
+    expect(status.mres).toBe(7);
     expect(status.hit).toBe(156);
     expect(status.flee).toBe(134);
     expect(status.crit).toBe(6);
@@ -250,6 +256,8 @@ describe("CharacterStatusEngine", () => {
         flatMatk: 7,
         flatDefense: 3,
         flatMagicDefense: 4,
+        flatRes: 5,
+        flatMres: 6,
       },
     });
 
@@ -257,6 +265,8 @@ describe("CharacterStatusEngine", () => {
     expect(status.matk).toBe(status.statusMatk + 77);
     expect(status.defense).toBe(28);
     expect(status.magicDefense).toBe(4);
+    expect(status.res).toBe(5);
+    expect(status.mres).toBe(6);
   });
 
   it("calculates AP from fourth job basepoints", () => {

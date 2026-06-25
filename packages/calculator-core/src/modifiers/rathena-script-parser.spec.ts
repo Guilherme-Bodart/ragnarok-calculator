@@ -107,6 +107,8 @@ describe("ModifierNormalizer", () => {
       bonus bMatk,30;
       bonus bDef,11;
       bonus bMdef,12;
+      bonus bRes,13;
+      bonus bMres,14;
       bonus bAtkEle,Ele_Fire;
       bonus bAllStats,10;
       bonus bStr,5;
@@ -147,6 +149,18 @@ describe("ModifierNormalizer", () => {
         stat: "magicDefense",
         operator: "addFlat",
         value: 12,
+        target: { type: "self" },
+      },
+      {
+        stat: "res",
+        operator: "addFlat",
+        value: 13,
+        target: { type: "self" },
+      },
+      {
+        stat: "mres",
+        operator: "addFlat",
+        value: 14,
         target: { type: "self" },
       },
       {
