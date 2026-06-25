@@ -5,12 +5,16 @@ export function getElementMultiplier(
   monster: RoMonster,
   fallbackElement?: ElementType,
 ) {
-  const attackElement = skill.element ?? fallbackElement ?? "neutral";
+  const attackElement = getAttackElement(skill, fallbackElement);
   const attackRates = elementRateTable[attackElement] ?? {};
   const defenseLevels = attackRates[monster.element] ?? [100, 100, 100, 100];
   const level = clampElementLevel(monster.elementLevel);
 
   return defenseLevels[level - 1] / 100;
+}
+
+export function getAttackElement(skill: RoSkill, fallbackElement?: ElementType) {
+  return skill.element ?? fallbackElement ?? "neutral";
 }
 
 const elementRateTable: Partial<

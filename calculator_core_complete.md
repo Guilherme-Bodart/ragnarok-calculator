@@ -83,6 +83,13 @@ Funcionando hoje:
 - Auditoria atual: `itemScripts=20037`, `fullySupported=6734`, `partiallySupported=5170`, `unsupportedStatements=22335`, `modifiers=45366`.
 - Proximo passo natural: expor/editar endows e elementos de arma como buffs manuais/catalogados, usando o mesmo campo.
 
+### 2026-06-24 - Elemento como etapa final
+
+- Ordem atual do dano: base/equip/mods/tamanho -> DEF/MDEF -> tabela elemental -> resistencia elemental do alvo.
+- `RoMonster.elementResistanceRates` permite representar reducoes como fogo -30%.
+- Exemplo: se a tabela elemental transforma 100 em 200 e o alvo tem 30% resistencia a fogo, o final vira 140.
+- Isso prepara monstros/alvos manuais com resistencias especiais sem misturar com `bSubEle`, que pertence ao personagem defendendo.
+
 Principais lacunas atuais:
 
 - Parser rAthena cobre pouco: basicamente `bonus`/`bonus2` e poucas familias.

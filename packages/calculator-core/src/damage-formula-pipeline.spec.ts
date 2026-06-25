@@ -217,6 +217,12 @@ describe("DamageFormulaPipeline", () => {
         value: 0.55,
       }),
     );
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "postDefenseDamage",
+        value: 316,
+      }),
+    );
   });
 
   it("uses weapon element modifiers for physical skills without a fixed element", () => {
@@ -224,6 +230,7 @@ describe("DamageFormulaPipeline", () => {
       ...neutralTarget,
       element: "undead",
       elementLevel: 1,
+      elementResistanceRates: { fire: 30 },
     };
 
     const result = pipeline.calculate({
@@ -244,6 +251,13 @@ describe("DamageFormulaPipeline", () => {
         value: 1.25,
       }),
     );
+    expect(result.breakdown).toContainEqual(
+      expect.objectContaining({
+        key: "elementResistanceRate",
+        value: 30,
+      }),
+    );
+    expect(result.damage.average).toBe(1085);
   });
 
   it("applies race-targeted defense ignore modifiers", () => {

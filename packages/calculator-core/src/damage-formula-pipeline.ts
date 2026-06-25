@@ -3,6 +3,7 @@ import { CastTimingEngine, type CastTimingResult } from "./cast-timing";
 import type { EffectiveCharacter } from "./effective-character";
 import {
   getDefenseMultiplier,
+  getAttackElement,
   getElementMultiplier,
   getMagicalBasePower,
   getMagicalLegacyBonusRate,
@@ -20,7 +21,7 @@ import {
   sumPhysicalEquipmentPower,
 } from "./formulas";
 import { SkillFormulaRegistry } from "./skills";
-import type { RoItem, RoMonster, RoSkill } from "./ro-types";
+import type { ElementType, RoItem, RoMonster, RoSkill } from "./ro-types";
 
 export type DamageBreakdownGroup =
   | "character"
@@ -71,10 +72,13 @@ type DamageFormulaContext = {
   formulaId: string;
   weaponRefinePower: number;
   weaponSizeMultiplier: number;
+  attackElement: ElementType;
   elementMultiplier: number;
+  elementResistanceRate: number;
   defenseIgnoreRate: number;
   defenseMultiplier: number;
   preDefenseDamage: number;
+  postDefenseDamage: number;
   singleHitDamage: number;
   hitCount: number;
   castTiming: CastTimingResult;
@@ -150,10 +154,18 @@ export class DamageFormulaPipeline {
     const weaponSizeMultiplier = magical
       ? 1
       : getWeaponSizeMultiplier(input.character.weaponType, input.monster.size);
+    const attackElement = getAttackElement(
+      input.skill,
+      magical ? undefined : input.modifierEffects.weaponElement,
+    );
     const elementMultiplier = getElementMultiplier(
       input.skill,
       input.monster,
       magical ? undefined : input.modifierEffects.weaponElement,
+    );
+    const elementResistanceRate = getTargetedRate(
+      input.monster.elementResistanceRates ?? {},
+      attackElement,
     );
     const defenseIgnoreRate = magical
       ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseRate, input.monster.race)
@@ -167,10 +179,12 @@ export class DamageFormulaPipeline {
       (basePower + equipmentPower + modifierFlatPower + weaponRefinePower) *
         skillMultiplier *
         finalRateMultiplier *
-        weaponSizeMultiplier *
-        elementMultiplier,
+        weaponSizeMultiplier,
     );
-    const singleHitDamage = Math.floor(preDefenseDamage * defenseMultiplier);
+    const postDefenseDamage = Math.floor(preDefenseDamage * defenseMultiplier);
+    const singleHitDamage = Math.floor(
+      postDefenseDamage * elementMultiplier * (1 - elementResistanceRate / 100),
+    );
     const castTiming = this.castTimingEngine.calculate({
       skill: input.skill,
       skillLevel: input.skillLevel,
@@ -194,10 +208,13 @@ export class DamageFormulaPipeline {
       formulaId: skillFormula.formulaId,
       weaponRefinePower,
       weaponSizeMultiplier,
+      attackElement,
       elementMultiplier,
+      elementResistanceRate,
       defenseIgnoreRate,
       defenseMultiplier,
       preDefenseDamage,
+      postDefenseDamage,
       singleHitDamage,
       hitCount: skillFormula.hitCount,
       castTiming,
@@ -288,6 +305,13 @@ export class DamageFormulaPipeline {
         unit: "multiplier",
       },
       {
+        key: "elementResistanceRate",
+        label: "Element resistance rate",
+        value: context.elementResistanceRate,
+        group: "target",
+        unit: "percent",
+      },
+      {
         key: "defenseIgnoreRate",
         label: "Defense ignore rate",
         value: context.defenseIgnoreRate,
@@ -305,6 +329,13 @@ export class DamageFormulaPipeline {
         key: "preDefenseDamage",
         label: "Pre-defense damage",
         value: context.preDefenseDamage,
+        group: "result",
+        unit: "flat",
+      },
+      {
+        key: "postDefenseDamage",
+        label: "Post-defense damage",
+        value: context.postDefenseDamage,
         group: "result",
         unit: "flat",
       },

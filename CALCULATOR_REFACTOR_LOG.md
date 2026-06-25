@@ -15,6 +15,15 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Ordem final de elemento e resistencia elemental
+
+- `DamageFormulaPipeline` passou a aplicar elemento depois da mitigacao de DEF/MDEF.
+- O breakdown agora separa `preDefenseDamage`, `postDefenseDamage`, `elementMultiplier` e `elementResistanceRate`.
+- `RoMonster` ganhou `elementResistanceRates` opcional para resistencias do alvo por elemento.
+- Exemplo esperado: dano que virou 200 por vantagem elemental e encontra 30% de resistencia a fogo termina em 140.
+
+Motivo: fica mais facil auditar o resultado como "dano apos defesa" multiplicado por vantagem/desvantagem elemental e depois reduzido por resistencia elemental especifica do alvo.
+
 ### 2026-06-24 - Elemento de arma via bAtkEle
 
 - Parser rAthena passou a reconhecer `bonus bAtkEle,Ele_*`.

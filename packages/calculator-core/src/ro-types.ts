@@ -114,6 +114,7 @@ export type RoMonster = {
   magicDefense: number;
   hp: number;
   classType?: MonsterClass;
+  elementResistanceRates?: Partial<Record<ElementType, number>>;
   source: "manual" | "iwdb" | "rathena";
   sourceUrl?: string;
 };
