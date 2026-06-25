@@ -37,6 +37,8 @@ export type CharacterStatus = {
   statusMatk: number;
   atk: number;
   matk: number;
+  defense: number;
+  magicDefense: number;
   hit: number;
   flee: number;
   crit: number;
@@ -91,6 +93,7 @@ export class CharacterStatusEngine {
     );
     const equipmentAtk = this.sumEquipmentPower(input.items ?? [], "attack");
     const equipmentMatk = this.sumEquipmentPower(input.items ?? [], "magicAttack");
+    const equipmentDefense = this.sumEquipmentPower(input.items ?? [], "defense");
     const flatAtk = input.modifierEffects?.flatAtk ?? 0;
     const flatMatk = input.modifierEffects?.flatMatk ?? 0;
     const weaponType = input.character.weaponType ?? "bareHand";
@@ -136,6 +139,8 @@ export class CharacterStatusEngine {
       statusMatk,
       atk: statusAtk + equipmentAtk + flatAtk,
       matk: statusMatk + equipmentMatk + flatMatk,
+      defense: equipmentDefense + (input.modifierEffects?.flatDefense ?? 0),
+      magicDefense: input.modifierEffects?.flatMagicDefense ?? 0,
       hit:
         Math.floor(
           input.character.baseLevel +
@@ -200,7 +205,10 @@ export class CharacterStatusEngine {
     };
   }
 
-  private sumEquipmentPower(items: RoItem[], stat: "attack" | "magicAttack") {
+  private sumEquipmentPower(
+    items: RoItem[],
+    stat: "attack" | "magicAttack" | "defense",
+  ) {
     return items.reduce((total, item) => {
       const itemPower = item[stat] ?? 0;
       const bonusPower = item.bonuses.reduce((bonusTotal, bonus) => {

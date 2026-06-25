@@ -22,6 +22,8 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   },
   flatAtk: 0,
   flatMatk: 0,
+  flatDefense: 0,
+  flatMagicDefense: 0,
   pAtk: 0,
   smatk: 0,
   atkRate: 0,

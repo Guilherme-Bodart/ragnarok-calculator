@@ -50,6 +50,8 @@ describe("CalculatorModifierEffectsFactory", () => {
       bonuses: [],
       rawScript: `
         bonus bBaseAtk,100;
+        bonus bDef,12;
+        bonus bMdef,7;
         bonus bAllStats,10;
         bonus bStr,5;
         bonus bAtkRate,10;
@@ -79,6 +81,8 @@ describe("CalculatorModifierEffectsFactory", () => {
       },
       flatAtk: 100,
       flatMatk: 0,
+      flatDefense: 12,
+      flatMagicDefense: 7,
       atkRate: 10,
       shortAttackRate: 7,
       longAttackRate: 9,

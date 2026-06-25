@@ -58,7 +58,7 @@ Funcionando hoje:
 - Payload versionado V2.
 - Parser rAthena incremental para subset de scripts.
 - Pipeline de dano com breakdown.
-- Core ja captura traits, cast/delay, critico/cura, reducoes defensivas por raca/elemento e modificadores por classe de monstro (`Class_All`, `Class_Normal`, `Class_Boss`).
+- Core ja captura traits, DEF/MDEF, cast/delay, critico/cura, reducoes defensivas por raca/elemento e modificadores por classe de monstro (`Class_All`, `Class_Normal`, `Class_Boss`).
 - Algumas formulas estaticas: `SM_BASH`, `SM_MAGNUM`, `KN_BOWLINGBASH`, bolts basicos de mago.
 - Fallback generico para skills.
 
@@ -68,6 +68,13 @@ Funcionando hoje:
 - Auditoria atual: `itemScripts=20037`, `fullySupported=5852`, `partiallySupported=5595`, `unsupportedStatements=24465`, `modifiers=43236`.
 - `Class_All` ja afeta o calculo ofensivo mesmo sem `monster.classType`; `Class_Normal` e `Class_Boss` precisam do alvo classificado.
 - As reducoes `bSubClass` ficam separadas para futuro calculo defensivo e nao contaminam dano causado.
+
+### 2026-06-24 - DEF/MDEF no status
+
+- `bonus bDef` e `bonus bMdef` agora entram em `flatDefense` e `flatMagicDefense`.
+- `CharacterStatusEngine` expoe `defense` e `magicDefense` no status calculado.
+- Auditoria atual: `itemScripts=20037`, `fullySupported=6621`, `partiallySupported=5142`, `unsupportedStatements=22595`, `modifiers=45106`.
+- Isso prepara preview defensivo, buffs defensivos e calculos futuros sem reprocessar scripts no componente React.
 
 Principais lacunas atuais:
 

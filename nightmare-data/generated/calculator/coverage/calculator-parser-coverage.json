@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 5852,
-  "partiallySupportedItemScripts": 5595,
-  "unsupportedItemScripts": 14185,
-  "itemScriptsWithModifiers": 11447,
-  "totalModifiers": 43236,
-  "unsupportedStatements": 24465,
+  "fullySupportedItemScripts": 6621,
+  "partiallySupportedItemScripts": 5142,
+  "unsupportedItemScripts": 13416,
+  "itemScriptsWithModifiers": 11763,
+  "totalModifiers": 45106,
+  "unsupportedStatements": 22595,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -142,38 +142,6 @@
       ]
     },
     {
-      "command": "bonus bMdef",
-      "reason": "unsupported-stat-effect",
-      "count": 1308,
-      "examples": [
-        {
-          "itemId": 1578,
-          "itemName": "Book Of Prayer",
-          "rawLine": "bonus bMdef,10;"
-        },
-        {
-          "itemId": 1646,
-          "itemName": "La'cryma Stick",
-          "rawLine": "bonus bMdef,.@r;"
-        },
-        {
-          "itemId": 1661,
-          "itemName": "Mental Destroyer",
-          "rawLine": "bonus bMdef,20;"
-        },
-        {
-          "itemId": 2107,
-          "itemName": "Mirror Shield",
-          "rawLine": "bonus bMdef,5;"
-        },
-        {
-          "itemId": 2108,
-          "itemName": "Mirror Shield",
-          "rawLine": "bonus bMdef,5;"
-        }
-      ]
-    },
-    {
       "command": "sc_start",
       "reason": "unsupported-bonus-code",
       "count": 636,
@@ -202,38 +170,6 @@
           "itemId": 645,
           "itemName": "Concentration Potion",
           "rawLine": "sc_start SC_ASPDPOTION0,1800000,4;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bDef",
-      "reason": "unsupported-bonus-code",
-      "count": 606,
-      "examples": [
-        {
-          "itemId": 1135,
-          "itemName": "Cutlus",
-          "rawLine": "bonus bDef,1;"
-        },
-        {
-          "itemId": 1160,
-          "itemName": "Broad Sword",
-          "rawLine": "bonus bDef,5;"
-        },
-        {
-          "itemId": 1162,
-          "itemName": "Broad Sword",
-          "rawLine": "bonus bDef,5;"
-        },
-        {
-          "itemId": 1167,
-          "itemName": "Schweizersabel",
-          "rawLine": "bonus bDef,1;"
-        },
-        {
-          "itemId": 1170,
-          "itemName": "Katzbalger",
-          "rawLine": "bonus bDef,10;"
         }
       ]
     },
@@ -3886,6 +3822,38 @@
       ]
     },
     {
+      "command": "bonus bDef",
+      "reason": "unsupported-bonus-code",
+      "count": 24,
+      "examples": [
+        {
+          "itemId": 1484,
+          "itemName": "Cardo",
+          "rawLine": "bonus bDef,getrefine()/2;"
+        },
+        {
+          "itemId": 13167,
+          "itemName": "Gate Keeper-DD",
+          "rawLine": "bonus bDef,getrefine();"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bDef,2*.@e;"
+        },
+        {
+          "itemId": 15984,
+          "itemName": "[Not For Sale] Heavenly Order",
+          "rawLine": "bonus bDef,20*.@f;"
+        },
+        {
+          "itemId": 19451,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bDef,20*(.@f/18);"
+        }
+      ]
+    },
+    {
       "command": "bonus3 bAddEffOnSkill",
       "reason": "unsupported-bonus-code",
       "count": 24,
@@ -4234,6 +4202,38 @@
           "itemId": 310689,
           "itemName": "Star Cluster of Wisdom Lv1",
           "rawLine": "bonus bHPlus,.@param;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bMdef",
+      "reason": "unsupported-stat-effect",
+      "count": 20,
+      "examples": [
+        {
+          "itemId": 4644,
+          "itemName": "Infinite Vocal Card",
+          "rawLine": "bonus bMdef,5+.@b;"
+        },
+        {
+          "itemId": 5795,
+          "itemName": "Bright Red Dress Hat",
+          "rawLine": "bonus bMdef,7+(getrefine()/2);"
+        },
+        {
+          "itemId": 15984,
+          "itemName": "[Not For Sale] Heavenly Order",
+          "rawLine": "bonus bMdef,2*.@c;"
+        },
+        {
+          "itemId": 19451,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bMdef,2*(.@c/18);"
+        },
+        {
+          "itemId": 19452,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bMdef,2*(.@c/18);"
         }
       ]
     },

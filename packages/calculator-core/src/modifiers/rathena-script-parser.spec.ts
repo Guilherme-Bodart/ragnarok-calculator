@@ -105,6 +105,8 @@ describe("ModifierNormalizer", () => {
     const result = normalizer.fromRawScript(`
       bonus bAtk,25;
       bonus bMatk,30;
+      bonus bDef,11;
+      bonus bMdef,12;
       bonus bAllStats,10;
       bonus bStr,5;
       bonus bInt,6;
@@ -132,6 +134,18 @@ describe("ModifierNormalizer", () => {
         stat: "matk",
         operator: "addFlat",
         value: 30,
+        target: { type: "self" },
+      },
+      {
+        stat: "defense",
+        operator: "addFlat",
+        value: 11,
+        target: { type: "self" },
+      },
+      {
+        stat: "magicDefense",
+        operator: "addFlat",
+        value: 12,
         target: { type: "self" },
       },
       {

@@ -16,6 +16,8 @@ export type CalculatorModifierEffects = {
   statBonuses: Record<CharacterStat, number>;
   flatAtk: number;
   flatMatk: number;
+  flatDefense: number;
+  flatMagicDefense: number;
   pAtk: number;
   smatk: number;
   atkRate: number;
@@ -85,6 +87,8 @@ export class CalculatorModifierEffectsFactory {
       },
       flatAtk: 0,
       flatMatk: 0,
+      flatDefense: 0,
+      flatMagicDefense: 0,
       pAtk: 0,
       smatk: 0,
       atkRate: 0,
@@ -163,6 +167,16 @@ export class CalculatorModifierEffectsFactory {
           bucket.target.type === "self"
         ) {
           effects.flatAtk += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "defense" && bucket.target.type === "self") {
+          effects.flatDefense += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "magicDefense" && bucket.target.type === "self") {
+          effects.flatMagicDefense += bucket.value;
           continue;
         }
 

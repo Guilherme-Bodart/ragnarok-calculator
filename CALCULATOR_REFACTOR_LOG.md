@@ -15,6 +15,16 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - DEF e MDEF de itens no status
+
+- Parser rAthena passou a reconhecer `bonus bDef` e `bonus bMdef`.
+- `CalculatorModifierEffectsFactory` agrega `flatDefense` e `flatMagicDefense`.
+- `CharacterStatusEngine` expoe `defense` e `magicDefense`, somando DEF de equipamento com DEF/MDEF vindos de script.
+- Auditoria do parser subiu de 5.852 para 6.621 scripts totalmente suportados e reduziu unsupported statements para 22.595.
+- `bonus bDef` saiu do top unsupported.
+
+Motivo: defesa de equipamento e MDEF aparecem muito em scripts reais; mesmo sem fechar o calculo defensivo completo, o status do personagem precisa carregar esses valores para buffs, preview e futuras formulas.
+
 ### 2026-06-24 - Modificadores por classe de monstro
 
 - Parser rAthena passou a reconhecer `bonus2 bAddClass`, `bonus2 bMagicAddClass` e `bonus2 bSubClass`.
