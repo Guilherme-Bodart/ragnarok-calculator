@@ -188,6 +188,7 @@ export class DamageFormulaPipeline {
     const castTiming = this.castTimingEngine.calculate({
       skill: input.skill,
       skillLevel: input.skillLevel,
+      effectiveStats: input.character.effectiveStats,
       modifierEffects: input.modifierEffects,
     });
     const totalDamage = singleHitDamage * skillFormula.hitCount;

@@ -15,6 +15,15 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Formulas bRO de ASPD e conjuracao
+
+- `CastTimingEngine` passou a aplicar a reducao natural de conjuracao variavel por `DEX * 2 + INT`.
+- Conjuracao fixa agora aplica reducao flat primeiro e usa a maior reducao percentual fixa, em vez de somar percentuais.
+- `AspdEngine` passou a usar a formula de ASPD por classe/arma + bonus AGI/DEX + percentual de equipamentos + ponto fixo.
+- Cap de ASPD agora e 190 ate base 99 e 193 a partir do base 100.
+
+Motivo: alinhar o core com a referencia do bRO/Browiki, deixando cast e ASPD bem mais proximos do comportamento real antes de evoluir buffs e consumiveis.
+
 ### 2026-06-24 - Expressoes matematicas rAthena
 
 - Avaliador de expressoes passou a aceitar `min`, `max`, `pow`, `getrefine()` e `getenchantgrade()`.

@@ -88,6 +88,7 @@ describe("CastTimingEngine", () => {
     const result = engine.calculate({
       skill,
       skillLevel: 10,
+      effectiveStats: { dex: 0, int: 0 },
       modifierEffects: {
         ...emptyModifierEffects,
         variableCastRate: -25,
@@ -104,12 +105,24 @@ describe("CastTimingEngine", () => {
       baseVariableCastMs: 4000,
       variableCastMs: 2000,
       baseFixedCastMs: 1000,
-      fixedCastMs: 600,
+      fixedCastMs: 720,
       baseAfterCastDelayMs: 500,
       afterCastDelayMs: 400,
       cooldownMs: 2000,
-      cycleTimeMs: 4600,
+      cycleTimeMs: 4720,
     });
+  });
+
+  it("reduces variable cast naturally with DEX and INT", () => {
+    const result = engine.calculate({
+      skill,
+      skillLevel: 10,
+      effectiveStats: { dex: 120, int: 100 },
+      modifierEffects: emptyModifierEffects,
+    });
+
+    expect(result.variableCastMs).toBe(796);
+    expect(result.fixedCastMs).toBe(1000);
   });
 
   it("keeps instant skills at zero cycle time", () => {
@@ -125,6 +138,7 @@ describe("CastTimingEngine", () => {
       engine.calculate({
         skill: instantSkill,
         skillLevel: 10,
+        effectiveStats: { dex: 120, int: 100 },
         modifierEffects: emptyModifierEffects,
       }).cycleTimeMs,
     ).toBe(0);

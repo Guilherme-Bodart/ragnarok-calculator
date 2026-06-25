@@ -137,7 +137,7 @@ describe("CharacterStatusEngine", () => {
     expect(status.hit).toBe(156);
     expect(status.flee).toBe(134);
     expect(status.crit).toBe(6);
-    expect(status.aspd).toBe(168.67);
+    expect(status.aspd).toBe(163.34);
   });
 
   it("applies item trait stat bonuses before derived combat stats", () => {

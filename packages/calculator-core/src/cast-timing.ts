@@ -1,9 +1,11 @@
 import type { CalculatorModifierEffects } from "./calculator-modifier-effects";
+import type { StatBonus } from "./job-stats";
 import type { RoSkill } from "./ro-types";
 
 export type CastTimingInput = {
   skill: RoSkill;
   skillLevel: number;
+  effectiveStats: Pick<StatBonus, "dex" | "int">;
   modifierEffects: CalculatorModifierEffects;
 };
 
@@ -37,16 +39,21 @@ export class CastTimingEngine {
     const variableCastRate =
       input.modifierEffects.variableCastRate +
       (input.modifierEffects.skillVariableCastRate[skillId] ?? 0);
-    const fixedCastRate =
-      input.modifierEffects.fixedCastRate +
-      (input.modifierEffects.skillFixedCastRate[skillId] ?? 0);
+    const fixedCastRate = getStrongestFixedCastReductionRate(
+      input.modifierEffects.fixedCastRate,
+      input.modifierEffects.skillFixedCastRate[skillId] ?? 0,
+    );
     const fixedCastFlat =
       input.modifierEffects.fixedCast +
       (input.modifierEffects.skillFixedCast[skillId] ?? 0);
-    const variableCastMs = applyRate(baseVariableCastMs, variableCastRate);
+    const variableCastMs = Math.floor(
+      baseVariableCastMs *
+        getNaturalVariableCastMultiplier(input.effectiveStats) *
+        getRateMultiplier(variableCastRate),
+    );
     const fixedCastMs = Math.max(
       0,
-      applyRate(baseFixedCastMs, fixedCastRate) + fixedCastFlat,
+      Math.floor((baseFixedCastMs + fixedCastFlat) * getRateMultiplier(fixedCastRate)),
     );
     const afterCastDelayMs = applyRate(
       baseAfterCastDelayMs,
@@ -73,4 +80,16 @@ function getLevelValue(values: Record<string, number> | undefined, level: number
 
 function applyRate(value: number, rate: number) {
   return Math.max(0, Math.floor(value * (1 + rate / 100)));
+}
+
+function getNaturalVariableCastMultiplier(stats: Pick<StatBonus, "dex" | "int">) {
+  return Math.max(0, 1 - Math.sqrt((stats.dex * 2 + stats.int) / 530));
+}
+
+function getRateMultiplier(rate: number) {
+  return Math.max(0, 1 - Math.max(0, -rate) / 100);
+}
+
+function getStrongestFixedCastReductionRate(globalRate: number, skillRate: number) {
+  return Math.min(0, globalRate, skillRate);
 }

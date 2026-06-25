@@ -159,6 +159,7 @@ export class CharacterStatusEngine {
         Math.floor(effectiveStats.luk / 3 + traitEffects.criticalDamageRate) +
         (input.modifierEffects?.crit ?? 0),
       aspd: this.aspdEngine.calculate({
+        baseLevel: input.character.baseLevel,
         classId: input.character.classId,
         weaponType,
         effectiveStats,

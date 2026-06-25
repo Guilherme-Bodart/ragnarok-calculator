@@ -96,6 +96,14 @@ Funcionando hoje:
 - Auditoria atual: `itemScripts=20037`, `fullySupported=7149`, `partiallySupported=5089`, `unsupportedStatements=21709`, `modifiers=45901`.
 - Isso melhora `bBaseAtk`, `bSkillAtk`, `bAddRace` e similares quando o mapper ja existe e faltava apenas calcular o valor.
 
+### 2026-06-24 - ASPD e conjuracao pela referencia bRO
+
+- Conjuracao variavel: `A * (1 - sqrt((DEX * 2 + INT) / 530)) * (1 - B / 100)`.
+- Conjuracao fixa: `(C - D) * (1 - E / 100)`, modelada como tempo base + reducao flat e maior reducao percentual.
+- ASPD: usa base de classe/arma, bonus de AGI/DEX, percentual de equipamentos e ponto fixo.
+- Cap de ASPD: 190 ate base 99, 193 a partir do base 100.
+- Lacuna conhecida: ainda falta separar `STD/pocoes/habilidades positivas` em campo proprio; por enquanto `bAspd` fica como ponto fixo final e `bAspdRate` como percentual de equipamentos.
+
 Principais lacunas atuais:
 
 - Parser rAthena cobre pouco: basicamente `bonus`/`bonus2` e poucas familias.

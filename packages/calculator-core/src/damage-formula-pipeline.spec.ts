@@ -416,21 +416,21 @@ describe("DamageFormulaPipeline", () => {
     });
 
     expect(result.castTiming).toMatchObject({
-      variableCastMs: 1000,
+      variableCastMs: 385,
       fixedCastMs: 750,
       afterCastDelayMs: 500,
-      cycleTimeMs: 2250,
+      cycleTimeMs: 1635,
     });
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "cycleTimeMs",
-        value: 2250,
+        value: 1635,
       }),
     );
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "dps",
-        value: Math.floor(result.damage.total / 2.25),
+        value: Math.floor(result.damage.total / 1.635),
       }),
     );
   });
