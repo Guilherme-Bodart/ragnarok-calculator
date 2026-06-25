@@ -1319,6 +1319,39 @@ Proximo bloco recomendado:
   - Melhorar suporte de `bonus2 bSkillAtk` com expressoes dependentes de skill aprendida.
   - Completar conversores de raca/classe especiais se o alvo PvP virar prioridade.
 
+## Bloco Fechado: Acerto Perfeito De Itens
+
+Data: 2026-06-25.
+
+Implementado:
+
+- Parser rAthena reconhece:
+  - `bonus bPerfectHitAddRate`
+- `CalculatorModifierEffectsFactory` agrega:
+  - `perfectHitRate`
+- `CharacterStatusEngine` expoe:
+  - `perfectHitRate`
+- Testes cobrem parser, agregacao e status final.
+
+Observacao:
+
+- Acerto perfeito ainda nao altera dano medio. Ele fica exposto no status para a futura engine de hit/flee/precisao contra monstros.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 7.375 -> 7.446.
+- Scripts parcialmente suportados: 4.895 -> 4.832.
+- Unsupported statements: 21.195 -> 21.030.
+- Modifiers extraidos: 46.415 -> 46.580.
+- `bonus bPerfectHitAddRate` saiu do top unsupported.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Melhorar suporte de `bonus2 bSkillAtk` com expressoes dependentes de skill aprendida.
+  - Completar conversores de raca/classe especiais se o alvo PvP virar prioridade.
+  - Capturar efeitos visuais/auto-spell como ignored runtime effects mais explicitos.
+
 ## Bloco Fechado: Reducoes Defensivas Por Raca E Elemento
 
 Data: 2026-06-24.

@@ -37,6 +37,7 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   maxAp: 0,
   maxApRate: 0,
   hit: 0,
+  perfectHitRate: 0,
   flee: 0,
   crit: 0,
   criticalDamageRate: 0,
@@ -118,6 +119,7 @@ describe("CharacterStatusEngine", () => {
         maxHpRate: 10,
         maxSpRate: 5,
         hit: 3,
+        perfectHitRate: 12,
         flee: 4,
         crit: 2,
         aspd: 1,
@@ -142,6 +144,7 @@ describe("CharacterStatusEngine", () => {
     expect(status.res).toBe(6);
     expect(status.mres).toBe(7);
     expect(status.hit).toBe(156);
+    expect(status.perfectHitRate).toBe(12);
     expect(status.flee).toBe(134);
     expect(status.crit).toBe(6);
     expect(status.aspd).toBe(163.34);

@@ -34,6 +34,7 @@ export type CalculatorModifierEffects = {
   maxAp: number;
   maxApRate: number;
   hit: number;
+  perfectHitRate: number;
   flee: number;
   crit: number;
   criticalDamageRate: number;
@@ -109,6 +110,7 @@ export class CalculatorModifierEffectsFactory {
       maxAp: 0,
       maxApRate: 0,
       hit: 0,
+      perfectHitRate: 0,
       flee: 0,
       crit: 0,
       criticalDamageRate: 0,
@@ -280,6 +282,14 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "hit" && bucket.target.type === "self") {
           effects.hit += bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "perfectHitRate" &&
+          bucket.target.type === "self"
+        ) {
+          effects.perfectHitRate += bucket.value;
           continue;
         }
 

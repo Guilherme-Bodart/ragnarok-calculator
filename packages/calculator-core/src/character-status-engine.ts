@@ -42,6 +42,7 @@ export type CharacterStatus = {
   res: number;
   mres: number;
   hit: number;
+  perfectHitRate: number;
   flee: number;
   crit: number;
   aspd: number;
@@ -152,6 +153,7 @@ export class CharacterStatusEngine {
             effectiveStats.luk / 3 +
             effectiveStats.con,
         ) + (input.modifierEffects?.hit ?? 0),
+      perfectHitRate: input.modifierEffects?.perfectHitRate ?? 0,
       flee:
         Math.floor(
           input.character.baseLevel +

@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 7375,
-  "partiallySupportedItemScripts": 4895,
-  "unsupportedItemScripts": 12662,
-  "itemScriptsWithModifiers": 12270,
-  "totalModifiers": 46415,
-  "unsupportedStatements": 21195,
+  "fullySupportedItemScripts": 7446,
+  "partiallySupportedItemScripts": 4832,
+  "unsupportedItemScripts": 12591,
+  "itemScriptsWithModifiers": 12278,
+  "totalModifiers": 46580,
+  "unsupportedStatements": 21030,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -714,38 +714,6 @@
           "itemId": 4687,
           "itemName": "True Cecil Damon Card",
           "rawLine": "bonus2 bSkillAtk,\"RA_CLUSTERBOMB\",20+.@b;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bPerfectHitAddRate",
-      "reason": "unsupported-bonus-code",
-      "count": 175,
-      "examples": [
-        {
-          "itemId": 1413,
-          "itemName": "Gungnir",
-          "rawLine": "bonus bPerfectHitAddRate,25;"
-        },
-        {
-          "itemId": 1418,
-          "itemName": "Gungnir",
-          "rawLine": "bonus bPerfectHitAddRate,25;"
-        },
-        {
-          "itemId": 15417,
-          "itemName": "Armor of Purple Thread",
-          "rawLine": "bonus bPerfectHitAddRate,5;"
-        },
-        {
-          "itemId": 15417,
-          "itemName": "Armor of Purple Thread",
-          "rawLine": "bonus bPerfectHitAddRate,10;"
-        },
-        {
-          "itemId": 15417,
-          "itemName": "Armor of Purple Thread",
-          "rawLine": "bonus bPerfectHitAddRate,10;"
         }
       ]
     },
@@ -5098,6 +5066,38 @@
           "itemId": 4290,
           "itemName": "Cat O' Nine Tails Card",
           "rawLine": "bonus bMagicDamageReturn,5;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bPerfectHitAddRate",
+      "reason": "unsupported-bonus-code",
+      "count": 10,
+      "examples": [
+        {
+          "itemId": 15984,
+          "itemName": "[Not For Sale] Heavenly Order",
+          "rawLine": "bonus bPerfectHitAddRate,2*.@e;"
+        },
+        {
+          "itemId": 310648,
+          "itemName": "Extra Agi",
+          "rawLine": "bonus bPerfectHitAddRate,readparam(bAgi)/10;"
+        },
+        {
+          "itemId": 420006,
+          "itemName": "Vassalage Necklace",
+          "rawLine": "bonus bPerfectHitAddRate,5*.@val;"
+        },
+        {
+          "itemId": 460017,
+          "itemName": "Illusion Guard",
+          "rawLine": "bonus bPerfectHitAddRate,3*(min(getrefine(),12)/2);"
+        },
+        {
+          "itemId": 480075,
+          "itemName": "Baby Boar Bib",
+          "rawLine": "bonus bPerfectHitAddRate,4*getskilllv(\"SU_POWEROFFLOCK\");"
         }
       ]
     },

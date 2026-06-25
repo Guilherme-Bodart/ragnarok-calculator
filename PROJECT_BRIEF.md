@@ -168,6 +168,7 @@ Funcionando:
 - Core calcula ASPD com formula bRO/Sigma aproximada: base classe/arma, bonus AGI/DEX, percentual de equipamentos, ponto fixo e cap 190/193 por base level.
 - Core reconhece modificadores de cast/delay vindos de itens, incluindo variantes por skill, mas o calculo final de cast/DPS ainda e proximo passo.
 - Core reconhece `bUseSPrate` e agrega `spCostRate` para futuro painel de custo/recursos da skill.
+- Core reconhece `bPerfectHitAddRate` e expoe `perfectHitRate` no status calculado.
 - Core reconhece modificadores de dano critico e poder de cura vindos de itens, mas engines finais de critico/cura ainda sao proximos passos.
 - Core possui engine inicial de cast/DPS; quando `RoSkill` traz cast/cooldown por level, o resultado expoe ciclo e DPS no breakdown.
 - Adapter rAthena ja popula cast variavel, cast fixo, pos-conjuracao e cooldown por level quando esses campos existem em `skills.en.json`.

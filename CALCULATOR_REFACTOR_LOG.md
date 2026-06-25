@@ -631,3 +631,12 @@ Motivo: itens de 4th job usam RES/MRES com frequencia, e o status do personagem 
 - `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7375 e unsupported statements cairam para 21195.
 
 Motivo: custo de SP nao muda dano direto, mas e parte do ciclo real de uso das skills e deve estar capturado para o card de ataque/recursos.
+
+### 2026-06-25 - Acerto perfeito de itens
+
+- Parser rAthena reconhece `bonus bPerfectHitAddRate`.
+- `CalculatorModifierEffectsFactory` agrega o valor em `perfectHitRate`.
+- `CharacterStatusEngine` expoe `perfectHitRate` junto com `hit`.
+- `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7446 e unsupported statements cairam para 21030.
+
+Motivo: acerto perfeito nao aumenta dano bruto, mas e parte importante da precisao real contra alvos com esquiva alta.

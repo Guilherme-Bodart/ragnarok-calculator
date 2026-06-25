@@ -270,6 +270,7 @@ describe("CalculatorModifierEffectsFactory", () => {
         bonus bMaxSPrate,5;
         bonus bMaxAP,25;
         bonus bHit,15;
+        bonus bPerfectHitAddRate,12;
         bonus bFlee,20;
         bonus bCritical,7;
         bonus bCritAtkRate,25;
@@ -297,6 +298,7 @@ describe("CalculatorModifierEffectsFactory", () => {
       maxSpRate: 5,
       maxAp: 25,
       hit: 15,
+      perfectHitRate: 12,
       flee: 20,
       crit: 7,
       criticalDamageRate: 25,

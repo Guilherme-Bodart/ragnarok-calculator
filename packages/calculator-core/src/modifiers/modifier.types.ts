@@ -121,6 +121,7 @@ export const normalizedModifierSchema = z.object({
     "maxAp",
     "maxApRate",
     "hit",
+    "perfectHitRate",
     "flee",
     "crit",
     "criticalDamageRate",

@@ -39,6 +39,7 @@ const emptyModifierEffects: CalculatorModifierEffects = {
   maxAp: 0,
   maxApRate: 0,
   hit: 0,
+  perfectHitRate: 0,
   flee: 0,
   crit: 0,
   criticalDamageRate: 0,
