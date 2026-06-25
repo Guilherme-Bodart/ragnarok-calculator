@@ -15,6 +15,14 @@ Evoluir a calculadora sem espalhar regras em CSS/local state e sem carregar dado
 
 ## Log
 
+### 2026-06-24 - Expressoes matematicas rAthena
+
+- Avaliador de expressoes passou a aceitar `min`, `max`, `pow`, `getrefine()` e `getenchantgrade()`.
+- Isso libera comandos que ja tinham mapper, mas falhavam quando o valor era uma expressao como `pow(min(14,.@r)-3,2)` ou `getrefine()*14`.
+- Auditoria do parser subiu de 6.734 para 7.149 scripts totalmente suportados e reduziu unsupported statements para 21.709.
+
+Motivo: aumentar cobertura sem criar regras novas de jogo; apenas avaliamos expressoes deterministicas que usam contexto ja conhecido do item/refino/grade.
+
 ### 2026-06-24 - Ordem final de elemento e resistencia elemental
 
 - `DamageFormulaPipeline` passou a aplicar elemento depois da mitigacao de DEF/MDEF.

@@ -8,11 +8,12 @@ type ExpressionVariables = {
 type Token =
   | { type: "number"; value: number }
   | { type: "variable"; value: string }
+  | { type: "identifier"; value: string }
   | {
       type: "operator";
       value: "+" | "-" | "*" | "/" | ">" | ">=" | "<" | "<=" | "==" | "!=";
     }
-  | { type: "symbol"; value: "(" | ")" | "?" | ":" };
+  | { type: "symbol"; value: "(" | ")" | "?" | ":" | "," };
 
 type ExpressionOperator = Extract<Token, { type: "operator" }>["value"];
 type ExpressionSymbol = Extract<Token, { type: "symbol" }>["value"];
@@ -59,6 +60,18 @@ function tokenizeExpression(expression: string): Token[] | null {
     if (expression.startsWith("BaseLevel", index)) {
       tokens.push({ type: "variable", value: "baseLevel" });
       index += "BaseLevel".length;
+      continue;
+    }
+
+    if (/[A-Za-z_]/.test(char)) {
+      const match = expression.slice(index).match(/^[A-Za-z_][A-Za-z0-9_]*/);
+
+      if (!match) {
+        return null;
+      }
+
+      tokens.push({ type: "identifier", value: match[0] });
+      index += match[0].length;
       continue;
     }
 
@@ -125,7 +138,7 @@ function isExpressionOperator(value: string): value is ExpressionOperator {
 }
 
 function isExpressionSymbol(value: string): value is ExpressionSymbol {
-  return ["(", ")", "?", ":"].includes(value);
+  return ["(", ")", "?", ":", ","].includes(value);
 }
 
 class ExpressionParser {
@@ -276,6 +289,10 @@ class ExpressionParser {
       return this.getVariableValue(token.value);
     }
 
+    if (token.type === "identifier") {
+      return this.parseFunctionCall(token.value);
+    }
+
     if (this.matchSymbol("(")) {
       const value = this.parseTernary();
 
@@ -284,6 +301,62 @@ class ExpressionParser {
       }
 
       return value;
+    }
+
+    return null;
+  }
+
+  private parseFunctionCall(functionName: string): number | null {
+    this.index += 1;
+
+    if (!this.matchSymbol("(")) {
+      return null;
+    }
+
+    const args: number[] = [];
+
+    if (!this.matchSymbol(")")) {
+      while (true) {
+        const value = this.parseTernary();
+
+        if (value === null) {
+          return null;
+        }
+
+        args.push(value);
+
+        if (this.matchSymbol(")")) {
+          break;
+        }
+
+        if (!this.matchSymbol(",")) {
+          return null;
+        }
+      }
+    }
+
+    return this.evaluateFunction(functionName, args);
+  }
+
+  private evaluateFunction(functionName: string, args: number[]) {
+    if (functionName === "min" && args.length >= 1) {
+      return Math.min(...args);
+    }
+
+    if (functionName === "max" && args.length >= 1) {
+      return Math.max(...args);
+    }
+
+    if (functionName === "pow" && args.length === 2) {
+      return Math.pow(args[0], args[1]);
+    }
+
+    if (functionName === "getrefine" && args.length === 0) {
+      return this.variables.refine ?? null;
+    }
+
+    if (functionName === "getenchantgrade" && args.length === 0) {
+      return this.variables.grade ?? null;
     }
 
     return null;
@@ -314,7 +387,7 @@ class ExpressionParser {
     return false;
   }
 
-  private matchSymbol(symbol: "(" | ")" | "?" | ":") {
+  private matchSymbol(symbol: "(" | ")" | "?" | ":" | ",") {
     const token = this.peek();
 
     if (token?.type === "symbol" && token.value === symbol) {

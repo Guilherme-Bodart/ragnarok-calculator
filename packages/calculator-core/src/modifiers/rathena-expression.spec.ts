@@ -31,6 +31,23 @@ describe("evaluateRathenaExpression", () => {
     ).toBe(30);
   });
 
+  it("evaluates supported rAthena math functions", () => {
+    expect(evaluateRathenaExpression("getrefine()*14", { refine: 9 })).toBe(
+      126,
+    );
+    expect(
+      evaluateRathenaExpression("pow(min(14,.@r)-3,2)", { refine: 9 }),
+    ).toBe(36);
+    expect(
+      evaluateRathenaExpression("(max(0,BaseLevel-70)/10)*5", {
+        baseLevel: 120,
+      }),
+    ).toBe(25);
+    expect(evaluateRathenaExpression("getenchantgrade()+1", { grade: 2 })).toBe(
+      3,
+    );
+  });
+
   it("rejects unsupported expressions", () => {
     expect(evaluateRathenaExpression("rand(1,2)", { refine: 9 })).toBeNull();
     expect(evaluateRathenaExpression(".@unknown/2", { refine: 9 })).toBeNull();

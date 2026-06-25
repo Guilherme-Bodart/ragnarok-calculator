@@ -6,12 +6,12 @@
     "monsters": 0
   },
   "itemScripts": 20037,
-  "fullySupportedItemScripts": 6734,
-  "partiallySupportedItemScripts": 5170,
-  "unsupportedItemScripts": 13303,
-  "itemScriptsWithModifiers": 11904,
-  "totalModifiers": 45366,
-  "unsupportedStatements": 22335,
+  "fullySupportedItemScripts": 7149,
+  "partiallySupportedItemScripts": 5089,
+  "unsupportedItemScripts": 12888,
+  "itemScriptsWithModifiers": 12238,
+  "totalModifiers": 45901,
+  "unsupportedStatements": 21709,
   "unsupportedCommands": [
     {
       "command": "getgroupitem",
@@ -112,7 +112,7 @@
     {
       "command": "<script-fragment>",
       "reason": "script-fragment",
-      "count": 1479,
+      "count": 1391,
       "examples": [
         {
           "itemId": 1281,
@@ -125,19 +125,19 @@
           "rawLine": "}\",70,3000,BF_WEAPON,\"{ specialeffect2 EF_POTION_BERSERK; }\";"
         },
         {
-          "itemId": 1296,
-          "itemName": "Metal Katar",
-          "rawLine": ".@i = min(BaseLevel/10,12);"
-        },
-        {
-          "itemId": 1398,
-          "itemName": "Metal Two Handed Axe",
-          "rawLine": ".@i = min(BaseLevel/10,12);"
-        },
-        {
           "itemId": 1446,
           "itemName": "Requiem Spear",
           "rawLine": ".@b += (.@r-5)*15+20;"
+        },
+        {
+          "itemId": 1499,
+          "itemName": "Requiem Lance",
+          "rawLine": ".@b += (.@r-5)*15+30;"
+        },
+        {
+          "itemId": 1499,
+          "itemName": "Requiem Lance",
+          "rawLine": ".@c += (.@r-5);"
         }
       ]
     },
@@ -304,7 +304,7 @@
     {
       "command": "bonus2 bSubRace",
       "reason": "unsupported-bonus-code",
-      "count": 385,
+      "count": 382,
       "examples": [
         {
           "itemId": 1331,
@@ -366,73 +366,9 @@
       ]
     },
     {
-      "command": "bonus bBaseAtk",
-      "reason": "unsupported-bonus-code",
-      "count": 331,
-      "examples": [
-        {
-          "itemId": 1394,
-          "itemName": "Upgrade Two-Handed Axe",
-          "rawLine": "bonus bBaseAtk,(getrefine()*14);"
-        },
-        {
-          "itemId": 1398,
-          "itemName": "Metal Two Handed Axe",
-          "rawLine": "bonus bBaseAtk,(getrefine()*7);"
-        },
-        {
-          "itemId": 1400,
-          "itemName": "Vicious Mind Spear",
-          "rawLine": "bonus bBaseAtk,pow(min(getrefine(),15),2);"
-        },
-        {
-          "itemId": 1443,
-          "itemName": "Crimson Spear",
-          "rawLine": "bonus bBaseAtk,(.@r<=15?pow(.@r,2):225);"
-        },
-        {
-          "itemId": 1443,
-          "itemName": "Crimson Spear",
-          "rawLine": "bonus bBaseAtk,((max(0,BaseLevel-70)/10)*5);"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bSkillAtk",
-      "reason": "unsupported-bonus-code",
-      "count": 326,
-      "examples": [
-        {
-          "itemId": 1435,
-          "itemName": "Cannon Spear",
-          "rawLine": "bonus2 bSkillAtk,\"LG_CANNONSPEAR\",10+(getrefine()*3);"
-        },
-        {
-          "itemId": 1682,
-          "itemName": "Shadow Staff",
-          "rawLine": "bonus2 bSkillAtk,\"WL_HELLINFERNO\",(getskilllv(\"WL_HELLINFERNO\") >= 5 ? 100 : 0) + (.@r*10);"
-        },
-        {
-          "itemId": 4684,
-          "itemName": "True Eremes Guile Card",
-          "rawLine": "bonus2 bSkillAtk,\"GC_CROSSIMPACT\",20+.@b;"
-        },
-        {
-          "itemId": 4685,
-          "itemName": "True Margaretha Sorin Card",
-          "rawLine": "bonus2 bSkillAtk,\"AB_ADORAMUS\",20+.@b;"
-        },
-        {
-          "itemId": 4686,
-          "itemName": "True Kathryne Keyron Card",
-          "rawLine": "bonus2 bSkillAtk,\"WL_CRIMSONROCK\",20+.@b;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bAddRace",
       "reason": "unsupported-bonus-code",
-      "count": 320,
+      "count": 311,
       "examples": [
         {
           "itemId": 1187,
@@ -458,6 +394,38 @@
           "itemId": 1282,
           "itemName": "Glorious Jamadhar",
           "rawLine": "bonus2 bAddRace,RC_DemiHuman,pow(min(14,.@r)-4,2);"
+        }
+      ]
+    },
+    {
+      "command": "bonus bBaseAtk",
+      "reason": "unsupported-bonus-code",
+      "count": 305,
+      "examples": [
+        {
+          "itemId": 1400,
+          "itemName": "Vicious Mind Spear",
+          "rawLine": "bonus bBaseAtk,pow(min(getrefine(),15),2);"
+        },
+        {
+          "itemId": 1443,
+          "itemName": "Crimson Spear",
+          "rawLine": "bonus bBaseAtk,(.@r<=15?pow(.@r,2):225);"
+        },
+        {
+          "itemId": 1443,
+          "itemName": "Crimson Spear",
+          "rawLine": "bonus bBaseAtk,((max(0,BaseLevel-70)/10)*5);"
+        },
+        {
+          "itemId": 1450,
+          "itemName": "Vicious Mind Lance",
+          "rawLine": "bonus bBaseAtk,pow(min(getrefine(),15),2);"
+        },
+        {
+          "itemId": 1498,
+          "itemName": "Crimson Lance",
+          "rawLine": "bonus bBaseAtk,(.@r<=15?pow(.@r,2):225);"
         }
       ]
     },
@@ -782,6 +750,38 @@
       ]
     },
     {
+      "command": "bonus2 bSkillAtk",
+      "reason": "unsupported-bonus-code",
+      "count": 199,
+      "examples": [
+        {
+          "itemId": 1682,
+          "itemName": "Shadow Staff",
+          "rawLine": "bonus2 bSkillAtk,\"WL_HELLINFERNO\",(getskilllv(\"WL_HELLINFERNO\") >= 5 ? 100 : 0) + (.@r*10);"
+        },
+        {
+          "itemId": 4684,
+          "itemName": "True Eremes Guile Card",
+          "rawLine": "bonus2 bSkillAtk,\"GC_CROSSIMPACT\",20+.@b;"
+        },
+        {
+          "itemId": 4685,
+          "itemName": "True Margaretha Sorin Card",
+          "rawLine": "bonus2 bSkillAtk,\"AB_ADORAMUS\",20+.@b;"
+        },
+        {
+          "itemId": 4686,
+          "itemName": "True Kathryne Keyron Card",
+          "rawLine": "bonus2 bSkillAtk,\"WL_CRIMSONROCK\",20+.@b;"
+        },
+        {
+          "itemId": 4687,
+          "itemName": "True Cecil Damon Card",
+          "rawLine": "bonus2 bSkillAtk,\"RA_CLUSTERBOMB\",20+.@b;"
+        }
+      ]
+    },
+    {
       "command": "bonus bPerfectHitAddRate",
       "reason": "unsupported-bonus-code",
       "count": 175,
@@ -810,38 +810,6 @@
           "itemId": 15417,
           "itemName": "Armor of Purple Thread",
           "rawLine": "bonus bPerfectHitAddRate,10;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bMatk",
-      "reason": "unsupported-bonus-code",
-      "count": 171,
-      "examples": [
-        {
-          "itemId": 1600,
-          "itemName": "Vicious Mind Rod",
-          "rawLine": "bonus bMatk,pow(min(getrefine(),15),2);"
-        },
-        {
-          "itemId": 1680,
-          "itemName": "Crimson Rod",
-          "rawLine": "bonus bMatk,(((BaseLevel-70)/10)*5)+(.@r<=15?pow(.@r,2):225);"
-        },
-        {
-          "itemId": 1900,
-          "itemName": "Vicious Mind Violin",
-          "rawLine": "bonus bMatk,pow(min(getrefine(),15),2)/2;"
-        },
-        {
-          "itemId": 1947,
-          "itemName": "Violin of Evil",
-          "rawLine": "bonus bMatk,pow(getrefine(),2);"
-        },
-        {
-          "itemId": 1996,
-          "itemName": "Vicious Mind Wire",
-          "rawLine": "bonus bMatk,pow(min(getrefine(),15),2)/2;"
         }
       ]
     },
@@ -1006,6 +974,38 @@
       ]
     },
     {
+      "command": "bonus bMatk",
+      "reason": "unsupported-bonus-code",
+      "count": 145,
+      "examples": [
+        {
+          "itemId": 1600,
+          "itemName": "Vicious Mind Rod",
+          "rawLine": "bonus bMatk,pow(min(getrefine(),15),2);"
+        },
+        {
+          "itemId": 1680,
+          "itemName": "Crimson Rod",
+          "rawLine": "bonus bMatk,(((BaseLevel-70)/10)*5)+(.@r<=15?pow(.@r,2):225);"
+        },
+        {
+          "itemId": 1900,
+          "itemName": "Vicious Mind Violin",
+          "rawLine": "bonus bMatk,pow(min(getrefine(),15),2)/2;"
+        },
+        {
+          "itemId": 1947,
+          "itemName": "Violin of Evil",
+          "rawLine": "bonus bMatk,pow(getrefine(),2);"
+        },
+        {
+          "itemId": 1996,
+          "itemName": "Vicious Mind Wire",
+          "rawLine": "bonus bMatk,pow(min(getrefine(),15),2)/2;"
+        }
+      ]
+    },
+    {
       "command": "bonus5",
       "reason": "unsupported-bonus-code",
       "count": 142,
@@ -1070,38 +1070,6 @@
       ]
     },
     {
-      "command": "bonus2 bIgnoreDefRaceRate",
-      "reason": "unsupported-bonus-code",
-      "count": 138,
-      "examples": [
-        {
-          "itemId": 1329,
-          "itemName": "Lesser Guild Member's Cleaver",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
-        },
-        {
-          "itemId": 1329,
-          "itemName": "Lesser Guild Member's Cleaver",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
-        },
-        {
-          "itemId": 1396,
-          "itemName": "Vellum Guillotine",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,30;"
-        },
-        {
-          "itemId": 1587,
-          "itemName": "Vellum Great Encyclopedia",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,30;"
-        },
-        {
-          "itemId": 1859,
-          "itemName": "Lesser Guild Member's Fist",
-          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bSubSize",
       "reason": "unsupported-bonus-code",
       "count": 135,
@@ -1130,6 +1098,38 @@
           "itemId": 2051,
           "itemName": "Illusion Survivor's Staff",
           "rawLine": "bonus2 bSubSize,Size_Medium,15;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bIgnoreDefRaceRate",
+      "reason": "unsupported-bonus-code",
+      "count": 134,
+      "examples": [
+        {
+          "itemId": 1329,
+          "itemName": "Lesser Guild Member's Cleaver",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
+        },
+        {
+          "itemId": 1329,
+          "itemName": "Lesser Guild Member's Cleaver",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
+        },
+        {
+          "itemId": 1396,
+          "itemName": "Vellum Guillotine",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,30;"
+        },
+        {
+          "itemId": 1587,
+          "itemName": "Vellum Great Encyclopedia",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,30;"
+        },
+        {
+          "itemId": 1859,
+          "itemName": "Lesser Guild Member's Fist",
+          "rawLine": "bonus2 bIgnoreDefRaceRate,RC_Player_Doram,5;"
         }
       ]
     },
@@ -1194,38 +1194,6 @@
           "itemId": 2166,
           "itemName": "Devil's Bible Drive",
           "rawLine": "bonus bSPrecovRate,3;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bMagicAtkEle",
-      "reason": "unsupported-bonus-code",
-      "count": 132,
-      "examples": [
-        {
-          "itemId": 2041,
-          "itemName": "Flame Thunder Witch's Wand",
-          "rawLine": "bonus2 bMagicAtkEle,Ele_Fire,(getskilllv(\"SO_FIREWALK\")*10)+(.@r*5);"
-        },
-        {
-          "itemId": 2041,
-          "itemName": "Flame Thunder Witch's Wand",
-          "rawLine": "bonus2 bMagicAtkEle,Ele_Wind,(getskilllv(\"SO_ELECTRICWALK\")*10)+(.@r*5);"
-        },
-        {
-          "itemId": 2047,
-          "itemName": "Witch's Staff",
-          "rawLine": "bonus2 bMagicAtkEle,Ele_Fire,(getskilllv(\"SO_FIREWALK\")*10)+(5*(.@r/2));"
-        },
-        {
-          "itemId": 2047,
-          "itemName": "Witch's Staff",
-          "rawLine": "bonus2 bMagicAtkEle,Ele_Wind,(getskilllv(\"SO_ELECTRICWALK\")*10)+(5*(.@r/2));"
-        },
-        {
-          "itemId": 4586,
-          "itemName": "Tikbalang Card",
-          "rawLine": "bonus2 bMagicAtkEle,Ele_Wind,(getrefine()>=9)?10:5;"
         }
       ]
     },
@@ -1326,38 +1294,6 @@
       ]
     },
     {
-      "command": "bonus bMaxHP",
-      "reason": "unsupported-bonus-code",
-      "count": 126,
-      "examples": [
-        {
-          "itemId": 2920,
-          "itemName": "Vit Glove",
-          "rawLine": "bonus bMaxHP,(readparam(bVit)/10)*50;"
-        },
-        {
-          "itemId": 2926,
-          "itemName": "Vit Glove",
-          "rawLine": "bonus bMaxHP,(readparam(bVit)/10)*50;"
-        },
-        {
-          "itemId": 4353,
-          "itemName": "Remover Card",
-          "rawLine": "bonus bMaxHP,800-40*getrefine();"
-        },
-        {
-          "itemId": 4589,
-          "itemName": "Jejeling Card",
-          "rawLine": "bonus bMaxHP,200*readparam(bVit)/10;"
-        },
-        {
-          "itemId": 4645,
-          "itemName": "Infinite Eclipse Card",
-          "rawLine": "bonus bMaxHP,300+.@b;"
-        }
-      ]
-    },
-    {
       "command": "bonus4",
       "reason": "unsupported-bonus-code",
       "count": 123,
@@ -1454,41 +1390,41 @@
       ]
     },
     {
-      "command": "bonus bLongAtkRate",
+      "command": "itemskill",
       "reason": "unsupported-bonus-code",
-      "count": 119,
+      "count": 114,
       "examples": [
         {
-          "itemId": 2589,
-          "itemName": "Fallen Angel Wing",
-          "rawLine": "bonus bLongAtkRate,readparam(bDex)/20;"
+          "itemId": 585,
+          "itemName": "Brusti",
+          "rawLine": "itemskill \"PR_MAGNIFICAT\",3;"
         },
         {
-          "itemId": 4593,
-          "itemName": "Menblatt Card",
-          "rawLine": "bonus bLongAtkRate,readparam(bDex)/10;"
+          "itemId": 601,
+          "itemName": "Fly Wing",
+          "rawLine": "itemskill \"AL_TELEPORT\",1;"
         },
         {
-          "itemId": 4662,
-          "itemName": "Big Eggring Card",
-          "rawLine": "bonus bLongAtkRate,5-1*min(readparam(bDex)/10,5);"
+          "itemId": 602,
+          "itemName": "Butterfly Wing",
+          "rawLine": "itemskill \"AL_TELEPORT\",3;"
         },
         {
-          "itemId": 13136,
-          "itemName": "Trial Rebel's Revolver",
-          "rawLine": "bonus bLongAtkRate,getskilllv(\"GS_CHAINACTION\");"
+          "itemId": 605,
+          "itemName": "Anodyne",
+          "rawLine": "itemskill \"SM_ENDURE\",1;"
         },
         {
-          "itemId": 13336,
-          "itemName": "Trial Ninja's Huuma Shuriken",
-          "rawLine": "bonus bLongAtkRate,getskilllv(\"NJ_TOBIDOUGU\");"
+          "itemId": 606,
+          "itemName": "Aloevera",
+          "rawLine": "itemskill \"SM_SELFPROVOKE\",1;"
         }
       ]
     },
     {
       "command": "bonus2 bMagicAddRace",
       "reason": "unsupported-bonus-code",
-      "count": 114,
+      "count": 112,
       "examples": [
         {
           "itemId": 1591,
@@ -1518,34 +1454,66 @@
       ]
     },
     {
-      "command": "itemskill",
+      "command": "bonus bLongAtkRate",
       "reason": "unsupported-bonus-code",
-      "count": 114,
+      "count": 110,
       "examples": [
         {
-          "itemId": 585,
-          "itemName": "Brusti",
-          "rawLine": "itemskill \"PR_MAGNIFICAT\",3;"
+          "itemId": 2589,
+          "itemName": "Fallen Angel Wing",
+          "rawLine": "bonus bLongAtkRate,readparam(bDex)/20;"
         },
         {
-          "itemId": 601,
-          "itemName": "Fly Wing",
-          "rawLine": "itemskill \"AL_TELEPORT\",1;"
+          "itemId": 4593,
+          "itemName": "Menblatt Card",
+          "rawLine": "bonus bLongAtkRate,readparam(bDex)/10;"
         },
         {
-          "itemId": 602,
-          "itemName": "Butterfly Wing",
-          "rawLine": "itemskill \"AL_TELEPORT\",3;"
+          "itemId": 4662,
+          "itemName": "Big Eggring Card",
+          "rawLine": "bonus bLongAtkRate,5-1*min(readparam(bDex)/10,5);"
         },
         {
-          "itemId": 605,
-          "itemName": "Anodyne",
-          "rawLine": "itemskill \"SM_ENDURE\",1;"
+          "itemId": 13136,
+          "itemName": "Trial Rebel's Revolver",
+          "rawLine": "bonus bLongAtkRate,getskilllv(\"GS_CHAINACTION\");"
         },
         {
-          "itemId": 606,
-          "itemName": "Aloevera",
-          "rawLine": "itemskill \"SM_SELFPROVOKE\",1;"
+          "itemId": 13336,
+          "itemName": "Trial Ninja's Huuma Shuriken",
+          "rawLine": "bonus bLongAtkRate,getskilllv(\"NJ_TOBIDOUGU\");"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bMagicAtkEle",
+      "reason": "unsupported-bonus-code",
+      "count": 106,
+      "examples": [
+        {
+          "itemId": 2041,
+          "itemName": "Flame Thunder Witch's Wand",
+          "rawLine": "bonus2 bMagicAtkEle,Ele_Fire,(getskilllv(\"SO_FIREWALK\")*10)+(.@r*5);"
+        },
+        {
+          "itemId": 2041,
+          "itemName": "Flame Thunder Witch's Wand",
+          "rawLine": "bonus2 bMagicAtkEle,Ele_Wind,(getskilllv(\"SO_ELECTRICWALK\")*10)+(.@r*5);"
+        },
+        {
+          "itemId": 2047,
+          "itemName": "Witch's Staff",
+          "rawLine": "bonus2 bMagicAtkEle,Ele_Fire,(getskilllv(\"SO_FIREWALK\")*10)+(5*(.@r/2));"
+        },
+        {
+          "itemId": 2047,
+          "itemName": "Witch's Staff",
+          "rawLine": "bonus2 bMagicAtkEle,Ele_Wind,(getskilllv(\"SO_ELECTRICWALK\")*10)+(5*(.@r/2));"
+        },
+        {
+          "itemId": 15897,
+          "itemName": "Rebirth Crown",
+          "rawLine": "bonus2 bMagicAtkEle,Ele_Neutral,(readparam(bInt)+readparam(bDex))/10;"
         }
       ]
     },
@@ -1616,14 +1584,9 @@
     {
       "command": "bonus bPAtk",
       "reason": "unsupported-bonus-code",
-      "count": 97,
+      "count": 94,
       "examples": [
         {
-          "itemId": 28789,
-          "itemName": "Time Gap Kurojin (A)",
-          "rawLine": "bonus bPAtk,3*(getrefine()/2);"
-        },
-        {
           "itemId": 310674,
           "itemName": "Star Cluster of Power Lv1",
           "rawLine": "bonus bPAtk,.@param;"
@@ -1642,70 +1605,11 @@
           "itemId": 310674,
           "itemName": "Star Cluster of Power Lv1",
           "rawLine": "bonus bPAtk,.@param;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bAspdRate",
-      "reason": "unsupported-non-damage-effect",
-      "count": 87,
-      "examples": [
-        {
-          "itemId": 1293,
-          "itemName": "Vellum Jamadhar",
-          "rawLine": "bonus bAspdRate,4+getrefine();"
         },
         {
-          "itemId": 1565,
-          "itemName": "Ledger of Death",
-          "rawLine": "bonus bAspdRate,getrefine();"
-        },
-        {
-          "itemId": 1579,
-          "itemName": "Book of the Dead",
-          "rawLine": "bonus bAspdRate,getrefine();"
-        },
-        {
-          "itemId": 1833,
-          "itemName": "Claw of Flash",
-          "rawLine": "bonus bAspdRate,getrefine();"
-        },
-        {
-          "itemId": 1841,
-          "itemName": "Claw of Flash",
-          "rawLine": "bonus bAspdRate,getrefine();"
-        }
-      ]
-    },
-    {
-      "command": "bonus bMaxHPrate",
-      "reason": "unsupported-stat-effect",
-      "count": 87,
-      "examples": [
-        {
-          "itemId": 1494,
-          "itemName": "Spear Of Odin",
-          "rawLine": "bonus bMaxHPrate,getrefine();"
-        },
-        {
-          "itemId": 4482,
-          "itemName": "Sealed General Egnigem Cenia Card",
-          "rawLine": "bonus bMaxHPrate,.@rate;"
-        },
-        {
-          "itemId": 4493,
-          "itemName": "Sealed Tao Gunka Card",
-          "rawLine": "bonus bMaxHPrate,((getrefine()>14)?75:50);"
-        },
-        {
-          "itemId": 4504,
-          "itemName": "Sealed Eddga Card",
-          "rawLine": "bonus bMaxHPrate,((getrefine()>14)?-35:-50);"
-        },
-        {
-          "itemId": 4547,
-          "itemName": "Enhanced Byorgue Card",
-          "rawLine": "bonus bMaxHPrate,getrefine()/2;"
+          "itemId": 310675,
+          "itemName": "Star Cluster of Power Lv2",
+          "rawLine": "bonus bPAtk,2*.@param;"
         }
       ]
     },
@@ -1802,6 +1706,38 @@
           "itemId": 314230,
           "itemName": "Frontier Spell (Fighter)",
           "rawLine": "bonus bNonCritAtkRate,3;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bAspdRate",
+      "reason": "unsupported-non-damage-effect",
+      "count": 74,
+      "examples": [
+        {
+          "itemId": 1944,
+          "itemName": "Hippie Guitar",
+          "rawLine": "bonus bAspdRate,.@lvl;"
+        },
+        {
+          "itemId": 2589,
+          "itemName": "Fallen Angel Wing",
+          "rawLine": "bonus bAspdRate,(readparam(bAgi)/20);"
+        },
+        {
+          "itemId": 4595,
+          "itemName": "Cenere Card",
+          "rawLine": "bonus bAspdRate,2*(readparam(bAgi)/10);"
+        },
+        {
+          "itemId": 4662,
+          "itemName": "Big Eggring Card",
+          "rawLine": "bonus bAspdRate,10-2*min(readparam(bAgi)/10,5);"
+        },
+        {
+          "itemId": 13107,
+          "itemName": "Wasteland's Outlaw",
+          "rawLine": "bonus bAspdRate,readparam(bAgi)/14;"
         }
       ]
     },
@@ -1934,6 +1870,38 @@
       ]
     },
     {
+      "command": "bonus bMaxHPrate",
+      "reason": "unsupported-stat-effect",
+      "count": 69,
+      "examples": [
+        {
+          "itemId": 4565,
+          "itemName": "Paladin Randel Card",
+          "rawLine": "bonus bMaxHPrate,(readparam(bInt)>=110)?20:10;"
+        },
+        {
+          "itemId": 15362,
+          "itemName": "Apollo Armor",
+          "rawLine": "bonus bMaxHPrate,20+getskilllv(\"RK_DRAGONBREATH\");"
+        },
+        {
+          "itemId": 15365,
+          "itemName": "Venus Armor",
+          "rawLine": "bonus bMaxHPrate,.@lvl;"
+        },
+        {
+          "itemId": 15433,
+          "itemName": "Neptune's suit",
+          "rawLine": "bonus bMaxHPrate,2*(.@a/2);"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bMaxHPrate,.@e;"
+        }
+      ]
+    },
+    {
       "command": "bonus bHealPower2",
       "reason": "unsupported-bonus-code",
       "count": 68,
@@ -2030,38 +1998,6 @@
       ]
     },
     {
-      "command": "bonus bDelayrate",
-      "reason": "unsupported-non-damage-effect",
-      "count": 62,
-      "examples": [
-        {
-          "itemId": 2173,
-          "itemName": "Crescent Wrist Guard",
-          "rawLine": "bonus bDelayrate,-(getrefine()*2);"
-        },
-        {
-          "itemId": 4480,
-          "itemName": "Sealed Kiel Card",
-          "rawLine": "bonus bDelayrate,((getrefine()>14)?-20:-15);"
-        },
-        {
-          "itemId": 15405,
-          "itemName": "Fafnir Scale",
-          "rawLine": "bonus bDelayrate,-2*getskilllv(\"RK_DRAGONBREATH_WATER\");"
-        },
-        {
-          "itemId": 15407,
-          "itemName": "Whiteknight Armor",
-          "rawLine": "bonus bDelayrate,-5-(min(10,.@r)*2);"
-        },
-        {
-          "itemId": 15446,
-          "itemName": "Cetrion's Ring (OSM)",
-          "rawLine": "bonus bDelayrate,-.@d;"
-        }
-      ]
-    },
-    {
       "command": "bonus3 bAddMonsterIdDropItem",
       "reason": "ignored-drop-effect",
       "count": 62,
@@ -2122,38 +2058,6 @@
           "itemId": 4158,
           "itemName": "Sky Deleter Card",
           "rawLine": "bonus bHPGainValue,100;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bVariableCastrate",
-      "reason": "unsupported-bonus-code",
-      "count": 61,
-      "examples": [
-        {
-          "itemId": 4541,
-          "itemName": "Sealed High Wizard Card",
-          "rawLine": "bonus bVariableCastrate,.@rate;"
-        },
-        {
-          "itemId": 5226,
-          "itemName": "Mini Propeller",
-          "rawLine": "bonus bVariableCastrate,-getrefine();"
-        },
-        {
-          "itemId": 5622,
-          "itemName": "F Mini Propeller",
-          "rawLine": "bonus bVariableCastrate,-getrefine();"
-        },
-        {
-          "itemId": 5972,
-          "itemName": "Chatty Parrot",
-          "rawLine": "bonus bVariableCastrate,-readparam(bInt)/30;"
-        },
-        {
-          "itemId": 15446,
-          "itemName": "Cetrion's Ring (OSM)",
-          "rawLine": "bonus bVariableCastrate,-.@c;"
         }
       ]
     },
@@ -2350,34 +2254,34 @@
       ]
     },
     {
-      "command": "bonus bShortAtkRate",
-      "reason": "unsupported-bonus-code",
-      "count": 56,
+      "command": "bonus bDelayrate",
+      "reason": "unsupported-non-damage-effect",
+      "count": 55,
       "examples": [
         {
-          "itemId": 300362,
-          "itemName": "Unfrost Flower Card",
-          "rawLine": "bonus bShortAtkRate,4*(getrefine()/3);"
+          "itemId": 15405,
+          "itemName": "Fafnir Scale",
+          "rawLine": "bonus bDelayrate,-2*getskilllv(\"RK_DRAGONBREATH_WATER\");"
         },
         {
-          "itemId": 300422,
-          "itemName": "Catherine Gaebolg Card",
-          "rawLine": "bonus bShortAtkRate,5+4*(getrefine()/2);"
+          "itemId": 15407,
+          "itemName": "Whiteknight Armor",
+          "rawLine": "bonus bDelayrate,-5-(min(10,.@r)*2);"
         },
         {
-          "itemId": 300474,
-          "itemName": "Sanctuary Cleaning Chief Card",
-          "rawLine": "bonus bShortAtkRate,30+5*(getrefine()/3);"
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bDelayrate,-.@d;"
         },
         {
-          "itemId": 300515,
-          "itemName": "Yoster Fixer Card",
-          "rawLine": "bonus bShortAtkRate,10+7*(getrefine()/3);"
+          "itemId": 15462,
+          "itemName": "2nd Anniversary Jupiter Armor",
+          "rawLine": "bonus bDelayrate,-2*getskilllv(\"WL_RADIUS\");"
         },
         {
-          "itemId": 300644,
-          "itemName": "Encroached Exploration Robot Card",
-          "rawLine": "bonus bShortAtkRate,20+4*(getrefine()/3);"
+          "itemId": 19451,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bDelayrate,-2*(.@b/18);"
         }
       ]
     },
@@ -2478,38 +2382,6 @@
       ]
     },
     {
-      "command": "bonus bMaxSPrate",
-      "reason": "unsupported-stat-effect",
-      "count": 53,
-      "examples": [
-        {
-          "itemId": 2579,
-          "itemName": "Magic Stole",
-          "rawLine": "bonus bMaxSPrate,((getrefine()>=6)?6:3);"
-        },
-        {
-          "itemId": 4482,
-          "itemName": "Sealed General Egnigem Cenia Card",
-          "rawLine": "bonus bMaxSPrate,.@rate;"
-        },
-        {
-          "itemId": 15072,
-          "itemName": "Nectar Suit",
-          "rawLine": "bonus bMaxSPrate,(getrefine()/2);"
-        },
-        {
-          "itemId": 15174,
-          "itemName": "Surfer Swimsuit",
-          "rawLine": "bonus bMaxSPrate,(getrefine()/3)+5;"
-        },
-        {
-          "itemId": 15984,
-          "itemName": "[Not For Sale] Heavenly Order",
-          "rawLine": "bonus bMaxSPrate,2*.@d;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bAddDamageClass",
       "reason": "unsupported-bonus-code",
       "count": 53,
@@ -2570,6 +2442,70 @@
           "itemId": 2939,
           "itemName": "RJC2012 Spell Necklace",
           "rawLine": "bonus bNoCastCancel;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bVariableCastrate",
+      "reason": "unsupported-bonus-code",
+      "count": 51,
+      "examples": [
+        {
+          "itemId": 5972,
+          "itemName": "Chatty Parrot",
+          "rawLine": "bonus bVariableCastrate,-readparam(bInt)/30;"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bVariableCastrate,-.@c;"
+        },
+        {
+          "itemId": 15883,
+          "itemName": "Nezuko's Eyes (OSM)",
+          "rawLine": "bonus bVariableCastrate,-.@a;"
+        },
+        {
+          "itemId": 15984,
+          "itemName": "[Not For Sale] Heavenly Order",
+          "rawLine": "bonus bVariableCastrate,-.@c;"
+        },
+        {
+          "itemId": 19138,
+          "itemName": "Seraphim Coronet",
+          "rawLine": "bonus bVariableCastrate,.@int/8;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bShortAtkRate",
+      "reason": "unsupported-bonus-code",
+      "count": 50,
+      "examples": [
+        {
+          "itemId": 310674,
+          "itemName": "Star Cluster of Power Lv1",
+          "rawLine": "bonus bShortAtkRate,.@param;"
+        },
+        {
+          "itemId": 310674,
+          "itemName": "Star Cluster of Power Lv1",
+          "rawLine": "bonus bShortAtkRate,.@param;"
+        },
+        {
+          "itemId": 310674,
+          "itemName": "Star Cluster of Power Lv1",
+          "rawLine": "bonus bShortAtkRate,.@param;"
+        },
+        {
+          "itemId": 310674,
+          "itemName": "Star Cluster of Power Lv1",
+          "rawLine": "bonus bShortAtkRate,.@param;"
+        },
+        {
+          "itemId": 310674,
+          "itemName": "Star Cluster of Power Lv1",
+          "rawLine": "bonus bShortAtkRate,.@param;"
         }
       ]
     },
@@ -2638,38 +2574,6 @@
       ]
     },
     {
-      "command": "bonus bCritAtkRate",
-      "reason": "unsupported-bonus-code",
-      "count": 49,
-      "examples": [
-        {
-          "itemId": 1743,
-          "itemName": "Glorious Hunter Bow",
-          "rawLine": "bonus bCritAtkRate,min(10,.@r)*2;"
-        },
-        {
-          "itemId": 2577,
-          "itemName": "Sapha Hood",
-          "rawLine": "bonus bCritAtkRate,getrefine();"
-        },
-        {
-          "itemId": 2589,
-          "itemName": "Fallen Angel Wing",
-          "rawLine": "bonus bCritAtkRate,readparam(bLuk)/20;"
-        },
-        {
-          "itemId": 4594,
-          "itemName": "Petal Card",
-          "rawLine": "bonus bCritAtkRate,2*(readparam(bLuk)/10);"
-        },
-        {
-          "itemId": 4662,
-          "itemName": "Big Eggring Card",
-          "rawLine": "bonus bCritAtkRate,10-2*min(readparam(bLuk)/10,5);"
-        }
-      ]
-    },
-    {
       "command": "bonus bSplashRange",
       "reason": "unsupported-bonus-code",
       "count": 49,
@@ -2730,6 +2634,38 @@
           "itemId": 1676,
           "itemName": "Baculum Daemonicum",
           "rawLine": "bonus3 bAddEff,Eff_Blind,2000,ATF_MAGIC;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bMaxSPrate",
+      "reason": "unsupported-stat-effect",
+      "count": 47,
+      "examples": [
+        {
+          "itemId": 15984,
+          "itemName": "[Not For Sale] Heavenly Order",
+          "rawLine": "bonus bMaxSPrate,2*.@d;"
+        },
+        {
+          "itemId": 19451,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bMaxSPrate,2*(.@d/18);"
+        },
+        {
+          "itemId": 19452,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bMaxSPrate,2*(.@d/18);"
+        },
+        {
+          "itemId": 28577,
+          "itemName": "Fresh Grass Necklace",
+          "rawLine": "bonus bMaxSPrate,.@a;"
+        },
+        {
+          "itemId": 28578,
+          "itemName": "Cute Grass Necklace",
+          "rawLine": "bonus bMaxSPrate,.@a*2;"
         }
       ]
     },
@@ -2830,34 +2766,34 @@
       ]
     },
     {
-      "command": "bonus bMatkRate",
+      "command": "bonus bCritAtkRate",
       "reason": "unsupported-bonus-code",
-      "count": 44,
+      "count": 43,
       "examples": [
         {
-          "itemId": 2005,
-          "itemName": "Dea Staff",
-          "rawLine": "bonus bMatkRate,getrefine()/2;"
+          "itemId": 1743,
+          "itemName": "Glorious Hunter Bow",
+          "rawLine": "bonus bCritAtkRate,min(10,.@r)*2;"
         },
         {
-          "itemId": 2040,
-          "itemName": "Trial Warlock's Staff",
-          "rawLine": "bonus bMatkRate,getskilllv(\"WZ_STORMGUST\");"
+          "itemId": 2589,
+          "itemName": "Fallen Angel Wing",
+          "rawLine": "bonus bCritAtkRate,readparam(bLuk)/20;"
         },
         {
-          "itemId": 4561,
-          "itemName": "Professor Celia Card",
-          "rawLine": "bonus bMatkRate,(readparam(bDex)>=110)?14:7;"
+          "itemId": 4594,
+          "itemName": "Petal Card",
+          "rawLine": "bonus bCritAtkRate,2*(readparam(bLuk)/10);"
         },
         {
-          "itemId": 5379,
-          "itemName": "Tam",
-          "rawLine": "bonus bMatkRate,2+(getrefine()/2);"
+          "itemId": 4662,
+          "itemName": "Big Eggring Card",
+          "rawLine": "bonus bCritAtkRate,10-2*min(readparam(bLuk)/10,5);"
         },
         {
-          "itemId": 15433,
-          "itemName": "Neptune's suit",
-          "rawLine": "bonus bMatkRate,.@a/2;"
+          "itemId": 5918,
+          "itemName": "Gambler's Seal",
+          "rawLine": "bonus bCritAtkRate,.@critical_dmg;"
         }
       ]
     },
@@ -2894,38 +2830,6 @@
       ]
     },
     {
-      "command": "bonus bCritical",
-      "reason": "unsupported-bonus-code",
-      "count": 41,
-      "examples": [
-        {
-          "itemId": 1298,
-          "itemName": "Shiver Katar",
-          "rawLine": "bonus bCritical,getrefine();"
-        },
-        {
-          "itemId": 1376,
-          "itemName": "Heart Breaker",
-          "rawLine": "bonus bCritical,20+getrefine();"
-        },
-        {
-          "itemId": 1548,
-          "itemName": "Veteran Hammer",
-          "rawLine": "bonus bCritical,getskilllv(\"PR_MACEMASTERY\")*2;"
-        },
-        {
-          "itemId": 1564,
-          "itemName": "Encyclopedia",
-          "rawLine": "bonus bCritical,20+(readparam(bLuk)/5);"
-        },
-        {
-          "itemId": 1580,
-          "itemName": "Giant Encyclopedia",
-          "rawLine": "bonus bCritical,20+(readparam(bLuk)/5);"
-        }
-      ]
-    },
-    {
       "command": "bonus bNoKnockback",
       "reason": "unsupported-bonus-code",
       "count": 41,
@@ -2954,38 +2858,6 @@
           "itemId": 5560,
           "itemName": "Bullock Helm",
           "rawLine": "bonus bNoKnockback;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bHealPower",
-      "reason": "unsupported-bonus-code",
-      "count": 40,
-      "examples": [
-        {
-          "itemId": 1548,
-          "itemName": "Veteran Hammer",
-          "rawLine": "bonus bHealPower,getskilllv(\"AL_DP\");"
-        },
-        {
-          "itemId": 1625,
-          "itemName": "Healing Staff",
-          "rawLine": "bonus bHealPower,(getrefine()/2)*3;"
-        },
-        {
-          "itemId": 1641,
-          "itemName": "Glorious Cure Wand",
-          "rawLine": "bonus bHealPower,5+(min(14,.@r)-5)*2;"
-        },
-        {
-          "itemId": 1666,
-          "itemName": "Healing Staff",
-          "rawLine": "bonus bHealPower,(getrefine()*3/2);"
-        },
-        {
-          "itemId": 15883,
-          "itemName": "Nezuko's Eyes (OSM)",
-          "rawLine": "bonus bHealPower,.@a;"
         }
       ]
     },
@@ -3086,70 +2958,6 @@
       ]
     },
     {
-      "command": "bonus2 bVariableCastrate",
-      "reason": "unsupported-bonus-code",
-      "count": 38,
-      "examples": [
-        {
-          "itemId": 19469,
-          "itemName": "Sacred Crown",
-          "rawLine": "bonus2 bVariableCastrate,\"AB_JUDEX\",-5*getskilllv(\"AB_ORATIO\");"
-        },
-        {
-          "itemId": 19469,
-          "itemName": "Sacred Crown",
-          "rawLine": "bonus2 bVariableCastrate,\"AB_ADORAMUS\",-5*getskilllv(\"AB_ORATIO\");"
-        },
-        {
-          "itemId": 22134,
-          "itemName": "Enforcer Shoes",
-          "rawLine": "bonus2 bVariableCastrate,\"ASC_METEORASSAULT\",-7*(.@a+.@b+.@c);"
-        },
-        {
-          "itemId": 22145,
-          "itemName": "Tengu's Shoes",
-          "rawLine": "bonus2 bVariableCastrate,\"MO_CALLSPIRITS\",-.@c*10;"
-        },
-        {
-          "itemId": 22145,
-          "itemName": "Tengu's Shoes",
-          "rawLine": "bonus2 bVariableCastrate,\"MO_STEELBODY\",-.@c*10;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bHit",
-      "reason": "unsupported-bonus-code",
-      "count": 37,
-      "examples": [
-        {
-          "itemId": 1290,
-          "itemName": "Agent Katar",
-          "rawLine": "bonus bHit,readparam(bLuk)/2;"
-        },
-        {
-          "itemId": 2921,
-          "itemName": "Dex Glove",
-          "rawLine": "bonus bHit,(readparam(bDex)/10);"
-        },
-        {
-          "itemId": 2927,
-          "itemName": "Dex Glove",
-          "rawLine": "bonus bHit,(readparam(bDex)/10);"
-        },
-        {
-          "itemId": 4430,
-          "itemName": "Ifrit Card",
-          "rawLine": "bonus bHit,(JobLevel/10);"
-        },
-        {
-          "itemId": 4487,
-          "itemName": "Sealed Ifrit Card",
-          "rawLine": "bonus bHit,(JobLevel/20);"
-        }
-      ]
-    },
-    {
       "command": "bonus bReduceDamageReturn",
       "reason": "unsupported-bonus-code",
       "count": 37,
@@ -3182,66 +2990,98 @@
       ]
     },
     {
-      "command": "bonus2 bSubEle",
+      "command": "bonus2 bVariableCastrate",
       "reason": "unsupported-bonus-code",
       "count": 37,
       "examples": [
         {
-          "itemId": 2168,
-          "itemName": "Immune Shield",
-          "rawLine": "bonus2 bSubEle,Ele_Neutral,min(.@r,12)-4;"
+          "itemId": 19469,
+          "itemName": "Sacred Crown",
+          "rawLine": "bonus2 bVariableCastrate,\"AB_JUDEX\",-5*getskilllv(\"AB_ORATIO\");"
         },
         {
-          "itemId": 2589,
-          "itemName": "Fallen Angel Wing",
-          "rawLine": "bonus2 bSubEle,Ele_Neutral,readparam(bVit)/20;"
+          "itemId": 19469,
+          "itemName": "Sacred Crown",
+          "rawLine": "bonus2 bVariableCastrate,\"AB_ADORAMUS\",-5*getskilllv(\"AB_ORATIO\");"
         },
         {
-          "itemId": 4375,
-          "itemName": "Orc Baby Card",
-          "rawLine": "bonus2 bSubEle,Ele_Neutral,.@i;"
+          "itemId": 22134,
+          "itemName": "Enforcer Shoes",
+          "rawLine": "bonus2 bVariableCastrate,\"ASC_METEORASSAULT\",-7*(.@a+.@b+.@c);"
         },
         {
-          "itemId": 15090,
-          "itemName": "Armor of Gray",
-          "rawLine": "bonus2 bSubEle,Ele_Holy,10+getrefine()*2;"
+          "itemId": 22145,
+          "itemName": "Tengu's Shoes",
+          "rawLine": "bonus2 bVariableCastrate,\"MO_CALLSPIRITS\",-.@c*10;"
         },
         {
-          "itemId": 15091,
-          "itemName": "Gray Robe",
-          "rawLine": "bonus2 bSubEle,Ele_Holy,10+getrefine()*2;"
+          "itemId": 22145,
+          "itemName": "Tengu's Shoes",
+          "rawLine": "bonus2 bVariableCastrate,\"MO_STEELBODY\",-.@c*10;"
         }
       ]
     },
     {
-      "command": "bonus bCon",
+      "command": "bonus bCritical",
       "reason": "unsupported-bonus-code",
       "count": 36,
       "examples": [
         {
-          "itemId": 311026,
-          "itemName": "Clockwork (CON)",
-          "rawLine": "bonus bCon,3+getenchantgrade();"
+          "itemId": 1548,
+          "itemName": "Veteran Hammer",
+          "rawLine": "bonus bCritical,getskilllv(\"PR_MACEMASTERY\")*2;"
         },
         {
-          "itemId": 312326,
-          "itemName": "Fiery Earth Rune 2Lv",
-          "rawLine": "bonus bCon,2*.@str;"
+          "itemId": 1564,
+          "itemName": "Encyclopedia",
+          "rawLine": "bonus bCritical,20+(readparam(bLuk)/5);"
         },
         {
-          "itemId": 312327,
-          "itemName": "Fiery Earth Rune 3Lv",
-          "rawLine": "bonus bCon,2*.@str;"
+          "itemId": 1580,
+          "itemName": "Giant Encyclopedia",
+          "rawLine": "bonus bCritical,20+(readparam(bLuk)/5);"
         },
         {
-          "itemId": 312328,
-          "itemName": "Fiery Earth Rune 4Lv",
-          "rawLine": "bonus bCon,2*.@str;"
+          "itemId": 2367,
+          "itemName": "Sniping Suit",
+          "rawLine": "bonus bCritical,6+(readparam(bLuk)/10);"
         },
         {
-          "itemId": 312329,
-          "itemName": "Fiery Earth Rune 5Lv",
-          "rawLine": "bonus bCon,2*.@str;"
+          "itemId": 2398,
+          "itemName": "Sniping Suit",
+          "rawLine": "bonus bCritical,6+(readparam(bLuk)/10);"
+        }
+      ]
+    },
+    {
+      "command": "bonus bHealPower",
+      "reason": "unsupported-bonus-code",
+      "count": 36,
+      "examples": [
+        {
+          "itemId": 1548,
+          "itemName": "Veteran Hammer",
+          "rawLine": "bonus bHealPower,getskilllv(\"AL_DP\");"
+        },
+        {
+          "itemId": 1641,
+          "itemName": "Glorious Cure Wand",
+          "rawLine": "bonus bHealPower,5+(min(14,.@r)-5)*2;"
+        },
+        {
+          "itemId": 15883,
+          "itemName": "Nezuko's Eyes (OSM)",
+          "rawLine": "bonus bHealPower,.@a;"
+        },
+        {
+          "itemId": 15922,
+          "itemName": "Charm Of Mistic Frozen",
+          "rawLine": "bonus bHealPower,(readparam(bAgi)+readparam(bVit))/15;"
+        },
+        {
+          "itemId": 16056,
+          "itemName": "Veteran Hammer",
+          "rawLine": "bonus bHealPower,getskilllv(\"AL_DP\");"
         }
       ]
     },
@@ -3274,70 +3114,6 @@
           "itemId": 15245,
           "itemName": "Nature Suit",
           "rawLine": "bonus bMagicHPGainValue,50;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bPow",
-      "reason": "unsupported-bonus-code",
-      "count": 36,
-      "examples": [
-        {
-          "itemId": 311021,
-          "itemName": "Clockwork (POW)",
-          "rawLine": "bonus bPow,3+getenchantgrade();"
-        },
-        {
-          "itemId": 312326,
-          "itemName": "Fiery Earth Rune 2Lv",
-          "rawLine": "bonus bPow,2*.@str;"
-        },
-        {
-          "itemId": 312327,
-          "itemName": "Fiery Earth Rune 3Lv",
-          "rawLine": "bonus bPow,2*.@str;"
-        },
-        {
-          "itemId": 312328,
-          "itemName": "Fiery Earth Rune 4Lv",
-          "rawLine": "bonus bPow,2*.@str;"
-        },
-        {
-          "itemId": 312329,
-          "itemName": "Fiery Earth Rune 5Lv",
-          "rawLine": "bonus bPow,2*.@str;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bAtkRate",
-      "reason": "unsupported-bonus-code",
-      "count": 35,
-      "examples": [
-        {
-          "itemId": 4494,
-          "itemName": "Sealed Turtle General Card",
-          "rawLine": "bonus bAtkRate,.@rate;"
-        },
-        {
-          "itemId": 15433,
-          "itemName": "Neptune's suit",
-          "rawLine": "bonus bAtkRate,.@a/2;"
-        },
-        {
-          "itemId": 15466,
-          "itemName": "2nd Anniversary Vulcan Armor",
-          "rawLine": "bonus bAtkRate,getskilllv(\"MC_MAMMONITE\");"
-        },
-        {
-          "itemId": 22134,
-          "itemName": "Enforcer Shoes",
-          "rawLine": "bonus bAtkRate,4*.@a;"
-        },
-        {
-          "itemId": 22145,
-          "itemName": "Tengu's Shoes",
-          "rawLine": "bonus bAtkRate,4*getskilllv(\"SR_GENTLETOUCH_QUIET\");"
         }
       ]
     },
@@ -3376,7 +3152,7 @@
     {
       "command": "bonus bSMatk",
       "reason": "unsupported-bonus-code",
-      "count": 35,
+      "count": 34,
       "examples": [
         {
           "itemId": 310686,
@@ -3402,6 +3178,102 @@
           "itemId": 310687,
           "itemName": "Star Cluster of Spell Lv2",
           "rawLine": "bonus bSMatk,2*.@param;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bCon",
+      "reason": "unsupported-bonus-code",
+      "count": 33,
+      "examples": [
+        {
+          "itemId": 312326,
+          "itemName": "Fiery Earth Rune 2Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        },
+        {
+          "itemId": 312327,
+          "itemName": "Fiery Earth Rune 3Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        },
+        {
+          "itemId": 312328,
+          "itemName": "Fiery Earth Rune 4Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        },
+        {
+          "itemId": 312329,
+          "itemName": "Fiery Earth Rune 5Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        },
+        {
+          "itemId": 312330,
+          "itemName": "Fiery Earth Rune 6Lv",
+          "rawLine": "bonus bCon,2*.@str;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bHit",
+      "reason": "unsupported-bonus-code",
+      "count": 33,
+      "examples": [
+        {
+          "itemId": 1290,
+          "itemName": "Agent Katar",
+          "rawLine": "bonus bHit,readparam(bLuk)/2;"
+        },
+        {
+          "itemId": 2921,
+          "itemName": "Dex Glove",
+          "rawLine": "bonus bHit,(readparam(bDex)/10);"
+        },
+        {
+          "itemId": 2927,
+          "itemName": "Dex Glove",
+          "rawLine": "bonus bHit,(readparam(bDex)/10);"
+        },
+        {
+          "itemId": 4430,
+          "itemName": "Ifrit Card",
+          "rawLine": "bonus bHit,(JobLevel/10);"
+        },
+        {
+          "itemId": 4487,
+          "itemName": "Sealed Ifrit Card",
+          "rawLine": "bonus bHit,(JobLevel/20);"
+        }
+      ]
+    },
+    {
+      "command": "bonus bMatkRate",
+      "reason": "unsupported-bonus-code",
+      "count": 33,
+      "examples": [
+        {
+          "itemId": 2040,
+          "itemName": "Trial Warlock's Staff",
+          "rawLine": "bonus bMatkRate,getskilllv(\"WZ_STORMGUST\");"
+        },
+        {
+          "itemId": 4561,
+          "itemName": "Professor Celia Card",
+          "rawLine": "bonus bMatkRate,(readparam(bDex)>=110)?14:7;"
+        },
+        {
+          "itemId": 15433,
+          "itemName": "Neptune's suit",
+          "rawLine": "bonus bMatkRate,.@a/2;"
+        },
+        {
+          "itemId": 18821,
+          "itemName": "Rainbow Feather Deco",
+          "rawLine": "bonus bMatkRate,.@r3;"
+        },
+        {
+          "itemId": 19103,
+          "itemName": "Old King’s Crown",
+          "rawLine": "bonus bMatkRate,5+max(1,(.@r-6));"
         }
       ]
     },
@@ -3466,6 +3338,102 @@
           "itemId": 4352,
           "itemName": "General Egnigem Cenia Card",
           "rawLine": "bonus2 bHPRegenRate,50,10000;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bPow",
+      "reason": "unsupported-bonus-code",
+      "count": 31,
+      "examples": [
+        {
+          "itemId": 312326,
+          "itemName": "Fiery Earth Rune 2Lv",
+          "rawLine": "bonus bPow,2*.@str;"
+        },
+        {
+          "itemId": 312327,
+          "itemName": "Fiery Earth Rune 3Lv",
+          "rawLine": "bonus bPow,2*.@str;"
+        },
+        {
+          "itemId": 312328,
+          "itemName": "Fiery Earth Rune 4Lv",
+          "rawLine": "bonus bPow,2*.@str;"
+        },
+        {
+          "itemId": 312329,
+          "itemName": "Fiery Earth Rune 5Lv",
+          "rawLine": "bonus bPow,2*.@str;"
+        },
+        {
+          "itemId": 312330,
+          "itemName": "Fiery Earth Rune 6Lv",
+          "rawLine": "bonus bPow,2*.@str;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bAtkRate",
+      "reason": "unsupported-bonus-code",
+      "count": 30,
+      "examples": [
+        {
+          "itemId": 15433,
+          "itemName": "Neptune's suit",
+          "rawLine": "bonus bAtkRate,.@a/2;"
+        },
+        {
+          "itemId": 15466,
+          "itemName": "2nd Anniversary Vulcan Armor",
+          "rawLine": "bonus bAtkRate,getskilllv(\"MC_MAMMONITE\");"
+        },
+        {
+          "itemId": 22134,
+          "itemName": "Enforcer Shoes",
+          "rawLine": "bonus bAtkRate,4*.@a;"
+        },
+        {
+          "itemId": 22145,
+          "itemName": "Tengu's Shoes",
+          "rawLine": "bonus bAtkRate,4*getskilllv(\"SR_GENTLETOUCH_QUIET\");"
+        },
+        {
+          "itemId": 27215,
+          "itemName": "Sealed Champion Card",
+          "rawLine": "bonus bAtkRate,(readparam(bAgi)>=110) ? 6 : 3;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bSubEle",
+      "reason": "unsupported-bonus-code",
+      "count": 30,
+      "examples": [
+        {
+          "itemId": 2168,
+          "itemName": "Immune Shield",
+          "rawLine": "bonus2 bSubEle,Ele_Neutral,min(.@r,12)-4;"
+        },
+        {
+          "itemId": 2589,
+          "itemName": "Fallen Angel Wing",
+          "rawLine": "bonus2 bSubEle,Ele_Neutral,readparam(bVit)/20;"
+        },
+        {
+          "itemId": 19298,
+          "itemName": "Sealed Tatenasi Helm",
+          "rawLine": "bonus2 bSubEle,Ele_Neutral,5+(min(10,.@r-6));"
+        },
+        {
+          "itemId": 20835,
+          "itemName": "[Katsuya] Fallen Angel Wings",
+          "rawLine": "bonus2 bSubEle,Ele_Neutral,readparam(bVit)/20;"
+        },
+        {
+          "itemId": 20852,
+          "itemName": "Witch's Cloak",
+          "rawLine": "bonus2 bSubEle,Ele_Fire,5*@r;"
         }
       ]
     },
@@ -3598,70 +3566,6 @@
       ]
     },
     {
-      "command": "bonus2 bAddEle",
-      "reason": "unsupported-bonus-code",
-      "count": 27,
-      "examples": [
-        {
-          "itemId": 4481,
-          "itemName": "Sealed Ktullanux Card",
-          "rawLine": "bonus2 bAddEle,Ele_Fire,((getrefine()>14)?35:25);"
-        },
-        {
-          "itemId": 4485,
-          "itemName": "Sealed Gloom Under Night Card",
-          "rawLine": "bonus2 bAddEle,Ele_Holy,.@rate;"
-        },
-        {
-          "itemId": 4485,
-          "itemName": "Sealed Gloom Under Night Card",
-          "rawLine": "bonus2 bAddEle,Ele_Dark,.@rate;"
-        },
-        {
-          "itemId": 28612,
-          "itemName": "Illusion Book of the Apocalypse",
-          "rawLine": "bonus2 bAddEle,Ele_Water,.@val;"
-        },
-        {
-          "itemId": 28612,
-          "itemName": "Illusion Book of the Apocalypse",
-          "rawLine": "bonus2 bAddEle,Ele_Earth,.@val;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bFlee",
-      "reason": "unsupported-bonus-code",
-      "count": 26,
-      "examples": [
-        {
-          "itemId": 1265,
-          "itemName": "Bloody Roar",
-          "rawLine": "bonus bFlee,-(readparam(bAgi)+BaseLevel);"
-        },
-        {
-          "itemId": 2919,
-          "itemName": "Agi Glove",
-          "rawLine": "bonus bFlee,(readparam(bAgi)/10);"
-        },
-        {
-          "itemId": 2925,
-          "itemName": "Agi Glove",
-          "rawLine": "bonus bFlee,(readparam(bAgi)/10);"
-        },
-        {
-          "itemId": 4375,
-          "itemName": "Orc Baby Card",
-          "rawLine": "bonus bFlee,.@i;"
-        },
-        {
-          "itemId": 4560,
-          "itemName": "Clown Alphoccio Card",
-          "rawLine": "bonus bFlee,(readparam(bVit)>=110)?40:20;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bAddDefMonster",
       "reason": "unsupported-bonus-code",
       "count": 26,
@@ -3786,38 +3690,6 @@
           "itemId": 1393,
           "itemName": "End Sectora",
           "rawLine": "bonus2 bAddEff2,Eff_Freeze,300;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bDef",
-      "reason": "unsupported-bonus-code",
-      "count": 24,
-      "examples": [
-        {
-          "itemId": 1484,
-          "itemName": "Cardo",
-          "rawLine": "bonus bDef,getrefine()/2;"
-        },
-        {
-          "itemId": 13167,
-          "itemName": "Gate Keeper-DD",
-          "rawLine": "bonus bDef,getrefine();"
-        },
-        {
-          "itemId": 15446,
-          "itemName": "Cetrion's Ring (OSM)",
-          "rawLine": "bonus bDef,2*.@e;"
-        },
-        {
-          "itemId": 15984,
-          "itemName": "[Not For Sale] Heavenly Order",
-          "rawLine": "bonus bDef,20*.@f;"
-        },
-        {
-          "itemId": 19451,
-          "itemName": "Heavenly Order",
-          "rawLine": "bonus bDef,20*(.@f/18);"
         }
       ]
     },
@@ -4078,66 +3950,34 @@
       ]
     },
     {
-      "command": "bonus bAgi",
+      "command": "bonus bFlee",
       "reason": "unsupported-bonus-code",
       "count": 20,
       "examples": [
         {
-          "itemId": 2425,
-          "itemName": "Black Leather Boots",
-          "rawLine": "bonus bAgi,(getrefine()>=9?3:1);"
+          "itemId": 1265,
+          "itemName": "Bloody Roar",
+          "rawLine": "bonus bFlee,-(readparam(bAgi)+BaseLevel);"
         },
         {
-          "itemId": 2434,
-          "itemName": "Black Leather Boots",
-          "rawLine": "bonus bAgi,(getrefine()>=9?3:1);"
+          "itemId": 2919,
+          "itemName": "Agi Glove",
+          "rawLine": "bonus bFlee,(readparam(bAgi)/10);"
         },
         {
-          "itemId": 4387,
-          "itemName": "Ancient Mimic Card",
-          "rawLine": "bonus bAgi,readparam(bLuk)/18;"
+          "itemId": 2925,
+          "itemName": "Agi Glove",
+          "rawLine": "bonus bFlee,(readparam(bAgi)/10);"
         },
         {
-          "itemId": 4396,
-          "itemName": "Odium of Thanatos Card",
-          "rawLine": "bonus bAgi,getrefine()-5;"
+          "itemId": 4560,
+          "itemName": "Clown Alphoccio Card",
+          "rawLine": "bonus bFlee,(readparam(bVit)>=110)?40:20;"
         },
         {
-          "itemId": 15053,
-          "itemName": "Special Ninja Suit",
-          "rawLine": "bonus bAgi,1+(getrefine()/3);"
-        }
-      ]
-    },
-    {
-      "command": "bonus bFixedCast",
-      "reason": "unsupported-bonus-code",
-      "count": 20,
-      "examples": [
-        {
-          "itemId": 19249,
-          "itemName": "Spell Circuit",
-          "rawLine": "bonus bFixedCast,-.@val*100;"
-        },
-        {
-          "itemId": 19263,
-          "itemName": "General's Helm",
-          "rawLine": "bonus bFixedCast,-.@val*100;"
-        },
-        {
-          "itemId": 19296,
-          "itemName": "Fancy Feather Hat",
-          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
-        },
-        {
-          "itemId": 19300,
-          "itemName": "Dog Officer",
-          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
-        },
-        {
-          "itemId": 19308,
-          "itemName": "Amistr Beret",
-          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
+          "itemId": 4566,
+          "itemName": "Gypsy Trentini Card",
+          "rawLine": "bonus bFlee,(readparam(bVit)>=110)?40:20;"
         }
       ]
     },
@@ -4174,38 +4014,6 @@
       ]
     },
     {
-      "command": "bonus bMdef",
-      "reason": "unsupported-stat-effect",
-      "count": 20,
-      "examples": [
-        {
-          "itemId": 4644,
-          "itemName": "Infinite Vocal Card",
-          "rawLine": "bonus bMdef,5+.@b;"
-        },
-        {
-          "itemId": 5795,
-          "itemName": "Bright Red Dress Hat",
-          "rawLine": "bonus bMdef,7+(getrefine()/2);"
-        },
-        {
-          "itemId": 15984,
-          "itemName": "[Not For Sale] Heavenly Order",
-          "rawLine": "bonus bMdef,2*.@c;"
-        },
-        {
-          "itemId": 19451,
-          "itemName": "Heavenly Order",
-          "rawLine": "bonus bMdef,2*(.@c/18);"
-        },
-        {
-          "itemId": 19452,
-          "itemName": "Heavenly Order",
-          "rawLine": "bonus bMdef,2*(.@c/18);"
-        }
-      ]
-    },
-    {
       "command": "bonus bLongSPGainValue",
       "reason": "unsupported-bonus-code",
       "count": 19,
@@ -4238,34 +4046,34 @@
       ]
     },
     {
-      "command": "bonus bInt",
-      "reason": "unsupported-stat-effect",
+      "command": "bonus bFixedCast",
+      "reason": "unsupported-bonus-code",
       "count": 18,
       "examples": [
         {
-          "itemId": 2039,
-          "itemName": "Illusion Wizardry Staff",
-          "rawLine": "bonus bInt,(6+.@val);"
+          "itemId": 19296,
+          "itemName": "Fancy Feather Hat",
+          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
         },
         {
-          "itemId": 4393,
-          "itemName": "Mistress of Shelter Card",
-          "rawLine": "bonus bInt,readparam(bStr)/18;"
+          "itemId": 19300,
+          "itemName": "Dog Officer",
+          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
         },
         {
-          "itemId": 4397,
-          "itemName": "Despero of Thanatos Card",
-          "rawLine": "bonus bInt,getrefine()-6;"
+          "itemId": 19308,
+          "itemName": "Amistr Beret",
+          "rawLine": "bonus bFixedCast,-100*(min((.@r-10),15)/1);"
         },
         {
-          "itemId": 15446,
-          "itemName": "Cetrion's Ring (OSM)",
-          "rawLine": "bonus bInt,2*.@a;"
+          "itemId": 310885,
+          "itemName": "Warlock Stone (Middle)",
+          "rawLine": "bonus bFixedCast,-100*getskilllv(\"WL_COMET\");"
         },
         {
-          "itemId": 18931,
-          "itemName": "Lion Model Hat",
-          "rawLine": "bonus bInt,2+((.@r >= 2 && .@r <= 8) ? 1 : ((.@r > 8) ? (.@r/8): 0));"
+          "itemId": 310887,
+          "itemName": "Royal Guard Stone (Upper)",
+          "rawLine": "bonus bFixedCast,-100*getskilllv(\"LG_INSPIRATION\");"
         }
       ]
     },
@@ -4302,38 +4110,6 @@
       ]
     },
     {
-      "command": "bonus2 bAddSize",
-      "reason": "unsupported-bonus-code",
-      "count": 18,
-      "examples": [
-        {
-          "itemId": 1833,
-          "itemName": "Claw of Flash",
-          "rawLine": "bonus2 bAddSize,Size_Medium,getrefine();"
-        },
-        {
-          "itemId": 1841,
-          "itemName": "Claw of Flash",
-          "rawLine": "bonus2 bAddSize,Size_Medium,getrefine();"
-        },
-        {
-          "itemId": 4496,
-          "itemName": "Sealed Drake Card",
-          "rawLine": "bonus2 bAddSize,Size_All,.@rate;"
-        },
-        {
-          "itemId": 310189,
-          "itemName": "Assassin Cross Stone II (Lower)",
-          "rawLine": "bonus2 bAddSize,Size_All,2*getskilllv(\"ASC_KATAR\");"
-        },
-        {
-          "itemId": 310262,
-          "itemName": "Creator Stone II (Top)",
-          "rawLine": "bonus2 bAddSize,Size_All,getskilllv(\"AM_CANNIBALIZE\");"
-        }
-      ]
-    },
-    {
       "command": "transform",
       "reason": "unsupported-bonus-code",
       "count": 18,
@@ -4366,6 +4142,38 @@
       ]
     },
     {
+      "command": "bonus bDef",
+      "reason": "unsupported-bonus-code",
+      "count": 17,
+      "examples": [
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bDef,2*.@e;"
+        },
+        {
+          "itemId": 15984,
+          "itemName": "[Not For Sale] Heavenly Order",
+          "rawLine": "bonus bDef,20*.@f;"
+        },
+        {
+          "itemId": 19451,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bDef,20*(.@f/18);"
+        },
+        {
+          "itemId": 19452,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bDef,20*(.@f/18);"
+        },
+        {
+          "itemId": 20962,
+          "itemName": "Skin of Typhon",
+          "rawLine": "bonus bDef,20*.@s;"
+        }
+      ]
+    },
+    {
       "command": "bonus bNoRegen",
       "reason": "unsupported-bonus-code",
       "count": 17,
@@ -4394,38 +4202,6 @@
           "itemId": 4158,
           "itemName": "Sky Deleter Card",
           "rawLine": "bonus bNoRegen,1;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bSpl",
-      "reason": "unsupported-bonus-code",
-      "count": 17,
-      "examples": [
-        {
-          "itemId": 311022,
-          "itemName": "Clockwork (SPL)",
-          "rawLine": "bonus bSpl,3+getenchantgrade();"
-        },
-        {
-          "itemId": 312366,
-          "itemName": "Soul Purifying Rune 2Lv",
-          "rawLine": "bonus bSpl,2*.@int;"
-        },
-        {
-          "itemId": 312367,
-          "itemName": "Soul Purifying Rune 3Lv",
-          "rawLine": "bonus bSpl,2*.@int;"
-        },
-        {
-          "itemId": 312368,
-          "itemName": "Soul Purifying Rune 4Lv",
-          "rawLine": "bonus bSpl,2*.@int;"
-        },
-        {
-          "itemId": 312369,
-          "itemName": "Soul Purifying Rune 5Lv",
-          "rawLine": "bonus bSpl,2*.@int;"
         }
       ]
     },
@@ -4558,34 +4334,66 @@
       ]
     },
     {
-      "command": "bonus bDex",
-      "reason": "unsupported-bonus-code",
+      "command": "bonus bInt",
+      "reason": "unsupported-stat-effect",
       "count": 16,
       "examples": [
         {
-          "itemId": 1920,
-          "itemName": "Berserk Guitar",
-          "rawLine": "bonus bDex,-readparam(bDex);"
-        },
-        {
-          "itemId": 1928,
-          "itemName": "Spirited Guitar",
-          "rawLine": "bonus bDex,-readparam(bDex);"
-        },
-        {
-          "itemId": 2039,
-          "itemName": "Illusion Wizardry Staff",
-          "rawLine": "bonus bDex,(2+.@val);"
-        },
-        {
-          "itemId": 4392,
-          "itemName": "Dame of Sentinel Card",
-          "rawLine": "bonus bDex,readparam(bVit)/18;"
+          "itemId": 4393,
+          "itemName": "Mistress of Shelter Card",
+          "rawLine": "bonus bInt,readparam(bStr)/18;"
         },
         {
           "itemId": 15446,
           "itemName": "Cetrion's Ring (OSM)",
-          "rawLine": "bonus bDex,2*.@c;"
+          "rawLine": "bonus bInt,2*.@a;"
+        },
+        {
+          "itemId": 18931,
+          "itemName": "Lion Model Hat",
+          "rawLine": "bonus bInt,2+((.@r >= 2 && .@r <= 8) ? 1 : ((.@r > 8) ? (.@r/8): 0));"
+        },
+        {
+          "itemId": 19262,
+          "itemName": "Ancient Dragon Crown",
+          "rawLine": "bonus bInt,(readparam(bInt)+readparam(bDex))/10;"
+        },
+        {
+          "itemId": 28410,
+          "itemName": "Sapphire Wrist",
+          "rawLine": "bonus bInt,.@n/2;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bMdef",
+      "reason": "unsupported-stat-effect",
+      "count": 16,
+      "examples": [
+        {
+          "itemId": 4644,
+          "itemName": "Infinite Vocal Card",
+          "rawLine": "bonus bMdef,5+.@b;"
+        },
+        {
+          "itemId": 15984,
+          "itemName": "[Not For Sale] Heavenly Order",
+          "rawLine": "bonus bMdef,2*.@c;"
+        },
+        {
+          "itemId": 19451,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bMdef,2*(.@c/18);"
+        },
+        {
+          "itemId": 19452,
+          "itemName": "Heavenly Order",
+          "rawLine": "bonus bMdef,2*(.@c/18);"
+        },
+        {
+          "itemId": 24312,
+          "itemName": "Minstrel Shadow Shield",
+          "rawLine": "bonus bMdef,.@r*(getskilllv(\"MI_HARMONIZE\")+getskilllv(\"MI_RUSH_WINDMILL\")+getskilllv(\"MI_ECHOSONG\"))/5;"
         }
       ]
     },
@@ -4622,9 +4430,169 @@
       ]
     },
     {
-      "command": "bonus2 bMagicAddEle",
+      "command": "bonus2 bAddEle",
+      "reason": "unsupported-bonus-code",
+      "count": 16,
+      "examples": [
+        {
+          "itemId": 300339,
+          "itemName": "Sealed Polluted Dark Lord Card",
+          "rawLine": "bonus2 bAddEle,Ele_Neutral,.@val/20;"
+        },
+        {
+          "itemId": 300406,
+          "itemName": "Sealed Gopinch Card",
+          "rawLine": "bonus2 bAddEle,Ele_Wind,(readparam(bStr)+readparam(bInt)+readparam(bDex))/10;"
+        },
+        {
+          "itemId": 313061,
+          "itemName": "Nightwatch Stone (Garment)",
+          "rawLine": "bonus2 bAddEle,Ele_All,(getskilllv(\"NW_HIDDEN_CARD\")/2);"
+        },
+        {
+          "itemId": 400541,
+          "itemName": "Time Dimensions Rune Crown (Shinkiro & Shiranui)",
+          "rawLine": "bonus2 bAddEle,Ele_All,3*getskilllv(\"KG_KYOMU\");"
+        },
+        {
+          "itemId": 420194,
+          "itemName": "Survival Whistle",
+          "rawLine": "bonus2 bAddEle,Ele_All,.@a+(readparam(bStr)/20);"
+        }
+      ]
+    },
+    {
+      "command": "bonus bSpl",
       "reason": "unsupported-bonus-code",
       "count": 15,
+      "examples": [
+        {
+          "itemId": 312366,
+          "itemName": "Soul Purifying Rune 2Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        },
+        {
+          "itemId": 312367,
+          "itemName": "Soul Purifying Rune 3Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        },
+        {
+          "itemId": 312368,
+          "itemName": "Soul Purifying Rune 4Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        },
+        {
+          "itemId": 312369,
+          "itemName": "Soul Purifying Rune 5Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        },
+        {
+          "itemId": 312370,
+          "itemName": "Soul Purifying Rune 6Lv",
+          "rawLine": "bonus bSpl,2*.@int;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bAddSize",
+      "reason": "unsupported-bonus-code",
+      "count": 15,
+      "examples": [
+        {
+          "itemId": 310189,
+          "itemName": "Assassin Cross Stone II (Lower)",
+          "rawLine": "bonus2 bAddSize,Size_All,2*getskilllv(\"ASC_KATAR\");"
+        },
+        {
+          "itemId": 310262,
+          "itemName": "Creator Stone II (Top)",
+          "rawLine": "bonus2 bAddSize,Size_All,getskilllv(\"AM_CANNIBALIZE\");"
+        },
+        {
+          "itemId": 311463,
+          "itemName": "Rebellion Stone (Upper)",
+          "rawLine": "bonus2 bAddSize,Size_All,2*getskilllv(\"RL_P_ALTER\");"
+        },
+        {
+          "itemId": 311912,
+          "itemName": "Kagerou Stone (Upper)",
+          "rawLine": "bonus2 bAddSize,Size_All,2*getskilllv(\"KO_RIGHT\");"
+        },
+        {
+          "itemId": 313730,
+          "itemName": "Wander Mins Stone II (Middle)",
+          "rawLine": "bonus2 bAddSize,Size_All,3*getskilllv(\"WM_SIRCLEOFNATURE\");"
+        }
+      ]
+    },
+    {
+      "command": "bonus bDex",
+      "reason": "unsupported-bonus-code",
+      "count": 14,
+      "examples": [
+        {
+          "itemId": 1920,
+          "itemName": "Berserk Guitar",
+          "rawLine": "bonus bDex,-readparam(bDex);"
+        },
+        {
+          "itemId": 1928,
+          "itemName": "Spirited Guitar",
+          "rawLine": "bonus bDex,-readparam(bDex);"
+        },
+        {
+          "itemId": 4392,
+          "itemName": "Dame of Sentinel Card",
+          "rawLine": "bonus bDex,readparam(bVit)/18;"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bDex,2*.@c;"
+        },
+        {
+          "itemId": 18929,
+          "itemName": "Elephant Model Hat",
+          "rawLine": "bonus bDex,2+((.@r >= 2 && .@r <= 8) ? 1 : ((.@r > 8) ? (.@r/8): 0));"
+        }
+      ]
+    },
+    {
+      "command": "bonus bMaxHP",
+      "reason": "unsupported-bonus-code",
+      "count": 14,
+      "examples": [
+        {
+          "itemId": 2920,
+          "itemName": "Vit Glove",
+          "rawLine": "bonus bMaxHP,(readparam(bVit)/10)*50;"
+        },
+        {
+          "itemId": 2926,
+          "itemName": "Vit Glove",
+          "rawLine": "bonus bMaxHP,(readparam(bVit)/10)*50;"
+        },
+        {
+          "itemId": 4589,
+          "itemName": "Jejeling Card",
+          "rawLine": "bonus bMaxHP,200*readparam(bVit)/10;"
+        },
+        {
+          "itemId": 4645,
+          "itemName": "Infinite Eclipse Card",
+          "rawLine": "bonus bMaxHP,300+.@b;"
+        },
+        {
+          "itemId": 4662,
+          "itemName": "Big Eggring Card",
+          "rawLine": "bonus bMaxHP,1000-200*min(readparam(bVit)/10,5);"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bMagicAddEle",
+      "reason": "unsupported-bonus-code",
+      "count": 14,
       "examples": [
         {
           "itemId": 18804,
@@ -4650,38 +4618,6 @@
           "itemId": 19469,
           "itemName": "Sacred Crown",
           "rawLine": "bonus2 bMagicAddEle,Ele_Undead,.@a;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bVit",
-      "reason": "unsupported-stat-effect",
-      "count": 14,
-      "examples": [
-        {
-          "itemId": 4338,
-          "itemName": "Obsidian Card",
-          "rawLine": "bonus bVit,readparam(bDex)/18;"
-        },
-        {
-          "itemId": 4370,
-          "itemName": "Dimik Card",
-          "rawLine": "bonus bVit,getrefine()-5;"
-        },
-        {
-          "itemId": 5766,
-          "itemName": "Amistr Cap",
-          "rawLine": "bonus bVit,1+(getrefine()/2);"
-        },
-        {
-          "itemId": 15137,
-          "itemName": "Tatenasi Armor",
-          "rawLine": "bonus bVit,getrefine();"
-        },
-        {
-          "itemId": 15149,
-          "itemName": "Guardian Unit",
-          "rawLine": "bonus bVit,getrefine();"
         }
       ]
     },
@@ -4750,34 +4686,34 @@
       ]
     },
     {
-      "command": "bonus2 bAddClass",
+      "command": "bonus bAgi",
       "reason": "unsupported-bonus-code",
-      "count": 13,
+      "count": 12,
       "examples": [
         {
-          "itemId": 2184,
-          "itemName": "Bunker Shield",
-          "rawLine": "bonus2 bAddClass,Class_All,4+max(0,.@r-4);"
+          "itemId": 4387,
+          "itemName": "Ancient Mimic Card",
+          "rawLine": "bonus bAgi,readparam(bLuk)/18;"
         },
         {
-          "itemId": 4535,
-          "itemName": "Sealed Randgris Card",
-          "rawLine": "bonus2 bAddClass,Class_All,(getrefine()>=15?8:5);"
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bAgi,2*.@f;"
         },
         {
-          "itemId": 4562,
-          "itemName": "Champion Chen Card",
-          "rawLine": "bonus2 bAddClass,Class_All,(readparam(bAgi)>=110)?14:7;"
+          "itemId": 18163,
+          "itemName": "Vigilante Bow",
+          "rawLine": "bonus bAgi,.@a/10;"
         },
         {
-          "itemId": 15110,
-          "itemName": "Supplement Part Str",
-          "rawLine": "bonus2 bAddClass,Class_All,5+getrefine()/4;"
+          "itemId": 28411,
+          "itemName": "Emerald Earrings",
+          "rawLine": "bonus bAgi,.@n/2;"
         },
         {
-          "itemId": 15343,
-          "itemName": "Supplement Part STR",
-          "rawLine": "bonus2 bAddClass,Class_All,5+(getrefine()/4);"
+          "itemId": 28536,
+          "itemName": "Emerald Earring",
+          "rawLine": "bonus bAgi,.@n/2;"
         }
       ]
     },
@@ -4842,38 +4778,6 @@
           "itemId": 19140,
           "itemName": "Squirrel Ears Hood Hat",
           "rawLine": "bonus bCriticalLong,20;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bCrt",
-      "reason": "unsupported-bonus-code",
-      "count": 12,
-      "examples": [
-        {
-          "itemId": 311025,
-          "itemName": "Clockwork (CRT)",
-          "rawLine": "bonus bCrt,3+getenchantgrade();"
-        },
-        {
-          "itemId": 312386,
-          "itemName": "Corrupted Poison Rune 2Lv",
-          "rawLine": "bonus bCrt,2*.@luk;"
-        },
-        {
-          "itemId": 312387,
-          "itemName": "Corrupted Poison Rune 3Lv",
-          "rawLine": "bonus bCrt,2*.@luk;"
-        },
-        {
-          "itemId": 312388,
-          "itemName": "Corrupted Poison Rune 4Lv",
-          "rawLine": "bonus bCrt,2*.@luk;"
-        },
-        {
-          "itemId": 312389,
-          "itemName": "Corrupted Poison Rune 5Lv",
-          "rawLine": "bonus bCrt,2*.@luk;"
         }
       ]
     },
@@ -5134,38 +5038,6 @@
       ]
     },
     {
-      "command": "bonus2 bMagicAddSize",
-      "reason": "unsupported-bonus-code",
-      "count": 11,
-      "examples": [
-        {
-          "itemId": 4496,
-          "itemName": "Sealed Drake Card",
-          "rawLine": "bonus2 bMagicAddSize,Size_All,.@rate;"
-        },
-        {
-          "itemId": 19499,
-          "itemName": "Fortunetelling Sealed",
-          "rawLine": "bonus2 bMagicAddSize,Size_All,4*.@a;"
-        },
-        {
-          "itemId": 28564,
-          "itemName": "Valkyrie Drop",
-          "rawLine": "bonus2 bMagicAddSize,Size_All,3*.@a;"
-        },
-        {
-          "itemId": 311467,
-          "itemName": "Soul Reaper Stone (Middle)",
-          "rawLine": "bonus2 bMagicAddSize,Size_All,getskilllv(\"SP_SWHOO\");"
-        },
-        {
-          "itemId": 311915,
-          "itemName": "Oboro Stone (Upper)",
-          "rawLine": "bonus2 bMagicAddSize,Size_All,2*getskilllv(\"KO_RIGHT\");"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bSPLossRate",
       "reason": "unsupported-bonus-code",
       "count": 11,
@@ -5226,6 +5098,38 @@
           "itemId": 13007,
           "itemName": "Jitte",
           "rawLine": "bonus bBreakWeaponRate,200;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bCrt",
+      "reason": "unsupported-bonus-code",
+      "count": 10,
+      "examples": [
+        {
+          "itemId": 312386,
+          "itemName": "Corrupted Poison Rune 2Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
+        },
+        {
+          "itemId": 312387,
+          "itemName": "Corrupted Poison Rune 3Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
+        },
+        {
+          "itemId": 312388,
+          "itemName": "Corrupted Poison Rune 4Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
+        },
+        {
+          "itemId": 312389,
+          "itemName": "Corrupted Poison Rune 5Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
+        },
+        {
+          "itemId": 312390,
+          "itemName": "Corrupted Poison Rune 6Lv",
+          "rawLine": "bonus bCrt,2*.@luk;"
         }
       ]
     },
@@ -5294,34 +5198,34 @@
       ]
     },
     {
-      "command": "bonus bMaxSP",
+      "command": "bonus2 bMagicAddSize",
       "reason": "unsupported-bonus-code",
-      "count": 9,
+      "count": 10,
       "examples": [
         {
-          "itemId": 2554,
-          "itemName": "Nydhorgg's Shadow Garb",
-          "rawLine": "bonus bMaxSP,(BaseLevel/3)+(getrefine()*10);"
+          "itemId": 19499,
+          "itemName": "Fortunetelling Sealed",
+          "rawLine": "bonus2 bMagicAddSize,Size_All,4*.@a;"
         },
         {
-          "itemId": 18993,
-          "itemName": "Flower Hat",
-          "rawLine": "bonus bMaxSP,.@b;"
+          "itemId": 28564,
+          "itemName": "Valkyrie Drop",
+          "rawLine": "bonus2 bMagicAddSize,Size_All,3*.@a;"
         },
         {
-          "itemId": 19397,
-          "itemName": "Racing Cap (Soul Linker)",
-          "rawLine": "bonus bMaxSP,100*getskilllv(\"TK_SPTIME\");"
+          "itemId": 311467,
+          "itemName": "Soul Reaper Stone (Middle)",
+          "rawLine": "bonus2 bMagicAddSize,Size_All,getskilllv(\"SP_SWHOO\");"
         },
         {
-          "itemId": 27377,
-          "itemName": "Ancient Stone Shooter Card",
-          "rawLine": "bonus bMaxSP,20*(readparam(bStr)/10);"
+          "itemId": 311915,
+          "itemName": "Oboro Stone (Upper)",
+          "rawLine": "bonus2 bMagicAddSize,Size_All,2*getskilllv(\"KO_RIGHT\");"
         },
         {
-          "itemId": 28374,
-          "itemName": "Foxtail Ring",
-          "rawLine": "bonus bMaxSP,5*.@lvl;"
+          "itemId": 313361,
+          "itemName": "Soul Ascetic Stone (Garment)",
+          "rawLine": "bonus2 bMagicAddSize,Size_All,2*getskilllv(\"SOA_CIRCLE_OF_DIRECTIONS_AND_ELEMENTALS\");"
         }
       ]
     },
@@ -5386,6 +5290,70 @@
           "itemId": 20852,
           "itemName": "Witch's Cloak",
           "rawLine": "bonus bNoWalkDelay;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bVit",
+      "reason": "unsupported-stat-effect",
+      "count": 9,
+      "examples": [
+        {
+          "itemId": 4338,
+          "itemName": "Obsidian Card",
+          "rawLine": "bonus bVit,readparam(bDex)/18;"
+        },
+        {
+          "itemId": 15215,
+          "itemName": "Sealed Tatenasi Armor",
+          "rawLine": "bonus bVit,min(getrefine(),10);"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bVit,2*.@e;"
+        },
+        {
+          "itemId": 28565,
+          "itemName": "Perverse Demon Mask",
+          "rawLine": "bonus bVit,3*(.@d/18);"
+        },
+        {
+          "itemId": 28573,
+          "itemName": "Emerald Ring",
+          "rawLine": "bonus bVit,5+(.@a);"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bAddClass",
+      "reason": "unsupported-bonus-code",
+      "count": 9,
+      "examples": [
+        {
+          "itemId": 2184,
+          "itemName": "Bunker Shield",
+          "rawLine": "bonus2 bAddClass,Class_All,4+max(0,.@r-4);"
+        },
+        {
+          "itemId": 4562,
+          "itemName": "Champion Chen Card",
+          "rawLine": "bonus2 bAddClass,Class_All,(readparam(bAgi)>=110)?14:7;"
+        },
+        {
+          "itemId": 22207,
+          "itemName": "Imperial Boots",
+          "rawLine": "bonus2 bAddClass,Class_All,4*getskilllv(\"CR_DEVOTION\");"
+        },
+        {
+          "itemId": 470027,
+          "itemName": "Juggernaut",
+          "rawLine": "bonus2 bAddClass,Class_All,4*getskilllv(\"RL_FIRE_RAIN\");"
+        },
+        {
+          "itemId": 470028,
+          "itemName": "Juggernaut",
+          "rawLine": "bonus2 bAddClass,Class_All,4*getskilllv(\"RL_FIREDANCE\");"
         }
       ]
     },
@@ -5678,38 +5646,6 @@
       ]
     },
     {
-      "command": "bonus2 bSubClass",
-      "reason": "unsupported-bonus-code",
-      "count": 7,
-      "examples": [
-        {
-          "itemId": 2169,
-          "itemName": "Kalasag",
-          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/3;"
-        },
-        {
-          "itemId": 2170,
-          "itemName": "Bayani Kalasag",
-          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/3;"
-        },
-        {
-          "itemId": 5271,
-          "itemName": "Phoenix Crown",
-          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine();"
-        },
-        {
-          "itemId": 15051,
-          "itemName": "Bakunawa Scale Armor",
-          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/2;"
-        },
-        {
-          "itemId": 15052,
-          "itemName": "Bayani Bakunawa Scale Armor",
-          "rawLine": "bonus2 bSubClass,Class_Boss,getrefine()/2;"
-        }
-      ]
-    },
-    {
       "command": "item_enchant",
       "reason": "unsupported-bonus-code",
       "count": 7,
@@ -5738,70 +5674,6 @@
           "itemId": 101218,
           "itemName": "Snowflower Armor Enchant (Shoes)",
           "rawLine": "item_enchant(28);"
-        }
-      ]
-    },
-    {
-      "command": "bonus bAllStats",
-      "reason": "unsupported-stat-effect",
-      "count": 6,
-      "examples": [
-        {
-          "itemId": 22198,
-          "itemName": "Traveler Shoes",
-          "rawLine": "bonus bAllStats,getskilllv(\"WA_SWING_DANCE\");"
-        },
-        {
-          "itemId": 27228,
-          "itemName": "Big Eggring Card",
-          "rawLine": "bonus bAllStats,getrefine();"
-        },
-        {
-          "itemId": 470084,
-          "itemName": "Rune Greaves",
-          "rawLine": "bonus bAllStats,3*(getskilllv(\"RK_DRAGONBREATH\")+getskilllv(\"RK_DRAGONBREATH_WATER\")/2);"
-        },
-        {
-          "itemId": 470085,
-          "itemName": "Rune Greaves",
-          "rawLine": "bonus bAllStats,3*(getskilllv(\"RK_DRAGONBREATH\")+getskilllv(\"RK_DRAGONBREATH_WATER\")/2);"
-        },
-        {
-          "itemId": 490526,
-          "itemName": "Emerald Ring-LT",
-          "rawLine": "bonus bAllStats,5+(getskilllv(\"AC_DOUBLE\")/2);"
-        }
-      ]
-    },
-    {
-      "command": "bonus bStr",
-      "reason": "unsupported-bonus-code",
-      "count": 6,
-      "examples": [
-        {
-          "itemId": 4346,
-          "itemName": "Egnigem Cenia Card",
-          "rawLine": "bonus bStr,readparam(bInt)/18;"
-        },
-        {
-          "itemId": 4358,
-          "itemName": "Seyren Windsor Card",
-          "rawLine": "bonus bStr,getrefine()-6;"
-        },
-        {
-          "itemId": 15446,
-          "itemName": "Cetrion's Ring (OSM)",
-          "rawLine": "bonus bStr,2*.@d;"
-        },
-        {
-          "itemId": 28565,
-          "itemName": "Perverse Demon Mask",
-          "rawLine": "bonus bStr,3*(.@i/18);"
-        },
-        {
-          "itemId": 28596,
-          "itemName": "Toy Ring",
-          "rawLine": "bonus bStr,5+(.@a+.@b);"
         }
       ]
     },
@@ -5870,6 +5742,38 @@
       ]
     },
     {
+      "command": "bonus bAllStats",
+      "reason": "unsupported-stat-effect",
+      "count": 5,
+      "examples": [
+        {
+          "itemId": 22198,
+          "itemName": "Traveler Shoes",
+          "rawLine": "bonus bAllStats,getskilllv(\"WA_SWING_DANCE\");"
+        },
+        {
+          "itemId": 470084,
+          "itemName": "Rune Greaves",
+          "rawLine": "bonus bAllStats,3*(getskilllv(\"RK_DRAGONBREATH\")+getskilllv(\"RK_DRAGONBREATH_WATER\")/2);"
+        },
+        {
+          "itemId": 470085,
+          "itemName": "Rune Greaves",
+          "rawLine": "bonus bAllStats,3*(getskilllv(\"RK_DRAGONBREATH\")+getskilllv(\"RK_DRAGONBREATH_WATER\")/2);"
+        },
+        {
+          "itemId": 490526,
+          "itemName": "Emerald Ring-LT",
+          "rawLine": "bonus bAllStats,5+(getskilllv(\"AC_DOUBLE\")/2);"
+        },
+        {
+          "itemId": 490527,
+          "itemName": "Emerald Earring-LT",
+          "rawLine": "bonus bAllStats,5+(getskilllv(\"WM_LESSON\")/2);"
+        }
+      ]
+    },
+    {
       "command": "bonus bDef2Rate",
       "reason": "unsupported-bonus-code",
       "count": 5,
@@ -5902,34 +5806,34 @@
       ]
     },
     {
-      "command": "bonus bLuk",
+      "command": "bonus bMaxSP",
       "reason": "unsupported-bonus-code",
       "count": 5,
       "examples": [
         {
-          "itemId": 4369,
-          "itemName": "Venatu Card",
-          "rawLine": "bonus bLuk,readparam(bAgi)/18;"
+          "itemId": 18993,
+          "itemName": "Flower Hat",
+          "rawLine": "bonus bMaxSP,.@b;"
         },
         {
-          "itemId": 15070,
-          "itemName": "Happy Clothes",
-          "rawLine": "bonus bLuk,getrefine();"
+          "itemId": 19397,
+          "itemName": "Racing Cap (Soul Linker)",
+          "rawLine": "bonus bMaxSP,100*getskilllv(\"TK_SPTIME\");"
         },
         {
-          "itemId": 15446,
-          "itemName": "Cetrion's Ring (OSM)",
-          "rawLine": "bonus bLuk,2*.@b;"
+          "itemId": 27377,
+          "itemName": "Ancient Stone Shooter Card",
+          "rawLine": "bonus bMaxSP,20*(readparam(bStr)/10);"
         },
         {
-          "itemId": 28410,
-          "itemName": "Sapphire Wrist",
-          "rawLine": "bonus bLuk,.@n/2;"
+          "itemId": 470069,
+          "itemName": "Paradise Luxury Boots",
+          "rawLine": "bonus bMaxSP,20*(min(.@l,150)/10);"
         },
         {
-          "itemId": 28565,
-          "itemName": "Perverse Demon Mask",
-          "rawLine": "bonus bLuk,3*(.@a/18);"
+          "itemId": 470093,
+          "itemName": "Advanced Paradise Shoes",
+          "rawLine": "bonus bMaxSP,30*(min(BaseLevel,150)/10);"
         }
       ]
     },
@@ -5962,6 +5866,38 @@
           "itemId": 490607,
           "itemName": "Document Merchant",
           "rawLine": "bonus bNoMadoFuel;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bStr",
+      "reason": "unsupported-bonus-code",
+      "count": 5,
+      "examples": [
+        {
+          "itemId": 4346,
+          "itemName": "Egnigem Cenia Card",
+          "rawLine": "bonus bStr,readparam(bInt)/18;"
+        },
+        {
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bStr,2*.@d;"
+        },
+        {
+          "itemId": 28565,
+          "itemName": "Perverse Demon Mask",
+          "rawLine": "bonus bStr,3*(.@i/18);"
+        },
+        {
+          "itemId": 28596,
+          "itemName": "Toy Ring",
+          "rawLine": "bonus bStr,5+(.@a+.@b);"
+        },
+        {
+          "itemId": 490037,
+          "itemName": "Dark Ring",
+          "rawLine": "bonus bStr,5+.@val;"
         }
       ]
     },
@@ -6190,29 +6126,29 @@
       ]
     },
     {
-      "command": "bonus bFixedCastrate",
+      "command": "bonus bLuk",
       "reason": "unsupported-bonus-code",
       "count": 4,
       "examples": [
         {
-          "itemId": 1649,
-          "itemName": "Laphine Staff",
-          "rawLine": "bonus bFixedCastrate,-getrefine();"
+          "itemId": 4369,
+          "itemName": "Venatu Card",
+          "rawLine": "bonus bLuk,readparam(bAgi)/18;"
         },
         {
-          "itemId": 1679,
-          "itemName": "Laphine Staff",
-          "rawLine": "bonus bFixedCastrate,-getrefine();"
+          "itemId": 15446,
+          "itemName": "Cetrion's Ring (OSM)",
+          "rawLine": "bonus bLuk,2*.@b;"
         },
         {
-          "itemId": 5905,
-          "itemName": "Lyrica Hat",
-          "rawLine": "bonus bFixedCastrate,4*(getskilllv(\"WM_LESSON\"));"
+          "itemId": 28410,
+          "itemName": "Sapphire Wrist",
+          "rawLine": "bonus bLuk,.@n/2;"
         },
         {
-          "itemId": 480251,
-          "itemName": "Mystery Wing",
-          "rawLine": "bonus bFixedCastrate,-70*.@d;"
+          "itemId": 28565,
+          "itemName": "Perverse Demon Mask",
+          "rawLine": "bonus bLuk,3*(.@a/18);"
         }
       ]
     },
@@ -6240,60 +6176,6 @@
           "itemId": 19023,
           "itemName": "Queen Scaraba Helmet",
           "rawLine": "bonus bMdefRate,-50;"
-        }
-      ]
-    },
-    {
-      "command": "bonus bSta",
-      "reason": "unsupported-bonus-code",
-      "count": 4,
-      "examples": [
-        {
-          "itemId": 311023,
-          "itemName": "Clockwork (STA)",
-          "rawLine": "bonus bSta,3+getenchantgrade();"
-        },
-        {
-          "itemId": 450201,
-          "itemName": "Varmundt Glade Rune Armor",
-          "rawLine": "bonus bSta,(readparam(bVit)/25);"
-        },
-        {
-          "itemId": 450243,
-          "itemName": "Rune Armor of Plain",
-          "rawLine": "bonus bSta,(readparam(bVit)/25);"
-        },
-        {
-          "itemId": 490277,
-          "itemName": "Dimensional Wanderer's Lock",
-          "rawLine": "bonus bSta,4*.@param;"
-        }
-      ]
-    },
-    {
-      "command": "bonus2 bFixedCastrate",
-      "reason": "unsupported-non-damage-effect",
-      "count": 4,
-      "examples": [
-        {
-          "itemId": 22145,
-          "itemName": "Tengu's Shoes",
-          "rawLine": "bonus2 bFixedCastrate,\"CH_SOULCOLLECT\",-.@c*10;"
-        },
-        {
-          "itemId": 28236,
-          "itemName": "Metal Kingcobra",
-          "rawLine": "bonus2 bFixedCastrate,\"RL_AM_BLAST\",-10*getrefine();"
-        },
-        {
-          "itemId": 470027,
-          "itemName": "Juggernaut",
-          "rawLine": "bonus2 bFixedCastrate,\"RL_BANISHING_BUSTER\",-20*getskilllv(\"RL_BANISHING_BUSTER\");"
-        },
-        {
-          "itemId": 470028,
-          "itemName": "Juggernaut",
-          "rawLine": "bonus2 bFixedCastrate,\"RL_BANISHING_BUSTER\",-20*getskilllv(\"RL_BANISHING_BUSTER\");"
         }
       ]
     },
@@ -6482,28 +6364,6 @@
       ]
     },
     {
-      "command": "bonus bAspd",
-      "reason": "unsupported-bonus-code",
-      "count": 3,
-      "examples": [
-        {
-          "itemId": 1191,
-          "itemName": "Alca Bringer",
-          "rawLine": "bonus bAspd,(getrefine()/2);"
-        },
-        {
-          "itemId": 21004,
-          "itemName": "Alca Bringer",
-          "rawLine": "bonus bAspd,(getrefine()/2);"
-        },
-        {
-          "itemId": 410256,
-          "itemName": "Magic Star-LT",
-          "rawLine": "bonus bAspd,.@a;"
-        }
-      ]
-    },
-    {
       "command": "bonus bLongHPGainValue",
       "reason": "unsupported-bonus-code",
       "count": 3,
@@ -6522,6 +6382,28 @@
           "itemId": 400477,
           "itemName": "Agricultural Tools",
           "rawLine": "bonus bLongHPGainValue,500;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bSta",
+      "reason": "unsupported-bonus-code",
+      "count": 3,
+      "examples": [
+        {
+          "itemId": 450201,
+          "itemName": "Varmundt Glade Rune Armor",
+          "rawLine": "bonus bSta,(readparam(bVit)/25);"
+        },
+        {
+          "itemId": 450243,
+          "itemName": "Rune Armor of Plain",
+          "rawLine": "bonus bSta,(readparam(bVit)/25);"
+        },
+        {
+          "itemId": 490277,
+          "itemName": "Dimensional Wanderer's Lock",
+          "rawLine": "bonus bSta,4*.@param;"
         }
       ]
     },
@@ -6566,6 +6448,28 @@
           "itemId": 4540,
           "itemName": "Sealed Lord of The Dead Card",
           "rawLine": "bonus2 bComaClass,Class_Normal,1;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bFixedCastrate",
+      "reason": "unsupported-non-damage-effect",
+      "count": 3,
+      "examples": [
+        {
+          "itemId": 22145,
+          "itemName": "Tengu's Shoes",
+          "rawLine": "bonus2 bFixedCastrate,\"CH_SOULCOLLECT\",-.@c*10;"
+        },
+        {
+          "itemId": 470027,
+          "itemName": "Juggernaut",
+          "rawLine": "bonus2 bFixedCastrate,\"RL_BANISHING_BUSTER\",-20*getskilllv(\"RL_BANISHING_BUSTER\");"
+        },
+        {
+          "itemId": 470028,
+          "itemName": "Juggernaut",
+          "rawLine": "bonus2 bFixedCastrate,\"RL_BANISHING_BUSTER\",-20*getskilllv(\"RL_BANISHING_BUSTER\");"
         }
       ]
     },
@@ -6736,6 +6640,23 @@
       ]
     },
     {
+      "command": "bonus bFixedCastrate",
+      "reason": "unsupported-bonus-code",
+      "count": 2,
+      "examples": [
+        {
+          "itemId": 5905,
+          "itemName": "Lyrica Hat",
+          "rawLine": "bonus bFixedCastrate,4*(getskilllv(\"WM_LESSON\"));"
+        },
+        {
+          "itemId": 480251,
+          "itemName": "Mystery Wing",
+          "rawLine": "bonus bFixedCastrate,-70*.@d;"
+        }
+      ]
+    },
+    {
       "command": "bonus bMagicAtkDef",
       "reason": "unsupported-bonus-code",
       "count": 2,
@@ -6787,23 +6708,6 @@
       ]
     },
     {
-      "command": "bonus bWis",
-      "reason": "unsupported-bonus-code",
-      "count": 2,
-      "examples": [
-        {
-          "itemId": 311024,
-          "itemName": "Clockwork (WIS)",
-          "rawLine": "bonus bWis,3+getenchantgrade();"
-        },
-        {
-          "itemId": 490276,
-          "itemName": "Dimensional Wanderer's Key",
-          "rawLine": "bonus bWis,4*.@param;"
-        }
-      ]
-    },
-    {
       "command": "bonus2 bDropAddClass",
       "reason": "unsupported-bonus-code",
       "count": 2,
@@ -6851,6 +6755,23 @@
           "itemId": 300246,
           "itemName": "Grote Card",
           "rawLine": "bonus2 bMagicSubSize,Size_Small,1;"
+        }
+      ]
+    },
+    {
+      "command": "bonus2 bSubClass",
+      "reason": "unsupported-bonus-code",
+      "count": 2,
+      "examples": [
+        {
+          "itemId": 470193,
+          "itemName": "Military Boots TH",
+          "rawLine": "bonus2 bSubClass,Class_Boss,.@c;"
+        },
+        {
+          "itemId": 470194,
+          "itemName": "[Not for Sale] Military Boots TH",
+          "rawLine": "bonus2 bSubClass,Class_Boss,.@c;"
         }
       ]
     },
@@ -7027,6 +6948,18 @@
       ]
     },
     {
+      "command": "bonus bAspd",
+      "reason": "unsupported-bonus-code",
+      "count": 1,
+      "examples": [
+        {
+          "itemId": 410256,
+          "itemName": "Magic Star-LT",
+          "rawLine": "bonus bAspd,.@a;"
+        }
+      ]
+    },
+    {
       "command": "bonus bAtkRange",
       "reason": "unsupported-bonus-code",
       "count": 1,
@@ -7107,6 +7040,18 @@
           "itemId": 460092,
           "itemName": "Ancient Prontera Book",
           "rawLine": "bonus bVariableCast,-30;"
+        }
+      ]
+    },
+    {
+      "command": "bonus bWis",
+      "reason": "unsupported-bonus-code",
+      "count": 1,
+      "examples": [
+        {
+          "itemId": 490276,
+          "itemName": "Dimensional Wanderer's Key",
+          "rawLine": "bonus bWis,4*.@param;"
         }
       ]
     },

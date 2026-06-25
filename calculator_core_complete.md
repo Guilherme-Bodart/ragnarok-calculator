@@ -90,6 +90,12 @@ Funcionando hoje:
 - Exemplo: se a tabela elemental transforma 100 em 200 e o alvo tem 30% resistencia a fogo, o final vira 140.
 - Isso prepara monstros/alvos manuais com resistencias especiais sem misturar com `bSubEle`, que pertence ao personagem defendendo.
 
+### 2026-06-24 - Expressoes rAthena deterministicas
+
+- `min`, `max`, `pow`, `getrefine()` e `getenchantgrade()` agora sao avaliados no parser.
+- Auditoria atual: `itemScripts=20037`, `fullySupported=7149`, `partiallySupported=5089`, `unsupportedStatements=21709`, `modifiers=45901`.
+- Isso melhora `bBaseAtk`, `bSkillAtk`, `bAddRace` e similares quando o mapper ja existe e faltava apenas calcular o valor.
+
 Principais lacunas atuais:
 
 - Parser rAthena cobre pouco: basicamente `bonus`/`bonus2` e poucas familias.
