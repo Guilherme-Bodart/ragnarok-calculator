@@ -1,0 +1,71 @@
+{
+  "version": 2,
+  "name": "Guilh Arch Mage 229",
+  "character": {
+    "selectedClassId": "Arch_Mage",
+    "baseLevel": 229,
+    "jobLevel": 46,
+    "stats": {
+      "str": 20,
+      "agi": 103,
+      "vit": 100,
+      "int": 125,
+      "dex": 120,
+      "luk": 83,
+      "pow": 0,
+      "sta": 0,
+      "wis": 0,
+      "spl": 100,
+      "con": 14,
+      "crt": 0
+    }
+  },
+  "attack": {
+    "selectedSkillId": "AG_SOUL_VC_STRIKE",
+    "skillLevel": 5
+  },
+  "tree": {
+    "learnedSkills": {}
+  },
+  "equipment": {
+    "itemContexts": {
+      "640012": { "refine": 11 },
+      "18849": { "refine": 9 },
+      "450179": { "refine": 11 },
+      "480019": { "refine": 9 },
+      "470021": { "refine": 9 }
+    },
+    "selectedCardsBySlot": {
+      "garment": [300733],
+      "accessoryLeft": [27161],
+      "costumeHeadTop": [29468],
+      "costumeHeadMid": [29469],
+      "costumeHeadLow": [29470],
+      "costumeGarment": [29471]
+    },
+    "selectedItemsBySlot": {
+      "weapon": 640012,
+      "headTop": 18849,
+      "headMid": 410233,
+      "headLow": 420213,
+      "armor": 450179,
+      "garment": 480019,
+      "shoes": 470021,
+      "accessoryLeft": 32237,
+      "accessoryRight": 490152,
+      "shadowWeapon": 24595,
+      "shadowArmor": 24584,
+      "shadowShield": 24585,
+      "shadowShoes": 24586,
+      "shadowEarring": 24587,
+      "shadowPendant": 24588
+    }
+  },
+  "buffs": {
+    "activeBuffs": {},
+    "selectedBuffId": ""
+  },
+  "target": {
+    "selectedMonsterId": 1002
+  }
+}
