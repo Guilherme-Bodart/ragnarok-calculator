@@ -26,6 +26,17 @@ const staticSkillFormulas: Record<
   MG_COLDBOLT: calculateBoltSkill("MG_COLDBOLT"),
   MG_FIREBOLT: calculateBoltSkill("MG_FIREBOLT"),
   MG_LIGHTNINGBOLT: calculateBoltSkill("MG_LIGHTNINGBOLT"),
+  AG_SOUL_VC_STRIKE: (input) => ({
+    formulaId: "static:AG_SOUL_VC_STRIKE",
+    multiplier:
+      ((900 + input.character.effectiveStats.spl * 3) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount:
+      input.skill.hitCountByLevel?.[String(input.skillLevel)] ??
+      input.skill.hitCount,
+  }),
 };
 
 function calculateBoltSkill(skillId: string) {

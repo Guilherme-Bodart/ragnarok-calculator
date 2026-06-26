@@ -131,6 +131,56 @@ describe("SkillFormulaRegistry", () => {
     },
   );
 
+  it("uses the LATAM Soul Vulcan Strike formula with base level and SPL scaling", () => {
+    const character = new CharacterStatusEngine().calculate({
+      character: {
+        baseLevel: 229,
+        jobLevel: 46,
+        classId: "Arch_Mage",
+        stats: {
+          str: 20,
+          agi: 103,
+          vit: 100,
+          int: 125,
+          dex: 120,
+          luk: 83,
+          pow: 0,
+          sta: 0,
+          wis: 0,
+          spl: 100,
+          con: 14,
+          crt: 0,
+        },
+      },
+    });
+
+    expect(
+      new SkillFormulaRegistry().calculate({
+        ...input,
+        character,
+        skill: {
+          ...input.skill,
+          id: "AG_SOUL_VC_STRIKE",
+          damageType: "magical",
+          maxLevel: 5,
+          hitCount: 7,
+          hitCountByLevel: {
+            "1": 3,
+            "2": 4,
+            "3": 5,
+            "4": 6,
+            "5": 7,
+          },
+        },
+        skillLevel: 5,
+      }),
+    ).toEqual({
+      formulaId: "static:AG_SOUL_VC_STRIKE",
+      multiplier: 27.48,
+      hitCount: 7,
+    });
+  });
+
   it("uses per-level hit counts when skill data provides them", () => {
     expect(
       new SkillFormulaRegistry().calculate({
