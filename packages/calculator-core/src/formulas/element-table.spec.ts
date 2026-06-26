@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { getElementMultiplier } from "./element-table";
 import type { RoMonster, RoSkill } from "../ro-types";
+import { getElementMultiplier } from "./element-table";
 
 const skill: RoSkill = {
   id: "MG_COLDBOLT",
@@ -64,5 +64,39 @@ describe("getElementMultiplier", () => {
         elementLevel: 99,
       }),
     ).toBe(2);
+  });
+
+  it("uses the corrected level 1 table for ghost against neutral dummies", () => {
+    expect(
+      getElementMultiplier(
+        {
+          ...skill,
+          id: "AG_SOUL_VC_STRIKE",
+          element: "ghost",
+        },
+        {
+          ...monster,
+          element: "neutral",
+          elementLevel: 1,
+        },
+      ),
+    ).toBe(0.9);
+  });
+
+  it("keeps higher element levels for ghost against neutral monsters", () => {
+    expect(
+      getElementMultiplier(
+        {
+          ...skill,
+          id: "AG_SOUL_VC_STRIKE",
+          element: "ghost",
+        },
+        {
+          ...monster,
+          element: "neutral",
+          elementLevel: 2,
+        },
+      ),
+    ).toBe(0);
   });
 });
