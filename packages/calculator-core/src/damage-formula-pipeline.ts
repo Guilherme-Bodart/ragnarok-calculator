@@ -77,6 +77,7 @@ type DamageFormulaContext = {
   elementResistanceRate: number;
   defenseIgnoreRate: number;
   defenseMultiplier: number;
+  softDefReduction: number;
   preDefenseDamage: number;
   postDefenseDamage: number;
   singleHitDamage: number;
@@ -182,8 +183,16 @@ export class DamageFormulaPipeline {
         weaponSizeMultiplier,
     );
     const postDefenseDamage = Math.floor(preDefenseDamage * defenseMultiplier);
-    const singleHitDamage = Math.floor(
-      postDefenseDamage * elementMultiplier * (1 - elementResistanceRate / 100),
+    // rAthena Renewal: Soft DEF/MDEF — subtração flat por hit após Hard DEF/MDEF
+    // Soft MDEF para monstros = floor((INT + Level) / 4), exposto em monster.softMdef
+    const softDefReduction = magical
+      ? (input.monster.softMdef ?? 0)
+      : (input.monster.softDef ?? 0);
+    const singleHitDamage = Math.max(
+      1,
+      Math.floor(
+        postDefenseDamage * elementMultiplier * (1 - elementResistanceRate / 100),
+      ) - softDefReduction,
     );
     const castTiming = this.castTimingEngine.calculate({
       skill: input.skill,
@@ -214,6 +223,7 @@ export class DamageFormulaPipeline {
       elementResistanceRate,
       defenseIgnoreRate,
       defenseMultiplier,
+      softDefReduction,
       preDefenseDamage,
       postDefenseDamage,
       singleHitDamage,
@@ -325,6 +335,13 @@ export class DamageFormulaPipeline {
         value: context.defenseMultiplier,
         group: "target",
         unit: "multiplier",
+      },
+      {
+        key: "softDefReduction",
+        label: "Soft DEF/MDEF reduction (flat per hit)",
+        value: context.softDefReduction,
+        group: "target",
+        unit: "flat",
       },
       {
         key: "preDefenseDamage",

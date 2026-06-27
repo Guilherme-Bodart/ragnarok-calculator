@@ -92,16 +92,24 @@ describe("calculateDamageFromDataset", () => {
   it("calculates damage through the shared core flow", () => {
     const result = calculateDamageFromDataset(input, dataset);
 
-    expect(result.damage.average).toBe(2000);
-    expect(result.damage.total).toBe(2000);
+    // StatusATK (rAthena Renewal) = STR + floor(STR/2) + floor(DEX/5) + floor(LUK/3) + floor(Level/4)
+    // = 100 + 50 + 0 + 0 + 25 = 175
+    // ATK = 175 (status) + 0 (weapon) + 100 (flatAtk do item) = 275
+    // SM_BASH lv10 multiplier = (130 + 30*10)/100 = 4.0
+    // finalRate = 1 + (atkRate:10 + raceDamage demihuman:15) / 100 = 1.25
+    // preDefense = floor(275 * 4.0 * 1.25) = 1375
+    // postDefense = floor(1375 * 1.0) = 1375 (monster DEF=0)
+    // singleHit = max(1, floor(1375 * 1.0 * 1.0) - 0) = 1375
+    expect(result.damage.average).toBe(1375);
+    expect(result.damage.total).toBe(1375);
     expect(result.meta).toMatchObject({
       formulaId: "static:SM_BASH",
       precision: "validated",
       warnings: [],
     });
     expect(result.characterStatus).toMatchObject({
-      statusAtk: 300,
-      atk: 400,
+      statusAtk: 175,
+      atk: 275,
       maxHp: 0,
       maxSp: 0,
     });
@@ -146,7 +154,12 @@ describe("calculateDamageFromDataset", () => {
       },
     );
 
-    expect(result.damage.average).toBe(2040);
+    // NOTA: refineItem substituí o item original — não tem bBaseAtk:100 nem bAddRace demihuman:15
+    // ATK = statusAtk:175 + 0 (sem flatAtk) = 175
+    // bAtkRate:20 (refine>=7), bSkillAtk SM_BASH:50 (skill level >=10)
+    // finalRate = 1 + (atkRate:20 + skillDamage:50) / 100 = 1.70
+    // preDefense = floor(175 * 4.0 * 1.70) = floor(1190) = 1190
+    expect(result.damage.average).toBe(1190);
   });
 
   it("resolves item enchant grade conditions before damage", () => {
@@ -170,7 +183,10 @@ describe("calculateDamageFromDataset", () => {
       },
     );
 
-    expect(result.characterStatus.atk).toBe(350);
+    // StatusATK novo: 175. ATK base = 175 + 0 (no flat from item, grade bonus is flatAtk:50)
+    // flatAtk do item = bBaseAtk:50 (com grade D)
+    // atk = 175 (status) + 0 (weapon) + 50 (flatAtk do grade) = 225
+    expect(result.characterStatus.atk).toBe(225);
     expect(result.meta.warnings).toEqual([]);
   });
 

@@ -82,16 +82,22 @@ export class CharacterStatusEngine {
       input.character.classId,
       input.character.baseLevel,
     );
+    // rAthena Renewal: Status ATK = STR + floor(STR/2) + floor(DEX/5) + floor(LUK/3) + floor(Level/4) + POW*5
     const statusAtk = Math.floor(
-      input.character.baseLevel +
-        effectiveStats.str * 2 +
-        effectiveStats.dex / 5 +
+      effectiveStats.str +
+        Math.floor(effectiveStats.str / 2) +
+        Math.floor(effectiveStats.dex / 5) +
+        Math.floor(effectiveStats.luk / 3) +
+        Math.floor(input.character.baseLevel / 4) +
         traitEffects.statusAtk,
     );
+    // rAthena Renewal: Status MATK = INT + floor(INT/2) + floor(DEX/5) + floor(LUK/3) + floor(Level/4) + SPL*5
     const statusMatk = Math.floor(
-      input.character.baseLevel +
-        effectiveStats.int * 2 +
-        effectiveStats.dex / 5 +
+      effectiveStats.int +
+        Math.floor(effectiveStats.int / 2) +
+        Math.floor(effectiveStats.dex / 5) +
+        Math.floor(effectiveStats.luk / 3) +
+        Math.floor(input.character.baseLevel / 4) +
         traitEffects.statusMatk,
     );
     const equipmentAtk = this.sumEquipmentPower(input.items ?? [], "attack");

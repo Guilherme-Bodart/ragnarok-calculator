@@ -112,6 +112,10 @@ export type RoMonster = {
   elementLevel: number;
   defense: number;
   magicDefense: number;
+  /** Soft DEF — subtração flat de dano físico por hit após Hard DEF. rAthena: floor((VIT + Level) / 4) para jogadores, para monstros geralmente metade do DEF total. */
+  softDef?: number;
+  /** Soft MDEF — subtração flat de dano mágico por hit após Hard MDEF. rAthena: floor((INT + Level) / 4) para monstros. */
+  softMdef?: number;
   hp: number;
   classType?: MonsterClass;
   elementResistanceRates?: Partial<Record<ElementType, number>>;
