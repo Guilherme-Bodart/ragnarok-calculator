@@ -1,3 +1,4 @@
+export * from "./critical";
 export * from "./defense";
 export * from "./element-table";
 export * from "./magical-atk";

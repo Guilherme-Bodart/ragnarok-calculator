@@ -16,6 +16,12 @@ export type DamageRange = {
   average: number;
   maximum: number;
   total: number;
+  /** Chance de crítico (0 a 100) */
+  criticalChance?: number;
+  /** Dano se for um acerto crítico */
+  criticalDamage?: number;
+  /** Média ponderada entre acerto normal e crítico */
+  weightedAverage?: number;
 };
 
 export type CalculateDamageResult = {

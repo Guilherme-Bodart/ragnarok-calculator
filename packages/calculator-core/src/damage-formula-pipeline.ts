@@ -20,6 +20,7 @@ import {
   sumMagicalEquipmentPower,
   sumPhysicalEquipmentPower,
 } from "./formulas";
+import { CriticalEngine } from "./formulas/critical";
 import { SkillFormulaRegistry } from "./skills";
 import type { ElementType, RoItem, RoMonster, RoSkill } from "./ro-types";
 
@@ -54,6 +55,9 @@ export type DamageFormulaResult = {
     average: number;
     maximum: number;
     total: number;
+    criticalChance?: number;
+    criticalDamage?: number;
+    weightedAverage?: number;
   };
   breakdown: DamageBreakdownLine[];
   formulaId: string;
@@ -90,6 +94,7 @@ export class DamageFormulaPipeline {
   constructor(
     private readonly skillFormulaRegistry = new SkillFormulaRegistry(),
     private readonly castTimingEngine = new CastTimingEngine(),
+    private readonly criticalEngine = new CriticalEngine(),
   ) {}
 
   calculate(input: DamageFormulaInput): DamageFormulaResult {
@@ -99,12 +104,37 @@ export class DamageFormulaPipeline {
     const maximum = Math.max(1, Math.floor(average * 1.05));
     const total = average * context.hitCount;
 
+    let criticalChance: number | undefined;
+    let criticalDamage: number | undefined;
+    let weightedAverage: number | undefined;
+
+    // Crítico é aplicado a ataques físicos. Para Renewal, multiplicamos o dano base pelo multiplicador de crítico
+    if (input.skill.damageType === "physical") {
+      const critResult = this.criticalEngine.calculate(
+        input.character, // character é do tipo EffectiveCharacter (que extende CharacterStatus)
+        input.modifierEffects,
+        input.monster,
+      );
+
+      criticalChance = critResult.chance;
+      // Dano crítico no Renewal multiplica o dano final (pós-defesa)
+      criticalDamage = Math.max(1, Math.floor(average * critResult.damageMultiplier));
+      
+      const chance = criticalChance ?? 0;
+      const normalChance = Math.max(0, 100 - chance) / 100;
+      const critRate = chance / 100;
+      weightedAverage = Math.floor(average * normalChance + criticalDamage * critRate);
+    }
+
     return {
       damage: {
         minimum,
         average,
         maximum,
         total,
+        criticalChance,
+        criticalDamage,
+        weightedAverage,
       },
       breakdown: this.createBreakdown(input, context),
       formulaId: context.formulaId,
