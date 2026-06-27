@@ -12,6 +12,7 @@ export type SkillFormulaResult = {
   formulaId: string;
   multiplier: number;
   hitCount: number;
+  precision: "validated" | "inferred" | "partial" | "prototype";
 };
 
 export type SkillFormulaAdapter = {

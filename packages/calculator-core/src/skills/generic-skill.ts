@@ -13,12 +13,17 @@ export class GenericSkillFormula implements SkillFormulaAdapter {
   }
 
   calculate(input: SkillFormulaInput): SkillFormulaResult {
+    const hasMultiplier =
+      input.skill.baseMultiplierByLevel?.[String(input.skillLevel)] !==
+      undefined;
+
     return {
       formulaId: this.id,
       multiplier: getSkillMultiplier(input.skill, input.skillLevel),
       hitCount:
         input.skill.hitCountByLevel?.[String(input.skillLevel)] ??
         input.skill.hitCount,
+      precision: hasMultiplier ? "inferred" : "prototype",
     };
   }
 }

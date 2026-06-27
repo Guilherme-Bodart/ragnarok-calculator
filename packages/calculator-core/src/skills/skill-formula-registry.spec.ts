@@ -66,6 +66,7 @@ describe("SkillFormulaRegistry", () => {
       formulaId: "generic",
       multiplier: 4,
       hitCount: 1,
+      precision: "inferred",
     });
   });
 
@@ -74,6 +75,7 @@ describe("SkillFormulaRegistry", () => {
       formulaId: "static:SM_BASH",
       multiplier: 4,
       hitCount: 1,
+      precision: "validated",
     });
   });
 
@@ -91,6 +93,7 @@ describe("SkillFormulaRegistry", () => {
       formulaId: "static:SM_MAGNUM",
       multiplier: 3,
       hitCount: 1,
+      precision: "validated",
     });
 
     expect(
@@ -106,6 +109,7 @@ describe("SkillFormulaRegistry", () => {
       formulaId: "static:KN_BOWLINGBASH",
       multiplier: 5,
       hitCount: 2,
+      precision: "validated",
     });
   });
 
@@ -127,6 +131,7 @@ describe("SkillFormulaRegistry", () => {
         formulaId: `static:${skillId}`,
         multiplier: 1,
         hitCount: 7,
+        precision: "validated",
       });
     },
   );
@@ -176,8 +181,11 @@ describe("SkillFormulaRegistry", () => {
       }),
     ).toEqual({
       formulaId: "static:AG_SOUL_VC_STRIKE",
-      multiplier: 27.48,
+      // LATAM 180% por nível: (180*5 + spl:100 * 3 * 5) * baseLevel:229 / 10000
+      // = (900 + 1500) * 229 / 10000 = 2400 * 229 / 10000 = 54.96
+      multiplier: 54.96,
       hitCount: 7,
+      precision: "validated",
     });
   });
 
@@ -201,6 +209,7 @@ describe("SkillFormulaRegistry", () => {
       formulaId: "generic",
       multiplier: 1,
       hitCount: 5,
+      precision: "prototype",
     });
   });
 
