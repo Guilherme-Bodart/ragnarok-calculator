@@ -1,6 +1,7 @@
 import { CalculatorModifierEffectsFactory } from "./calculator-modifier-effects";
 import { CharacterStatusEngine } from "./character-status-engine";
 import { DamageEngine } from "./damage-engine";
+import { mergeBuffEffects, type BuffEffect } from "./buff-effects";
 import type { CalculateDamageResult } from "./calculation-result";
 import type { RulesetContext } from "./rulesets";
 import type { CalculatorCharacter, RoItem, RoMonster, RoSkill } from "./ro-types";
@@ -17,6 +18,10 @@ export type CalculateDamageInput = {
   equipmentItemIds: number[];
   cardItemIds: number[];
   buffItemIds: number[];
+  /** Efeitos de buffs já resolvidos pelo frontend (skill buffs, consumíveis, comidas, endows, etc.).
+   *  O core apenas acumula esses efeitos sobre os modifiers vindos dos itens.
+   *  Use BuffEffect para qualquer buff que não seja um item com rawScript no dataset. */
+  buffEffects?: BuffEffect[];
   itemContexts: CalculatorItemContext[];
   monsterId: number;
   skillId: string;
@@ -62,7 +67,7 @@ export function calculateDamageFromDataset(
   ].map((itemId) => findItemById(dataset.items, itemId));
 
   const modifierEffectsFactory = new CalculatorModifierEffectsFactory();
-  const modifierEffects = modifierEffectsFactory.fromItems(
+  let modifierEffects = modifierEffectsFactory.fromItems(
     items,
     createItemContextMap(input.itemContexts),
     {
@@ -72,6 +77,11 @@ export function calculateDamageFromDataset(
       ruleset: input.ruleset,
     },
   );
+
+  // Aplicar buffEffects (buffs de skill, consumíveis, endows, etc.) sobre os modifiers de item
+  if (input.buffEffects && input.buffEffects.length > 0) {
+    modifierEffects = mergeBuffEffects(modifierEffects, input.buffEffects);
+  }
   const characterStatus = new CharacterStatusEngine().calculate({
     character: input.character,
     items,
