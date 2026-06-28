@@ -66,7 +66,7 @@ export class ModifierResolver {
 
   private compare(
     actual: number | undefined,
-    operator: ModifierCondition["operator"],
+    operator: ">" | ">=" | "<" | "<=" | "==" | "!=",
     expected: number,
   ) {
     if (actual === undefined) {

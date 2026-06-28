@@ -124,7 +124,7 @@ function createSkillLevelCondition(
 
 function isRathenaConditionOperator(
   operator: string,
-): operator is ModifierCondition["operator"] {
+): operator is ">" | ">=" | "<" | "<=" | "==" | "!=" {
   return [">", ">=", "<", "<=", "==", "!="].includes(operator);
 }
 

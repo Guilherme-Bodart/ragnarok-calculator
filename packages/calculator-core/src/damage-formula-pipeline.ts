@@ -87,6 +87,7 @@ type DamageFormulaContext = {
   hitCount: number;
   castTiming: CastTimingResult;
   dps: number;
+  formulaId: string;
 };
 
 export class DamageFormulaPipeline {
@@ -199,8 +200,8 @@ export class DamageFormulaPipeline {
       ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseRate, input.monster.race)
       : getTargetedRate(input.modifierEffects.ignoreDefenseRate, input.monster.race);
     const defenseIgnoreClassRate = magical
-      ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseClassRate, input.monster.class)
-      : getTargetedRate(input.modifierEffects.ignoreDefenseClassRate, input.monster.class);
+      ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseClassRate, input.monster.classType)
+      : getTargetedRate(input.modifierEffects.ignoreDefenseClassRate, input.monster.classType);
     const defenseIgnoreRate = Math.min(100, defenseIgnoreRaceRate + defenseIgnoreClassRate);
     const defenseMultiplier = getDefenseMultiplier(
       input.monster,
