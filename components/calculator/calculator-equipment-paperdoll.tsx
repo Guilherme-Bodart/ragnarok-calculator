@@ -33,7 +33,7 @@ export function CalculatorEquipmentPaperdoll({
     >
       <div className="equipment-avatar" aria-hidden="true">
         <div className="equipment-avatar-ring" />
-        <div className="equipment-avatar-sprite">
+        <div className="equipment-avatar-sprite" suppressHydrationWarning>
           <span className="equipment-avatar-head" />
           <span className="equipment-avatar-body" />
           <span className="equipment-avatar-arm equipment-avatar-arm-left" />

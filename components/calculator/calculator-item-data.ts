@@ -20,25 +20,29 @@ type SearchCalculatorItemsInput = {
   kind?: "card" | "consumable";
 };
 
-const itemsCache = new Map<string, CalculatorItemIndexOption[]>();
+const itemsCache = new Map<string, Promise<CalculatorItemIndexOption[]>>();
 
 export function clearCalculatorItemsCache() {
   itemsCache.clear();
 }
 
-async function fetchItemCategory(category: string): Promise<CalculatorItemIndexOption[]> {
+export function fetchItemCategory(category: string): Promise<CalculatorItemIndexOption[]> {
   if (itemsCache.has(category)) {
     return itemsCache.get(category)!;
   }
 
-  const response = await fetch(`/data/calculator/items/${category}.json`);
-  if (!response.ok) {
+  const promise = fetch(`/data/calculator/items/${category}.json`).then(async (response) => {
+    if (!response.ok) {
+      return [];
+    }
+    return (await response.json()) as CalculatorItemIndexOption[];
+  }).catch(() => {
+    itemsCache.delete(category);
     return [];
-  }
+  });
 
-  const data = (await response.json()) as CalculatorItemIndexOption[];
-  itemsCache.set(category, data);
-  return data;
+  itemsCache.set(category, promise);
+  return promise;
 }
 
 export async function searchCalculatorItems({

@@ -107,8 +107,9 @@ function getItemSlots(
   if (locations.Left_Hand) slots.push("shield");
   if (locations.Garment) slots.push("garment");
   if (locations.Shoes) slots.push("shoes");
-  if (locations.Left_Accessory) slots.push("accessoryLeft");
-  if (locations.Right_Accessory) slots.push("accessoryRight");
+  if (locations.Left_Accessory || locations.Right_Accessory) {
+    slots.push("accessoryLeft", "accessoryRight");
+  }
   if (locations.Costume_Head_Top) slots.push("costumeHeadTop");
   if (locations.Costume_Head_Mid) slots.push("costumeHeadMid");
   if (locations.Costume_Head_Low) slots.push("costumeHeadLow");

@@ -136,9 +136,16 @@ console.log(`Generated ${byCategory.size} category files, cards, and consumables
 function getSlots(locations: any) {
   if (!locations) return [];
 
-  return Object.entries(locationToSlot)
+  const slots = Object.entries(locationToSlot)
     .filter(([location]) => locations[location])
     .map(([, slot]) => slot);
+
+  if (slots.includes("accessoryLeft") || slots.includes("accessoryRight")) {
+    if (!slots.includes("accessoryLeft")) slots.push("accessoryLeft");
+    if (!slots.includes("accessoryRight")) slots.push("accessoryRight");
+  }
+
+  return slots;
 }
 
 function getItemKind(type: any) {
