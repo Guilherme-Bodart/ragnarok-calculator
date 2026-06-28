@@ -48,6 +48,20 @@ describe("evaluateRathenaExpression", () => {
     );
   });
 
+  it("evaluates learned skill level lookups", () => {
+    expect(
+      evaluateRathenaExpression('getskilllv("GC_WEAPONBLOCKING") * 10', {
+        learnedSkills: { GC_WEAPONBLOCKING: 5 },
+      }),
+    ).toBe(50);
+    expect(
+      evaluateRathenaExpression(
+        '(getskilllv("WL_HELLINFERNO") >= 5 ? 100 : 0)',
+        { learnedSkills: { WL_HELLINFERNO: 4 } },
+      ),
+    ).toBe(0);
+  });
+
   it("rejects unsupported expressions", () => {
     expect(evaluateRathenaExpression("rand(1,2)", { refine: 9 })).toBeNull();
     expect(evaluateRathenaExpression(".@unknown/2", { refine: 9 })).toBeNull();

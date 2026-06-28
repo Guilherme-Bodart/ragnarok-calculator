@@ -61,6 +61,8 @@ export type CalculatorModifierEffects = {
   magicElementAttackRate: Partial<Record<ModifierElementId, number>>;
   ignoreDefenseRate: Partial<Record<ModifierRaceId, number>>;
   ignoreMagicDefenseRate: Partial<Record<ModifierRaceId, number>>;
+  ignoreDefenseClassRate: Partial<Record<ModifierClassId, number>>;
+  ignoreMagicDefenseClassRate: Partial<Record<ModifierClassId, number>>;
   incomingRaceDamageReductionRate: Partial<Record<ModifierRaceId, number>>;
   incomingElementDamageReductionRate: Partial<Record<ModifierElementId, number>>;
   incomingClassDamageReductionRate: Partial<Record<ModifierClassId, number>>;
@@ -137,6 +139,8 @@ export class CalculatorModifierEffectsFactory {
       magicElementAttackRate: {},
       ignoreDefenseRate: {},
       ignoreMagicDefenseRate: {},
+      ignoreDefenseClassRate: {},
+      ignoreMagicDefenseClassRate: {},
       incomingRaceDamageReductionRate: {},
       incomingElementDamageReductionRate: {},
       incomingClassDamageReductionRate: {},
@@ -151,6 +155,7 @@ export class CalculatorModifierEffectsFactory {
         },
         {
           ...baseContext,
+          equippedItemIds: items.map((i) => i.id),
           ...(contextByItemId.get(item.id) ?? {}),
         },
       );
@@ -529,6 +534,28 @@ export class CalculatorModifierEffectsFactory {
           const current =
             effects.ignoreMagicDefenseRate[bucket.target.raceId] ?? 0;
           effects.ignoreMagicDefenseRate[bucket.target.raceId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "ignoreDefenseClassRate" &&
+          bucket.target.type === "class"
+        ) {
+          const current =
+            effects.ignoreDefenseClassRate[bucket.target.classId] ?? 0;
+          effects.ignoreDefenseClassRate[bucket.target.classId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "ignoreMagicDefenseClassRate" &&
+          bucket.target.type === "class"
+        ) {
+          const current =
+            effects.ignoreMagicDefenseClassRate[bucket.target.classId] ?? 0;
+          effects.ignoreMagicDefenseClassRate[bucket.target.classId] =
             current + bucket.value;
         }
       }

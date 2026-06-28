@@ -145,3 +145,41 @@ function toEnchantGradeValue(value: string) {
 
   return Number.isInteger(numericValue) ? numericValue : null;
 }
+
+export function createEquippedConditions(conditionText: string) {
+  const conditions: ModifierCondition[] = [];
+  const equippedPattern = /isequipped\s*\(\s*([\d\s,]+)\s*\)/g;
+
+  for (const match of conditionText.matchAll(equippedPattern)) {
+    const [, ids] = match;
+    const itemIds = ids
+      .split(",")
+      .map((id) => id.trim())
+      .filter((id) => id.length > 0)
+      .map(Number)
+      .filter(Number.isInteger);
+
+    if (itemIds.length === 0) {
+      return null;
+    }
+
+    conditions.push({
+      type: "equipped",
+      itemIds,
+    });
+  }
+
+  if (conditions.length === 0) {
+    return null;
+  }
+
+  const leftover = conditionText
+    .replace(equippedPattern, "")
+    .replace(/[\s()&|]+/g, "");
+
+  if (leftover) {
+    return null;
+  }
+
+  return conditions;
+}

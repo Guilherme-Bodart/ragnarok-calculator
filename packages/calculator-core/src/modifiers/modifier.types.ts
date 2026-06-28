@@ -84,6 +84,10 @@ export const modifierConditionSchema = z.discriminatedUnion("type", [
     classId: z.string().min(1),
     operator: z.enum(["==", "!="]),
   }),
+  z.object({
+    type: z.literal("equipped"),
+    itemIds: z.array(z.number().int()),
+  }),
 ]);
 
 export const normalizedModifierSchema = z.object({
@@ -149,6 +153,8 @@ export const normalizedModifierSchema = z.object({
     "magicElementAttackRate",
     "ignoreDefenseRate",
     "ignoreMagicDefenseRate",
+    "ignoreDefenseClassRate",
+    "ignoreMagicDefenseClassRate",
     "incomingRaceDamageReductionRate",
     "incomingElementDamageReductionRate",
     "incomingClassDamageReductionRate",
@@ -189,6 +195,7 @@ export const modifierResolutionContextSchema = z.object({
   baseLevel: z.number().int().min(1).optional(),
   learnedSkills: z.record(z.string(), z.number().int().min(0)).optional(),
   ruleset: rulesetContextSchema.optional(),
+  equippedItemIds: z.array(z.number().int()).optional(),
 });
 
 export const itemModifierSourceSchema = z.object({

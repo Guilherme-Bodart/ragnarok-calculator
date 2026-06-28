@@ -1,6 +1,6 @@
 import type { CalculatorModifierEffects } from "../calculator-modifier-effects";
 import type { EffectiveCharacter } from "../effective-character";
-import type { Bonus, RoItem, RoMonster, RoSkill } from "../ro-types";
+import type { RoItem, RoMonster, RoSkill } from "../ro-types";
 
 export function getPhysicalBasePower(character: EffectiveCharacter) {
   return character.statusAtk;
@@ -24,39 +24,49 @@ export function getPhysicalModifierFlatPower(effects: CalculatorModifierEffects)
   return effects.flatAtk;
 }
 
-export function getPhysicalLegacyBonusRate(
-  items: RoItem[],
-  skill: RoSkill,
-  monster: RoMonster,
-) {
-  return items
-    .flatMap((item) => item.bonuses)
-    .reduce(
-      (total, bonus) => total + getApplicablePhysicalLegacyBonusRate(bonus, skill, monster),
-      0,
-    );
-}
-
-export function getPhysicalTraitFinalRate(character: EffectiveCharacter) {
-  return character.traitEffects.pAtk;
-}
-
-export function getPhysicalModifierFinalRate(
+export function getPhysicalModifierFinalRateMultiplier(
+  character: EffectiveCharacter,
   effects: CalculatorModifierEffects,
+  items: RoItem[],
   monster: RoMonster,
   skill: RoSkill,
 ) {
-  const skillRate = effects.skillDamageRate[skill.id] ?? 0;
+  let legacyAtkRate = 0;
+  let legacySkillRate = 0;
+  let legacyRaceRate = 0;
+  let legacyElementRate = 0;
+  let legacySizeRate = 0;
+
+  for (const item of items) {
+    for (const bonus of item.bonuses) {
+      if (bonus.type === "atkRate") legacyAtkRate += bonus.value;
+      else if (bonus.type === "skillDamage" && bonus.skillId === skill.id) legacySkillRate += bonus.value;
+      else if (bonus.type === "raceDamage" && bonus.race === monster.race) legacyRaceRate += bonus.value;
+      else if (bonus.type === "elementDamage" && bonus.element === monster.element) legacyElementRate += bonus.value;
+      else if (bonus.type === "sizeDamage" && bonus.size === monster.size) legacySizeRate += bonus.value;
+    }
+  }
+
+  const atkRate = effects.atkRate + legacyAtkRate;
+  const pAtk = effects.pAtk + character.traitEffects.pAtk;
+  const skillRate = (effects.skillDamageRate[skill.id] ?? 0) + legacySkillRate;
+  
+  const raceRate = getTargetedRate(effects.raceDamageRate, monster.race) + legacyRaceRate;
+  const elementRate = getTargetedRate(effects.elementDamageRate, monster.element) + legacyElementRate;
+  const sizeRate = getTargetedRate(effects.sizeDamageRate, monster.size) + legacySizeRate;
+  const classRate = getTargetedRate(effects.classDamageRate, monster.classType);
+  
+  const rangeRate = getPhysicalRangeRate(effects, skill);
 
   return (
-    effects.atkRate +
-    getPhysicalRangeRate(effects, skill) +
-    effects.pAtk +
-    skillRate +
-    getTargetedRate(effects.raceDamageRate, monster.race) +
-    getTargetedRate(effects.elementDamageRate, monster.element) +
-    getTargetedRate(effects.sizeDamageRate, monster.size) +
-    getTargetedRate(effects.classDamageRate, monster.classType)
+    (1 + atkRate / 100) *
+    (1 + pAtk / 100) *
+    (1 + rangeRate / 100) *
+    (1 + skillRate / 100) *
+    (1 + raceRate / 100) *
+    (1 + elementRate / 100) *
+    (1 + sizeRate / 100) *
+    (1 + classRate / 100)
   );
 }
 
@@ -64,20 +74,6 @@ function getPhysicalRangeRate(effects: CalculatorModifierEffects, skill: RoSkill
   return Math.abs(skill.attackRange ?? 1) > 3
     ? effects.longAttackRate
     : effects.shortAttackRate;
-}
-
-function getApplicablePhysicalLegacyBonusRate(
-  bonus: Bonus,
-  skill: RoSkill,
-  monster: RoMonster,
-) {
-  if (bonus.type === "atkRate") return bonus.value;
-  if (bonus.type === "skillDamage" && bonus.skillId === skill.id) return bonus.value;
-  if (bonus.type === "raceDamage" && bonus.race === monster.race) return bonus.value;
-  if (bonus.type === "elementDamage" && bonus.element === monster.element) return bonus.value;
-  if (bonus.type === "sizeDamage" && bonus.size === monster.size) return bonus.value;
-
-  return 0;
 }
 
 function getTargetedRate<TTarget extends string>(

@@ -2,11 +2,13 @@ type ExpressionVariables = {
   refine?: number;
   grade?: number;
   baseLevel?: number;
+  learnedSkills?: Record<string, number | undefined>;
   locals?: Record<string, number | undefined>;
 };
 
 type Token =
   | { type: "number"; value: number }
+  | { type: "string"; value: string }
   | { type: "variable"; value: string }
   | { type: "identifier"; value: string }
   | {
@@ -54,6 +56,25 @@ function tokenizeExpression(expression: string): Token[] | null {
       }
 
       tokens.push({ type: "number", value: Number(value) });
+      continue;
+    }
+
+    if (char === '"' || char === "'") {
+      const quote = char;
+      let value = "";
+      index += 1;
+
+      while (index < expression.length && expression[index] !== quote) {
+        value += expression[index];
+        index += 1;
+      }
+
+      if (expression[index] !== quote) {
+        return null;
+      }
+
+      tokens.push({ type: "string", value });
+      index += 1;
       continue;
     }
 
@@ -313,6 +334,16 @@ class ExpressionParser {
       return null;
     }
 
+    if (functionName === "getskilllv") {
+      const skillId = this.matchString();
+
+      if (!skillId || !this.matchSymbol(")")) {
+        return null;
+      }
+
+      return this.variables.learnedSkills?.[skillId] ?? 0;
+    }
+
     const args: number[] = [];
 
     if (!this.matchSymbol(")")) {
@@ -396,6 +427,17 @@ class ExpressionParser {
     }
 
     return false;
+  }
+
+  private matchString() {
+    const token = this.peek();
+
+    if (token?.type === "string") {
+      this.index += 1;
+      return token.value;
+    }
+
+    return null;
   }
 
   private peek() {

@@ -490,6 +490,36 @@ describe("ModifierNormalizer", () => {
     ]);
   });
 
+  it("evaluates skill damage expressions with learned skill levels", () => {
+    const result = normalizer.fromRawScript(
+      `
+        bonus2 bSkillAtk,"GC_COUNTERSLASH",(10*getskilllv("GC_WEAPONBLOCKING"));
+        bonus2 bSkillAtk,"WL_HELLINFERNO",(getskilllv("WL_HELLINFERNO") >= 5 ? 100 : 0) + (.@r*10);
+      `,
+      {
+        refine: 9,
+        learnedSkills: {
+          GC_WEAPONBLOCKING: 5,
+          WL_HELLINFERNO: 5,
+        },
+      },
+    );
+
+    expect(result.unsupportedStatements).toEqual([]);
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "skillDamageRate",
+        value: 50,
+        target: { type: "skill", skillId: "GC_COUNTERSLASH" },
+      },
+      {
+        stat: "skillDamageRate",
+        value: 190,
+        target: { type: "skill", skillId: "WL_HELLINFERNO" },
+      },
+    ]);
+  });
+
   it("supports simple refine conditions using a refine variable", () => {
     const result = normalizer.fromRawScript(`
       .@r = getrefine();
@@ -651,6 +681,48 @@ describe("ModifierNormalizer", () => {
             type: "class",
             classId: "Job_Knight",
             operator: "==",
+          },
+        ],
+      },
+    ]);
+    expect(result.unsupportedStatements).toEqual([]);
+  });
+
+  it("attaches equipped conditions to simple isequipped blocks", () => {
+    const result = normalizer.fromRawScript(`
+      if (isequipped(1234, 5678)) {
+        bonus bLongAtkRate,50;
+      }
+    `);
+
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "longAttackRate",
+        value: 50,
+        conditions: [
+          {
+            type: "equipped",
+            itemIds: [1234, 5678],
+          },
+        ],
+      },
+    ]);
+    expect(result.unsupportedStatements).toEqual([]);
+  });
+
+  it("attaches equipped conditions to inline isequipped commands", () => {
+    const result = normalizer.fromRawScript(
+      "if (isequipped(1234)) bonus bAtkRate,5;",
+    );
+
+    expect(result.modifiers).toMatchObject([
+      {
+        stat: "atkRate",
+        value: 5,
+        conditions: [
+          {
+            type: "equipped",
+            itemIds: [1234],
           },
         ],
       },

@@ -51,6 +51,16 @@ export class ModifierResolver {
       return context.classId !== condition.classId;
     }
 
+    if (condition.type === "equipped") {
+      if (!context.equippedItemIds) {
+        return false;
+      }
+
+      return condition.itemIds.every((id) =>
+        context.equippedItemIds!.includes(id),
+      );
+    }
+
     return false;
   }
 

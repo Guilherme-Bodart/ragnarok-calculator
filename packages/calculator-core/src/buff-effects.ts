@@ -102,8 +102,10 @@ export type BuffEffect = {
 
   /** Ignore DEF por raça (%) */
   ignoreDefenseRate?: Partial<Record<ModifierRaceId, number>>;
-  /** Ignore MDEF por raça (%) */
   ignoreMagicDefenseRate?: Partial<Record<ModifierRaceId, number>>;
+  ignoreDefenseClassRate?: Partial<Record<ModifierClassId, number>>;
+  ignoreMagicDefenseClassRate?: Partial<Record<ModifierClassId, number>>;
+  incomingRaceDamageReductionRate?: Partial<Record<ModifierRaceId, number>>;
 
   /** MaxHP flat */
   maxHp?: number;
@@ -173,6 +175,9 @@ export function mergeBuffEffects(
     result.skillDamageRate = mergeRecord(result.skillDamageRate, buff.skillDamageRate) as Record<string, number>;
     result.ignoreDefenseRate = mergeRecord(result.ignoreDefenseRate, buff.ignoreDefenseRate);
     result.ignoreMagicDefenseRate = mergeRecord(result.ignoreMagicDefenseRate, buff.ignoreMagicDefenseRate);
+    result.ignoreDefenseClassRate = mergeRecord(result.ignoreDefenseClassRate, buff.ignoreDefenseClassRate);
+    result.ignoreMagicDefenseClassRate = mergeRecord(result.ignoreMagicDefenseClassRate, buff.ignoreMagicDefenseClassRate);
+    result.incomingRaceDamageReductionRate = mergeRecord(result.incomingRaceDamageReductionRate, buff.incomingRaceDamageReductionRate);
   }
 
   return result;

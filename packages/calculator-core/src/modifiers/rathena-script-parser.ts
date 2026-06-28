@@ -10,6 +10,7 @@ import {
   createGradeCondition,
   createRefineCondition,
   createSkillLevelConditions,
+  createEquippedConditions,
 } from "./rathena-script-conditions";
 import { evaluateRathenaExpression } from "./rathena-expression";
 import { BONUS2_MAPPERS, BONUS_MAPPERS } from "./rathena-script-mappers";
@@ -32,6 +33,7 @@ export class RathenaScriptParser {
       refine: context.refine,
       grade: context.grade,
       baseLevel: context.baseLevel,
+      learnedSkills: context.learnedSkills,
       locals: {},
     };
 
@@ -93,9 +95,13 @@ export class RathenaScriptParser {
     const classBlockExtraction = this.extractClassBlocks(scriptWithoutBlocks);
     segments.push(...classBlockExtraction.segments);
     scriptWithoutBlocks = classBlockExtraction.remainingScript;
+    const equippedBlockExtraction = this.extractEquippedBlocks(scriptWithoutBlocks);
+    segments.push(...equippedBlockExtraction.segments);
+    scriptWithoutBlocks = equippedBlockExtraction.remainingScript;
 
     const inlineRefine = /if\s*\(\s*(?:getrefine\(\)|\.@r)\s*(>=|>|<=|<|==|!=)\s*(-?\d+)\s*\)\s*([^;]+;)/g;
     const inlineGrade = /if\s*\(\s*(?:getenchantgrade\(\)|\.@g)\s*(>=|>|<=|<|==|!=)\s*(ENCHANTGRADE_[A-Z]+|-?\d+)\s*\)\s*([^;]+;)/g;
+    const inlineEquipped = /if\s*\(\s*isequipped\s*\(\s*([\d\s,]+)\s*\)\s*\)\s*([^;]+;)/g;
 
     for (const match of scriptWithoutBlocks.matchAll(inlineRefine)) {
       const [, operator, refineValue, statement] = match;
@@ -119,6 +125,20 @@ export class RathenaScriptParser {
         segments.push({
           statement: statement.trim(),
           conditions: [condition],
+        });
+      }
+
+      scriptWithoutBlocks = scriptWithoutBlocks.replace(match[0], "");
+    }
+
+    for (const match of scriptWithoutBlocks.matchAll(inlineEquipped)) {
+      const [, ids, statement] = match;
+      const conditions = createEquippedConditions(`isequipped(${ids})`);
+
+      if (conditions) {
+        segments.push({
+          statement: statement.trim(),
+          conditions,
         });
       }
 
@@ -289,6 +309,13 @@ export class RathenaScriptParser {
     segments.push(...gradeBlockExtraction.segments);
     remainingScript = gradeBlockExtraction.remainingScript;
 
+    const equippedBlockExtraction = this.extractEquippedBlocks(
+      remainingScript,
+      inheritedConditions,
+    );
+    segments.push(...equippedBlockExtraction.segments);
+    remainingScript = equippedBlockExtraction.remainingScript;
+
     segments.push(
       ...this.splitStatements(remainingScript).map((statement) => ({
         statement,
@@ -365,6 +392,52 @@ export class RathenaScriptParser {
           statement,
           conditions,
         })),
+      );
+      cursor = braceEnd + 1;
+    }
+
+    remainingScript += script.slice(cursor);
+
+    return {
+      segments,
+      remainingScript,
+    };
+  }
+
+  private extractEquippedBlocks(
+    script: string,
+    inheritedConditions: ModifierCondition[] = [],
+  ) {
+    const segments: ScriptSegment[] = [];
+    const equipBlockPattern = /if\s*\(([^{}]+)\)\s*\{/g;
+    let cursor = 0;
+    let remainingScript = "";
+
+    for (const match of script.matchAll(equipBlockPattern)) {
+      if (this.isInsideBlock(script, match.index)) {
+        continue;
+      }
+
+      const braceStart = match.index + match[0].length - 1;
+      const braceEnd = this.findMatchingBrace(script, braceStart);
+
+      if (braceEnd === -1 || match.index < cursor) {
+        continue;
+      }
+
+      const conditions = createEquippedConditions(match[1]);
+
+      if (!conditions) {
+        continue;
+      }
+
+      remainingScript += script.slice(cursor, match.index);
+      const blockBody = script.slice(braceStart + 1, braceEnd);
+      segments.push(
+        ...this.extractNestedConditionedSegments(blockBody, [
+          ...inheritedConditions,
+          ...conditions,
+        ]),
       );
       cursor = braceEnd + 1;
     }

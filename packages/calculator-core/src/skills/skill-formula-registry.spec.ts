@@ -181,9 +181,9 @@ describe("SkillFormulaRegistry", () => {
       }),
     ).toEqual({
       formulaId: "static:AG_SOUL_VC_STRIKE",
-      // LATAM 180% por nível: (180*5 + spl:100 * 3 * 5) * baseLevel:229 / 10000
-      // = (900 + 1500) * 229 / 10000 = 2400 * 229 / 10000 = 54.96
-      multiplier: 54.96,
+      // LATAM 180% por nível: (180*5 + spl:100 * 3) * baseLevel:229 / 10000
+      // = (900 + 300) * 229 / 10000 = 1200 * 229 / 10000 = 27.48
+      multiplier: 27.48,
       hitCount: 7,
       precision: "validated",
     });

@@ -5,21 +5,20 @@ import {
   getDefenseMultiplier,
   getAttackElement,
   getElementMultiplier,
-  getMagicalBasePower,
-  getMagicalLegacyBonusRate,
-  getMagicalModifierFinalRate,
-  getMagicalModifierFlatPower,
-  getMagicalTraitFinalRate,
-  getPhysicalBasePower,
-  getPhysicalLegacyBonusRate,
-  getPhysicalModifierFinalRate,
-  getPhysicalModifierFlatPower,
-  getPhysicalTraitFinalRate,
-  getWeaponRefineAtk,
-  getWeaponSizeMultiplier,
-  sumMagicalEquipmentPower,
-  sumPhysicalEquipmentPower,
 } from "./formulas";
+import {
+  getMagicalBasePower,
+  getMagicalModifierFinalRateMultiplier,
+  getMagicalModifierFlatPower,
+  sumMagicalEquipmentPower,
+} from "./formulas/magical-atk";
+import {
+  getPhysicalBasePower,
+  getPhysicalModifierFinalRateMultiplier,
+  getPhysicalModifierFlatPower,
+  sumPhysicalEquipmentPower,
+} from "./formulas/physical-atk";
+import { getWeaponRefineAtk, getWeaponSizeMultiplier } from "./formulas/index";
 import { CriticalEngine } from "./formulas/critical";
 import { SkillFormulaRegistry } from "./skills";
 import type { ElementType, RoItem, RoMonster, RoSkill } from "./ro-types";
@@ -55,6 +54,7 @@ export type DamageFormulaResult = {
     average: number;
     maximum: number;
     total: number;
+    damagePerHit: number;
     criticalChance?: number;
     criticalDamage?: number;
     weightedAverage?: number;
@@ -69,11 +69,10 @@ type DamageFormulaContext = {
   equipmentPower: number;
   modifierFlatPower: number;
   skillMultiplier: number;
-  legacyBonusRate: number;
-  traitFinalRate: number;
-  modifierFinalRate: number;
+  legacyBonusRate?: number;
+  traitFinalRate?: number;
+  modifierFinalRate?: number;
   finalRateMultiplier: number;
-  formulaId: string;
   weaponRefinePower: number;
   weaponSizeMultiplier: number;
   attackElement: ElementType;
@@ -99,39 +98,41 @@ export class DamageFormulaPipeline {
 
   calculate(input: DamageFormulaInput): DamageFormulaResult {
     const context = this.createContext(input);
-    const average = Math.max(1, context.singleHitDamage);
-    const minimum = Math.max(1, Math.floor(average * 0.95));
-    const maximum = Math.max(1, Math.floor(average * 1.05));
-    const total = average * context.hitCount;
+    // Em RO Renewal, a fórmula da Skill normalmente representa o dano TOTAL da habilidade.
+    // Os hits (hitCount) apenas dividem esse dano visualmente.
+    const total = Math.max(1, context.singleHitDamage);
+    const damagePerHit = Math.max(1, Math.floor(total / Math.max(1, context.hitCount)));
+    
+    const minimum = Math.max(1, Math.floor(total * 0.95));
+    const maximum = Math.max(1, Math.floor(total * 1.05));
 
     let criticalChance: number | undefined;
     let criticalDamage: number | undefined;
     let weightedAverage: number | undefined;
 
-    // Crítico é aplicado a ataques físicos. Para Renewal, multiplicamos o dano base pelo multiplicador de crítico
     if (input.skill.damageType === "physical") {
       const critResult = this.criticalEngine.calculate(
-        input.character, // character é do tipo EffectiveCharacter (que extende CharacterStatus)
+        input.character, 
         input.modifierEffects,
         input.monster,
       );
 
       criticalChance = critResult.chance;
-      // Dano crítico no Renewal multiplica o dano final (pós-defesa)
-      criticalDamage = Math.max(1, Math.floor(average * critResult.damageMultiplier));
+      criticalDamage = Math.max(1, Math.floor(total * critResult.damageMultiplier));
       
       const chance = criticalChance ?? 0;
       const normalChance = Math.max(0, 100 - chance) / 100;
       const critRate = chance / 100;
-      weightedAverage = Math.floor(average * normalChance + criticalDamage * critRate);
+      weightedAverage = Math.floor(total * normalChance + criticalDamage * critRate);
     }
 
     return {
       damage: {
         minimum,
-        average,
+        average: total,
         maximum,
         total,
+        damagePerHit,
         criticalChance,
         criticalDamage,
         weightedAverage,
@@ -160,25 +161,21 @@ export class DamageFormulaPipeline {
       skillLevel: input.skillLevel,
     });
     const skillMultiplier = skillFormula.multiplier;
-    const legacyBonusRate = magical
-      ? getMagicalLegacyBonusRate(input.items, input.skill, input.monster)
-      : getPhysicalLegacyBonusRate(input.items, input.skill, input.monster);
-    const traitFinalRate = magical
-      ? getMagicalTraitFinalRate(input.character)
-      : getPhysicalTraitFinalRate(input.character);
-    const modifierFinalRate = magical
-      ? getMagicalModifierFinalRate(
+    const finalRateMultiplier = magical
+      ? getMagicalModifierFinalRateMultiplier(
+          input.character,
           input.modifierEffects,
+          input.items,
           input.monster,
           input.skill,
         )
-      : getPhysicalModifierFinalRate(
+      : getPhysicalModifierFinalRateMultiplier(
+          input.character,
           input.modifierEffects,
+          input.items,
           input.monster,
           input.skill,
         );
-    const finalRateMultiplier =
-      1 + (legacyBonusRate + traitFinalRate + modifierFinalRate) / 100;
     const weaponRefinePower = magical
       ? 0
       : getWeaponRefineAtk(input.character.weaponLevel, input.character.weaponRefine);
@@ -198,30 +195,32 @@ export class DamageFormulaPipeline {
       input.monster.elementResistanceRates ?? {},
       attackElement,
     );
-    const defenseIgnoreRate = magical
+    const defenseIgnoreRaceRate = magical
       ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseRate, input.monster.race)
       : getTargetedRate(input.modifierEffects.ignoreDefenseRate, input.monster.race);
+    const defenseIgnoreClassRate = magical
+      ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseClassRate, input.monster.class)
+      : getTargetedRate(input.modifierEffects.ignoreDefenseClassRate, input.monster.class);
+    const defenseIgnoreRate = Math.min(100, defenseIgnoreRaceRate + defenseIgnoreClassRate);
     const defenseMultiplier = getDefenseMultiplier(
       input.monster,
       input.skill.damageType,
       defenseIgnoreRate,
     );
-    const preDefenseDamage = Math.floor(
-      (basePower + equipmentPower + modifierFlatPower + weaponRefinePower) *
-        skillMultiplier *
-        finalRateMultiplier *
-        weaponSizeMultiplier,
-    );
+    const preDefenseDamage =
+      (basePower + equipmentPower + modifierFlatPower) *
+      skillMultiplier *
+      finalRateMultiplier *
+      weaponSizeMultiplier *
+      elementMultiplier;
     const postDefenseDamage = Math.floor(preDefenseDamage * defenseMultiplier);
-    // rAthena Renewal: Soft DEF/MDEF — subtração flat por hit após Hard DEF/MDEF
-    // Soft MDEF para monstros = floor((INT + Level) / 4), exposto em monster.softMdef
     const softDefReduction = magical
       ? (input.monster.softMdef ?? 0)
       : (input.monster.softDef ?? 0);
     const singleHitDamage = Math.max(
       1,
       Math.floor(
-        postDefenseDamage * elementMultiplier * (1 - elementResistanceRate / 100),
+        postDefenseDamage * (1 - elementResistanceRate / 100),
       ) - softDefReduction,
     );
     const castTiming = this.castTimingEngine.calculate({
@@ -241,9 +240,6 @@ export class DamageFormulaPipeline {
       equipmentPower,
       modifierFlatPower,
       skillMultiplier,
-      legacyBonusRate,
-      traitFinalRate,
-      modifierFinalRate,
       finalRateMultiplier,
       formulaId: skillFormula.formulaId,
       weaponRefinePower,
@@ -297,29 +293,8 @@ export class DamageFormulaPipeline {
         unit: "multiplier",
       },
       {
-        key: "legacyBonusRate",
-        label: "Legacy item bonus rate",
-        value: context.legacyBonusRate,
-        group: "item",
-        unit: "percent",
-      },
-      {
-        key: "traitFinalRate",
-        label: "Trait final rate",
-        value: context.traitFinalRate,
-        group: "character",
-        unit: "percent",
-      },
-      {
-        key: "modifierFinalRate",
-        label: "Modifier final rate",
-        value: context.modifierFinalRate,
-        group: "modifier",
-        unit: "percent",
-      },
-      {
         key: "finalRateMultiplier",
-        label: "Final rate multiplier",
+        label: "Final rate multiplier (Categories)",
         value: context.finalRateMultiplier,
         group: "modifier",
         unit: "multiplier",

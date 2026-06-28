@@ -174,6 +174,7 @@ Funcionando:
 - Adapter rAthena ja popula cast variavel, cast fixo, pos-conjuracao e cooldown por level quando esses campos existem em `skills.en.json`.
 - Core captura reducoes defensivas por raca/elemento (`bSubRace`, `bSubEle`) separadas dos modificadores ofensivos.
 - Core reconhece `RC_Player_Doram` como alvo separado de modificador, sem aplicar esses efeitos em monstros comuns.
+- Core avalia `getskilllv("SKILL")` em expressoes de item quando `learnedSkills` esta disponivel, melhorando cobertura de `bonus2 bSkillAtk`.
 
 Ainda incompleto para V1:
 

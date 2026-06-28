@@ -15,5 +15,6 @@ export type ParserVariables = {
   refine?: number;
   grade?: number;
   baseLevel?: number;
+  learnedSkills?: Record<string, number>;
   locals?: Record<string, number | undefined>;
 };

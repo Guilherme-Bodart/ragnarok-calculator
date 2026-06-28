@@ -60,10 +60,10 @@ const staticSkillFormulas: Record<
   },
   AG_SOUL_VC_STRIKE: (input) => ({
     formulaId: "static:AG_SOUL_VC_STRIKE",
-    // LATAM Renewal: 180% por nível × (BaseLevel/100) × (1 + SPL*3/100)
-    // Fórmula: (180 * level + SPL * 3 * level) / 100 normalizada como multiplier
+    // LATAM Renewal: 180% por nível. SPL*3 não é multiplicado por level.
+    // Fórmula: ((180 * level) + (SPL * 3)) * (BaseLevel / 100)
     multiplier:
-      ((180 * input.skillLevel + input.character.effectiveStats.spl * 3 * input.skillLevel) *
+      ((180 * input.skillLevel + input.character.effectiveStats.spl * 3) *
         input.character.baseLevel) /
       100 /
       100,

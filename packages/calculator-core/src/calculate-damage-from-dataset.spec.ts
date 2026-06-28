@@ -96,12 +96,12 @@ describe("calculateDamageFromDataset", () => {
     // = 100 + 50 + 0 + 0 + 25 = 175
     // ATK = 175 (status) + 0 (weapon) + 100 (flatAtk do item) = 275
     // SM_BASH lv10 multiplier = (130 + 30*10)/100 = 4.0
-    // finalRate = 1 + (atkRate:10 + raceDamage demihuman:15) / 100 = 1.25
-    // preDefense = floor(275 * 4.0 * 1.25) = 1375
-    // postDefense = floor(1375 * 1.0) = 1375 (monster DEF=0)
-    // singleHit = max(1, floor(1375 * 1.0 * 1.0) - 0) = 1375
-    expect(result.damage.average).toBe(1375);
-    expect(result.damage.total).toBe(1375);
+    // finalRate = (1 + atkRate:10/100) * (1 + raceDamage demihuman:15/100) = 1.1 * 1.15 = 1.265
+    // preDefense = floor(275 * 4.0 * 1.265) = floor(1391.5) = 1391
+    // postDefense = floor(1391 * 1.0) = 1391 (monster DEF=0)
+    // singleHit = max(1, floor(1391 * 1.0 * 1.0) - 0) = 1391
+    expect(result.damage.average).toBe(1391);
+    expect(result.damage.total).toBe(1391);
     expect(result.meta).toMatchObject({
       formulaId: "static:SM_BASH",
       precision: "validated",
@@ -157,9 +157,9 @@ describe("calculateDamageFromDataset", () => {
     // NOTA: refineItem substituí o item original — não tem bBaseAtk:100 nem bAddRace demihuman:15
     // ATK = statusAtk:175 + 0 (sem flatAtk) = 175
     // bAtkRate:20 (refine>=7), bSkillAtk SM_BASH:50 (skill level >=10)
-    // finalRate = 1 + (atkRate:20 + skillDamage:50) / 100 = 1.70
-    // preDefense = floor(175 * 4.0 * 1.70) = floor(1190) = 1190
-    expect(result.damage.average).toBe(1190);
+    // finalRate = (1 + atkRate:20/100) * (1 + skillDamage:50/100) = 1.2 * 1.5 = 1.80
+    // preDefense = floor(175 * 4.0 * 1.80) = floor(1259.999...) = 1259
+    expect(result.damage.average).toBe(1259);
   });
 
   it("resolves item enchant grade conditions before damage", () => {

@@ -394,6 +394,70 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
       numericValue,
     );
   },
+  bIgnoreDefRate: (command, conditions, variables) => {
+    const numericValue = evaluateModifierValue(command.args[1], variables);
+
+    if (numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "ignoreDefenseRate",
+      { type: "race", raceId: "all" },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bIgnoreMdefRate: (command, conditions, variables) => {
+    const numericValue = evaluateModifierValue(command.args[1], variables);
+
+    if (numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "ignoreMagicDefenseRate",
+      { type: "race", raceId: "all" },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bIgnoreDefClassRate: (command, conditions, variables) => {
+    const [, rathenaClassId, value] = command.args;
+    const classId = toInternalClassId(rathenaClassId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!classId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "ignoreDefenseClassRate",
+      { type: "class", classId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bIgnoreMdefClassRate: (command, conditions, variables) => {
+    const [, rathenaClassId, value] = command.args;
+    const classId = toInternalClassId(rathenaClassId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!classId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "ignoreMagicDefenseClassRate",
+      { type: "class", classId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
 };
 
 function createModifier(
@@ -486,6 +550,8 @@ function createTargetedModifier(
     | "magicElementAttackRate"
     | "ignoreDefenseRate"
     | "ignoreMagicDefenseRate"
+    | "ignoreDefenseClassRate"
+    | "ignoreMagicDefenseClassRate"
     | "incomingRaceDamageReductionRate"
     | "incomingElementDamageReductionRate"
     | "incomingClassDamageReductionRate"

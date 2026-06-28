@@ -1381,6 +1381,34 @@ Proximo bloco recomendado:
   - Classificar efeitos visuais/auto-spell como ignorados explicitamente no preview.
   - Capturar flags de item inquebravel como informacao defensiva/UX.
 
+## Bloco Fechado: Expressoes De Skill Aprendida Em Item Scripts
+
+Data: 2026-06-25.
+
+Implementado:
+
+- `evaluateRathenaExpression` suporta:
+  - string literal como argumento de funcao
+  - `getskilllv("SKILL_ID")`
+- `RathenaScriptParser` injeta `learnedSkills` no contexto do avaliador.
+- `bonus2 bSkillAtk` com expressoes dependentes de skill aprendida passa a virar `skillDamageRate`.
+- Testes cobrem avaliador e parser.
+
+Impacto medido por `npm run calculator:audit:parser`:
+
+- Scripts totalmente suportados: 7.736 -> 7.960.
+- Scripts parcialmente suportados: 4.542 -> 4.484.
+- Unsupported statements: 20.182 -> 19.180.
+- Modifiers extraidos: 47.428 -> 48.267.
+- `bonus2 bSkillAtk` saiu do top unsupported.
+
+Proximo bloco recomendado:
+
+- Escolher entre:
+  - Classificar efeitos visuais/auto-spell como ignorados explicitamente no preview.
+  - Capturar flags de item inquebravel como informacao defensiva/UX.
+  - Adicionar suporte controlado para condicoes simples `readparam(...)` em scripts.
+
 ## Bloco Fechado: Reducoes Defensivas Por Raca E Elemento
 
 Data: 2026-06-24.

@@ -649,3 +649,12 @@ Motivo: acerto perfeito nao aumenta dano bruto, mas e parte importante da precis
 - `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7736 e unsupported statements cairam para 20182.
 
 Motivo: grande parte dos `bAddRace`/`bSubRace` restantes eram efeitos PvP contra Doram; capturar sem aplicar indevidamente melhora cobertura e preserva seguranca matematica.
+
+### 2026-06-25 - Expressoes de dano por skill com getskilllv
+
+- `evaluateRathenaExpression` agora entende strings em chamadas de funcao e `getskilllv("SKILL_ID")`.
+- `RathenaScriptParser` passa `learnedSkills` para o avaliador de expressoes.
+- `bonus2 bSkillAtk` com valor dependente de skill aprendida passa a ser normalizado quando o contexto contem `learnedSkills`.
+- `npm run calculator:audit:parser`: scripts totalmente suportados subiram para 7960 e unsupported statements cairam para 19180.
+
+Motivo: muitos equipamentos escalam dano de skill com base no nivel aprendido de outra skill; isso afeta diretamente o dano final.

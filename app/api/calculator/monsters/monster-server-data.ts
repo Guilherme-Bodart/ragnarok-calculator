@@ -34,6 +34,38 @@ export type CalculatorMonsterIndexEntry = {
   magicDefense: number | null;
 };
 
+const DUMMY_TARGET_ID = 999999;
+const dummyTarget: CalculatorMonsterIndexEntry = {
+  id: DUMMY_TARGET_ID,
+  name: "Cecil Damon (Test Dummy)",
+  level: 160,
+  race: "demi-human",
+  size: "medium",
+  element: "neutral",
+  elementLevel: 1,
+  hp: 10000000,
+  defense: 100,
+  magicDefense: 100,
+};
+const dummyTargetDetail = {
+  id: DUMMY_TARGET_ID,
+  name: "Cecil Damon (Test Dummy)",
+  level: 160,
+  hp: 10000000,
+  baseExp: 0,
+  jobExp: 0,
+  attack: 0,
+  magicAttack: 0,
+  defense: 100,
+  magicDefense: 100,
+  race: "demi-human" as const,
+  size: "medium" as const,
+  element: "neutral" as const,
+  elementLevel: 1,
+  class: "normal" as const,
+  elementResistanceRates: {},
+};
+
 export function searchMonsterIndex({
   limit,
   query,
@@ -41,7 +73,7 @@ export function searchMonsterIndex({
   limit: number;
   query?: string;
 }) {
-  const source = monstersIndex;
+  const source = [dummyTarget, ...monstersIndex];
   const normalizedQuery = normalizeSearch(query ?? "");
   const filteredMonsters = normalizedQuery
     ? source.filter((monster) =>
@@ -53,6 +85,10 @@ export function searchMonsterIndex({
 }
 
 export function getMonsterDetail(monsterId: number) {
+  if (monsterId === DUMMY_TARGET_ID) {
+    return dummyTargetDetail;
+  }
+
   const monster = monsterById.get(monsterId);
 
   if (!monster) {

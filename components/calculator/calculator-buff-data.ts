@@ -21,7 +21,7 @@ export const calculatorManualBuffItems = [
     itemId: 900001,
     name: "Blessing",
     type: "Consumable",
-    rawScript: "bonus bStr,10; bonus bInt,10; bonus bDex,10;",
+    rawScript: "bonus bStr,10; bonus bInt,10; bonus bDex,10; bonus bHit,10;",
     source: "rathena",
   },
   {
@@ -48,6 +48,54 @@ export const calculatorManualBuffItems = [
     rawScript: "bonus bAtkRate,5; bonus bMatkRate,5;",
     source: "rathena",
   },
+  {
+    group: "consumable",
+    itemId: 900005,
+    name: "Poção de Fúria Selvagem",
+    type: "Consumable",
+    rawScript: "bonus bAspdRate,20;",
+    source: "rathena",
+  },
+  {
+    group: "consumable",
+    itemId: 900006,
+    name: "Poção de Despertar",
+    type: "Consumable",
+    rawScript: "bonus bAspdRate,15;",
+    source: "rathena",
+  },
+  {
+    group: "consumable",
+    itemId: 900007,
+    name: "Poção de Concentração",
+    type: "Consumable",
+    rawScript: "bonus bAspdRate,10;",
+    source: "rathena",
+  },
+  {
+    group: "manual",
+    itemId: 900008,
+    name: "Buff VIP",
+    type: "Consumable",
+    rawScript: "bonus bAllStats,10; bonus bAtkRate,5; bonus bMatkRate,5; bonus bMaxHPrate,10; bonus bMaxSPrate,10;",
+    source: "rathena",
+  },
+  {
+    group: "manual",
+    itemId: 900009,
+    name: "Clementia (Nível Máximo)",
+    type: "Consumable",
+    rawScript: "bonus bStr,15; bonus bInt,15; bonus bDex,15;",
+    source: "rathena",
+  },
+  {
+    group: "manual",
+    itemId: 900010,
+    name: "Canto Candidus (Nível Máximo)",
+    type: "Consumable",
+    rawScript: "bonus bAgi,15;",
+    source: "rathena",
+  },
 ] as const satisfies readonly CalculatorBuffCatalogEntry[];
 
 export const calculatorBuffCatalog = {
@@ -58,29 +106,32 @@ export const calculatorBuffCatalog = {
   ),
 } as const;
 
-const manualBuffLabelByItemId = {
+const manualBuffLabelByItemId: Record<number, keyof CalculatorDictionary["buffs"]> = {
   900001: "blessing",
   900002: "increaseAgi",
   900003: "food",
   900004: "guildAura",
-} as const;
+};
 
 export function getCalculatorManualBuffSkills(
   copy: CalculatorDictionary["buffs"],
 ): CalculatorPanelSkill[] {
-  return calculatorManualBuffItems.map((item) => ({
-    id: `BUFF_${item.itemId}`,
-    name: copy[manualBuffLabelByItemId[item.itemId]],
-    classTree: "manual-buffs",
-    damageType: "physical",
-    element: "neutral",
-    maxLevel: 1,
-    hitCount: 1,
-    baseMultiplierByLevel: {
-      "1": 100,
-    },
-    source: "manual",
-  }));
+  return calculatorManualBuffItems.map((item) => {
+    const labelKey = manualBuffLabelByItemId[item.itemId];
+    return {
+      id: `BUFF_${item.itemId}`,
+      name: labelKey ? copy[labelKey] : item.name,
+      classTree: "manual-buffs",
+      damageType: "physical",
+      element: "neutral",
+      maxLevel: 1,
+      hitCount: 1,
+      baseMultiplierByLevel: {
+        "1": 100,
+      },
+      source: "manual",
+    };
+  });
 }
 
 const manualBuffItemIdBySkillId = new Map(
