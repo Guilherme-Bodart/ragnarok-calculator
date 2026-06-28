@@ -1,16 +1,9 @@
 import type { RoItem } from "@/packages/calculator-core/src";
 
-export type CalculatorItemIndexOption = {
-  id: number;
-  name: string;
+export type CalculatorItemIndexOption = CalculatorItemDetail & {
   sourceName?: string | null;
   searchText?: string | null;
-  kind: RoItem["kind"];
   cardSlots: number | null;
-  refineable: boolean;
-  attack: number | null;
-  magicAttack: number | null;
-  defense: number | null;
   hasModifiers: boolean;
 };
 
@@ -24,37 +17,80 @@ type SearchCalculatorItemsInput = {
   limit?: number;
   query?: string;
   slot?: string;
-  kind?: "card";
+  kind?: "card" | "consumable";
 };
+
+const itemsCache = new Map<string, CalculatorItemIndexOption[]>();
+
+export function clearCalculatorItemsCache() {
+  itemsCache.clear();
+}
+
+async function fetchItemCategory(category: string): Promise<CalculatorItemIndexOption[]> {
+  if (itemsCache.has(category)) {
+    return itemsCache.get(category)!;
+  }
+
+  const response = await fetch(`/data/calculator/items/${category}.json`);
+  if (!response.ok) {
+    return [];
+  }
+
+  const data = (await response.json()) as CalculatorItemIndexOption[];
+  itemsCache.set(category, data);
+  return data;
+}
 
 export async function searchCalculatorItems({
   kind,
-  limit,
+  limit = 80,
   query,
   slot,
 }: SearchCalculatorItemsInput) {
-  const params = new URLSearchParams();
+  let category = "";
 
-  if (kind) params.set("kind", kind);
-  if (limit) params.set("limit", String(limit));
-  if (query) params.set("q", query);
-  if (slot) params.set("slot", slot);
-
-  const response = await fetch(`/api/calculator/items?${params.toString()}`);
-
-  if (!response.ok) {
-    throw new Error("Failed to load calculator items.");
+  if (kind === "card") {
+    category = "card";
+  } else if (kind === "consumable") {
+    category = "consumable";
+  } else if (slot) {
+    category = slot.replace(/[^a-zA-Z0-9]/g, "");
+  } else {
+    return [];
   }
 
-  return (await response.json()) as CalculatorItemIndexOption[];
+  const items = await fetchItemCategory(category);
+
+  if (!query) {
+    return items.slice(0, limit);
+  }
+
+  const normalizedQuery = normalizeSearch(query);
+
+  return items
+    .filter((item) =>
+      normalizeSearch(
+        `${item.searchText ?? ""} ${item.name} ${item.sourceName ?? ""} ${item.id}`,
+      ).includes(normalizedQuery),
+    )
+    .slice(0, limit);
 }
 
-export async function getCalculatorItemDetail(itemId: number) {
-  const response = await fetch(`/api/calculator/items/${itemId}`);
+export async function getCalculatorItemDetail(itemId: number, category: string) {
+  const items = await fetchItemCategory(category);
+  const found = items.find((item) => item.id === itemId);
 
-  if (!response.ok) {
-    throw new Error(`Failed to load item ${itemId}.`);
+  if (!found) {
+    throw new Error(`Failed to load item ${itemId} from category ${category}.`);
   }
 
-  return (await response.json()) as CalculatorItemDetail;
+  return found as CalculatorItemDetail;
+}
+
+function normalizeSearch(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
 }

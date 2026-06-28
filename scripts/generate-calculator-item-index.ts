@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { toRoItem, type RathenaNormalizedItem } from "../packages/calculator-core/src/datasets/rathena-normalized";
 
 const root = process.cwd();
 const inputPath = path.join(root, "nightmare-data/normalized/items/items.en.json");
@@ -7,8 +8,7 @@ const localizedInputPath = path.join(
   root,
   "nightmare-data/normalized/items/items.br.json",
 );
-const outputDir = path.join(root, "nightmare-data/generated/calculator");
-const bySlotDir = path.join(outputDir, "items-by-slot");
+const outputDir = path.join(root, "public/data/calculator/items");
 
 const equipmentSlots = [
   "headTop",
@@ -33,7 +33,7 @@ const equipmentSlots = [
   "shadowPendant",
 ];
 
-const locationToSlot = {
+const locationToSlot: Record<string, string> = {
   Head_Top: "headTop",
   Head_Mid: "headMid",
   Head_Low: "headLow",
@@ -56,19 +56,28 @@ const locationToSlot = {
   Shadow_Left_Accessory: "shadowPendant",
 };
 
-fs.mkdirSync(bySlotDir, { recursive: true });
+if (fs.existsSync(outputDir)) {
+  fs.rmSync(outputDir, { recursive: true, force: true });
+}
+fs.mkdirSync(outputDir, { recursive: true });
 
-const items = JSON.parse(fs.readFileSync(inputPath, "utf8"));
+const items = JSON.parse(fs.readFileSync(inputPath, "utf8")) as RathenaNormalizedItem[];
 const localizedItems = readLocalizedItems(localizedInputPath);
-const bySlot = new Map(equipmentSlots.map((slot) => [slot, []]));
-const cards = [];
+const byCategory = new Map<string, any[]>(equipmentSlots.map((slot) => [slot, []]));
+const cards: any[] = [];
+const consumables: any[] = [];
 
 for (const item of items) {
   const localizedItem = localizedItems.get(item.itemId);
   const localizedName = localizedItem?.name;
-  const indexItem = {
-    id: item.itemId,
+  
+  const mergedItemDetail = {
+    ...toRoItem(item),
     name: localizedName ?? item.name,
+    refineable: Boolean((item as any).refineable),
+    rawType: item.type,
+    rawSubType: item.subType,
+    // Add index properties that aren't in RoItem
     sourceName: localizedName ? item.name : null,
     searchText: [
       localizedName,
@@ -81,7 +90,6 @@ for (const item of items) {
       .join(" "),
     kind: getItemKind(item.type),
     cardSlots: item.slots ?? null,
-    refineable: Boolean(item.refineable),
     attack: item.attack ?? null,
     magicAttack: item.magicAttack ?? null,
     defense: item.defense ?? null,
@@ -89,32 +97,43 @@ for (const item of items) {
   };
 
   if (item.type === "Card") {
-    cards.push(indexItem);
+    cards.push(mergedItemDetail);
+    continue;
+  }
+
+  if (mergedItemDetail.kind === "consumable") {
+    consumables.push(mergedItemDetail);
     continue;
   }
 
   for (const slot of getSlots(item.locations)) {
-    bySlot.get(slot)?.push(indexItem);
+    byCategory.get(slot)?.push(mergedItemDetail);
   }
 }
 
-for (const [slot, slotItems] of bySlot) {
+for (const [slot, slotItems] of byCategory) {
   fs.writeFileSync(
-    path.join(bySlotDir, `${slot}.json`),
+    path.join(outputDir, `${slot}.json`),
     JSON.stringify(sortByName(slotItems)),
     "utf8",
   );
 }
 
 fs.writeFileSync(
-  path.join(outputDir, "cards-index.json"),
+  path.join(outputDir, "card.json"),
   JSON.stringify(sortByName(cards)),
   "utf8",
 );
 
-console.log(`Generated ${bySlot.size} slot indexes and ${cards.length} cards.`);
+fs.writeFileSync(
+  path.join(outputDir, "consumable.json"),
+  JSON.stringify(sortByName(consumables)),
+  "utf8",
+);
 
-function getSlots(locations) {
+console.log(`Generated ${byCategory.size} category files, cards, and consumables.`);
+
+function getSlots(locations: any) {
   if (!locations) return [];
 
   return Object.entries(locationToSlot)
@@ -122,7 +141,7 @@ function getSlots(locations) {
     .map(([, slot]) => slot);
 }
 
-function getItemKind(type) {
+function getItemKind(type: any) {
   const key = String(type ?? "").toLowerCase();
 
   if (key === "card") return "card";
@@ -133,13 +152,13 @@ function getItemKind(type) {
   return "consumable";
 }
 
-function sortByName(itemsToSort) {
+function sortByName(itemsToSort: any[]) {
   return itemsToSort.sort((first, second) =>
     first.name.localeCompare(second.name, "en"),
   );
 }
 
-function readLocalizedItems(filePath) {
+function readLocalizedItems(filePath: string) {
   if (!fs.existsSync(filePath)) {
     return new Map();
   }
@@ -148,8 +167,8 @@ function readLocalizedItems(filePath) {
 
   return new Map(
     Object.values(rawItems)
-      .filter((item) => Number.isInteger(item?.id) && item?.name)
-      .map((item) => [
+      .filter((item: any) => Number.isInteger(item?.id) && item?.name)
+      .map((item: any) => [
         item.id,
         {
           name: item.name,

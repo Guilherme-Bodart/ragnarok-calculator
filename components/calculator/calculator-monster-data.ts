@@ -21,29 +21,44 @@ type SearchCalculatorMonstersInput = {
 };
 
 export async function searchCalculatorMonsters({
-  limit,
+  limit = 80,
   query,
 }: SearchCalculatorMonstersInput = {}) {
-  const params = new URLSearchParams();
-
-  if (limit) params.set("limit", String(limit));
-  if (query) params.set("q", query);
-
-  const response = await fetch(`/api/calculator/monsters?${params.toString()}`);
+  const response = await fetch("/data/calculator/monsters-index.json");
 
   if (!response.ok) {
-    throw new Error("Failed to load calculator monsters.");
+    return [];
   }
 
-  return (await response.json()) as CalculatorMonsterIndexOption[];
+  const monsters = (await response.json()) as CalculatorMonsterIndexOption[];
+
+  if (!query) {
+    return monsters.slice(0, limit);
+  }
+
+  const normalizedQuery = normalizeSearch(query);
+
+  return monsters
+    .filter((monster) =>
+      normalizeSearch(`${monster.name} ${monster.id}`).includes(normalizedQuery),
+    )
+    .slice(0, limit);
 }
 
 export async function getCalculatorMonsterDetail(monsterId: number) {
-  const response = await fetch(`/api/calculator/monsters/${monsterId}`);
+  const response = await fetch(`/data/calculator/monsters/${monsterId}.json`);
 
   if (!response.ok) {
     throw new Error(`Failed to load monster ${monsterId}.`);
   }
 
   return (await response.json()) as CalculatorMonsterDetail;
+}
+
+function normalizeSearch(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
 }

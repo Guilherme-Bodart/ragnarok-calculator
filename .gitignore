@@ -37,6 +37,7 @@ api-dev.*.log
 # local external sources
 /external/
 /nightmare-data/raw/
+/public/data/calculator/
 
 # env files (can opt-in for committing if needed)
 .env*

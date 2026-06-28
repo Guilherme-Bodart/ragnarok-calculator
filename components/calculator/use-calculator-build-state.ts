@@ -214,17 +214,31 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     setBuildName(nextName);
   }
   useEffect(() => {
-    const selectedItemIds = [...equipmentItemIds, ...cardItemIds].filter(
-      (itemId) => !selectedItemDetails[itemId],
-    );
+    const fetchRequests: { itemId: number; category: string }[] = [];
 
-    if (selectedItemIds.length === 0) {
+    for (const [slot, itemId] of Object.entries(selectedItemsBySlot)) {
+      if (typeof itemId === "number" && !selectedItemDetails[itemId]) {
+        fetchRequests.push({ itemId, category: slot });
+      }
+    }
+
+    for (const cardArray of Object.values(selectedCardsBySlot)) {
+      if (Array.isArray(cardArray)) {
+        for (const itemId of cardArray) {
+          if (typeof itemId === "number" && !selectedItemDetails[itemId]) {
+            fetchRequests.push({ itemId, category: "card" });
+          }
+        }
+      }
+    }
+
+    if (fetchRequests.length === 0) {
       return;
     }
 
     let isCurrent = true;
 
-    Promise.all(selectedItemIds.map((itemId) => getCalculatorItemDetail(itemId)))
+    Promise.all(fetchRequests.map((req) => getCalculatorItemDetail(req.itemId, req.category)))
       .then((items) => {
         if (!isCurrent) return;
 
@@ -238,7 +252,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     return () => {
       isCurrent = false;
     };
-  }, [cardItemIds, equipmentItemIds, selectedItemDetails]);
+  }, [selectedItemsBySlot, selectedCardsBySlot, selectedItemDetails]);
 
   useEffect(() => {
     let isCurrent = true;
