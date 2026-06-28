@@ -221,6 +221,7 @@ describe("SkillFormulaRegistry", () => {
         formulaId: "test-specific",
         multiplier: 9,
         hitCount: 3,
+        precision: "validated",
       }),
     };
 
@@ -228,6 +229,7 @@ describe("SkillFormulaRegistry", () => {
       formulaId: "test-specific",
       multiplier: 9,
       hitCount: 3,
+      precision: "validated",
     });
   });
 });
