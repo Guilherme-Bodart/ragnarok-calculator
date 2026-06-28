@@ -4,6 +4,7 @@ import {
   type CalculatorBuildPayload,
 } from "./calculator-build-payload";
 import { calculatorDemoInput } from "./calculator-demo-data";
+import archMageBuild from "@/packages/calculator-core/src/reference-scenarios/guilh-arch-mage-build.json";
 
 export const calculatorBuildStorageKey = "nightmare-calculator-build";
 
@@ -25,9 +26,9 @@ export function createDefaultCalculatorBuild(): CalculatorBuildPayload {
       learnedSkills: {},
     },
     equipment: {
-      itemContexts: {},
-      selectedCardsBySlot: {},
-      selectedItemsBySlot: {},
+      itemContexts: archMageBuild.equipment.itemContexts as Record<number, { refine?: number; grade?: number }>,
+      selectedCardsBySlot: archMageBuild.equipment.selectedCardsBySlot as any,
+      selectedItemsBySlot: archMageBuild.equipment.selectedItemsBySlot as any,
     },
     buffs: {
       activeBuffs: {},
