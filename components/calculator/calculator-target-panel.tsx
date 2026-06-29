@@ -105,6 +105,7 @@ export function CalculatorTargetPanel({
 
       <Field className="monster-picker" label={copy.target.monsterLabel}>
         <RichSelect
+          className="text-sm"
           value={String(selectedMonsterId)}
           onChange={(monsterId) => onMonsterChange(Number(monsterId))}
           searchValue={monsterQuery}
@@ -113,29 +114,41 @@ export function CalculatorTargetPanel({
           groups={[
             {
               label: copy.target.monsterLabel,
-              options: options.map((monster) => ({
-                id: String(monster.id),
-                label: `${monster.name}${monster.level ? ` Lv. ${monster.level}` : ""}`,
-                icon: <CalculatorMonsterIcon monsterId={monster.id} size={24} />
-              })),
+              options: options.map((monster) => {
+                const raceStr = monster.race ? monster.race.charAt(0).toUpperCase() + monster.race.slice(1) : "";
+                const sizeMap: Record<string, string> = { small: "S", medium: "M", large: "L" };
+                const sizeStr = monster.size && sizeMap[monster.size] ? sizeMap[monster.size] : "";
+                const extra = [raceStr, sizeStr].filter(Boolean).join(" ");
+                
+                return {
+                  id: String(monster.id),
+                  label: `${monster.level || "?"} ${monster.name}${extra ? ` (${extra})` : ""}`,
+                  icon: <CalculatorMonsterIcon monsterId={monster.id} size={24} />
+                };
+              }),
             },
           ]}
         />
       </Field>
 
       {selectedMonster ? (
-        <div className="target-monster-summary flex items-center gap-4 p-3 bg-muted/20 border border-border/50 rounded-md mt-4">
-          <CalculatorMonsterIcon monsterId={selectedMonster.id} size={48} className="shrink-0" />
-          <div className="flex flex-wrap gap-2 text-xs">
-            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">Lv. {selectedMonster.level}</span>
-            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">{selectedMonster.race}</span>
-            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">{selectedMonster.size}</span>
-            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">
-              {selectedMonster.element} {selectedMonster.elementLevel}
-            </span>
-            <span className="px-2 py-0.5 bg-sky-950/30 text-sky-400 border border-sky-900/50 rounded">HP {selectedMonster.hp.toLocaleString()}</span>
-            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">DEF {selectedMonster.defense}</span>
-            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">MDEF {selectedMonster.magicDefense}</span>
+        <div className="target-monster-summary flex items-start gap-3 p-3 bg-card border border-border/50 rounded-md mt-4 shadow-sm">
+          <CalculatorMonsterIcon monsterId={selectedMonster.id} size={96} className="shrink-0 bg-muted/30 rounded border border-border/50 p-1" />
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
+              <div className="font-semibold text-rose-500">HP <span className="text-foreground ml-1">{selectedMonster.hp.toLocaleString()}</span></div>
+              <div className="font-semibold text-muted-foreground">Def <span className="text-foreground ml-1">{selectedMonster.defense}</span></div>
+              <div className="font-semibold text-muted-foreground">Mdef <span className="text-foreground ml-1">{selectedMonster.magicDefense}</span></div>
+              <div className="font-semibold text-muted-foreground">Res <span className="text-foreground ml-1">0</span></div>
+              <div className="font-semibold text-muted-foreground">M.Res <span className="text-foreground ml-1">0</span></div>
+            </div>
+            
+            <div className="flex flex-col gap-0.5 mt-1 text-xs font-medium">
+              {selectedMonster.classType === "boss" ? <span className="text-rose-500">Boss</span> : <span className="text-emerald-500">Normal</span>}
+              <span className="text-amber-500 capitalize">{selectedMonster.element} {selectedMonster.elementLevel}</span>
+              <span className="text-orange-400 capitalize">{selectedMonster.race}</span>
+              <span className="text-sky-400 capitalize">{selectedMonster.size}</span>
+            </div>
           </div>
         </div>
       ) : null}
@@ -147,6 +160,12 @@ export function CalculatorTargetPanel({
           {averageDamage} {copy.target.averageHit} / {hitCount}{" "}
           {copy.target.hit} / {result.skill.damageType}
         </small>
+        {selectedMonster && dps > 0 && (
+          <div className="mt-2 pt-2 border-t border-border/30 flex justify-between text-xs text-muted-foreground">
+            <span>DPS: <strong className="text-foreground">{dps.toLocaleString()}</strong></span>
+            <span>Tempo: <strong className="text-amber-500">{formatTime(selectedMonster.hp / dps)}</strong></span>
+          </div>
+        )}
       </div>
 
       <div className="breakdown-list">
@@ -210,3 +229,18 @@ export function CalculatorTargetPanel({
     </aside>
   );
 }
+
+function formatTime(seconds: number) {
+  if (!isFinite(seconds)) return "∞";
+  if (seconds < 60) return `${seconds.toFixed(1)}s`;
+  
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  
+  if (m < 60) return `${m}m ${s}s`;
+  
+  const h = Math.floor(m / 60);
+  const remM = m % 60;
+  return `${h}h ${remM}m`;
+}
+
