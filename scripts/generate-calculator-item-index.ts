@@ -74,16 +74,16 @@ for (const item of items) {
   
   const mergedItemDetail = {
     ...toRoItem(item),
-    name: localizedName ?? item.name,
+    name: localizedName ?? cleanItemName(item.name),
     refineable: Boolean((item as any).refineable),
     rawType: item.type,
     rawSubType: item.subType,
     // Add index properties that aren't in RoItem
-    sourceName: localizedName ? item.name : null,
+    sourceName: localizedName ? cleanItemName(item.name) : null,
     searchText: [
       localizedName,
       localizedItem?.unidName,
-      item.name,
+      cleanItemName(item.name),
       item.aegisName,
       item.itemId,
     ]
@@ -179,9 +179,17 @@ function readLocalizedItems(filePath: string) {
       .map((item: any) => [
         item.id,
         {
-          name: item.name,
-          unidName: item.unidName ?? null,
+          name: cleanItemName(item.name),
+          unidName: item.unidName ? cleanItemName(item.unidName) : null,
         },
       ]),
   );
 }
+
+function cleanItemName(name: string) {
+  if (!name) return name;
+  return name
+    .replace(/^\[(?:Not For Sale|Rental|Event|Bound)\]\s*/i, "")
+    .trim();
+}
+

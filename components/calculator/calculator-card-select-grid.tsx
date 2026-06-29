@@ -10,6 +10,8 @@ import type {
 } from "./calculator-item-data";
 import { ensureSelectedCardOptions } from "./calculator-item-picker-utils";
 
+import { CalculatorItemIcon } from "./calculator-item-icon";
+
 type CalculatorCardSelectGridProps = {
   cardOptions: CalculatorItemIndexOption[];
   cardQuery: string;
@@ -56,6 +58,7 @@ export function CalculatorCardSelectGrid({
                   ).map((card) => ({
                     id: String(card.id),
                     label: card.name,
+                    icon: <CalculatorItemIcon itemId={card.id} size={20} />
                   })),
                 ],
               },

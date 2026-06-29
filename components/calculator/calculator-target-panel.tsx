@@ -14,6 +14,8 @@ import {
 } from "./calculator-monster-data";
 import { getBreakdownValue } from "./calculator-utils";
 
+import { CalculatorMonsterIcon } from "./calculator-monster-icon";
+
 type CalculatorTargetPanelProps = {
   copy: CalculatorDictionary;
   result: CalculateDamageResult;
@@ -114,6 +116,7 @@ export function CalculatorTargetPanel({
               options: options.map((monster) => ({
                 id: String(monster.id),
                 label: `${monster.name}${monster.level ? ` Lv. ${monster.level}` : ""}`,
+                icon: <CalculatorMonsterIcon monsterId={monster.id} size={24} />
               })),
             },
           ]}
@@ -121,16 +124,19 @@ export function CalculatorTargetPanel({
       </Field>
 
       {selectedMonster ? (
-        <div className="target-monster-summary">
-          <span>Lv. {selectedMonster.level}</span>
-          <span>{selectedMonster.race}</span>
-          <span>{selectedMonster.size}</span>
-          <span>
-            {selectedMonster.element} {selectedMonster.elementLevel}
-          </span>
-          <span>HP {selectedMonster.hp.toLocaleString()}</span>
-          <span>DEF {selectedMonster.defense}</span>
-          <span>MDEF {selectedMonster.magicDefense}</span>
+        <div className="target-monster-summary flex items-center gap-4 p-3 bg-muted/20 border border-border/50 rounded-md mt-4">
+          <CalculatorMonsterIcon monsterId={selectedMonster.id} size={48} className="shrink-0" />
+          <div className="flex flex-wrap gap-2 text-xs">
+            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">Lv. {selectedMonster.level}</span>
+            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">{selectedMonster.race}</span>
+            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">{selectedMonster.size}</span>
+            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">
+              {selectedMonster.element} {selectedMonster.elementLevel}
+            </span>
+            <span className="px-2 py-0.5 bg-sky-950/30 text-sky-400 border border-sky-900/50 rounded">HP {selectedMonster.hp.toLocaleString()}</span>
+            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">DEF {selectedMonster.defense}</span>
+            <span className="px-2 py-0.5 bg-background border rounded text-muted-foreground">MDEF {selectedMonster.magicDefense}</span>
+          </div>
         </div>
       ) : null}
 

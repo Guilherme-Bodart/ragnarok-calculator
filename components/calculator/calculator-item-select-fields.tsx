@@ -11,6 +11,8 @@ import type {
 } from "./calculator-item-data";
 import { ensureSelectedOption } from "./calculator-item-picker-utils";
 
+import { CalculatorItemIcon } from "./calculator-item-icon";
+
 type CalculatorItemSelectFieldsProps = {
   copy: CalculatorDictionary;
   editingSlot: EquipmentSlot;
@@ -56,6 +58,7 @@ export function CalculatorItemSelectFields({
                 ...ensureSelectedOption(slotOptions, selectedItem).map((item) => ({
                   id: String(item.id),
                   label: item.name,
+                  icon: <CalculatorItemIcon itemId={item.id} size={20} />
                 })),
               ],
             },

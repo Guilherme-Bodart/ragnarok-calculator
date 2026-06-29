@@ -5,6 +5,7 @@ import type { CalculatorDictionary } from "./calculator-i18n";
 import type { CalculatorItemDetail } from "./calculator-item-data";
 import type { CalculatorEquipmentSlotDefinition } from "./calculator-equipment-slots";
 import { getShortItemName } from "./calculator-item-picker-utils";
+import { CalculatorItemIcon } from "./calculator-item-icon";
 
 type CalculatorEquipmentPaperdollProps = {
   activeTab: "equip" | "special";
@@ -53,16 +54,27 @@ export function CalculatorEquipmentPaperdoll({
         return (
           <button
             type="button"
-            className="equipment-slot"
+            className="equipment-slot relative flex items-center justify-start gap-3 overflow-hidden"
             data-slot-area={slot.area}
             key={slot.id}
             aria-label={`${label}: ${item?.name ?? copy.equipment.empty}`}
             onClick={() => onEditSlot(slot.id)}
           >
-            <Icon size={17} />
-            <span>{label}</span>
-            <strong>{item ? getShortItemName(item.name) : copy.equipment.empty}</strong>
-            {cardCount > 0 ? <small>{cardCount} carta(s)</small> : null}
+            {item ? (
+              <div className="shrink-0">
+                <CalculatorItemIcon itemId={item.id} size={32} />
+              </div>
+            ) : (
+              <div className="shrink-0 opacity-50">
+                <Icon size={24} />
+              </div>
+            )}
+            
+            <div className="flex flex-col items-start overflow-hidden w-full text-left">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{label}</span>
+              <strong className="text-sm font-medium truncate w-full">{item ? getShortItemName(item.name) : copy.equipment.empty}</strong>
+              {cardCount > 0 ? <small className="text-[10px] text-sky-400">{cardCount} carta(s)</small> : null}
+            </div>
           </button>
         );
       })}

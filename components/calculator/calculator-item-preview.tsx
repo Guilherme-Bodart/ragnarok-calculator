@@ -3,6 +3,8 @@ import type {
   CalculatorItemDetail,
   CalculatorItemIndexOption,
 } from "./calculator-item-data";
+import { CalculatorItemIcon } from "./calculator-item-icon";
+import { useState } from "react";
 
 type CalculatorItemPreviewProps = {
   cardOptions: CalculatorItemIndexOption[];
@@ -21,6 +23,7 @@ export function CalculatorItemPreview({
   selectedCards,
   selectedItemDetails,
 }: CalculatorItemPreviewProps) {
+  const [collectionImageError, setCollectionImageError] = useState(false);
   const t = copy.equipment.preview;
 
   if (!item) {
@@ -51,13 +54,28 @@ export function CalculatorItemPreview({
 
   return (
     <div className="calc-item-preview">
-      <div className="calc-item-preview-header">
-        <span>{item.id}</span>
-        <strong>{item.name}</strong>
-        {item.refineable ? <em>+{refine}</em> : null}
+      <div className="calc-item-preview-header flex items-start gap-4">
+        {!collectionImageError ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img 
+            src={`https://static.divine-pride.net/images/items/collection/${item.id}.png`}
+            alt={item.name}
+            className="w-16 h-20 object-contain shrink-0"
+            onError={() => setCollectionImageError(true)}
+          />
+        ) : (
+          <div className="w-16 h-20 shrink-0 flex items-center justify-center">
+            <CalculatorItemIcon itemId={item.id} size={48} />
+          </div>
+        )}
+        <div className="flex flex-col">
+          <span className="text-xs text-muted-foreground">ID: {item.id}</span>
+          <strong className="text-lg leading-tight">{item.name}</strong>
+          {item.refineable && refine > 0 ? <em className="text-sky-400 font-bold not-italic">+{refine}</em> : null}
+        </div>
       </div>
 
-      <dl className="calc-item-stat-grid">
+      <dl className="calc-item-stat-grid mt-4">
         {stats.map((stat) => (
           <div key={stat.label}>
             <dt>{stat.label}</dt>
