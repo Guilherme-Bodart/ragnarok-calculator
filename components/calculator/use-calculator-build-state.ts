@@ -16,14 +16,9 @@ import {
   readSavedCalculatorBuild,
 } from "./calculator-build-storage";
 import { calculatorDemoInput } from "./calculator-demo-data";
-import {
-  getCalculatorItemDetail,
-  type CalculatorItemDetail,
-} from "./calculator-item-data";
-import {
-  getCalculatorMonsterDetail,
-  type CalculatorMonsterDetail,
-} from "./calculator-monster-data";
+import { useCalculatorItemDetails } from "./use-calculator-item-details";
+import { useCalculatorMonsterDetail } from "./use-calculator-monster-detail";
+import type { CalculatorItemDetail } from "./calculator-item-data";
 import {
   getCalculatorClassBuffSkills,
   getCalculatorClassSkills,
@@ -70,11 +65,13 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
   const [itemContexts, setItemContexts] = useState<
     Record<number, { refine?: number; grade?: number }>
   >(savedBuild.equipment.itemContexts);
-  const [selectedItemDetails, setSelectedItemDetails] = useState<
-    Record<number, CalculatorItemDetail>
-  >({});
-  const [selectedMonsterDetail, setSelectedMonsterDetail] =
-    useState<CalculatorMonsterDetail | null>(null);
+
+  const { selectedItemDetails, setSelectedItemDetails } = useCalculatorItemDetails(
+    selectedItemsBySlot,
+    selectedCardsBySlot,
+  );
+  const { selectedMonsterDetail, setSelectedMonsterDetail } =
+    useCalculatorMonsterDetail(selectedMonsterId);
 
   const selectedClassSkills = useMemo(
     () => getCalculatorClassSkills(calculatorSkillTreeCatalog, selectedClassId),
@@ -213,76 +210,6 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
   function renameBuild(nextName: string) {
     setBuildName(nextName);
   }
-  useEffect(() => {
-    const fetchRequests: { itemId: number; category: string }[] = [];
-
-    for (const [slot, itemId] of Object.entries(selectedItemsBySlot)) {
-      if (typeof itemId === "number" && !selectedItemDetails[itemId]) {
-        fetchRequests.push({ itemId, category: slot });
-      }
-    }
-
-    for (const cardArray of Object.values(selectedCardsBySlot)) {
-      if (Array.isArray(cardArray)) {
-        for (const itemId of cardArray) {
-          if (typeof itemId === "number" && !selectedItemDetails[itemId]) {
-            fetchRequests.push({ itemId, category: "card" });
-          }
-        }
-      }
-    }
-
-    if (fetchRequests.length === 0) {
-      return;
-    }
-
-    let isCurrent = true;
-
-    Promise.all(
-      fetchRequests.map((req) =>
-        getCalculatorItemDetail(req.itemId, req.category).catch(() => null),
-      ),
-    )
-      .then((items) => {
-        if (!isCurrent) return;
-
-        const validItems = items.filter(
-          (item): item is CalculatorItemDetail => item !== null,
-        );
-
-        if (validItems.length === 0) {
-          return;
-        }
-
-        setSelectedItemDetails((currentDetails) => {
-          const nextDetails = { ...currentDetails };
-          for (const item of validItems) {
-            nextDetails[item.id] = item;
-          }
-          return nextDetails;
-        });
-      })
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [selectedItemsBySlot, selectedCardsBySlot, selectedItemDetails]);
-
-  useEffect(() => {
-    let isCurrent = true;
-
-    getCalculatorMonsterDetail(selectedMonsterId)
-      .then((monster) => {
-        if (isCurrent) {
-          setSelectedMonsterDetail(monster);
-        }
-      })
-      .catch(() => undefined);
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [selectedMonsterId]);
 
   function handleClassChange(classId: string) {
     const isFourthJob = isFourthJobClassId(classId);
