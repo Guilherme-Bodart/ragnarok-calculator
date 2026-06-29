@@ -176,6 +176,25 @@ export function CalculatorItemPickerModal({
       if (previousItemId && previousItemId !== nextItemId) {
         delete nextContexts[previousItemId];
       }
+
+      if (
+        slotId === "weapon" &&
+        nextSelectedItem &&
+        "isTwoHanded" in nextSelectedItem &&
+        nextSelectedItem.isTwoHanded
+      ) {
+        delete nextItems.shield;
+        delete nextCards.shield;
+      }
+
+      if (slotId === "shield" && nextItems.weapon) {
+        const weaponId = nextItems.weapon;
+        const weaponItem = selectedItemDetails[weaponId];
+        if (weaponItem?.isTwoHanded) {
+          delete nextItems.weapon;
+          delete nextCards.weapon;
+        }
+      }
     }
 
     onSelectedItemsBySlotChange(nextItems);
