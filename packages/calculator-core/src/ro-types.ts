@@ -76,16 +76,6 @@ export type EquipmentSlot =
   | "shadowEarring"
   | "shadowPendant";
 
-export type Bonus =
-  | { type: "flatAtk"; value: number }
-  | { type: "flatMatk"; value: number }
-  | { type: "atkRate"; value: number }
-  | { type: "matkRate"; value: number }
-  | { type: "skillDamage"; skillId: string; value: number }
-  | { type: "raceDamage"; race: MonsterRace; value: number }
-  | { type: "elementDamage"; element: ElementType; value: number }
-  | { type: "sizeDamage"; size: MonsterSize; value: number };
-
 export type RoItem = {
   id: number;
   name: string;
@@ -96,7 +86,6 @@ export type RoItem = {
   defense?: number;
   cardSlots?: number;
   isTwoHanded?: boolean;
-  bonuses: Bonus[];
   rawScript?: string;
   modifiers?: NormalizedModifier[];
   source: "manual" | "iwdb" | "rathena";

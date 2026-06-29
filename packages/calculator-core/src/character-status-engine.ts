@@ -224,19 +224,7 @@ export class CharacterStatusEngine {
   ) {
     return items.reduce((total, item) => {
       const itemPower = item[stat] ?? 0;
-      const bonusPower = item.bonuses.reduce((bonusTotal, bonus) => {
-        if (bonus.type === "flatAtk" && stat === "attack") {
-          return bonusTotal + bonus.value;
-        }
-
-        if (bonus.type === "flatMatk" && stat === "magicAttack") {
-          return bonusTotal + bonus.value;
-        }
-
-        return bonusTotal;
-      }, 0);
-
-      return total + itemPower + bonusPower;
+      return total + itemPower;
     }, 0);
   }
 

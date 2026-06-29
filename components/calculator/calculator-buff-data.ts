@@ -167,7 +167,6 @@ export function getCalculatorBuffPreview(buffId: string) {
       id: item.itemId,
       name: item.name,
       kind: "consumable",
-      bonuses: [],
       rawScript: item.rawScript,
       source: item.source,
     },

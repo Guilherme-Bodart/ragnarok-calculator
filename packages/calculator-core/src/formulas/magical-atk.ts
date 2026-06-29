@@ -7,17 +7,7 @@ export function getMagicalBasePower(character: EffectiveCharacter) {
 }
 
 export function sumMagicalEquipmentPower(items: RoItem[]) {
-  return items.reduce((total, item) => {
-    const bonusPower = item.bonuses.reduce((bonusTotal, bonus) => {
-      if (bonus.type === "flatMatk") {
-        return bonusTotal + bonus.value;
-      }
-
-      return bonusTotal;
-    }, 0);
-
-    return total + (item.magicAttack ?? 0) + bonusPower;
-  }, 0);
+  return items.reduce((total, item) => total + (item.magicAttack ?? 0), 0);
 }
 
 export function getMagicalModifierFlatPower(effects: CalculatorModifierEffects) {
@@ -31,33 +21,15 @@ export function getMagicalModifierFinalRateMultiplier(
   monster: RoMonster,
   skill: RoSkill,
 ) {
-  let legacyMatkRate = 0;
-  let legacySkillRate = 0;
-  let legacyRaceRate = 0;
-  let legacyElementRate = 0;
-  let legacySizeRate = 0;
-
-  for (const item of items) {
-    for (const bonus of item.bonuses) {
-      if (bonus.type === "matkRate") legacyMatkRate += bonus.value;
-      else if (bonus.type === "skillDamage" && bonus.skillId === skill.id) legacySkillRate += bonus.value;
-      else if (bonus.type === "raceDamage" && bonus.race === monster.race) legacyRaceRate += bonus.value;
-      else if (bonus.type === "elementDamage" && bonus.element === monster.element) legacyElementRate += bonus.value;
-      else if (bonus.type === "sizeDamage" && bonus.size === monster.size) legacySizeRate += bonus.value;
-    }
-  }
-
-  const matkRate = effects.matkRate + legacyMatkRate;
+  const matkRate = effects.matkRate;
   const smatk = effects.smatk + character.traitEffects.smatk;
-  const skillRate = (effects.skillDamageRate[skill.id] ?? 0) + legacySkillRate;
+  const skillRate = effects.skillDamageRate[skill.id] ?? 0;
 
-  const raceRate = getTargetedRate(effects.magicRaceDamageRate, monster.race) + legacyRaceRate;
-  const elementRate = getTargetedRate(effects.magicElementDamageRate, monster.element) + legacyElementRate;
-  const sizeRate = getTargetedRate(effects.magicSizeDamageRate, monster.size) + legacySizeRate;
+  const raceRate = getTargetedRate(effects.magicRaceDamageRate, monster.race);
+  const elementRate = getTargetedRate(effects.magicElementDamageRate, monster.element);
+  const sizeRate = getTargetedRate(effects.magicSizeDamageRate, monster.size);
   const classRate = getTargetedRate(effects.magicClassDamageRate, monster.classType);
   const elementAttackRate = getTargetedRate(effects.magicElementAttackRate, skill.element);
-
-
 
   return (
     (1 + matkRate / 100) *

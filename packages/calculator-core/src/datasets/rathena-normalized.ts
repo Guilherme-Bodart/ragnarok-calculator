@@ -85,7 +85,6 @@ export function toRoItem(item: RathenaNormalizedItem): RoItem {
     slots: getItemSlots(item.locations),
     cardSlots: numberOrUndefined(item.slots),
     isTwoHanded: Boolean(item.locations?.Both_Hand),
-    bonuses: [],
     rawScript: item.rawScript ?? undefined,
     source: "rathena",
   };
