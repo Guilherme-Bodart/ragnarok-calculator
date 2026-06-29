@@ -39,6 +39,7 @@ const locationToSlot: Record<string, string> = {
   Head_Low: "headLow",
   Armor: "armor",
   Right_Hand: "weapon",
+  Both_Hand: "weapon",
   Left_Hand: "shield",
   Garment: "garment",
   Shoes: "shoes",

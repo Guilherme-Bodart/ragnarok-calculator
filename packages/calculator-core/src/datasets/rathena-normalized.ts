@@ -84,6 +84,7 @@ export function toRoItem(item: RathenaNormalizedItem): RoItem {
     defense: numberOrUndefined(item.defense),
     slots: getItemSlots(item.locations),
     cardSlots: numberOrUndefined(item.slots),
+    isTwoHanded: Boolean(item.locations?.Both_Hand),
     bonuses: [],
     rawScript: item.rawScript ?? undefined,
     source: "rathena",
@@ -103,7 +104,7 @@ function getItemSlots(
   if (locations.Head_Mid) slots.push("headMid");
   if (locations.Head_Low) slots.push("headLow");
   if (locations.Armor) slots.push("armor");
-  if (locations.Right_Hand) slots.push("weapon");
+  if (locations.Right_Hand || locations.Both_Hand) slots.push("weapon");
   if (locations.Left_Hand) slots.push("shield");
   if (locations.Garment) slots.push("garment");
   if (locations.Shoes) slots.push("shoes");

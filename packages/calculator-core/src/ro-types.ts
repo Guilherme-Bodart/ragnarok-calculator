@@ -95,6 +95,7 @@ export type RoItem = {
   magicAttack?: number;
   defense?: number;
   cardSlots?: number;
+  isTwoHanded?: boolean;
   bonuses: Bonus[];
   rawScript?: string;
   modifiers?: NormalizedModifier[];
