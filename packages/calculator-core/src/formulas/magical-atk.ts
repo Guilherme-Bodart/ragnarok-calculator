@@ -57,9 +57,7 @@ export function getMagicalModifierFinalRateMultiplier(
   const classRate = getTargetedRate(effects.magicClassDamageRate, monster.classType);
   const elementAttackRate = getTargetedRate(effects.magicElementAttackRate, skill.element);
 
-  console.log("Rates Debug:", {
-    matkRate, smatk, skillRate, raceRate, elementRate, sizeRate, classRate, elementAttackRate, monsterSize: monster.size
-  });
+
 
   return (
     (1 + matkRate / 100) *

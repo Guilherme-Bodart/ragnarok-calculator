@@ -238,16 +238,30 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
 
     let isCurrent = true;
 
-    Promise.all(fetchRequests.map((req) => getCalculatorItemDetail(req.itemId, req.category)))
+    Promise.all(
+      fetchRequests.map((req) =>
+        getCalculatorItemDetail(req.itemId, req.category).catch(() => null),
+      ),
+    )
       .then((items) => {
         if (!isCurrent) return;
 
-        setSelectedItemDetails((currentDetails) => ({
-          ...currentDetails,
-          ...Object.fromEntries(items.map((item) => [item.id, item])),
-        }));
+        const validItems = items.filter(
+          (item): item is CalculatorItemDetail => item !== null,
+        );
+
+        if (validItems.length === 0) {
+          return;
+        }
+
+        setSelectedItemDetails((currentDetails) => {
+          const nextDetails = { ...currentDetails };
+          for (const item of validItems) {
+            nextDetails[item.id] = item;
+          }
+          return nextDetails;
+        });
       })
-      .catch(() => undefined);
 
     return () => {
       isCurrent = false;
