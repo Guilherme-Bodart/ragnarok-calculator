@@ -27,8 +27,14 @@ export class CriticalEngine {
     // Modificadores de CriticalDamageRate (tanto de traits quanto bônus de equipamentos) são somados
     const traitCritDamageRate = characterStatus.traitEffects.criticalDamageRate;
     const modifierCritDamageRate = modifierEffects.criticalDamageRate ?? 0;
+    
+    // Bônus específico contra a raça (bCritAtkRace)
+    const raceCritDamageRate = monster ? (modifierEffects.criticalRaceDamageRate[monster.race] ?? 0) : 0;
+    const allRaceCritDamageRate = modifierEffects.criticalRaceDamageRate["all"] ?? 0;
 
-    const damageMultiplier = 1.4 + (traitCritDamageRate + modifierCritDamageRate) / 100;
+    const totalCritBonus = traitCritDamageRate + modifierCritDamageRate + raceCritDamageRate + allRaceCritDamageRate;
+
+    const damageMultiplier = 1.4 + totalCritBonus / 100;
 
     return {
       chance,

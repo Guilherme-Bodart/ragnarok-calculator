@@ -212,6 +212,23 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
       numericValue,
     );
   },
+  bSubSize: (command, conditions, variables) => {
+    const [, rathenaSizeId, value] = command.args;
+    const sizeId = toInternalSizeId(rathenaSizeId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!sizeId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "incomingSizeDamageReductionRate",
+      { type: "size", sizeId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
   bMagicAddRace: (command, conditions, variables) => {
     const [, rathenaRaceId, value] = command.args;
     const raceId = toInternalRaceId(rathenaRaceId);
@@ -394,6 +411,40 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
       numericValue,
     );
   },
+  bIgnoreDefSizeRate: (command, conditions, variables) => {
+    const [, rathenaSizeId, value] = command.args;
+    const sizeId = toInternalSizeId(rathenaSizeId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!sizeId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "ignoreDefenseSizeRate",
+      { type: "size", sizeId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bIgnoreMdefSizeRate: (command, conditions, variables) => {
+    const [, rathenaSizeId, value] = command.args;
+    const sizeId = toInternalSizeId(rathenaSizeId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!sizeId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "ignoreMagicDefenseSizeRate",
+      { type: "size", sizeId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
   bIgnoreDefRate: (command, conditions, variables) => {
     const numericValue = evaluateModifierValue(command.args[1], variables);
 
@@ -453,6 +504,23 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
     return createTargetedModifier(
       "ignoreMagicDefenseClassRate",
       { type: "class", classId },
+      command,
+      conditions,
+      numericValue,
+    );
+  },
+  bCritAtkRace: (command, conditions, variables) => {
+    const [, rathenaRaceId, value] = command.args;
+    const raceId = toInternalRaceId(rathenaRaceId);
+    const numericValue = evaluateModifierValue(value, variables);
+
+    if (!raceId || numericValue === null) {
+      return null;
+    }
+
+    return createTargetedModifier(
+      "criticalRaceDamageRate",
+      { type: "race", raceId },
       command,
       conditions,
       numericValue,
@@ -552,9 +620,13 @@ function createTargetedModifier(
     | "ignoreMagicDefenseRate"
     | "ignoreDefenseClassRate"
     | "ignoreMagicDefenseClassRate"
+    | "ignoreDefenseSizeRate"
+    | "ignoreMagicDefenseSizeRate"
     | "incomingRaceDamageReductionRate"
     | "incomingElementDamageReductionRate"
     | "incomingClassDamageReductionRate"
+    | "incomingSizeDamageReductionRate"
+    | "criticalRaceDamageRate"
     | "weaponElement"
     | "skillVariableCastRate"
     | "skillFixedCastRate"

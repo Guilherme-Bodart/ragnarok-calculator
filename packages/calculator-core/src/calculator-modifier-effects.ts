@@ -63,9 +63,13 @@ export type CalculatorModifierEffects = {
   ignoreMagicDefenseRate: Partial<Record<ModifierRaceId, number>>;
   ignoreDefenseClassRate: Partial<Record<ModifierClassId, number>>;
   ignoreMagicDefenseClassRate: Partial<Record<ModifierClassId, number>>;
+  ignoreDefenseSizeRate: Partial<Record<ModifierSizeId, number>>;
+  ignoreMagicDefenseSizeRate: Partial<Record<ModifierSizeId, number>>;
   incomingRaceDamageReductionRate: Partial<Record<ModifierRaceId, number>>;
   incomingElementDamageReductionRate: Partial<Record<ModifierElementId, number>>;
   incomingClassDamageReductionRate: Partial<Record<ModifierClassId, number>>;
+  incomingSizeDamageReductionRate: Partial<Record<ModifierSizeId, number>>;
+  criticalRaceDamageRate: Partial<Record<ModifierRaceId, number>>;
   unsupportedStatements: string[];
 };
 
@@ -141,9 +145,13 @@ export class CalculatorModifierEffectsFactory {
       ignoreMagicDefenseRate: {},
       ignoreDefenseClassRate: {},
       ignoreMagicDefenseClassRate: {},
+      ignoreDefenseSizeRate: {},
+      ignoreMagicDefenseSizeRate: {},
       incomingRaceDamageReductionRate: {},
       incomingElementDamageReductionRate: {},
       incomingClassDamageReductionRate: {},
+      incomingSizeDamageReductionRate: {},
+      criticalRaceDamageRate: {},
       unsupportedStatements: [],
     };
 
@@ -557,6 +565,51 @@ export class CalculatorModifierEffectsFactory {
             effects.ignoreMagicDefenseClassRate[bucket.target.classId] ?? 0;
           effects.ignoreMagicDefenseClassRate[bucket.target.classId] =
             current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "ignoreDefenseSizeRate" &&
+          bucket.target.type === "size"
+        ) {
+          const current =
+            effects.ignoreDefenseSizeRate[bucket.target.sizeId] ?? 0;
+          effects.ignoreDefenseSizeRate[bucket.target.sizeId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "ignoreMagicDefenseSizeRate" &&
+          bucket.target.type === "size"
+        ) {
+          const current =
+            effects.ignoreMagicDefenseSizeRate[bucket.target.sizeId] ?? 0;
+          effects.ignoreMagicDefenseSizeRate[bucket.target.sizeId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "incomingSizeDamageReductionRate" &&
+          bucket.target.type === "size"
+        ) {
+          const current =
+            effects.incomingSizeDamageReductionRate[bucket.target.sizeId] ?? 0;
+          effects.incomingSizeDamageReductionRate[bucket.target.sizeId] =
+            current + bucket.value;
+          continue;
+        }
+
+        if (
+          bucket.stat === "criticalRaceDamageRate" &&
+          bucket.target.type === "race"
+        ) {
+          const current =
+            effects.criticalRaceDamageRate[bucket.target.raceId] ?? 0;
+          effects.criticalRaceDamageRate[bucket.target.raceId] =
+            current + bucket.value;
+          continue;
         }
       }
     }

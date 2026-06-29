@@ -202,7 +202,10 @@ export class DamageFormulaPipeline {
     const defenseIgnoreClassRate = magical
       ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseClassRate, input.monster.classType)
       : getTargetedRate(input.modifierEffects.ignoreDefenseClassRate, input.monster.classType);
-    const defenseIgnoreRate = Math.min(100, defenseIgnoreRaceRate + defenseIgnoreClassRate);
+    const defenseIgnoreSizeRate = magical
+      ? getTargetedRate(input.modifierEffects.ignoreMagicDefenseSizeRate, input.monster.size)
+      : getTargetedRate(input.modifierEffects.ignoreDefenseSizeRate, input.monster.size);
+    const defenseIgnoreRate = Math.min(100, defenseIgnoreRaceRate + defenseIgnoreClassRate + defenseIgnoreSizeRate);
     const defenseMultiplier = getDefenseMultiplier(
       input.monster,
       input.skill.damageType,
