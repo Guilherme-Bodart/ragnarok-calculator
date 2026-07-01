@@ -53,7 +53,15 @@ export class CalculatorService {
     });
   }
 
-  createBuild(userId: string, payload: SaveCalculatorBuildRequest) {
+  async createBuild(userId: string, payload: SaveCalculatorBuildRequest) {
+    const buildCount = await this.prisma.calculatorCharacterBuild.count({
+      where: { userId },
+    });
+
+    if (buildCount >= 3) {
+      throw new BadRequestException("O limite de 3 builds por conta foi atingido.");
+    }
+
     return this.prisma.calculatorCharacterBuild.create({
       data: {
         userId,

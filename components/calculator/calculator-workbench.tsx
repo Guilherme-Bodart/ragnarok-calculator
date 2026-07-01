@@ -14,6 +14,7 @@ import { CalculatorAttackPanel } from "./calculator-attack-panel";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorBuildsModal } from "./calculator-builds-modal";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
+import { CalculatorDerivedStats } from "./calculator-derived-stats";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
 import {
   isFourthJobClassId,
@@ -29,6 +30,7 @@ export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
   const copy = dictionary.calculator;
   const [isBuildsModalOpen, setIsBuildsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"character" | "equipment" | "combat">("character");
   const build = useCalculatorBuildState(copy);
   const {
     selectedSkillId,
@@ -123,66 +125,116 @@ export function CalculatorWorkbench() {
         </nav>
       </header>
 
-      <section className="calculator-hero-panel">
-        <CalculatorCharacterPanel
-          baseLevel={build.baseLevel}
-          copy={copy}
-          isFourthJob={isFourthJobClassId(build.selectedClassId)}
-          isTranscendent={isTranscendentEquivalentClassId(build.selectedClassId)}
-          jobLevel={build.jobLevel}
-          selectedClassId={build.selectedClassId}
-          stats={build.stats}
-          onBaseLevelChange={build.setBaseLevel}
-          onClassChange={build.handleClassChange}
-          onJobLevelChange={build.setJobLevel}
-          onStatsChange={build.setStats}
-        />
-        <CalculatorSkillTreePanel
-          copy={copy}
-          learnedSkills={build.learnedSkills}
-          selectedClassId={build.selectedClassId}
-          onLearnedSkillsChange={build.setLearnedSkills}
-        />
-      </section>
-
       <section className="calculator-workspace" aria-label={copy.workspaceAria}>
-        <div className="calculator-character-column">
-          <CalculatorAttackPanel
-            availableSkills={build.selectedClassSkills}
+        
+        {/* COLUNA 1: CONFIGURAÇÃO (Lado Esquerdo - 60%) */}
+        <div className="calculator-config-column flex flex-col gap-3 min-w-0">
+          
+          <nav className="calculator-tabs-nav flex items-center gap-2">
+            <Button
+              variant={activeTab === "character" ? "primary" : "ghost"}
+              onClick={() => setActiveTab("character")}
+            >
+              Personagem & Skills
+            </Button>
+            <Button
+              variant={activeTab === "equipment" ? "primary" : "ghost"}
+              onClick={() => setActiveTab("equipment")}
+            >
+              Equipamentos
+            </Button>
+            <Button
+              variant={activeTab === "combat" ? "primary" : "ghost"}
+              onClick={() => setActiveTab("combat")}
+            >
+              Combate & Buffs
+            </Button>
+          </nav>
+
+          {activeTab === "character" && (
+            <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <CalculatorCharacterPanel
+                baseLevel={build.baseLevel}
+                characterStatus={result.characterStatus}
+                copy={copy}
+                isFourthJob={isFourthJobClassId(build.selectedClassId)}
+                isTranscendent={isTranscendentEquivalentClassId(build.selectedClassId)}
+                jobLevel={build.jobLevel}
+                selectedClassId={build.selectedClassId}
+                stats={build.stats}
+                skillTreeSlot={
+                  <CalculatorSkillTreePanel
+                    copy={copy}
+                    learnedSkills={build.learnedSkills}
+                    selectedClassId={build.selectedClassId}
+                    onLearnedSkillsChange={build.setLearnedSkills}
+                  />
+                }
+                onBaseLevelChange={build.setBaseLevel}
+                onClassChange={build.handleClassChange}
+                onJobLevelChange={build.setJobLevel}
+                onStatsChange={build.setStats}
+              />
+            </div>
+          )}
+
+          {activeTab === "equipment" && (
+            <div className="flex flex-col gap-5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <CalculatorEquipmentPanel
+                copy={copy}
+                itemContexts={build.itemContexts}
+                selectedCardsBySlot={build.selectedCardsBySlot}
+                selectedItemDetails={build.selectedItemDetails}
+                selectedItemsBySlot={build.selectedItemsBySlot}
+                onItemContextsChange={build.setItemContexts}
+                onSelectedCardsBySlotChange={build.setSelectedCardsBySlot}
+                onSelectedItemsBySlotChange={build.setSelectedItemsBySlot}
+              />
+            </div>
+          )}
+
+          {activeTab === "combat" && (
+            <div className="flex flex-col gap-5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <CalculatorAttackPanel
+                availableSkills={build.selectedClassSkills}
+                copy={copy}
+                result={result}
+                resultMeta={result.meta}
+                selectedSkill={selectedSkill}
+                skillLevel={effectiveSkillLevel}
+                onSkillChange={handleSkillChange}
+                onSkillLevelChange={setSkillLevel}
+              />
+              <CalculatorBuffsPanel
+                activeBuffs={build.activeBuffs}
+                buffSkills={build.buffSkills}
+                copy={copy}
+                selectedBuffId={build.selectedBuffId}
+                onActiveBuffsChange={build.setActiveBuffs}
+                onSelectedBuffChange={build.setSelectedBuffId}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* COLUNA 2: SIMULAÇÃO E RESULTADO (Lado Direito - Fixo/Sticky) */}
+        <div className="calculator-result-column flex flex-col gap-4 min-w-0 sticky top-6 self-start h-[calc(100vh-3rem)]">
+          <div className="animate-in fade-in slide-in-from-right-4 duration-500 shrink-0">
+            <CalculatorDerivedStats 
+              status={result.characterStatus}
+              modifierEffects={result.modifierEffects} 
+            />
+          </div>
+
+          <CalculatorTargetPanel
             copy={copy}
             result={result}
-            resultMeta={result.meta}
-            selectedSkill={selectedSkill}
-            skillLevel={effectiveSkillLevel}
-            onSkillChange={handleSkillChange}
-            onSkillLevelChange={setSkillLevel}
-          />
-          <CalculatorBuffsPanel
-            activeBuffs={build.activeBuffs}
-            buffSkills={build.buffSkills}
-            copy={copy}
-            selectedBuffId={build.selectedBuffId}
-            onActiveBuffsChange={build.setActiveBuffs}
-            onSelectedBuffChange={build.setSelectedBuffId}
+            selectedMonster={build.selectedMonsterDetail}
+            selectedMonsterId={build.selectedMonsterId}
+            onMonsterChange={build.setSelectedMonsterId}
           />
         </div>
-        <CalculatorEquipmentPanel
-          copy={copy}
-          itemContexts={build.itemContexts}
-          selectedCardsBySlot={build.selectedCardsBySlot}
-          selectedItemDetails={build.selectedItemDetails}
-          selectedItemsBySlot={build.selectedItemsBySlot}
-          onItemContextsChange={build.setItemContexts}
-          onSelectedCardsBySlotChange={build.setSelectedCardsBySlot}
-          onSelectedItemsBySlotChange={build.setSelectedItemsBySlot}
-        />
-        <CalculatorTargetPanel
-          copy={copy}
-          result={result}
-          selectedMonster={build.selectedMonsterDetail}
-          selectedMonsterId={build.selectedMonsterId}
-          onMonsterChange={build.setSelectedMonsterId}
-        />
+
       </section>
 
       {isBuildsModalOpen ? (
@@ -191,6 +243,7 @@ export function CalculatorWorkbench() {
           currentBuild={build.currentBuild}
           onClose={() => setIsBuildsModalOpen(false)}
           onLoadBuild={build.loadBuild}
+          onMarkAsSaved={build.markAsSaved}
           onRenameBuild={build.renameBuild}
         />
       ) : null}

@@ -96,16 +96,15 @@ export function CalculatorTargetPanel({
   }, [monsterQuery]);
 
   return (
-    <aside className="calc-panel calc-target">
-      <PanelHeader
-        icon={<Swords size={17} />}
-        title={copy.target.title}
-        meta={copy.target.meta}
-      />
+    <aside className="flex flex-col gap-4 p-5 rounded-xl border border-sky-500/20 bg-gradient-to-br from-slate-900/90 to-slate-950/80 shadow-[0_8px_30px_rgb(0,0,0,0.5)] backdrop-blur-xl flex-1 animate-in fade-in slide-in-from-right-8 duration-700">
+      <div className="flex items-center gap-2 mb-2">
+        <Swords size={18} className="text-sky-400" />
+        <h2 className="text-sm font-black text-sky-100 uppercase tracking-widest">{copy.target.title}</h2>
+      </div>
 
       <Field className="monster-picker" label={copy.target.monsterLabel}>
         <RichSelect
-          className="text-sm"
+          className="text-sm bg-slate-900/60 border-slate-700/50"
           value={String(selectedMonsterId)}
           onChange={(monsterId) => onMonsterChange(Number(monsterId))}
           searchValue={monsterQuery}
@@ -132,97 +131,62 @@ export function CalculatorTargetPanel({
       </Field>
 
       {selectedMonster ? (
-        <div className="target-monster-summary flex items-start gap-3 p-3 bg-card border border-border/50 rounded-md mt-4 shadow-sm">
-          <CalculatorMonsterIcon monsterId={selectedMonster.id} size={96} className="shrink-0 bg-muted/30 rounded border border-border/50 p-1" />
-          <div className="flex flex-col gap-1.5 w-full">
-            <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
-              <div className="font-semibold text-rose-500">HP <span className="text-foreground ml-1">{selectedMonster.hp.toLocaleString()}</span></div>
-              <div className="font-semibold text-muted-foreground">Def <span className="text-foreground ml-1">{selectedMonster.defense}</span></div>
-              <div className="font-semibold text-muted-foreground">Mdef <span className="text-foreground ml-1">{selectedMonster.magicDefense}</span></div>
-              <div className="font-semibold text-muted-foreground">Res <span className="text-foreground ml-1">0</span></div>
-              <div className="font-semibold text-muted-foreground">M.Res <span className="text-foreground ml-1">0</span></div>
-            </div>
-            
-            <div className="flex flex-col gap-0.5 mt-1 text-xs font-medium">
-              {selectedMonster.classType === "boss" ? <span className="text-rose-500">Boss</span> : <span className="text-emerald-500">Normal</span>}
-              <span className="text-amber-500 capitalize">{selectedMonster.element} {selectedMonster.elementLevel}</span>
-              <span className="text-orange-400 capitalize">{selectedMonster.race}</span>
-              <span className="text-sky-400 capitalize">{selectedMonster.size}</span>
+        <div className="flex items-start gap-4 p-4 rounded-lg border border-slate-700/50 bg-slate-800/40 shadow-inner mt-2 shrink-0">
+          <CalculatorMonsterIcon monsterId={selectedMonster.id} size={72} className="shrink-0 bg-slate-900/60 rounded-md border border-slate-700/50 p-1 drop-shadow-md" />
+          <div className="flex flex-col w-full">
+            <strong className="text-sm text-sky-50 mb-2 truncate">{selectedMonster.name}</strong>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
+              <div className="font-semibold text-rose-400">HP <span className="text-slate-200 ml-1">{selectedMonster.hp.toLocaleString()}</span></div>
+              <div className="font-semibold text-slate-400">Def <span className="text-slate-200 ml-1">{selectedMonster.defense}</span></div>
+              <div className="font-semibold text-slate-400">Mdef <span className="text-slate-200 ml-1">{selectedMonster.magicDefense}</span></div>
+              <div className="font-semibold text-amber-500/80 capitalize">{selectedMonster.element} {selectedMonster.elementLevel}</div>
+              <div className="font-semibold text-sky-400/80 capitalize">{selectedMonster.size}</div>
             </div>
           </div>
         </div>
       ) : null}
 
-      <div className="damage-card">
-        <span>{copy.target.totalDamage}</span>
-        <strong>{totalDamage}</strong>
-        <small>
-          {averageDamage} {copy.target.averageHit} / {hitCount}{" "}
-          {copy.target.hit} / {result.skill.damageType}
+      <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-sky-400/30 bg-gradient-to-b from-sky-900/40 to-slate-900/60 shadow-[inset_0_0_20px_rgba(56,189,248,0.15)] mt-4 relative overflow-hidden flex-1 min-h-[200px]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-500/10 via-transparent to-transparent opacity-60 pointer-events-none" />
+        <span className="text-xs font-bold text-sky-200/60 uppercase tracking-widest mb-1 z-10">{copy.target.totalDamage}</span>
+        <strong className="text-5xl md:text-6xl font-black text-white drop-shadow-[0_0_15px_rgba(56,189,248,0.6)] z-10 tabular-nums tracking-tight">
+          {totalDamage}
+        </strong>
+        <small className="text-xs text-sky-200/80 mt-3 font-medium z-10">
+          {averageDamage} {copy.target.averageHit} / {hitCount} {copy.target.hit}
         </small>
+        
         {selectedMonster && dps > 0 && (
-          <div className="mt-2 pt-2 border-t border-border/30 flex justify-between text-xs text-muted-foreground">
-            <span>DPS: <strong className="text-foreground">{dps.toLocaleString()}</strong></span>
-            <span>Tempo: <strong className="text-amber-500">{formatTime(selectedMonster.hp / dps)}</strong></span>
+          <div className="w-full mt-4 pt-3 border-t border-sky-500/20 flex justify-between items-center text-xs z-10">
+            <span className="text-slate-400 font-semibold">DPS: <strong className="text-sky-300 ml-1 font-mono text-sm">{dps.toLocaleString()}</strong></span>
+            <span className="text-slate-400 font-semibold">TTK: <strong className="text-amber-400 ml-1 font-mono text-sm">{formatTime(selectedMonster.hp / dps)}</strong></span>
           </div>
         )}
       </div>
 
-      <div className="breakdown-list">
-        <div>
-          <span>{copy.target.precision}</span>
-          <strong>{result.meta.precision}</strong>
+      <div className="grid grid-cols-2 gap-2 mt-4 text-[10px] sm:text-xs">
+        <div className="flex justify-between p-2 rounded bg-slate-900/50 border border-slate-800/60">
+          <span className="text-slate-400">{copy.target.precision}</span>
+          <strong className="text-slate-200 font-mono">{result.meta.precision}</strong>
         </div>
-        <div>
-          <span>{copy.target.formula}</span>
-          <strong>{result.meta.formulaId}</strong>
+        <div className="flex justify-between p-2 rounded bg-slate-900/50 border border-slate-800/60">
+          <span className="text-slate-400">Poder Base</span>
+          <strong className="text-slate-200 font-mono">{basePower}</strong>
         </div>
-        <div>
-          <span>{copy.target.basePower}</span>
-          <strong>{basePower}</strong>
+        <div className="flex justify-between p-2 rounded bg-slate-900/50 border border-slate-800/60">
+          <span className="text-slate-400">Skill Ratio</span>
+          <strong className="text-slate-200 font-mono">{skillMultiplier.toFixed(2)}x</strong>
         </div>
-        <div>
-          <span>{copy.target.skillMultiplier}</span>
-          <strong>{skillMultiplier.toFixed(2)}x</strong>
-        </div>
-        <div>
-          <span>{copy.target.defenseMitigation}</span>
-          <strong>{defenseMultiplier.toFixed(3)}x</strong>
-        </div>
-        <div>
-          <span>{copy.target.elementMultiplier}</span>
-          <strong>{elementMultiplier.toFixed(3)}x</strong>
-        </div>
-        <div>
-          <span>{copy.target.sizeMultiplier}</span>
-          <strong>{weaponSizeMultiplier.toFixed(3)}x</strong>
-        </div>
-        <div>
-          <span>{copy.target.unsupportedModifiers}</span>
-          <strong>{unsupportedModifierStatements}</strong>
-        </div>
-        <div>
-          <span>{copy.target.activeBuffs}</span>
-          <strong>{activeBuffItems}</strong>
-        </div>
-        <div>
-          <span>{copy.target.cycleTime}</span>
-          <strong>{(cycleTimeMs / 1000).toFixed(2)}s</strong>
-        </div>
-        <div>
-          <span>{copy.target.dps}</span>
-          <strong>{dps.toLocaleString()}</strong>
-        </div>
-        <div>
-          <span>{copy.target.source}</span>
-          <strong>{copy.target.sourceValue}</strong>
+        <div className="flex justify-between p-2 rounded bg-slate-900/50 border border-slate-800/60">
+          <span className="text-slate-400">Def/Mdef</span>
+          <strong className="text-slate-200 font-mono">{defenseMultiplier.toFixed(3)}x</strong>
         </div>
       </div>
 
       {result.meta.warnings.length > 0 ? (
-        <div className="target-warning-list">
+        <div className="flex flex-col gap-1 mt-4 p-3 rounded-lg border border-rose-500/30 bg-rose-950/20 text-xs text-rose-300/90">
           {result.meta.warnings.map((warning) => (
-            <span key={warning}>{warning}</span>
+            <span key={warning}>• {warning}</span>
           ))}
         </div>
       ) : null}

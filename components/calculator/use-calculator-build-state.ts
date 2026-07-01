@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import {
   getCalculatorManualBuffSkills,
@@ -33,7 +33,10 @@ import type { CalculatorDictionary } from "./calculator-i18n";
 export function useCalculatorBuildState(copy: CalculatorDictionary) {
   const [savedBuild] = useState(createDefaultCalculatorBuild);
   const hasLoadedSavedBuildRef = useRef(false);
+  const skipNextModificationRef = useRef(false);
   const [buildName, setBuildName] = useState(savedBuild.name);
+  const [lastSavedAt, setLastSavedAt] = useState(Date.now());
+  const [lastModifiedAt, setLastModifiedAt] = useState(Date.now());
   const [selectedClassId, setSelectedClassId] = useState(
     savedBuild.character.selectedClassId,
   );
@@ -177,6 +180,12 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
       return;
     }
 
+    if (skipNextModificationRef.current) {
+      skipNextModificationRef.current = false;
+    } else {
+      setLastModifiedAt(Date.now());
+    }
+
     window.localStorage.setItem(
       calculatorBuildStorageKey,
       JSON.stringify(currentBuild),
@@ -188,7 +197,8 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     hasLoadedSavedBuildRef.current = true;
   }, []);
 
-  function loadBuild(nextBuild: CalculatorBuildPayload) {
+  const loadBuild = useCallback((nextBuild: CalculatorBuildPayload) => {
+    skipNextModificationRef.current = true;
     setBuildName(nextBuild.name);
     setSelectedClassId(nextBuild.character.selectedClassId);
     setLearnedSkills(nextBuild.tree.learnedSkills);
@@ -205,6 +215,13 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     setItemContexts(nextBuild.equipment.itemContexts);
     setSelectedItemDetails({});
     setSelectedMonsterDetail(null);
+    markAsSaved();
+  }, []);
+
+  function markAsSaved() {
+    const now = Date.now();
+    setLastSavedAt(now);
+    setLastModifiedAt(now);
   }
 
   function renameBuild(nextName: string) {
@@ -252,6 +269,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
       defaultClassId,
     );
 
+    skipNextModificationRef.current = true;
     window.localStorage.removeItem(calculatorBuildStorageKey);
     setBuildName(createDefaultCalculatorBuild().name);
     setSelectedClassId(defaultClassId);
@@ -283,8 +301,11 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     handleClassChange,
     itemContexts,
     jobLevel,
+    lastModifiedAt,
+    lastSavedAt,
     learnedSkills,
     loadBuild,
+    markAsSaved,
     resetBuild,
     resolvedCardItemIds,
     resolvedEquipmentItemIds,

@@ -31,20 +31,17 @@ export class JobBasepointsFactory {
     }
 
     return matchingGroups.reduce<JobBasepoints>(
-      (total, group) => ({
-        baseHp:
-          total.baseHp ||
-          this.getClosestBasepoint(group.baseHp, baseLevel) ||
-          emptyJobBasepoints.baseHp,
-        baseSp:
-          total.baseSp ||
-          this.getClosestBasepoint(group.baseSp, baseLevel) ||
-          emptyJobBasepoints.baseSp,
-        baseAp:
-          total.baseAp ||
-          this.getClosestBasepoint(group.baseAp, baseLevel) ||
-          emptyJobBasepoints.baseAp,
-      }),
+      (total, group) => {
+        const hp = total.baseHp || this.getClosestBasepoint(group.baseHp, baseLevel);
+        const sp = total.baseSp || this.getClosestBasepoint(group.baseSp, baseLevel);
+        const ap = total.baseAp || this.getClosestBasepoint(group.baseAp, baseLevel);
+        
+        return {
+          baseHp: hp || Math.floor(baseLevel * 150), // Fallback temporário para classes sem DB
+          baseSp: sp || Math.floor(baseLevel * 20),
+          baseAp: ap || (baseLevel >= 200 ? 200 : 0),
+        };
+      },
       { ...emptyJobBasepoints },
     );
   }

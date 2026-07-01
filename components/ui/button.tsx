@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 type SharedButtonProps = {
   children: ReactNode;
   icon?: ReactNode;
-  variant?: "primary" | "secondary" | "ghost" | "danger";
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "link";
 };
 
 type ButtonProps =

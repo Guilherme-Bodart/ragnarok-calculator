@@ -1,5 +1,5 @@
 export type {
-  Bonus,
+  NormalizedModifier,
   DamageType,
   ElementType,
   EquipmentSlot,

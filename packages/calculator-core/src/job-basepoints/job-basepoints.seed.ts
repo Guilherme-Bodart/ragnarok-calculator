@@ -4336,8 +4336,14 @@ export const jobBasepointGroups: JobBasepointsGroup[] = [
       "Shiranui",
       "Spirit_Handler"
     ],
-    "baseHp": {},
-    "baseSp": {},
+    "baseHp": {
+      "200": 45000,
+      "250": 75000
+    },
+    "baseSp": {
+      "200": 3000,
+      "250": 4500
+    },
     "baseAp": {
       "200": 200,
       "201": 200,

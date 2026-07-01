@@ -54,13 +54,32 @@ function mergeCalculatorMonsters(
   baseMonsters: RoMonster[],
   selectedMonster?: RoMonster | null,
 ) {
-  if (!selectedMonster) {
-    return baseMonsters;
-  }
-
   const monsterById = new Map(baseMonsters.map((monster) => [monster.id, monster]));
 
-  monsterById.set(selectedMonster.id, selectedMonster);
+  if (selectedMonster) {
+    monsterById.set(selectedMonster.id, selectedMonster);
+  } else if (!monsterById.has(1002)) {
+    // Add dummy Poring if nothing is selected and Poring is missing from base (unlikely, but just in case)
+    monsterById.set(1002, {
+      id: 1002,
+      name: "Poring (Loading...)",
+      level: 1,
+      hp: 55,
+      defense: 2,
+      magicDefense: 5,
+      size: "medium",
+      race: "plant",
+      element: "water",
+      elementLevel: 1,
+      source: "rathena",
+      classType: "normal",
+      baseExp: 0,
+      jobExp: 0,
+      attack: 0,
+      magicAttack: 0,
+      elementResistanceRates: {},
+    } as any);
+  }
 
   return Array.from(monsterById.values());
 }

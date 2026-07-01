@@ -37,7 +37,7 @@
 .calculator-topbar,
 .calculator-hero-panel,
 .calculator-workspace {
-  width: min(1480px, 100%);
+  width: min(1680px, 98%);
   margin-inline: auto;
 }
 
@@ -608,14 +608,15 @@
 
 .calculator-workspace {
   display: grid;
-  grid-template-columns: minmax(280px, 0.86fr) minmax(420px, 1.38fr) minmax(300px, 0.92fr);
-  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
   align-items: start;
 }
 
-.calculator-character-column {
+.calculator-config-column,
+.calculator-result-column {
   display: grid;
-  gap: 18px;
+  gap: 24px;
 }
 
 .calc-panel {
@@ -675,9 +676,9 @@
 
 .calc-select-row {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(118px, 0.36fr) minmax(108px, 0.32fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 110px) minmax(0, 110px);
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 24px;
 }
 
 .skill-tree-toolbar .ui-select select {
@@ -817,7 +818,7 @@
 .equipment-paperdoll {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(92px, 1fr) minmax(128px, 0.9fr) minmax(92px, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr);
   grid-template-rows: repeat(6, minmax(64px, auto));
   gap: 10px;
   min-height: 492px;
@@ -1303,7 +1304,7 @@
   text-transform: uppercase;
 }
 
-.damage-card strong {
+.damage-card > strong {
   color: #eaf9ff;
   font-family: var(--font-title);
   font-size: clamp(3rem, 5vw, 5rem);
@@ -1464,3 +1465,105 @@
   }
 }
 
+
+/* NEW UI ADDITIONS */
+
+/* DERIVED STATS REDESIGN */
+.derived-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.derived-stat-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8px 10px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(125, 211, 252, 0.15);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.derived-stat-badge:hover {
+  background: rgba(15, 23, 42, 0.7);
+  transform: translateY(-1px);
+  border-color: rgba(125, 211, 252, 0.3);
+}
+
+.derived-stat-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: rgba(226, 246, 255, 0.6);
+  margin-bottom: 2px;
+}
+
+.derived-stat-value {
+  font-family: var(--font-rune), monospace;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--ice);
+}
+
+.derived-stat-badge.highlight-hp {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+.derived-stat-badge.highlight-hp .derived-stat-label {
+  color: rgba(239, 68, 68, 0.9);
+}
+
+.derived-stat-badge.highlight-sp {
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.05);
+}
+.derived-stat-badge.highlight-sp .derived-stat-label {
+  color: rgba(56, 189, 248, 0.9);
+}
+
+.derived-stat-badge.muted {
+  opacity: 0.6;
+}
+
+/* BREAKDOWN ZEBRA-STRIPING OVERRIDE */
+.breakdown-list {
+  display: grid;
+  gap: 0;
+  border: 1px solid rgb(125 211 252 / 0.12);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.breakdown-list div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(2, 6, 23, 0.4);
+  border-bottom: none;
+}
+
+.breakdown-list div:nth-child(even) {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.breakdown-list span {
+  color: rgb(226 246 255 / 0.65);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.breakdown-list strong {
+  color: var(--ice);
+  font-family: var(--font-rune), monospace;
+  font-size: 0.85rem;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+  text-align: right;
+}

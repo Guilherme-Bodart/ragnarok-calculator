@@ -1,7 +1,9 @@
 @theme {
   --font-sans: var(--font-body);
   --font-mono: var(--font-rune);
-  --font-pixel: var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New", monospace;
+  --font-pixel:
+    var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New",
+    monospace;
 
   --color-night-950: #020612;
   --color-night-900: #061122;
@@ -15,9 +17,13 @@
 
 :root {
   --font-body: var(--font-inter), "Segoe UI", Arial, sans-serif;
-  --font-display: var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
-  --font-title: var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
-  --font-pixel: var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New", monospace;
+  --font-display:
+    var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-title:
+    var(--font-sora), var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-pixel:
+    var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New",
+    monospace;
   --font-rune: var(--font-jetbrains-mono), "Courier New", monospace;
   --shell: 1120px;
   --narrow: 720px;
@@ -31,15 +37,29 @@ html {
 }
 
 body {
-  --font-pixel: var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New", monospace;
+  --font-pixel:
+    var(--font-pixelify-sans), var(--font-jetbrains-mono), "Courier New",
+    monospace;
 
   min-height: 100%;
   overflow-x: hidden;
   color: var(--foreground);
   background:
-    radial-gradient(circle at 50% -8%, rgb(85 199 255 / 0.2), transparent 34rem),
-    radial-gradient(circle at 10% 26%, rgb(31 122 255 / 0.12), transparent 28rem),
-    radial-gradient(circle at 88% 78%, rgb(214 43 98 / 0.09), transparent 30rem),
+    radial-gradient(
+      circle at 50% -8%,
+      rgb(85 199 255 / 0.2),
+      transparent 34rem
+    ),
+    radial-gradient(
+      circle at 10% 26%,
+      rgb(31 122 255 / 0.12),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 88% 78%,
+      rgb(214 43 98 / 0.09),
+      transparent 30rem
+    ),
     linear-gradient(180deg, #020612 0%, #061122 42%, #020612 100%);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -49,7 +69,15 @@ body {
 * {
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding: 3px;
+}
+
+img,
+svg,
+path,
+button,
+input {
+  padding: initial;
 }
 
 a {
@@ -61,4 +89,3 @@ a {
   color: #020612;
   background: #a7efff;
 }
-

@@ -52,7 +52,8 @@ export async function saveCalculatorAccountBuild(payload: CalculatorBuildPayload
   });
 
   if (!response.ok) {
-    throw new Error("Failed to save calculator build.");
+    const errorData = (await response.json().catch(() => ({}))) as { message?: string };
+    throw new Error(errorData.message || "Failed to save calculator build.");
   }
 
   const data = (await response.json()) as { build?: unknown };
@@ -83,7 +84,8 @@ export async function updateCalculatorAccountBuild(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update calculator build.");
+    const errorData = (await response.json().catch(() => ({}))) as { message?: string };
+    throw new Error(errorData.message || "Failed to update calculator build.");
   }
 
   const data = (await response.json()) as { build?: unknown };

@@ -21,6 +21,7 @@ type CalculatorBuildsModalProps = {
   currentBuild: CalculatorBuildPayload;
   onClose: () => void;
   onLoadBuild: (build: CalculatorBuildPayload) => void;
+  onMarkAsSaved: () => void;
   onRenameBuild: (name: string) => void;
 };
 
@@ -29,6 +30,7 @@ export function CalculatorBuildsModal({
   currentBuild,
   onClose,
   onLoadBuild,
+  onMarkAsSaved,
   onRenameBuild,
 }: CalculatorBuildsModalProps) {
   const t = copy.builds;
@@ -86,9 +88,10 @@ export function CalculatorBuildsModal({
       setSelectedBuildId(savedBuild.id);
       setStatus("idle");
       setMessage(t.savedMessage);
-    } catch {
+      onMarkAsSaved();
+    } catch (error: any) {
       setStatus("error");
-      setMessage(t.saveError);
+      setMessage(error?.message || t.saveError);
     }
   }
 
@@ -113,9 +116,10 @@ export function CalculatorBuildsModal({
       );
       setStatus("idle");
       setMessage(t.updatedMessage);
-    } catch {
+      onMarkAsSaved();
+    } catch (error: any) {
       setStatus("error");
-      setMessage(t.updateError);
+      setMessage(error?.message || t.updateError);
     }
   }
 
@@ -156,9 +160,10 @@ export function CalculatorBuildsModal({
       setSelectedBuildId(savedBuild.id);
       setStatus("idle");
       setMessage(t.duplicatedMessage);
-    } catch {
+      onMarkAsSaved();
+    } catch (error: any) {
       setStatus("error");
-      setMessage(t.duplicateError);
+      setMessage(error?.message || t.duplicateError);
     }
   }
 

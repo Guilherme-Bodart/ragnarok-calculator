@@ -117,8 +117,9 @@ export function CalculatorBuffsModal({
       icon={<Sparkles size={18} className="text-amber-400" />}
       title={copy.buffs.title}
       onClose={onClose}
+      size="lg"
     >
-      <div className="flex flex-col gap-4 p-4 w-[600px] max-w-full">
+      <div className="flex flex-col gap-4 p-4">
         <Tabs label="Buff Categories">
           <TabButton
             active={activeTab === "buffs"}
@@ -134,7 +135,7 @@ export function CalculatorBuffsModal({
           </TabButton>
         </Tabs>
 
-        <div className="flex flex-col gap-6 overflow-y-auto max-h-[60vh] pr-2 custom-scrollbar">
+        <div className="flex flex-col gap-6">
           {activeTab === "buffs" && (
             <>
               {classSkills.length > 0 && (

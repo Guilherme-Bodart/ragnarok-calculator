@@ -47,7 +47,7 @@ export function CalculatorEquipmentPanel({
     activeTab === "equip" ? calculatorEquipSlots : calculatorSpecialSlots;
 
   return (
-    <section className="calc-panel calc-equipment">
+    <section className="flex flex-col gap-5">
       <PanelHeader
         icon={<Shield size={17} />}
         title={copy.equipment.title}

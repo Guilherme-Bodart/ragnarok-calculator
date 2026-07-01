@@ -5,6 +5,8 @@ import { IconButton } from "./icon-button";
 import { PanelHeader } from "./panel-header";
 import { ScrollArea } from "./scroll-area";
 
+type ModalSize = "sm" | "md" | "lg" | "xl";
+
 type ModalProps = {
   ariaLabel: string;
   children: ReactNode;
@@ -13,7 +15,15 @@ type ModalProps = {
   icon?: ReactNode;
   meta?: ReactNode;
   title: ReactNode;
+  size?: ModalSize;
   onClose: () => void;
+};
+
+const sizeClasses: Record<ModalSize, string> = {
+  sm: "w-full max-w-md",
+  md: "w-[90vw] max-w-2xl",
+  lg: "w-[95vw] max-w-5xl",
+  xl: "w-[98vw] max-w-7xl",
 };
 
 export function Modal({
@@ -24,13 +34,14 @@ export function Modal({
   icon,
   meta,
   title,
+  size = "md",
   onClose,
 }: ModalProps) {
   return (
     <div className="ui-modal-backdrop" role="presentation">
       <section
         aria-modal="true"
-        className={cn("ui-modal", className)}
+        className={cn("ui-modal", sizeClasses[size], className)}
         role="dialog"
         aria-label={ariaLabel}
       >

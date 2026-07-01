@@ -157,4 +157,5 @@ export type CalculatorCharacter = {
   baseLevel: number;
   jobLevel: number;
   stats: CharacterStats;
+  learnedSkills?: Record<string, number>;
 };

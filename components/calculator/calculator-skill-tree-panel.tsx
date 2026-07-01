@@ -102,18 +102,14 @@ export function CalculatorSkillTreePanel({
 
   return (
     <>
-      <aside className="calculator-skill-tree-card">
-        <Sparkles size={26} />
-        <strong>{copy.skillTree.title}</strong>
-        <span>{resolvedJob.name}</span>
-        <small>
-          {learnedCount} {copy.skillTree.learnedLevels} ·{" "}
-          {resolvedJob.skills.length} {copy.skillTree.availableSkills}
-        </small>
-        <Button type="button" onClick={() => setIsOpen(true)}>
+      <div className="flex items-center justify-between gap-4 p-3 rounded-lg border border-slate-700/50 bg-slate-900/60 w-full">
+        <div className="flex items-center justify-between flex-1 text-sm px-2">
+          <span className="text-slate-400 font-medium">{copy.skillTree.title}</span>
+        </div>
+        <Button type="button" variant="link" onClick={() => setIsOpen(true)} className="text-xs mr-2 uppercase font-bold tracking-wide">
           {copy.skillTree.openAction}
         </Button>
-      </aside>
+      </div>
 
       {isOpen ? (
         <div className="skill-tree-modal-backdrop" role="presentation">

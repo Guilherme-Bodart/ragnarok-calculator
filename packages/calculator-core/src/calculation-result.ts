@@ -1,3 +1,4 @@
+import type { CalculatorModifierEffects } from "./calculator-modifier-effects";
 import type { CharacterStatus } from "./character-status-engine";
 import type { DamageBreakdownLine } from "./damage-formula-pipeline";
 import type { RoMonster, RoSkill } from "./ro-types";
@@ -27,6 +28,7 @@ export type DamageRange = {
 export type CalculateDamageResult = {
   meta: CalculationMeta;
   characterStatus: CharacterStatus;
+  modifierEffects: CalculatorModifierEffects;
   target: RoMonster;
   skill: RoSkill;
   damage: DamageRange;

@@ -11,6 +11,7 @@ export type SkillFormulaInput = {
 export type SkillFormulaResult = {
   formulaId: string;
   multiplier: number;
+  bonusFlatDamage?: number;
   hitCount: number;
   precision: "validated" | "inferred" | "partial" | "prototype";
 };

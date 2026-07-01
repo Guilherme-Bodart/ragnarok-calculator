@@ -47,6 +47,7 @@ export type CharacterStatus = {
   crit: number;
   aspd: number;
   traitEffects: CalculatorTraitEffects;
+  learnedSkills?: Record<string, number>;
 };
 
 export type CharacterStatusEngineInput = {
@@ -179,6 +180,7 @@ export class CharacterStatusEngine {
         aspdRate: input.modifierEffects?.aspdRate ?? 0,
       }),
       traitEffects,
+      learnedSkills: input.character.learnedSkills,
     };
   }
 

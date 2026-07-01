@@ -107,6 +107,7 @@ export function calculateDamageFromDataset(
       warnings: createWarnings(modifierEffects.unsupportedStatements.length),
     },
     characterStatus,
+    modifierEffects,
     target: monster,
     skill,
     damage: result.damage,

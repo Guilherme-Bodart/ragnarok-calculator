@@ -61,7 +61,7 @@ export function useCalculatorResult({
             refine: context.refine,
             grade: context.grade,
           })),
-          monsterId: selectedMonsterId,
+          monsterId: calculatorDataset.monsters[0]?.id ?? selectedMonsterId,
           skillId: selectedSkillId,
           skillLevel,
         },

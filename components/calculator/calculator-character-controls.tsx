@@ -1,12 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
 import { Field } from "@/components/ui/field";
 import { NumberSelect } from "@/components/ui/number-select";
-import { RichSelect } from "@/components/ui/rich-select";
 import type { CalculatorDictionary } from "./calculator-i18n";
-import { CalculatorClassOptionPortrait } from "./calculator-class-option-portrait";
-import { calculatorSkillTreeClassGroups } from "./calculator-skill-tree-data";
+import { CalculatorClassSelector } from "./calculator-class-selector";
 
 type CalculatorCharacterControlsProps = {
   baseLevel: number;
@@ -29,43 +26,28 @@ export function CalculatorCharacterControls({
   onClassChange,
   onJobLevelChange,
 }: CalculatorCharacterControlsProps) {
-  const classSelectGroups = useMemo(
-    () =>
-      calculatorSkillTreeClassGroups.map((group) => ({
-        label: group.label,
-        options: group.options.map((job) => ({
-          id: job.id,
-          label: job.name,
-          icon: (
-            <CalculatorClassOptionPortrait classId={job.id} name={job.name} />
-          ),
-        })),
-      })),
-    [],
-  );
+
 
   return (
-    <div className="calc-select-row">
+    <div className="grid grid-cols-[1.5fr_1fr_1fr] gap-4 mb-2 p-2">
       <Field label={copy.character.classLabel}>
-        <RichSelect
-          groups={classSelectGroups}
-          searchPlaceholder="Filtrar classe"
-          value={selectedClassId}
-          onChange={onClassChange}
+        <CalculatorClassSelector
+          selectedClassId={selectedClassId}
+          onClassChange={onClassChange}
         />
       </Field>
       <Field label="Base">
         <NumberSelect
+          fit="fill"
           max={275}
-          prefix="Base"
           value={baseLevel}
           onChange={onBaseLevelChange}
         />
       </Field>
       <Field label="Job">
         <NumberSelect
+          fit="fill"
           max={isFourthJob ? 70 : 60}
-          prefix="Job"
           value={jobLevel}
           onChange={onJobLevelChange}
         />
