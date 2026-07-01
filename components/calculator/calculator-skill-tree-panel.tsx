@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, X } from "lucide-react";
+import { Sparkles, Network } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
   increaseSkillWithRequirements,
@@ -8,9 +8,7 @@ import {
   type LearnedSkillLevels,
 } from "@/packages/calculator-core/src";
 import { Button } from "@/components/ui/button";
-import { IconButton } from "@/components/ui/icon-button";
-import { PanelHeader } from "@/components/ui/panel-header";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Modal } from "@/components/ui/modal";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorSkillTreeBoard } from "./calculator-skill-tree-board";
 import {
@@ -112,28 +110,15 @@ export function CalculatorSkillTreePanel({
       </div>
 
       {isOpen ? (
-        <div className="skill-tree-modal-backdrop" role="presentation">
-          <section
-            className="skill-tree-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="skill-tree-title"
-          >
-            <header className="skill-tree-modal-header">
-              <PanelHeader
-                title={<h2 id="skill-tree-title">{copy.skillTree.modalTitle}</h2>}
-                meta={copy.skillTree.kicker}
-              />
-              <IconButton
-                className="skill-tree-close"
-                label={copy.skillTree.closeAction}
-                onClick={() => setIsOpen(false)}
-                type="button"
-              >
-                <X size={18} />
-              </IconButton>
-            </header>
-
+        <Modal
+          icon={<Network size={18} className="text-emerald-400" />}
+          title={copy.skillTree.modalTitle}
+          meta={copy.skillTree.kicker}
+          onClose={() => setIsOpen(false)}
+          size="xl"
+          className="bg-gradient-to-br from-slate-900/90 to-slate-950/95"
+        >
+          <div className="flex flex-col gap-4">
             <CalculatorSkillTreeToolbar
               copy={copy}
               search={search}
@@ -147,7 +132,7 @@ export function CalculatorSkillTreePanel({
               learnedCount={learnedCount}
             />
 
-            <ScrollArea className="skill-tree-groups">
+            <div className="skill-tree-groups">
               {visibleSkillGroups.map((group) => (
                 <section className="skill-tree-group" key={group.key}>
                   <CalculatorSkillTreeGroupHeading
@@ -164,9 +149,9 @@ export function CalculatorSkillTreePanel({
                   />
                 </section>
               ))}
-            </ScrollArea>
-          </section>
-        </div>
+            </div>
+          </div>
+        </Modal>
       ) : null}
     </>
   );
