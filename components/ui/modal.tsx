@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IconButton } from "./icon-button";
@@ -8,10 +11,10 @@ import { ScrollArea } from "./scroll-area";
 type ModalSize = "sm" | "md" | "lg" | "xl";
 
 type ModalProps = {
-  ariaLabel: string;
+  ariaLabel?: string;
   children: ReactNode;
   className?: string;
-  closeLabel: string;
+  closeLabel?: string;
   icon?: ReactNode;
   meta?: ReactNode;
   title: ReactNode;
@@ -30,14 +33,29 @@ export function Modal({
   ariaLabel,
   children,
   className,
-  closeLabel,
+  closeLabel = "Fechar",
   icon,
   meta,
   title,
   size = "md",
   onClose,
 }: ModalProps) {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div className="ui-modal-backdrop" role="presentation">
       <section
         aria-modal="true"
@@ -56,6 +74,7 @@ export function Modal({
         </IconButton>
         <ScrollArea className="ui-modal-body">{children}</ScrollArea>
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }

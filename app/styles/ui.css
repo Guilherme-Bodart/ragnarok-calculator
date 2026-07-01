@@ -375,7 +375,7 @@
 .ui-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 700;
+  z-index: 9999;
   display: grid;
   place-items: center;
   background: rgb(2 6 18 / 0.62);
