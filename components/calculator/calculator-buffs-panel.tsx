@@ -1,20 +1,12 @@
 "use client";
 
-import { Sparkles, X } from "lucide-react";
-import { useMemo } from "react";
+import { Sparkles } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
-import { IconButton } from "@/components/ui/icon-button";
-import { NumberSelect } from "@/components/ui/number-select";
 import { PanelHeader } from "@/components/ui/panel-header";
-import { RichSelect } from "@/components/ui/rich-select";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import type { CalculatorPanelSkill } from "./calculator-character-panel";
-import { CalculatorSkillIcon } from "./calculator-skill-icon";
-import {
-  getCalculatorBuffGroup,
-  getCalculatorBuffPreview,
-} from "./calculator-buff-data";
+import { CalculatorBuffsModal } from "./calculator-buffs-modal";
 
 type ActiveBuffLevels = Record<string, number>;
 
@@ -35,117 +27,35 @@ export function CalculatorBuffsPanel({
   onActiveBuffsChange,
   onSelectedBuffChange,
 }: CalculatorBuffsPanelProps) {
-  const selectedBuff = buffSkills.find((skill) => skill.id === selectedBuffId);
-  const activeBuffEntries = useMemo(
-    () =>
-      Object.entries(activeBuffs)
-        .map(([buffId, level]) => {
-          const skill = buffSkills.find((buffSkill) => buffSkill.id === buffId);
-
-          return skill ? { level, skill } : null;
-        })
-        .filter((entry): entry is { level: number; skill: CalculatorPanelSkill } =>
-          Boolean(entry),
-        ),
-    [activeBuffs, buffSkills],
-  );
-
-  function addBuff() {
-    if (!selectedBuff) {
-      return;
-    }
-
-    onActiveBuffsChange({
-      ...activeBuffs,
-      [selectedBuff.id]: activeBuffs[selectedBuff.id] ?? selectedBuff.maxLevel,
-    });
-  }
-
-  function setBuffLevel(buffId: string, level: number) {
-    onActiveBuffsChange({
-      ...activeBuffs,
-      [buffId]: level,
-    });
-  }
-
-  function removeBuff(buffId: string) {
-    const nextBuffs = { ...activeBuffs };
-    delete nextBuffs[buffId];
-    onActiveBuffsChange(nextBuffs);
-  }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const activeBuffCount = Object.keys(activeBuffs).length;
 
   return (
-    <section className="calc-panel calc-buffs">
+    <section className="flex flex-col gap-4 p-5 rounded-xl border border-sky-500/10 bg-slate-900/40 shadow-[0_8px_30px_rgb(0,0,0,0.3)] backdrop-blur-md">
       <PanelHeader
-        icon={<Sparkles size={17} />}
+        icon={<Sparkles size={17} className="text-amber-400" />}
         title={copy.buffs.title}
-        meta={`${activeBuffEntries.length} ${copy.buffs.activeMeta}`}
+        meta={`${activeBuffCount} ${copy.buffs.activeMeta}`}
       />
 
-      <div className="calc-buff-picker">
-        <Field label={copy.buffs.skillLabel}>
-          <RichSelect
-            groups={[
-              {
-                label: copy.buffs.classGroup,
-                options: buffSkills.map((skill) => ({
-                  id: skill.id,
-                  label: skill.name,
-                  icon: (
-                    <CalculatorSkillIcon
-                      name={skill.name}
-                      numericId={skill.numericId}
-                    />
-                  ),
-                })),
-              },
-            ]}
-            menuSize="compact"
-            searchPlaceholder={copy.buffs.searchPlaceholder}
-            value={selectedBuff?.id ?? buffSkills[0]?.id ?? ""}
-            onChange={onSelectedBuffChange}
-          />
-        </Field>
+      <div className="flex flex-col gap-3 w-full">
         <Button
-          disabled={!selectedBuff}
+          className="bg-sky-600 hover:bg-sky-500 text-white shadow-[0_0_15px_rgba(2,132,199,0.5)] border-sky-400/50 h-11 w-full font-bold uppercase tracking-widest"
           type="button"
-          variant="secondary"
-          onClick={addBuff}
+          onClick={() => setIsModalOpen(true)}
         >
-          {copy.buffs.addAction}
+          {copy.buffs.title}
         </Button>
       </div>
 
-      {activeBuffEntries.length > 0 ? (
-        <div className="calc-buff-list">
-          {activeBuffEntries.map(({ level, skill }) => (
-            <div className="calc-buff-row" key={skill.id}>
-              <CalculatorSkillIcon name={skill.name} numericId={skill.numericId} />
-              <span className="calc-buff-copy">
-                <strong>{skill.name}</strong>
-                <small>
-                  {getCalculatorBuffGroup(skill.id)} ·{" "}
-                  {getCalculatorBuffPreview(skill.id)}
-                </small>
-              </span>
-              <NumberSelect
-                max={skill.maxLevel}
-                prefix="Lv."
-                value={level}
-                onChange={(nextLevel) => setBuffLevel(skill.id, nextLevel)}
-              />
-              <IconButton
-                label={copy.buffs.removeAction}
-                type="button"
-                onClick={() => removeBuff(skill.id)}
-              >
-                <X size={15} />
-              </IconButton>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className="calc-empty-state">{copy.buffs.emptyState}</p>
+      {isModalOpen && (
+        <CalculatorBuffsModal
+          activeBuffs={activeBuffs}
+          buffSkills={buffSkills}
+          copy={copy}
+          onActiveBuffsChange={onActiveBuffsChange}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
     </section>
   );

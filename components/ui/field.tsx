@@ -16,10 +16,10 @@ type FieldValueProps = {
 
 export function Field({ children, className, label }: FieldProps) {
   return (
-    <label className={cn("ui-field", className)}>
-      <span>{label}</span>
+    <div className={cn("ui-field", className)}>
+      <span className="ui-field-label">{label}</span>
       {children}
-    </label>
+    </div>
   );
 }
 

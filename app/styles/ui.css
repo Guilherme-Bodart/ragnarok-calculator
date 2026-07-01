@@ -8,27 +8,27 @@
   content: "";
   position: absolute;
   top: 50%;
-  right: 14px;
+  right: 18px;
   width: 0;
   height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 6px solid rgb(167 239 255 / 0.9);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid rgb(167 239 255 / 0.9);
   pointer-events: none;
   transform: translateY(-35%);
 }
 
 .ui-select select {
   width: 100%;
-  min-height: 40px;
+  min-height: 48px;
   border: 1px solid rgb(167 239 255 / 0.16);
-  border-radius: 8px;
+  border-radius: 10px;
   color: #f2fbff;
   background:
-    linear-gradient(90deg, transparent calc(100% - 42px), rgb(8 47 73 / 0.56) 0),
+    linear-gradient(90deg, transparent calc(100% - 48px), rgb(8 47 73 / 0.56) 0),
     linear-gradient(180deg, rgb(167 239 255 / 0.08), rgb(2 6 18 / 0.08)),
     rgb(2 6 18 / 0.48);
-  padding-right: 46px;
+  padding: 8px 56px 8px 16px;
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.045),
     0 12px 26px rgb(0 0 0 / 0.12);
@@ -79,18 +79,18 @@
 
 .ui-rich-select-trigger {
   width: 100%;
-  min-height: 42px;
+  min-height: 48px;
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr) 34px;
+  grid-template-columns: 36px minmax(0, 1fr) 38px;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   border: 1px solid rgb(167 239 255 / 0.16);
-  border-radius: 8px;
+  border-radius: 10px;
   color: #f2fbff;
   background:
     linear-gradient(180deg, rgb(167 239 255 / 0.08), rgb(2 6 18 / 0.08)),
     rgb(2 6 18 / 0.48);
-  padding: 4px 4px 4px 6px;
+  padding: 6px 8px 6px 12px;
   font: inherit;
   font-weight: 900;
   text-align: left;
@@ -126,13 +126,8 @@
 }
 
 .ui-rich-select-menu {
-  position: absolute;
-  z-index: 900;
-  top: calc(100% + 6px);
-  left: 0;
-  width: 100%;
-  max-width: min(250px, calc(100vw - 48px));
-  max-height: min(320px, 46vh);
+  position: fixed;
+  z-index: 9999;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -264,18 +259,20 @@
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
+  padding: 4px;
 }
 
 .ui-input {
   width: 100%;
-  min-height: 40px;
+  min-width: 0;
+  min-height: 48px;
   border: 1px solid rgb(167 239 255 / 0.16);
-  border-radius: 8px;
+  border-radius: 10px;
   color: #f2fbff;
   background:
     linear-gradient(180deg, rgb(167 239 255 / 0.05), rgb(2 6 18 / 0.08)),
     rgb(2 6 18 / 0.58);
-  padding: 0 12px;
+  padding: 8px 16px;
   font: inherit;
   outline: none;
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
@@ -290,16 +287,16 @@
 }
 
 .ui-field-value {
-  min-height: 40px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   border: 1px solid rgb(167 239 255 / 0.16);
-  border-radius: 8px;
+  border-radius: 10px;
   color: rgb(242 251 255 / 0.82);
   background:
     linear-gradient(180deg, rgb(167 239 255 / 0.05), rgb(2 6 18 / 0.08)),
     rgb(2 6 18 / 0.48);
-  padding: 0 12px;
+  padding: 8px 16px;
   font: inherit;
   font-weight: 850;
 }
@@ -387,7 +384,6 @@
 
 .ui-modal {
   position: relative;
-  width: min(560px, 100%);
   max-height: min(720px, calc(100vh - 36px));
   overflow: hidden;
   border: 1px solid rgb(125 211 252 / 0.22);
