@@ -270,7 +270,7 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     setBuildName(createDefaultCalculatorBuild().name);
 
     // Agora sim, reseta o form
-    setClassId(defaultClassId);
+    setSelectedClassId(defaultClassId);
     setStats({
       str: 1,
       agi: 1,
