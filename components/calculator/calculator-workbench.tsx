@@ -40,7 +40,11 @@ export function CalculatorWorkbench() {
   const selectedSkill =
     calculatorDataset.skills.find((skill) => skill.id === selectedSkillId) ??
     build.selectedClassSkills[0] ??
-    calculatorDataset.skills[0];
+    calculatorDataset.skills[0] ?? {
+      id: "DUMMY",
+      name: "None",
+      maxLevel: 1,
+    };
   const effectiveSkillLevel = Math.min(skillLevel, selectedSkill.maxLevel);
   const result = useCalculatorResult({
     activeBuffItemIds: build.activeBuffItemIds,
