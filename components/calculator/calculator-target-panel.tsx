@@ -223,8 +223,8 @@ export function CalculatorTargetPanel({
             {/* Column 1: Core Combat Stats */}
             <div className="flex flex-col gap-1.5 border-r border-sky-500/10 pr-4">
               <div className="flex justify-between"><span className="text-slate-400">Precisão</span> <strong className={accuracy >= 100 ? "text-emerald-400" : "text-rose-400"}>{accuracy}%</strong></div>
-              <div className="flex justify-between"><span className="text-slate-400">Penet. Mágica</span> <strong className="text-sky-300">{(result.modifierEffects.ignoreMdefRate * 100).toFixed(0)}%</strong></div>
-              <div className="flex justify-between"><span className="text-slate-400">Penet. Física</span> <strong className="text-rose-300">{(result.modifierEffects.ignoreDefRate * 100).toFixed(0)}%</strong></div>
+              <div className="flex justify-between"><span className="text-slate-400">Penetração</span> <strong className="text-sky-300">{Number(result.breakdown.find((b) => b.key === "defenseIgnoreRate")?.value ?? 0).toFixed(0)}%</strong></div>
+              <div className="flex justify-between"><span className="text-slate-400">Crit. Rate</span> <strong className="text-rose-300">{result.characterStatus.crit}</strong></div>
               <div className="flex justify-between"><span className="text-slate-400">ASPD</span> <strong className="text-slate-200">{result.characterStatus.aspd}</strong></div>
             </div>
 
