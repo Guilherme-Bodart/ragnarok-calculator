@@ -46,7 +46,3 @@ export const defaultCalculatorInput: CalculateDamageInput = {
   skillLevel: 5,
 };
 
-export const calculatorDemoResult = calculateDamageFromDataset(
-  calculatorDemoInput,
-  calculatorDemoDataset,
-);

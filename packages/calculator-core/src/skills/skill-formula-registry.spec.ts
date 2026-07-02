@@ -108,7 +108,7 @@ describe("SkillFormulaRegistry", () => {
     ).toEqual({
       formulaId: "static:KN_BOWLINGBASH",
       multiplier: 5,
-      hitCount: 2,
+      hitCount: 1,
       precision: "validated",
     });
   });

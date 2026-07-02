@@ -15,7 +15,7 @@ import {
   createDefaultCalculatorBuild,
   readSavedCalculatorBuild,
 } from "./calculator-build-storage";
-import { calculatorDemoInput } from "./calculator-demo-data";
+import { defaultCalculatorInput } from "./calculator-base-data";
 import { useCalculatorItemDetails } from "./use-calculator-item-details";
 import { useCalculatorMonsterDetail } from "./use-calculator-monster-detail";
 import type { CalculatorItemDetail } from "./calculator-item-data";
@@ -263,23 +263,34 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
 
   function resetBuild() {
     const defaultClassId =
-      calculatorDemoInput.character.classId ?? "Dragon_Knight";
-    const nextSkills = getCalculatorClassSkills(
-      calculatorSkillTreeCatalog,
-      defaultClassId,
-    );
+      defaultCalculatorInput.character.classId ?? "Dragon_Knight";
 
     skipNextModificationRef.current = true;
     window.localStorage.removeItem(calculatorBuildStorageKey);
     setBuildName(createDefaultCalculatorBuild().name);
-    setSelectedClassId(defaultClassId);
+
+    // Agora sim, reseta o form
+    setClassId(defaultClassId);
+    setStats({
+      str: 1,
+      agi: 1,
+      vit: 1,
+      int: 1,
+      dex: 1,
+      luk: 1,
+      pow: 0,
+      sta: 0,
+      wis: 0,
+      spl: 0,
+      con: 0,
+      crt: 0,
+    });
+    setBaseLevel(defaultCalculatorInput.character.baseLevel);
+    setJobLevel(defaultCalculatorInput.character.jobLevel);
     setLearnedSkills({});
-    setBaseLevel(calculatorDemoInput.character.baseLevel);
-    setJobLevel(calculatorDemoInput.character.jobLevel);
-    setStats(createDefaultCalculatorBuild().character.stats);
-    setSelectedSkillId(nextSkills[0]?.id ?? calculatorDemoInput.skillId);
-    setSkillLevel(calculatorDemoInput.skillLevel);
-    setSelectedMonsterId(calculatorDemoInput.monsterId);
+    setSelectedSkillId(defaultCalculatorInput.skillId);
+    setSkillLevel(defaultCalculatorInput.skillLevel);
+    setSelectedMonsterId(defaultCalculatorInput.monsterId);
     setActiveBuffs({});
     setSelectedBuffId("");
     setSelectedItemsBySlot({});

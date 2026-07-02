@@ -3,7 +3,7 @@ import {
   migrateCalculatorBuildPayload,
   type CalculatorBuildPayload,
 } from "./calculator-build-payload";
-import { calculatorDemoInput } from "./calculator-demo-data";
+import { defaultCalculatorInput } from "./calculator-base-data";
 import archMageBuild from "@/packages/calculator-core/src/reference-scenarios/guilh-arch-mage-build.json";
 
 export const calculatorBuildStorageKey = "nightmare-calculator-build";
@@ -13,14 +13,14 @@ export function createDefaultCalculatorBuild(): CalculatorBuildPayload {
     version: calculatorBuildPayloadVersion,
     name: "Build local",
     character: {
-      selectedClassId: calculatorDemoInput.character.classId ?? "Dragon_Knight",
-      baseLevel: calculatorDemoInput.character.baseLevel,
-      jobLevel: calculatorDemoInput.character.jobLevel,
-      stats: { ...calculatorDemoInput.character.stats },
+      selectedClassId: defaultCalculatorInput.character.classId ?? "Dragon_Knight",
+      baseLevel: defaultCalculatorInput.character.baseLevel,
+      jobLevel: defaultCalculatorInput.character.jobLevel,
+      stats: { ...defaultCalculatorInput.character.stats },
     },
     attack: {
-      selectedSkillId: calculatorDemoInput.skillId,
-      skillLevel: calculatorDemoInput.skillLevel,
+      selectedSkillId: defaultCalculatorInput.skillId,
+      skillLevel: defaultCalculatorInput.skillLevel,
     },
     tree: {
       learnedSkills: {},
@@ -35,7 +35,7 @@ export function createDefaultCalculatorBuild(): CalculatorBuildPayload {
       selectedBuffId: "",
     },
     target: {
-      selectedMonsterId: calculatorDemoInput.monsterId,
+      selectedMonsterId: defaultCalculatorInput.monsterId,
     },
   };
 }
