@@ -5,7 +5,7 @@ import {
   calculateDamageFromDataset,
 } from "@/packages/calculator-core/src";
 import { isTranscendentEquivalentClassId } from "./calculator-class-rules";
-import { calculatorDemoInput } from "./calculator-demo-data";
+import { defaultCalculatorInput } from "./calculator-base-data";
 
 type CalculatorDataset = Parameters<typeof calculateDamageFromDataset>[1];
 type CalculatorInput = Parameters<typeof calculateDamageFromDataset>[0];
@@ -45,9 +45,9 @@ export function useCalculatorResult({
     () =>
       calculateDamageFromDataset(
         {
-          ...calculatorDemoInput,
+          ...defaultCalculatorInput,
           character: {
-            ...calculatorDemoInput.character,
+            ...defaultCalculatorInput.character,
             classId: selectedClassId,
             baseLevel,
             jobLevel,
@@ -57,7 +57,7 @@ export function useCalculatorResult({
           learnedSkills: effectiveLearnedSkills,
           equipmentItemIds: resolvedEquipmentItemIds,
           cardItemIds: resolvedCardItemIds,
-          buffItemIds: [...calculatorDemoInput.buffItemIds, ...activeBuffItemIds],
+          buffItemIds: [...defaultCalculatorInput.buffItemIds, ...activeBuffItemIds],
           activeBuffs,
           itemContexts: Object.entries(itemContexts).map(([itemId, context]) => ({
             itemId: Number(itemId),

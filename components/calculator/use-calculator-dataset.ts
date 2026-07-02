@@ -3,13 +3,13 @@
 import { useMemo } from "react";
 import type { RoItem, RoMonster } from "@/packages/calculator-core/src";
 import {
-  calculatorDemoDataset,
-} from "./calculator-demo-data";
+  baseCalculatorDataset,
+} from "./calculator-base-data";
 import type { CalculatorItemDetail } from "./calculator-item-data";
 import type { CalculatorMonsterDetail } from "./calculator-monster-data";
 import { mergeCalculatorSkills } from "./calculator-skill-classification";
 
-type CalculatorSkill = (typeof calculatorDemoDataset.skills)[number];
+type CalculatorSkill = (typeof baseCalculatorDataset.skills)[number];
 
 export function useCalculatorDataset({
   selectedCalculatorItems,
@@ -22,17 +22,17 @@ export function useCalculatorDataset({
 }) {
   return useMemo(
     () => ({
-      ...calculatorDemoDataset,
+      ...baseCalculatorDataset,
       items: mergeCalculatorItems(
-        calculatorDemoDataset.items,
+        baseCalculatorDataset.items,
         selectedCalculatorItems,
       ),
       skills: mergeCalculatorSkills(
-        calculatorDemoDataset.skills,
+        baseCalculatorDataset.skills,
         selectedClassSkills,
       ),
       monsters: mergeCalculatorMonsters(
-        calculatorDemoDataset.monsters,
+        baseCalculatorDataset.monsters,
         selectedMonsterDetail,
       ),
     }),

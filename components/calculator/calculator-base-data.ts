@@ -5,13 +5,13 @@ import {
 } from "@/packages/calculator-core/src";
 import { calculatorManualBuffItems } from "./calculator-buff-data";
 
-export const calculatorDemoDataset = createCalculatorDatasetFromRathenaNormalized({
+export const baseCalculatorDataset = createCalculatorDatasetFromRathenaNormalized({
   items: [...calculatorManualBuffItems],
   monsters: [],
   skills: [],
 });
 
-export const calculatorDemoInput: CalculateDamageInput = {
+export const defaultCalculatorInput: CalculateDamageInput = {
   ruleset: {
     server: "latam",
     mechanics: "renewal",
