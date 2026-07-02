@@ -53,9 +53,6 @@ export function CalculatorTargetPanel({
     result.breakdown,
     "unsupportedModifierStatements",
   );
-  const activeBuffItems = getBreakdownValue(result.breakdown, "activeBuffItems");
-  const cycleTimeMs = getBreakdownValue(result.breakdown, "cycleTimeMs");
-  const dps = getBreakdownValue(result.breakdown, "dps");
   const options = useMemo(() => {
     const optionById = new Map(
       monsterOptions.map((monster) => [monster.id, monster]),
@@ -95,101 +92,159 @@ export function CalculatorTargetPanel({
     };
   }, [monsterQuery]);
 
+  const activeBuffItems = getBreakdownValue(result.breakdown, "activeBuffItems");
+  const cycleTimeMs = Number(getBreakdownValue(result.breakdown, "cycleTimeMs")) || 0;
+  const dps = Number(getBreakdownValue(result.breakdown, "dps")) || 0;
+
+  const vct = Number(getBreakdownValue(result.breakdown, "variableCastMs")) || 0;
+  const fct = Number(getBreakdownValue(result.breakdown, "fixedCastMs")) || 0;
+  const delay = Number(getBreakdownValue(result.breakdown, "afterCastDelayMs")) || 0;
+  const cd = Number(getBreakdownValue(result.breakdown, "cooldownMs")) || 0;
+  
+  const skillPerSec = cycleTimeMs > 0 ? (1000 / cycleTimeMs).toFixed(2) : "0.00";
+
+  const reqHit = selectedMonster ? 200 + selectedMonster.level + (selectedMonster.agi ?? 0) : 0;
+  
+  // Accuracy = (Hit + 100) - ReqHit. Cap at 100, Min 5.
+  const hitDiff = result.characterStatus.hit + 100 - reqHit;
+  const accuracy = selectedMonster ? Math.max(5, Math.min(100, hitDiff)) : 100;
+
   return (
-    <aside className="flex flex-col gap-4 p-5 rounded-xl border border-sky-500/20 bg-gradient-to-br from-slate-900/90 to-slate-950/80 shadow-[0_8px_30px_rgb(0,0,0,0.5)] backdrop-blur-xl flex-1 animate-in fade-in slide-in-from-right-8 duration-700">
-      <div className="flex items-center gap-2 mb-2">
-        <Swords size={18} className="text-sky-400" />
-        <h2 className="text-sm font-black text-sky-100 uppercase tracking-widest">{copy.target.title}</h2>
-      </div>
-
-      <Field className="monster-picker" label={copy.target.monsterLabel}>
-        <RichSelect
-          className="text-sm bg-slate-900/60 border-slate-700/50"
-          value={String(selectedMonsterId)}
-          onChange={(monsterId) => onMonsterChange(Number(monsterId))}
-          searchValue={monsterQuery}
-          onSearchChange={setMonsterQuery}
-          searchPlaceholder={copy.target.searchPlaceholder}
-          groups={[
-            {
-              label: copy.target.monsterLabel,
-              options: options.map((monster) => {
-                const raceStr = monster.race ? monster.race.charAt(0).toUpperCase() + monster.race.slice(1) : "";
-                const sizeMap: Record<string, string> = { small: "S", medium: "M", large: "L" };
-                const sizeStr = monster.size && sizeMap[monster.size] ? sizeMap[monster.size] : "";
-                const extra = [raceStr, sizeStr].filter(Boolean).join(" ");
-                
-                return {
-                  id: String(monster.id),
-                  label: `${monster.level || "?"} ${monster.name}${extra ? ` (${extra})` : ""}`,
-                  icon: <CalculatorMonsterIcon monsterId={monster.id} size={24} />
-                };
-              }),
-            },
-          ]}
-        />
-      </Field>
-
-      {selectedMonster ? (
-        <div className="flex items-start gap-4 p-4 rounded-lg border border-slate-700/50 bg-slate-800/40 shadow-inner mt-2 shrink-0">
-          <CalculatorMonsterIcon monsterId={selectedMonster.id} size={72} className="shrink-0 bg-slate-900/60 rounded-md border border-slate-700/50 p-1 drop-shadow-md" />
-          <div className="flex flex-col w-full">
-            <strong className="text-sm text-sky-50 mb-2 truncate">{selectedMonster.name}</strong>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
-              <div className="font-semibold text-rose-400">HP <span className="text-slate-200 ml-1">{selectedMonster.hp.toLocaleString()}</span></div>
-              <div className="font-semibold text-slate-400">Def <span className="text-slate-200 ml-1">{selectedMonster.defense}</span></div>
-              <div className="font-semibold text-slate-400">Mdef <span className="text-slate-200 ml-1">{selectedMonster.magicDefense}</span></div>
-              <div className="font-semibold text-amber-500/80 capitalize">{selectedMonster.element} {selectedMonster.elementLevel}</div>
-              <div className="font-semibold text-sky-400/80 capitalize">{selectedMonster.size}</div>
-            </div>
+    <aside className="flex flex-col gap-0 p-0 rounded-xl border border-sky-500/20 bg-gradient-to-br from-slate-900/90 to-slate-950/80 shadow-[0_8px_30px_rgb(0,0,0,0.5)] backdrop-blur-xl flex-1 animate-in fade-in slide-in-from-right-8 duration-700 overflow-hidden relative min-h-0">
+      
+      {/* MONSTER SECTION (60% HEIGHT) */}
+      <div className="flex-[6] flex flex-col p-4 border-b border-sky-500/20 min-h-0 bg-slate-950/40 relative">
+        <div className="flex items-center justify-between gap-4 mb-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
+            <Swords size={18} className="text-sky-400" />
+            <h2 className="text-sm font-black text-sky-100 uppercase tracking-widest">{copy.target.title}</h2>
+          </div>
+          
+          <div className="flex-1 max-w-[280px]">
+            <RichSelect
+              className="text-xs bg-slate-900/60 border-slate-700/50 w-full"
+              value={String(selectedMonsterId)}
+              onChange={(monsterId) => onMonsterChange(Number(monsterId))}
+              searchValue={monsterQuery}
+              onSearchChange={setMonsterQuery}
+              searchPlaceholder={copy.target.searchPlaceholder}
+              groups={[
+                {
+                  label: copy.target.monsterLabel,
+                  options: options.map((monster) => {
+                    const raceStr = monster.race ? monster.race.charAt(0).toUpperCase() + monster.race.slice(1) : "";
+                    const sizeMap: Record<string, string> = { small: "S", medium: "M", large: "L" };
+                    const sizeStr = monster.size && sizeMap[monster.size] ? sizeMap[monster.size] : "";
+                    const extra = [raceStr, sizeStr].filter(Boolean).join(" ");
+                    
+                    return {
+                      id: String(monster.id),
+                      label: `Lv.${monster.level || "?"} ${monster.name}${extra ? ` (${extra})` : ""}`,
+                    };
+                  }),
+                },
+              ]}
+            />
           </div>
         </div>
-      ) : null}
 
-      <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-sky-400/30 bg-gradient-to-b from-sky-900/40 to-slate-900/60 shadow-[inset_0_0_20px_rgba(56,189,248,0.15)] mt-4 relative overflow-hidden flex-1 min-h-[200px]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-500/10 via-transparent to-transparent opacity-60 pointer-events-none" />
-        <span className="text-xs font-bold text-sky-200/60 uppercase tracking-widest mb-1 z-10">{copy.target.totalDamage}</span>
-        <strong className="text-5xl md:text-6xl font-black text-white drop-shadow-[0_0_15px_rgba(56,189,248,0.6)] z-10 tabular-nums tracking-tight">
-          {totalDamage}
-        </strong>
-        <small className="text-xs text-sky-200/80 mt-3 font-medium z-10">
-          {averageDamage} {copy.target.averageHit} / {hitCount} {copy.target.hit}
-        </small>
-        
-        {selectedMonster && dps > 0 && (
-          <div className="w-full mt-4 pt-3 border-t border-sky-500/20 flex justify-between items-center text-xs z-10">
-            <span className="text-slate-400 font-semibold">DPS: <strong className="text-sky-300 ml-1 font-mono text-sm">{dps.toLocaleString()}</strong></span>
-            <span className="text-slate-400 font-semibold">TTK: <strong className="text-amber-400 ml-1 font-mono text-sm">{formatTime(selectedMonster.hp / dps)}</strong></span>
+        {selectedMonster ? (
+          <div className="flex-1 min-h-0 flex items-start gap-4 p-3 rounded-lg border border-slate-700/50 bg-slate-800/40 shadow-inner overflow-y-auto custom-scrollbar">
+             {/* Left side: Image */}
+             <div className="flex flex-col gap-2 shrink-0 w-24 sm:w-28">
+               <CalculatorMonsterIcon monsterId={selectedMonster.id} size={112} className="w-full h-auto bg-slate-900/60 rounded-md border border-slate-700/50 p-1 drop-shadow-md" />
+               {selectedMonster.classType === "boss" && (
+                 <span className="text-[10px] font-bold text-rose-500 uppercase text-center tracking-widest bg-rose-950/40 rounded border border-rose-500/30 px-1 py-0.5">Boss</span>
+               )}
+             </div>
+
+             {/* Right side: Dense Stats Grid */}
+             <div className="flex-1 min-w-0 flex flex-col gap-2 justify-center">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-700/50">
+                  <strong className="text-[13px] text-sky-50 truncate">Lv.{selectedMonster.level} {selectedMonster.name}</strong>
+                </div>
+
+                {/* Row 1: HP / Req.Hit / Def / Mdef */}
+                <div className="flex justify-between items-center text-[10.5px] font-mono">
+                  <div className="flex gap-1 text-rose-400 font-semibold"><span>HP:</span> <span>{selectedMonster.hp.toLocaleString()}</span></div>
+                  <div className="flex gap-1 text-slate-300"><span>Req.Hit:</span> <span className="text-amber-100">{reqHit}</span></div>
+                  <div className="flex gap-1 text-slate-300"><span>Def:</span> <span className="text-slate-100">{selectedMonster.defense}</span></div>
+                  <div className="flex gap-1 text-slate-300"><span>Mdef:</span> <span className="text-slate-100">{selectedMonster.magicDefense}</span></div>
+                </div>
+
+                {/* Row 2: Race / Size / Element */}
+                <div className="flex justify-between items-center text-[10.5px] font-mono">
+                  <div className="flex gap-1 text-sky-300 capitalize"><span>Race:</span> <span className="text-sky-100">{selectedMonster.race}</span></div>
+                  <div className="flex gap-1 text-sky-300 capitalize"><span>Size:</span> <span className="text-sky-100">{selectedMonster.size}</span></div>
+                  <div className="flex gap-1 text-amber-500 capitalize"><span>Element:</span> <span className="text-amber-200">{selectedMonster.element} {selectedMonster.elementLevel}</span></div>
+                </div>
+
+                {/* Row 3: STR AGI VIT INT DEX LUK */}
+                <div className="flex justify-between items-center text-[10px] font-mono text-center pt-1.5 border-t border-slate-700/50 opacity-90">
+                  <div className="flex gap-1"><span className="text-slate-500">STR</span> <span className="text-slate-200">{selectedMonster.str ?? 0}</span></div>
+                  <div className="flex gap-1"><span className="text-slate-500">AGI</span> <span className="text-slate-200">{selectedMonster.agi ?? 0}</span></div>
+                  <div className="flex gap-1"><span className="text-slate-500">VIT</span> <span className="text-slate-200">{selectedMonster.vit ?? 0}</span></div>
+                  <div className="flex gap-1"><span className="text-slate-500">INT</span> <span className="text-slate-200">{selectedMonster.int ?? 0}</span></div>
+                  <div className="flex gap-1"><span className="text-slate-500">DEX</span> <span className="text-slate-200">{selectedMonster.dex ?? 0}</span></div>
+                  <div className="flex gap-1"><span className="text-slate-500">LUK</span> <span className="text-slate-200">{selectedMonster.luk ?? 0}</span></div>
+                </div>
+             </div>
+          </div>
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-xs text-slate-500 border border-dashed border-slate-700/50 rounded-lg">
+            Selecione um alvo para visualizar os atributos.
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-2 mt-4 text-[10px] sm:text-xs">
-        <div className="flex justify-between p-2 rounded bg-slate-900/50 border border-slate-800/60">
-          <span className="text-slate-400">{copy.target.precision}</span>
-          <strong className="text-slate-200 font-mono">{result.meta.precision}</strong>
-        </div>
-        <div className="flex justify-between p-2 rounded bg-slate-900/50 border border-slate-800/60">
-          <span className="text-slate-400">Poder Base</span>
-          <strong className="text-slate-200 font-mono">{basePower}</strong>
-        </div>
-        <div className="flex justify-between p-2 rounded bg-slate-900/50 border border-slate-800/60">
-          <span className="text-slate-400">Skill Ratio</span>
-          <strong className="text-slate-200 font-mono">{skillMultiplier.toFixed(2)}x</strong>
-        </div>
-        <div className="flex justify-between p-2 rounded bg-slate-900/50 border border-slate-800/60">
-          <span className="text-slate-400">Def/Mdef</span>
-          <strong className="text-slate-200 font-mono">{defenseMultiplier.toFixed(3)}x</strong>
-        </div>
-      </div>
+      {/* DAMAGE SECTION (40% HEIGHT) */}
+      <div className="flex-[4] flex flex-col p-4 bg-slate-900/40 relative">
+         {/* Hero Header */}
+         <div className="flex justify-between items-start mb-4 shrink-0">
+           <div className="flex flex-col">
+             <span className="text-[10px] font-bold text-sky-300/80 uppercase tracking-widest">Dano Total da Skill</span>
+             <strong className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_8px_rgba(56,189,248,0.5)] tabular-nums tracking-tight leading-none mt-1">
+               {totalDamage}
+             </strong>
+             <span className="text-[10px] text-slate-400 mt-1">{result.damage.minimum.toLocaleString()} - {result.damage.maximum.toLocaleString()} (avg: {averageDamage})</span>
+           </div>
+           
+           <div className="flex flex-col items-end text-right">
+             <span className="text-[10px] font-bold text-amber-500/80 uppercase tracking-widest">DPS Estimado</span>
+             <strong className="text-xl sm:text-2xl font-black text-amber-400 tabular-nums leading-none mt-1">{dps.toLocaleString()}</strong>
+             {selectedMonster && dps > 0 && (
+               <span className="text-[10px] text-slate-300 mt-1 font-mono">TTK: {formatTime(selectedMonster.hp / dps)}</span>
+             )}
+           </div>
+         </div>
 
-      {result.meta.warnings.length > 0 ? (
-        <div className="flex flex-col gap-1 mt-4 p-3 rounded-lg border border-rose-500/30 bg-rose-950/20 text-xs text-rose-300/90">
-          {result.meta.warnings.map((warning) => (
-            <span key={warning}>• {warning}</span>
-          ))}
-        </div>
-      ) : null}
+         {/* Advanced Stats Grid */}
+         <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 mt-auto shrink-0 border-t border-sky-500/10 pt-3 text-[10.5px] font-mono">
+            {/* Column 1: Core Combat Stats */}
+            <div className="flex flex-col gap-1.5 border-r border-sky-500/10 pr-4">
+              <div className="flex justify-between"><span className="text-slate-400">Precisão</span> <strong className={accuracy >= 100 ? "text-emerald-400" : "text-rose-400"}>{accuracy}%</strong></div>
+              <div className="flex justify-between"><span className="text-slate-400">Penet. Mágica</span> <strong className="text-sky-300">{(result.modifierEffects.ignoreMdefRate * 100).toFixed(0)}%</strong></div>
+              <div className="flex justify-between"><span className="text-slate-400">Penet. Física</span> <strong className="text-rose-300">{(result.modifierEffects.ignoreDefRate * 100).toFixed(0)}%</strong></div>
+              <div className="flex justify-between"><span className="text-slate-400">ASPD</span> <strong className="text-slate-200">{result.characterStatus.aspd}</strong></div>
+            </div>
+
+            {/* Column 2: Cast & Delay */}
+            <div className="flex flex-col gap-1.5 pl-2">
+              <div className="flex justify-between"><span className="text-slate-400">VCT</span> <strong className="text-slate-200">{(vct / 1000).toFixed(3)}s</strong></div>
+              <div className="flex justify-between"><span className="text-slate-400">FCT</span> <strong className="text-slate-200">{(fct / 1000).toFixed(3)}s</strong></div>
+              <div className="flex justify-between"><span className="text-slate-400">Delay</span> <strong className="text-slate-200">{(delay / 1000).toFixed(3)}s</strong></div>
+              <div className="flex justify-between"><span className="text-slate-400">Skill/s</span> <strong className="text-amber-300">{skillPerSec}</strong></div>
+            </div>
+         </div>
+
+         {result.meta.warnings.length > 0 ? (
+           <div className="flex flex-col gap-1 mt-3 p-2 rounded border border-rose-500/30 bg-rose-950/20 text-[10px] text-rose-300/90 shrink-0">
+             {result.meta.warnings.map((warning) => (
+               <span key={warning}>• {warning}</span>
+             ))}
+           </div>
+         ) : null}
+      </div>
     </aside>
   );
 }

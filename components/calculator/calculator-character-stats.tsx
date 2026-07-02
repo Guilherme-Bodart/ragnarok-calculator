@@ -45,23 +45,23 @@ export function CalculatorCharacterStats({
     return (
       <div
         key={stat.key}
-        className="flex items-center justify-between bg-slate-900/60 border border-slate-700/50 rounded-xl p-3 shadow-sm hover:border-sky-500/30 hover:bg-slate-900/80 transition-colors"
+        className="flex items-center justify-between bg-slate-900/60 border border-slate-700/50 rounded-xl p-2 shadow-sm hover:border-sky-500/30 hover:bg-slate-900/80 transition-colors"
       >
         {/* Label */}
-        <div className="flex items-center w-14 ml-2">
-          <label className="text-sm font-bold text-sky-200 uppercase tracking-widest cursor-pointer select-none">
+        <div className="flex items-center w-10 shrink-0 ml-1">
+          <label className="text-xs font-bold text-sky-200 uppercase tracking-widest cursor-pointer select-none">
             {stat.label}
           </label>
         </div>
 
         {/* Input Area */}
-        <div className="flex items-center gap-2 flex-1 justify-center">
+        <div className="flex items-center gap-1.5 flex-1 justify-center">
           <button
             type="button"
             onClick={decrement}
-            className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-600 transition-colors focus:outline-none focus:ring-1 focus:ring-sky-500/50"
+            className="w-7 h-7 shrink-0 flex items-center justify-center rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-600 transition-colors focus:outline-none focus:ring-1 focus:ring-sky-500/50"
           >
-            <Minus size={16} />
+            <Minus size={14} />
           </button>
 
           <input
@@ -70,26 +70,31 @@ export function CalculatorCharacterStats({
             max={maxVal}
             value={currentValue}
             onChange={(event) => onStatChange(stat, Number(event.target.value))}
-            className="w-16 h-10 bg-slate-950/50 border border-slate-800 text-center font-mono font-bold text-slate-100 text-base focus:outline-none focus:ring-1 focus:ring-sky-500 rounded-lg hide-arrows"
+            className="w-12 h-8 bg-slate-950/50 border border-slate-800 text-center font-mono font-bold text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 rounded-lg hide-arrows"
           />
 
           <button
             type="button"
             onClick={increment}
-            className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-600 transition-colors focus:outline-none focus:ring-1 focus:ring-sky-500/50"
+            className="w-7 h-7 shrink-0 flex items-center justify-center rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-600 transition-colors focus:outline-none focus:ring-1 focus:ring-sky-500/50"
           >
-            <Plus size={16} />
+            <Plus size={14} />
           </button>
         </div>
 
         {/* Cost */}
-        <div className="mr-1">
+        <div className="flex flex-col items-center justify-center w-10 shrink-0">
           {currentValue < maxVal ? (
-            <span className="text-[11px] text-slate-400 font-medium select-none">
-              Custo: <span className="text-sky-300 font-bold">{cost}</span>
-            </span>
+            <>
+              <span className="text-[9px] text-slate-400 font-medium select-none leading-tight">
+                Custo:
+              </span>
+              <span className="text-[11px] text-sky-300 font-bold leading-none">
+                {cost}
+              </span>
+            </>
           ) : (
-            <span className="text-[11px] text-emerald-400 font-bold select-none tracking-wider">
+            <span className="text-[10px] text-emerald-400 font-bold select-none tracking-wider">
               MAX
             </span>
           )}

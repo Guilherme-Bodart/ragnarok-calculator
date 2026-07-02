@@ -34,6 +34,15 @@ export type RathenaNormalizedMonster = {
   defense?: number | null;
   magicDefense?: number | null;
   hp?: number | null;
+  stats?: {
+    str: number;
+    agi: number;
+    vit: number;
+    int: number;
+    dex: number;
+    luk: number;
+  } | null;
+  isBoss?: boolean | null;
   source: "rathena";
 };
 
@@ -136,6 +145,13 @@ export function toRoMonster(monster: RathenaNormalizedMonster): RoMonster {
     defense: monster.defense ?? 0,
     magicDefense: monster.magicDefense ?? 0,
     hp: monster.hp ?? 1,
+    str: monster.stats?.str ?? 0,
+    agi: monster.stats?.agi ?? 0,
+    vit: monster.stats?.vit ?? 0,
+    int: monster.stats?.int ?? 0,
+    dex: monster.stats?.dex ?? 0,
+    luk: monster.stats?.luk ?? 0,
+    classType: monster.isBoss ? "boss" : "normal",
     source: "rathena",
   };
 }

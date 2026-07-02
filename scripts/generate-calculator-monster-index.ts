@@ -67,7 +67,13 @@ const dummyTargetDetail = {
   size: "medium" as const,
   element: "neutral" as const,
   elementLevel: 1,
-  classType: "normal" as const,
+  classType: "boss" as const,
+  str: 130,
+  agi: 130,
+  vit: 70,
+  int: 80,
+  dex: 300,
+  luk: 50,
   elementResistanceRates: {},
 };
 

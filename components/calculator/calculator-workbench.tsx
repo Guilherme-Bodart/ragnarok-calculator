@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Boxes,
-  FlaskConical,
-  RotateCcw,
-} from "lucide-react";
+import { Boxes, FlaskConical, RotateCcw } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -30,14 +26,12 @@ export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
   const copy = dictionary.calculator;
   const [isBuildsModalOpen, setIsBuildsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"character" | "equipment" | "combat">("character");
+  const [activeTab, setActiveTab] = useState<
+    "character" | "equipment" | "combat"
+  >("character");
   const build = useCalculatorBuildState(copy);
-  const {
-    selectedSkillId,
-    setSelectedSkillId,
-    setSkillLevel,
-    skillLevel,
-  } = build;
+  const { selectedSkillId, setSelectedSkillId, setSkillLevel, skillLevel } =
+    build;
   const calculatorDataset = useCalculatorDataset({
     selectedCalculatorItems: build.selectedCalculatorItems,
     selectedClassSkills: build.selectedClassSkills,
@@ -94,7 +88,11 @@ export function CalculatorWorkbench() {
     <main className="calculator-page">
       <div className="calculator-grid-bg" />
       <header className="calculator-topbar">
-        <Link href="/" className="calculator-brand" aria-label={copy.backHomeAria}>
+        <Link
+          href="/"
+          className="calculator-brand"
+          aria-label={copy.backHomeAria}
+        >
           <Image src="/nightmare-reaper.png" alt="" width={38} height={38} />
           <span>
             <strong>Nightmare</strong>
@@ -111,7 +109,11 @@ export function CalculatorWorkbench() {
           >
             {copy.buildsAction}
           </Button>
-          <Button icon={<FlaskConical size={16} />} type="button" variant="ghost">
+          <Button
+            icon={<FlaskConical size={16} />}
+            type="button"
+            variant="ghost"
+          >
             {copy.syncAction}
           </Button>
           <Button
@@ -126,24 +128,25 @@ export function CalculatorWorkbench() {
       </header>
 
       <section className="calculator-workspace" aria-label={copy.workspaceAria}>
-        
         {/* COLUNA 1: CONFIGURAÇÃO (Lado Esquerdo - 60%) */}
         <div className="calculator-config-column flex flex-col gap-3 min-w-0">
-          
-          <nav className="calculator-tabs-nav flex items-center gap-2">
+          <nav className="calculator-tabs-nav grid grid-cols-3 gap-1.5">
             <Button
+              className="text-[9.5px] sm:text-[11px] px-1 sm:px-2 py-1.5 h-8 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
               variant={activeTab === "character" ? "primary" : "ghost"}
               onClick={() => setActiveTab("character")}
             >
               Personagem & Skills
             </Button>
             <Button
+              className="text-[9.5px] sm:text-[11px] px-1 sm:px-2 py-1.5 h-8 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
               variant={activeTab === "equipment" ? "primary" : "ghost"}
               onClick={() => setActiveTab("equipment")}
             >
               Equipamentos
             </Button>
             <Button
+              className="text-[9.5px] sm:text-[11px] px-1 sm:px-2 py-1.5 h-8 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
               variant={activeTab === "combat" ? "primary" : "ghost"}
               onClick={() => setActiveTab("combat")}
             >
@@ -158,7 +161,9 @@ export function CalculatorWorkbench() {
                 characterStatus={result.characterStatus}
                 copy={copy}
                 isFourthJob={isFourthJobClassId(build.selectedClassId)}
-                isTranscendent={isTranscendentEquivalentClassId(build.selectedClassId)}
+                isTranscendent={isTranscendentEquivalentClassId(
+                  build.selectedClassId,
+                )}
                 jobLevel={build.jobLevel}
                 selectedClassId={build.selectedClassId}
                 stats={build.stats}
@@ -218,11 +223,11 @@ export function CalculatorWorkbench() {
         </div>
 
         {/* COLUNA 2: SIMULAÇÃO E RESULTADO (Lado Direito - Fixo/Sticky) */}
-        <div className="calculator-result-column flex flex-col gap-4 min-w-0 sticky top-6 self-start h-[calc(100vh-3rem)]">
-          <div className="animate-in fade-in slide-in-from-right-4 duration-500 shrink-0">
-            <CalculatorDerivedStats 
+        <div className="calculator-result-column flex flex-col gap-4 min-w-0 sticky top-6 self-start">
+          <div>
+            <CalculatorDerivedStats
               status={result.characterStatus}
-              modifierEffects={result.modifierEffects} 
+              modifierEffects={result.modifierEffects}
             />
           </div>
 
@@ -234,7 +239,6 @@ export function CalculatorWorkbench() {
             onMonsterChange={build.setSelectedMonsterId}
           />
         </div>
-
       </section>
 
       {isBuildsModalOpen ? (

@@ -88,6 +88,7 @@ export function CalculatorAttackPanel({
 
         <Field label={copy.attack.levelLabel}>
           <NumberSelect
+            fit="fill"
             max={selectedSkill.maxLevel}
             prefix="Lv."
             value={Math.min(skillLevel, selectedSkill.maxLevel)}

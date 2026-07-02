@@ -77,7 +77,7 @@ export function CalculatorCharacterPanel({
       <PanelHeader
         icon={<Activity size={17} />}
         title={copy.character.title}
-        meta={`Base ${baseLevel} / Job ${jobLevel}`}
+        meta={<span className="text-slate-200 text-xs font-semibold tracking-wide">Base {baseLevel} / Job {jobLevel}</span>}
       />
 
       <CalculatorCharacterControls

@@ -107,6 +107,12 @@ export type RoMonster = {
   /** Soft MDEF — subtração flat de dano mágico por hit após Hard MDEF. rAthena: floor((INT + Level) / 4) para monstros. */
   softMdef?: number;
   hp: number;
+  str?: number;
+  agi?: number;
+  vit?: number;
+  int?: number;
+  dex?: number;
+  luk?: number;
   classType?: MonsterClass;
   elementResistanceRates?: Partial<Record<ElementType, number>>;
   source: "manual" | "iwdb" | "rathena";

@@ -217,7 +217,8 @@
   color: rgb(242 251 255 / 0.82);
   background: transparent;
   padding: 5px 8px;
-  font: inherit;
+  font-family: inherit;
+  font-size: 13px;
   font-weight: 850;
   text-align: left;
   cursor: pointer;
