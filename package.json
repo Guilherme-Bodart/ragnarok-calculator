@@ -13,7 +13,7 @@
     "data:monster-index": "tsx scripts/generate-calculator-monster-index.ts",
     "sprite:costume": "node scripts/generate-costume-walker.mjs",
     "sprite:manifest": "node scripts/generate-costume-walker.mjs --refresh-manifest",
-    "build": "next build",
+    "build": "npm run data:item-index && npm run data:monster-index && next build",
     "build:api": "npm --prefix api run build",
     "render:api:build": "npm install --include=dev && npm --prefix api install --include=dev && npm --prefix api run prisma:generate && npm --prefix api run prisma:deploy && npm --prefix api run build",
     "render:api:migrate": "npm --prefix api run prisma:deploy",
