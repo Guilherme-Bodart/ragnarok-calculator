@@ -71,6 +71,7 @@ export type CalculatorModifierEffects = {
   incomingSizeDamageReductionRate: Partial<Record<ModifierSizeId, number>>;
   criticalRaceDamageRate: Partial<Record<ModifierRaceId, number>>;
   unsupportedStatements: string[];
+  edpActive?: boolean;
 };
 
 export class CalculatorModifierEffectsFactory {

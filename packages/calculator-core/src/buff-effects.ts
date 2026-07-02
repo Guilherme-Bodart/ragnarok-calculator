@@ -115,6 +115,9 @@ export type BuffEffect = {
   maxSp?: number;
   /** MaxSP % */
   maxSpRate?: number;
+
+  /** Flag especial para Enchant Deadly Poison (EDP) */
+  edpActive?: boolean;
 };
 
 /**
@@ -163,6 +166,7 @@ export function mergeBuffEffects(
 
     // weaponElement: último buff que definir um elemento vence (ex: endow > conversor)
     if (buff.weaponElement !== undefined) result.weaponElement = buff.weaponElement;
+    if (buff.edpActive !== undefined) result.edpActive = buff.edpActive;
 
     result.raceDamageRate = mergeRecord(result.raceDamageRate, buff.raceDamageRate);
     result.elementDamageRate = mergeRecord(result.elementDamageRate, buff.elementDamageRate);

@@ -1,8 +1,11 @@
 import type { EffectiveCharacter } from "../effective-character";
 import type { RoMonster, RoSkill } from "../ro-types";
 
+import type { CalculatorModifierEffects } from "../calculator-modifier-effects";
+
 export type SkillFormulaInput = {
   character: EffectiveCharacter;
+  modifierEffects: CalculatorModifierEffects;
   monster: RoMonster;
   skill: RoSkill;
   skillLevel: number;

@@ -157,6 +157,7 @@ export class DamageFormulaPipeline {
       : getPhysicalModifierFlatPower(input.modifierEffects);
     const skillFormula = this.skillFormulaRegistry.calculate({
       character: input.character,
+      modifierEffects: input.modifierEffects,
       monster: input.monster,
       skill: input.skill,
       skillLevel: input.skillLevel,
@@ -211,12 +212,15 @@ export class DamageFormulaPipeline {
       input.skill.damageType,
       defenseIgnoreRate,
     );
+    const edpMultiplier = input.modifierEffects.edpActive && !magical ? 5 : 1;
+    
     const preDefenseDamage =
-      (basePower + equipmentPower + modifierFlatPower) *
+      (basePower + (equipmentPower + modifierFlatPower + weaponRefinePower) * edpMultiplier) *
       skillMultiplier *
       finalRateMultiplier *
       weaponSizeMultiplier *
       elementMultiplier;
+    
     const postDefenseDamage = Math.floor(preDefenseDamage * defenseMultiplier);
     const softDefReduction = magical
       ? (input.monster.softMdef ?? 0)

@@ -1,5 +1,6 @@
 import { GenericSkillFormula } from "./generic-skill";
 import { StaticSkillFormula } from "./static-skill-formulas";
+import { GuillotineCrossSkillFormula } from "./classes/guillotine-cross";
 import type {
   SkillFormulaAdapter,
   SkillFormulaInput,
@@ -9,6 +10,7 @@ import type {
 export class SkillFormulaRegistry {
   constructor(
     private readonly adapters: SkillFormulaAdapter[] = [
+      new GuillotineCrossSkillFormula(),
       new StaticSkillFormula(),
       new GenericSkillFormula(),
     ],
