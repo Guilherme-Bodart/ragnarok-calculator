@@ -120,9 +120,10 @@ export function CalculatorTargetPanel({
             <h2 className="text-sm font-black text-sky-100 uppercase tracking-widest">{copy.target.title}</h2>
           </div>
           
-          <div className="flex-1 max-w-[280px]">
+          <div className="flex-1 w-full sm:w-auto sm:min-w-[280px]">
             <RichSelect
-              className="text-xs bg-slate-900/60 border-slate-700/50 w-full"
+              className="text-xs bg-slate-900/60 border-slate-700/50"
+              fit="fill"
               value={String(selectedMonsterId)}
               onChange={(monsterId) => onMonsterChange(Number(monsterId))}
               searchValue={monsterQuery}
@@ -149,10 +150,10 @@ export function CalculatorTargetPanel({
         </div>
 
         {selectedMonster ? (
-          <div className="flex-1 min-h-0 flex items-start gap-4 p-3 rounded-lg border border-slate-700/50 bg-slate-800/40 shadow-inner overflow-y-auto custom-scrollbar">
+          <div className="flex-1 min-h-0 flex items-start gap-4 pt-3 pb-1 overflow-y-auto custom-scrollbar">
              {/* Left side: Image */}
              <div className="flex flex-col gap-2 shrink-0 w-24 sm:w-28">
-               <CalculatorMonsterIcon monsterId={selectedMonster.id} size={112} className="w-full h-auto bg-slate-900/60 rounded-md border border-slate-700/50 p-1 drop-shadow-md" />
+               <CalculatorMonsterIcon monsterId={selectedMonster.id} size={112} className="w-full h-auto drop-shadow-[0_0_10px_rgba(255,255,255,0.05)]" />
                {selectedMonster.classType === "boss" && (
                  <span className="text-[10px] font-bold text-rose-500 uppercase text-center tracking-widest bg-rose-950/40 rounded border border-rose-500/30 px-1 py-0.5">Boss</span>
                )}
@@ -219,20 +220,24 @@ export function CalculatorTargetPanel({
          </div>
 
          {/* Advanced Stats Grid */}
-         <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 mt-auto shrink-0 border-t border-sky-500/10 pt-3 text-[10.5px] font-mono">
+         <div className="grid grid-cols-3 gap-x-4 gap-y-1.5 mt-auto shrink-0 border-t border-sky-500/10 pt-3 text-[10.5px] font-mono">
             {/* Column 1: Core Combat Stats */}
-            <div className="flex flex-col gap-1.5 border-r border-sky-500/10 pr-4">
+            <div className="flex flex-col gap-1.5 border-r border-sky-500/10 pr-3">
               <div className="flex justify-between"><span className="text-slate-400">Precisão</span> <strong className={accuracy >= 100 ? "text-emerald-400" : "text-rose-400"}>{accuracy}%</strong></div>
               <div className="flex justify-between"><span className="text-slate-400">Penetração</span> <strong className="text-sky-300">{Number(result.breakdown.find((b) => b.key === "defenseIgnoreRate")?.value ?? 0).toFixed(0)}%</strong></div>
               <div className="flex justify-between"><span className="text-slate-400">Crit. Rate</span> <strong className="text-rose-300">{result.characterStatus.crit}</strong></div>
-              <div className="flex justify-between"><span className="text-slate-400">ASPD</span> <strong className="text-slate-200">{result.characterStatus.aspd}</strong></div>
             </div>
 
             {/* Column 2: Cast & Delay */}
-            <div className="flex flex-col gap-1.5 pl-2">
+            <div className="flex flex-col gap-1.5 border-r border-sky-500/10 pr-3 pl-1">
               <div className="flex justify-between"><span className="text-slate-400">VCT</span> <strong className="text-slate-200">{(vct / 1000).toFixed(3)}s</strong></div>
               <div className="flex justify-between"><span className="text-slate-400">FCT</span> <strong className="text-slate-200">{(fct / 1000).toFixed(3)}s</strong></div>
               <div className="flex justify-between"><span className="text-slate-400">Delay</span> <strong className="text-slate-200">{(delay / 1000).toFixed(3)}s</strong></div>
+            </div>
+
+            {/* Column 3: Speed & Output */}
+            <div className="flex flex-col gap-1.5 pl-1">
+              <div className="flex justify-between"><span className="text-slate-400">ASPD</span> <strong className="text-slate-200">{result.characterStatus.aspd}</strong></div>
               <div className="flex justify-between"><span className="text-slate-400">Skill/s</span> <strong className="text-amber-300">{skillPerSec}</strong></div>
             </div>
          </div>

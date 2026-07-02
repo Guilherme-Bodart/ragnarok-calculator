@@ -70,6 +70,7 @@
 
 .ui-rich-select[data-fit="fill"] {
   display: block;
+  width: 100%;
   max-width: none;
 }
 
