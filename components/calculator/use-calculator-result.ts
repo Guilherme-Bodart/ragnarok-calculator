@@ -12,6 +12,7 @@ type CalculatorInput = Parameters<typeof calculateDamageFromDataset>[0];
 
 export function useCalculatorResult({
   activeBuffItemIds,
+  activeBuffs,
   baseLevel,
   calculatorDataset,
   effectiveLearnedSkills,
@@ -26,6 +27,7 @@ export function useCalculatorResult({
   stats,
 }: {
   activeBuffItemIds: number[];
+  activeBuffs: Record<string, number>;
   baseLevel: number;
   calculatorDataset: CalculatorDataset;
   effectiveLearnedSkills: CalculatorInput["learnedSkills"];
@@ -56,6 +58,7 @@ export function useCalculatorResult({
           equipmentItemIds: resolvedEquipmentItemIds,
           cardItemIds: resolvedCardItemIds,
           buffItemIds: [...calculatorDemoInput.buffItemIds, ...activeBuffItemIds],
+          activeBuffs,
           itemContexts: Object.entries(itemContexts).map(([itemId, context]) => ({
             itemId: Number(itemId),
             refine: context.refine,
@@ -69,6 +72,7 @@ export function useCalculatorResult({
       ),
     [
       activeBuffItemIds,
+      activeBuffs,
       baseLevel,
       calculatorDataset,
       effectiveLearnedSkills,

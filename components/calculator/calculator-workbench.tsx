@@ -44,6 +44,7 @@ export function CalculatorWorkbench() {
   const effectiveSkillLevel = Math.min(skillLevel, selectedSkill.maxLevel);
   const result = useCalculatorResult({
     activeBuffItemIds: build.activeBuffItemIds,
+    activeBuffs: build.activeBuffs,
     baseLevel: build.baseLevel,
     calculatorDataset,
     effectiveLearnedSkills: build.effectiveLearnedSkills,

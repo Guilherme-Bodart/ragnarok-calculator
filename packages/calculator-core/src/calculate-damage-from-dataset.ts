@@ -2,6 +2,7 @@ import { CalculatorModifierEffectsFactory } from "./calculator-modifier-effects"
 import { CharacterStatusEngine } from "./character-status-engine";
 import { DamageEngine } from "./damage-engine";
 import { mergeBuffEffects, type BuffEffect } from "./buff-effects";
+import { globalBuffRegistry } from "./buffs";
 import type { CalculateDamageResult } from "./calculation-result";
 import type { RulesetContext } from "./rulesets";
 import type { CalculatorCharacter, RoItem, RoMonster, RoSkill } from "./ro-types";
@@ -18,10 +19,9 @@ export type CalculateDamageInput = {
   equipmentItemIds: number[];
   cardItemIds: number[];
   buffItemIds: number[];
-  /** Efeitos de buffs já resolvidos pelo frontend (skill buffs, consumíveis, comidas, endows, etc.).
-   *  O core apenas acumula esses efeitos sobre os modifiers vindos dos itens.
-   *  Use BuffEffect para qualquer buff que não seja um item com rawScript no dataset. */
-  buffEffects?: BuffEffect[];
+  /** Buffs ativos mapeados por ID da habilidade (ex: AL_BLESSING) para o Nível.
+   *  O core utilizará o BuffRegistry para converter esses níveis em BuffEffects reais. */
+  activeBuffs?: Record<string, number>;
   itemContexts: CalculatorItemContext[];
   monsterId: number;
   skillId: string;
@@ -78,10 +78,18 @@ export function calculateDamageFromDataset(
     },
   );
 
-  // Aplicar buffEffects (buffs de skill, consumíveis, endows, etc.) sobre os modifiers de item
-  if (input.buffEffects && input.buffEffects.length > 0) {
-    modifierEffects = mergeBuffEffects(modifierEffects, input.buffEffects);
+  // Aplicar buffs ativos (habilidades/consumíveis)
+  if (input.activeBuffs && Object.keys(input.activeBuffs).length > 0) {
+    const resolvedBuffEffects = globalBuffRegistry.resolve(
+      input.activeBuffs,
+      input.character.baseLevel,
+      input.character.jobLevel,
+    );
+    if (resolvedBuffEffects.length > 0) {
+      modifierEffects = mergeBuffEffects(modifierEffects, resolvedBuffEffects);
+    }
   }
+
   const characterStatus = new CharacterStatusEngine().calculate({
     character: input.character,
     items,
