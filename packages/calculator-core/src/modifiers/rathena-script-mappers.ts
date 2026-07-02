@@ -302,9 +302,7 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
     const classId = toInternalClassId(rathenaClassId);
     const numericValue = evaluateModifierValue(value, variables);
 
-    if (!classId || numericValue === null) {
-      return null;
-    }
+    if (!classId || numericValue === null) return null;
 
     return createTargetedModifier(
       "magicClassDamageRate",
