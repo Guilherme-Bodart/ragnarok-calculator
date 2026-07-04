@@ -118,7 +118,8 @@ export function CalculatorCardEnchantModal({
   // Busca lista de encantamentos válidos para o equipamento selecionado
   const validEnchants = useMemo(() => {
     if (!selectedItem) return null;
-    return enchantMapping[selectedItem.id] || enchantMapping[selectedItem.sourceName || ""] || enchantMapping[selectedItem.name] || null;
+    const aegisName = (selectedItem as any).sourceName || "";
+    return enchantMapping[selectedItem.id] || enchantMapping[aegisName] || enchantMapping[selectedItem.name] || null;
   }, [selectedItem, enchantMapping]);
 
   function selectCard(index: number, itemId: string) {
