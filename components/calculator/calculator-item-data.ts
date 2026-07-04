@@ -21,9 +21,27 @@ type SearchCalculatorItemsInput = {
 };
 
 const itemsCache = new Map<string, Promise<CalculatorItemIndexOption[]>>();
+let enchantMappingPromise: Promise<Record<string, (number[] | null)[]>> | null = null;
 
 export function clearCalculatorItemsCache() {
   itemsCache.clear();
+  enchantMappingPromise = null;
+}
+
+export function fetchEnchantMapping(): Promise<Record<string, (number[] | null)[]>> {
+  if (enchantMappingPromise) return enchantMappingPromise;
+
+  enchantMappingPromise = fetch(`/data/calculator/enchant-mapping.json`)
+    .then(async (response) => {
+      if (!response.ok) return {};
+      return (await response.json()) as Record<string, (number[] | null)[]>;
+    })
+    .catch(() => {
+      enchantMappingPromise = null;
+      return {};
+    });
+
+  return enchantMappingPromise;
 }
 
 export function fetchItemCategory(category: string): Promise<CalculatorItemIndexOption[]> {
@@ -66,7 +84,7 @@ export async function searchCalculatorItems({
   const items = await fetchItemCategory(category);
 
   if (!query) {
-    return items.slice(0, limit);
+    return items;
   }
 
   const normalizedQuery = normalizeSearch(query);

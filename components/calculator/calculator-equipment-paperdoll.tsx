@@ -15,6 +15,7 @@ type CalculatorEquipmentPaperdollProps = {
   selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
   slots: readonly CalculatorEquipmentSlotDefinition[];
   onEditSlot: (slotId: EquipmentSlot) => void;
+  onEditCardsAndEnchants: (slotId: EquipmentSlot) => void;
 };
 
 export function CalculatorEquipmentPaperdoll({
@@ -25,6 +26,7 @@ export function CalculatorEquipmentPaperdoll({
   selectedItemsBySlot,
   slots,
   onEditSlot,
+  onEditCardsAndEnchants,
 }: CalculatorEquipmentPaperdollProps) {
   return (
     <div
@@ -50,7 +52,6 @@ export function CalculatorEquipmentPaperdoll({
         const label = copy.equipment.slots[slot.id];
         const itemId = selectedItemsBySlot[slot.id];
         const item = itemId ? selectedItemDetails[itemId] : null;
-        const cardCount = selectedCardsBySlot[slot.id]?.length ?? 0;
 
         return (
           <button
@@ -77,13 +78,52 @@ export function CalculatorEquipmentPaperdoll({
               <strong className={`text-xs font-medium truncate w-full block ${item ? 'text-slate-100' : 'text-slate-500'}`}>
                 {item ? getShortItemName(item.name) : copy.equipment.empty}
               </strong>
-              {cardCount > 0 ? (
-                <div className="flex gap-0.5 mt-1">
-                  {Array.from({ length: cardCount }).map((_, i) => (
-                    <div key={i} className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_5px_rgba(56,189,248,0.8)]" />
-                  ))}
+
+              {/* Indicators row for cards (circles) and enchantments (squares) */}
+              {item && (
+                <div 
+                  className="flex items-center gap-1 mt-1.5 border-t border-slate-800/60 pt-1 w-full"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Avoid triggering open item picker modal
+                    onEditCardsAndEnchants(slot.id);
+                  }}
+                >
+                  {/* Card Dot(s) */}
+                  {item.cardSlots && item.cardSlots > 0 ? (
+                    Array.from({ length: item.cardSlots }).map((_, i) => {
+                      const hasCard = Boolean(selectedCardsBySlot[slot.id]?.[i]);
+                      return (
+                        <div 
+                          key={`card-${i}`} 
+                          title={hasCard ? "Carta Equipada" : "Carta Vazia"}
+                          className={`w-1.5 h-1.5 rounded-full border transition-all ${
+                            hasCard 
+                              ? "bg-sky-400 border-sky-300 shadow-[0_0_4px_rgba(56,189,248,0.8)]" 
+                              : "bg-transparent border-slate-700 hover:border-slate-500"
+                          }`} 
+                        />
+                      );
+                    })
+                  ) : null}
+
+                  {/* Enchant Squares */}
+                  {Array.from({ length: 3 }).map((_, i) => {
+                    const enchantIndex = (item.cardSlots ?? 0) + i;
+                    const hasEnchant = Boolean(selectedCardsBySlot[slot.id]?.[enchantIndex]);
+                    return (
+                      <div 
+                        key={`enchant-${i}`} 
+                        title={hasEnchant ? "Encantamento Equipado" : "Encantamento Vazio"}
+                        className={`w-1.5 h-1.5 rounded-sm border transition-all ${
+                          hasEnchant 
+                            ? "bg-amber-400 border-amber-300 shadow-[0_0_4px_rgba(245,158,11,0.8)]" 
+                            : "bg-transparent border-slate-700 hover:border-slate-500"
+                        }`} 
+                      />
+                    );
+                  })}
                 </div>
-              ) : null}
+              )}
             </div>
           </button>
         );

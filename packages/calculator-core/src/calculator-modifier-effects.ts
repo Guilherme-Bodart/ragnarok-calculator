@@ -156,6 +156,16 @@ export class CalculatorModifierEffectsFactory {
       unsupportedStatements: [],
     };
 
+    const refinesBySlot: Record<string, number> = {};
+    for (const item of items) {
+      const ref = contextByItemId.get(item.id)?.refine ?? 0;
+      if (item.slots) {
+        for (const slot of item.slots) {
+          refinesBySlot[slot] = ref;
+        }
+      }
+    }
+
     for (const item of items) {
       const result = this.pipeline.getEffects(
         {
@@ -165,6 +175,7 @@ export class CalculatorModifierEffectsFactory {
         {
           ...baseContext,
           equippedItemIds: items.map((i) => i.id),
+          refinesBySlot,
           ...(contextByItemId.get(item.id) ?? {}),
         },
       );

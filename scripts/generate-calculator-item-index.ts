@@ -95,6 +95,7 @@ for (const item of items) {
     magicAttack: item.magicAttack ?? null,
     defense: item.defense ?? null,
     hasModifiers: Boolean(item.rawScript),
+    description: localizedItem?.description ?? null,
   };
 
   if (item.type === "Card") {
@@ -181,6 +182,7 @@ function readLocalizedItems(filePath: string) {
         {
           name: cleanItemName(item.name),
           unidName: item.unidName ? cleanItemName(item.unidName) : null,
+          description: item.description ?? null,
         },
       ]),
   );

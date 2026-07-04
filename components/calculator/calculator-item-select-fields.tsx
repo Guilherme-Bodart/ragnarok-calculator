@@ -26,8 +26,20 @@ type CalculatorItemSelectFieldsProps = {
     item: CalculatorItemIndexOption | CalculatorItemDetail,
     refine: number,
   ) => void;
+  onGradeChange: (
+    item: CalculatorItemIndexOption | CalculatorItemDetail,
+    grade: number,
+  ) => void;
   onSelectItem: (slotId: EquipmentSlot, itemId: string) => void;
 };
+
+const gradeOptions = [
+  { id: "0", label: "Nenhum" },
+  { id: "1", label: "Grau D" },
+  { id: "2", label: "Grau C" },
+  { id: "3", label: "Grau B" },
+  { id: "4", label: "Grau A" }
+];
 
 export function CalculatorItemSelectFields({
   copy,
@@ -39,17 +51,19 @@ export function CalculatorItemSelectFields({
   slotOptions,
   onItemQueryChange,
   onRefineChange,
+  onGradeChange,
   onSelectItem,
 }: CalculatorItemSelectFieldsProps) {
   const canRefineSelectedItem = Boolean(selectedItem?.refineable);
   const selectedRefineValue =
     selectedItem && canRefineSelectedItem ? itemContexts[selectedItem.id]?.refine ?? 0 : 0;
+  const selectedGradeValue =
+    selectedItem && canRefineSelectedItem ? itemContexts[selectedItem.id]?.grade ?? 0 : 0;
 
   return (
     <div className="calc-item-modal-grid">
       <Field className="calc-item-select-field" label={copy.equipment.itemLabel}>
         <RichSelect
-          fit="fill"
           groups={[
             {
               label: copy.equipment.itemLabel,
@@ -89,6 +103,24 @@ export function CalculatorItemSelectFields({
               onRefineChange(selectedItem, refine);
             }
           }}
+        />
+      </Field>
+
+      <Field className="calc-grade-select-field" label="Grau (Encant.)">
+        <RichSelect
+          disabled={!canRefineSelectedItem}
+          value={String(selectedGradeValue)}
+          onChange={(gradeVal) => {
+            if (selectedItem && canRefineSelectedItem) {
+              onGradeChange(selectedItem, Number(gradeVal));
+            }
+          }}
+          groups={[
+            {
+              label: "Grau",
+              options: gradeOptions,
+            },
+          ]}
         />
       </Field>
     </div>

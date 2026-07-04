@@ -71,7 +71,7 @@ export function CalculatorCardSelectGrid({
                 ? copy.equipment.noSearchResults
                 : copy.equipment.searchMinLengthHint
             }
-            value={String(selectedCards[index] ?? "empty")}
+            value={selectedCards[index] ? String(selectedCards[index]) : "empty"}
             onChange={(itemId) => onSelectCard(editingSlot, index, itemId)}
             onSearchChange={onCardQueryChange}
           />

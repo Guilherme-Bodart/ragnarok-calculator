@@ -10,13 +10,11 @@ import {
   normalizeCalculatorItemSearchQuery,
 } from "@/lib/calculator-item-search";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
-import { CalculatorCardSelectGrid } from "./calculator-card-select-grid";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorItemPreview } from "./calculator-item-preview";
 import {
   getCardSlotCount,
   getValidCardsForItem,
-  selectedItemHasModifiers,
 } from "./calculator-item-picker-utils";
 import { CalculatorItemSelectFields } from "./calculator-item-select-fields";
 import {
@@ -57,48 +55,36 @@ export function CalculatorItemPickerModal({
   onSelectedCardsBySlotChange,
   onSelectedItemsBySlotChange,
 }: CalculatorItemPickerModalProps) {
-  const [cardSearchResult, setCardSearchResult] = useState<{
-    options: CalculatorItemIndexOption[];
-    query: string;
-  }>({ options: [], query: "" });
-  const [cardQuery, setCardQuery] = useState("");
   const [itemQuery, setItemQuery] = useState("");
   const [slotSearchResult, setSlotSearchResult] = useState<{
     options: CalculatorItemIndexOption[];
     query: string;
     slot: EquipmentSlot;
   }>({ options: [], query: "", slot: editingSlot });
+
   const debouncedItemQuery = useDebouncedValue(
     itemQuery,
     CALCULATOR_ITEM_SEARCH_DEBOUNCE_MS,
   );
-  const debouncedCardQuery = useDebouncedValue(
-    cardQuery,
-    CALCULATOR_ITEM_SEARCH_DEBOUNCE_MS,
-  );
+
   const isItemSearchReady = isCalculatorItemSearchReady(itemQuery);
-  const isCardSearchReady = isCalculatorItemSearchReady(cardQuery);
   const normalizedItemQuery = normalizeCalculatorItemSearchQuery(itemQuery);
-  const normalizedCardQuery = normalizeCalculatorItemSearchQuery(cardQuery);
+
   const effectiveSlotOptions =
     isItemSearchReady &&
     slotSearchResult.query === normalizedItemQuery &&
     slotSearchResult.slot === editingSlot
       ? slotSearchResult.options
       : [];
+
   const selectedItemId = selectedItemsBySlot[editingSlot];
   const selectedItem =
     effectiveSlotOptions.find((item) => item.id === selectedItemId) ??
     (selectedItemId ? selectedItemDetails[selectedItemId] : undefined);
-  const selectedCards = selectedCardsBySlot[editingSlot] ?? [];
-  const cardSlotCount = getCardSlotCount(selectedItem);
-  const effectiveCardOptions =
-    isCardSearchReady &&
-    cardSlotCount > 0 &&
-    cardSearchResult.query === normalizedCardQuery
-      ? cardSearchResult.options
-      : [];
 
+  const selectedCards = selectedCardsBySlot[editingSlot] ?? [];
+
+  // Search items effect
   useEffect(() => {
     if (!isCalculatorItemSearchReady(debouncedItemQuery)) {
       return;
@@ -121,32 +107,6 @@ export function CalculatorItemPickerModal({
     };
   }, [debouncedItemQuery, editingSlot]);
 
-  useEffect(() => {
-    if (cardSlotCount <= 0) {
-      return;
-    }
-
-    if (!isCalculatorItemSearchReady(debouncedCardQuery)) {
-      return;
-    }
-
-    let isCurrent = true;
-
-    const query = normalizeCalculatorItemSearchQuery(debouncedCardQuery);
-
-    searchCalculatorItems({ kind: "card", limit: 80, query })
-      .then((items) => {
-        if (isCurrent) setCardSearchResult({ options: items, query });
-      })
-      .catch(() => {
-        if (isCurrent) setCardSearchResult({ options: [], query });
-      });
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [cardSlotCount, debouncedCardQuery]);
-
   function selectItem(slotId: EquipmentSlot, itemId: string) {
     const nextItems = { ...selectedItemsBySlot };
     const nextCards = { ...selectedCardsBySlot };
@@ -162,6 +122,7 @@ export function CalculatorItemPickerModal({
       const nextSelectedItem =
         effectiveSlotOptions.find((item) => item.id === nextItemId) ??
         selectedItemDetails[nextItemId];
+      
       const validCards = getValidCardsForItem(
         selectedCardsBySlot[slotId] ?? [],
         nextSelectedItem,
@@ -202,21 +163,6 @@ export function CalculatorItemPickerModal({
     onItemContextsChange(nextContexts);
   }
 
-  function selectCard(slotId: EquipmentSlot, index: number, itemId: string) {
-    const cards = [...(selectedCardsBySlot[slotId] ?? [])];
-
-    if (itemId === "empty") {
-      cards.splice(index, 1);
-    } else {
-      cards[index] = Number(itemId);
-    }
-
-    onSelectedCardsBySlotChange({
-      ...selectedCardsBySlot,
-      [slotId]: cards.filter(Boolean),
-    });
-  }
-
   function setRefine(
     item: CalculatorItemIndexOption | CalculatorItemDetail,
     refine: number,
@@ -224,7 +170,21 @@ export function CalculatorItemPickerModal({
     onItemContextsChange({
       ...itemContexts,
       [item.id]: {
+        ...itemContexts[item.id],
         refine,
+      },
+    });
+  }
+
+  function setGrade(
+    item: CalculatorItemIndexOption | CalculatorItemDetail,
+    grade: number,
+  ) {
+    onItemContextsChange({
+      ...itemContexts,
+      [item.id]: {
+        ...itemContexts[item.id],
+        grade,
       },
     });
   }
@@ -237,53 +197,33 @@ export function CalculatorItemPickerModal({
       title={copy.equipment.modalTitle}
       onClose={onClose}
     >
-        <CalculatorItemSelectFields
-          copy={copy}
-          editingSlot={editingSlot}
-          itemContexts={itemContexts}
-          itemQuery={itemQuery}
-          isItemSearchReady={isItemSearchReady}
-          selectedItem={selectedItem}
-          slotOptions={effectiveSlotOptions}
-          onItemQueryChange={setItemQuery}
-          onRefineChange={setRefine}
-          onSelectItem={selectItem}
-        />
+      <CalculatorItemSelectFields
+        copy={copy}
+        editingSlot={editingSlot}
+        itemContexts={itemContexts}
+        itemQuery={itemQuery}
+        isItemSearchReady={isItemSearchReady}
+        selectedItem={selectedItem}
+        slotOptions={effectiveSlotOptions}
+        onItemQueryChange={setItemQuery}
+        onRefineChange={setRefine}
+        onGradeChange={setGrade}
+        onSelectItem={selectItem}
+      />
 
-        <CalculatorItemPreview
-          cardOptions={effectiveCardOptions}
-          copy={copy}
-          item={selectedItem}
-          itemContexts={itemContexts}
-          selectedCards={selectedCards}
-          selectedItemDetails={selectedItemDetails}
-        />
+      <CalculatorItemPreview
+        cardOptions={[]}
+        copy={copy}
+        item={selectedItem}
+        itemContexts={itemContexts}
+        selectedCards={selectedCards}
+        selectedItemDetails={selectedItemDetails}
+        selectedItemsBySlot={selectedItemsBySlot}
+      />
 
-        <CalculatorCardSelectGrid
-          cardOptions={effectiveCardOptions}
-          cardQuery={cardQuery}
-          cardSlotCount={cardSlotCount}
-          copy={copy}
-          editingSlot={editingSlot}
-          isCardSearchReady={isCardSearchReady}
-          selectedCards={selectedCards}
-          selectedItemDetails={selectedItemDetails}
-          onCardQueryChange={setCardQuery}
-          onSelectCard={selectCard}
-        />
-
-        <div className="calc-modifier-preview">
-          <strong>{copy.equipment.modifiersTitle}</strong>
-          <p>
-            {selectedItemHasModifiers(selectedItem)
-              ? copy.equipment.modifiersReady
-              : copy.equipment.noModifiers}
-          </p>
-        </div>
-
-        <Button type="button" onClick={onClose}>
-          {copy.equipment.doneAction}
-        </Button>
+      <Button type="button" onClick={onClose} className="mt-4 w-full">
+        {copy.equipment.doneAction}
+      </Button>
     </Modal>
   );
 }

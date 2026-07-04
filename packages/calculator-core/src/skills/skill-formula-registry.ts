@@ -1,6 +1,8 @@
 import { GenericSkillFormula } from "./generic-skill";
 import { StaticSkillFormula } from "./static-skill-formulas";
 import { GuillotineCrossSkillFormula } from "./classes/guillotine-cross";
+import { ArchMageSkillFormula } from "./classes/arch-mage";
+import { WarlockSkillFormula } from "./classes/warlock";
 import type {
   SkillFormulaAdapter,
   SkillFormulaInput,
@@ -11,6 +13,8 @@ export class SkillFormulaRegistry {
   constructor(
     private readonly adapters: SkillFormulaAdapter[] = [
       new GuillotineCrossSkillFormula(),
+      new ArchMageSkillFormula(),
+      new WarlockSkillFormula(),
       new StaticSkillFormula(),
       new GenericSkillFormula(),
     ],

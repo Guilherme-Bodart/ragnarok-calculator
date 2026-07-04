@@ -200,6 +200,7 @@ export const modifierResolutionContextSchema = z.object({
   learnedSkills: z.record(z.string(), z.number().int().min(0)).optional(),
   ruleset: rulesetContextSchema.optional(),
   equippedItemIds: z.array(z.number().int()).optional(),
+  refinesBySlot: z.record(z.string(), z.number().int().min(0)).optional(),
 });
 
 export const itemModifierSourceSchema = z.object({

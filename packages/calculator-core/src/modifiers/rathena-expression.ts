@@ -4,6 +4,7 @@ type ExpressionVariables = {
   baseLevel?: number;
   learnedSkills?: Record<string, number | undefined>;
   locals?: Record<string, number | undefined>;
+  refinesBySlot?: Record<string, number>;
 };
 
 type Token =
@@ -390,6 +391,29 @@ class ExpressionParser {
       return this.variables.grade ?? null;
     }
 
+    if (functionName === "getequiprefinerycnt" && args.length === 1) {
+      const slot = args[0];
+      const slotMap: Record<number, string[]> = {
+        1: ["headTop"],
+        2: ["armor"],
+        3: ["shield", "weapon"],
+        4: ["weapon", "shield"],
+        5: ["garment"],
+        6: ["shoes"],
+        7: ["accessoryLeft"],
+        8: ["accessoryRight"],
+        9: ["headMid"],
+        10: ["headLow"],
+      };
+      const targetSlots = slotMap[slot] ?? [];
+      for (const s of targetSlots) {
+        if (this.variables.refinesBySlot?.[s] !== undefined) {
+          return this.variables.refinesBySlot[s];
+        }
+      }
+      return 0;
+    }
+
     return null;
   }
 
@@ -445,6 +469,34 @@ class ExpressionParser {
   }
 
   private getVariableValue(variable: string) {
+    const constants: Record<string, number> = {
+      EQI_HEAD_TOP: 1,
+      EQI_ARMOR: 2,
+      EQI_HAND_L: 3,
+      EQI_HAND_R: 4,
+      EQI_GARMENT: 5,
+      EQI_SHOES: 6,
+      EQI_ACC_L: 7,
+      EQI_ACC_R: 8,
+      EQI_HEAD_MID: 9,
+      EQI_HEAD_LOW: 10,
+      EQI_LEFTHAND: 3,
+      EQI_RIGHTHAND: 4,
+      Ele_Neutral: 0,
+      Ele_Water: 1,
+      Ele_Earth: 2,
+      Ele_Fire: 3,
+      Ele_Wind: 4,
+      Ele_Poison: 5,
+      Ele_Holy: 6,
+      Ele_Dark: 7,
+      Ele_Ghost: 8,
+      Ele_Undead: 9,
+    };
+    if (constants[variable] !== undefined) {
+      return constants[variable];
+    }
+
     if (variable === "refine") return this.variables.refine ?? null;
     if (variable === "grade") return this.variables.grade ?? null;
     if (variable === "baseLevel") return this.variables.baseLevel ?? null;

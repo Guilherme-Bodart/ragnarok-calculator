@@ -844,25 +844,24 @@
     ". avatar .";
 }
 
-.calc-item-modal-grid,
+.calc-item-modal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px 140px;
+  gap: 12px;
+  margin-top: 14px;
+}
+
 .calc-card-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 96px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin-top: 14px;
 }
 
 .calc-item-select-field,
-.calc-refine-select-field {
+.calc-refine-select-field,
+.calc-grade-select-field {
   min-width: 0;
-}
-
-.calc-refine-select-field .ui-rich-select {
-  width: 96px;
-}
-
-.calc-card-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .calc-item-preview {
@@ -920,7 +919,7 @@
   border: 1px solid rgb(125 211 252 / 0.1);
   border-radius: 8px;
   background: rgb(6 17 34 / 0.38);
-  padding: 7px;
+  padding: 4px 6px;
 }
 
 .calc-item-stat-grid dt {

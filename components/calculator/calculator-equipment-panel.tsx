@@ -12,6 +12,7 @@ import {
   calculatorSpecialSlots,
 } from "./calculator-equipment-slots";
 import { CalculatorItemPickerModal } from "./calculator-item-picker-modal";
+import { CalculatorCardEnchantModal } from "./calculator-card-enchant-modal";
 import type { CalculatorItemDetail } from "./calculator-item-data";
 
 type CalculatorEquipmentPanelProps = {
@@ -43,6 +44,8 @@ export function CalculatorEquipmentPanel({
 }: CalculatorEquipmentPanelProps) {
   const [activeTab, setActiveTab] = useState<"equip" | "special">("equip");
   const [editingSlot, setEditingSlot] = useState<EquipmentSlot | null>(null);
+  const [editingCardsAndEnchantsSlot, setEditingCardsAndEnchantsSlot] = useState<EquipmentSlot | null>(null);
+
   const activeSlots =
     activeTab === "equip" ? calculatorEquipSlots : calculatorSpecialSlots;
 
@@ -77,6 +80,7 @@ export function CalculatorEquipmentPanel({
         selectedItemsBySlot={selectedItemsBySlot}
         slots={activeSlots}
         onEditSlot={setEditingSlot}
+        onEditCardsAndEnchants={setEditingCardsAndEnchantsSlot}
       />
 
       {editingSlot ? (
@@ -91,6 +95,18 @@ export function CalculatorEquipmentPanel({
           onItemContextsChange={onItemContextsChange}
           onSelectedCardsBySlotChange={onSelectedCardsBySlotChange}
           onSelectedItemsBySlotChange={onSelectedItemsBySlotChange}
+        />
+      ) : null}
+
+      {editingCardsAndEnchantsSlot ? (
+        <CalculatorCardEnchantModal
+          copy={copy}
+          editingSlot={editingCardsAndEnchantsSlot}
+          selectedCardsBySlot={selectedCardsBySlot}
+          selectedItemDetails={selectedItemDetails}
+          selectedItemsBySlot={selectedItemsBySlot}
+          onClose={() => setEditingCardsAndEnchantsSlot(null)}
+          onSelectedCardsBySlotChange={onSelectedCardsBySlotChange}
         />
       ) : null}
     </section>

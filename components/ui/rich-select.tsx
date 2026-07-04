@@ -62,7 +62,7 @@ export function RichSelect({
   onChange,
   className,
   disabled = false,
-  fit = "auto",
+  fit = "fill",
   menuSize = "default",
   onSearchChange,
   searchable = "auto",
@@ -189,7 +189,7 @@ export function RichSelect({
         160,
         Math.min(320, shouldOpenAbove ? availableAbove - gap : availableBelow - gap),
       );
-      const width = Math.min(250, Math.max(rect.width, 92));
+      const width = Math.max(rect.width, 120);
       const left = Math.min(
         Math.max(viewportPadding, rect.left),
         window.innerWidth - width - viewportPadding,

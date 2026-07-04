@@ -147,6 +147,59 @@
   max-height: min(260px, 42vh);
 }
 
+/* Compact mode: smaller triggers for card/enchant grids */
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-trigger {
+  min-height: 36px;
+  padding: 4px 6px 4px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+  gap: 6px;
+  grid-template-columns: 24px minmax(0, 1fr) 28px;
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-trigger[data-has-icons="false"] {
+  grid-template-columns: minmax(0, 1fr) 28px;
+  padding-left: 10px;
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-chevron {
+  width: 28px;
+  min-height: 24px;
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-menu button {
+  min-height: 34px;
+  padding: 3px 6px;
+  font-size: 12px;
+  gap: 6px;
+  grid-template-columns: 24px minmax(0, 1fr);
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-menu button[data-has-icons="false"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-menu button .ui-rich-select-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-search {
+  min-height: 30px;
+  margin-bottom: 4px;
+  padding: 0 6px;
+  gap: 6px;
+}
+
+.ui-rich-select[data-menu-size="compact"] .ui-rich-select-search input {
+  font-size: 12px;
+}
+
 .ui-rich-select-menu:has(button:nth-of-type(12)) {
   width: 100%;
 }
