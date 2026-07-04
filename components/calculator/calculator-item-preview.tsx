@@ -234,10 +234,11 @@ export function CalculatorItemPreview({
         if (mod.target.type === "race") targetStr = ` vs ${translateRace(mod.target.raceId)}`;
         else if (mod.target.type === "element") targetStr = ` vs ${translateElement(mod.target.elementId)}`;
         else if (mod.target.type === "size") targetStr = ` vs ${translateSize(mod.target.sizeId)}`;
-        else if (mod.target.type === "class") targetStr = ` vs ${translateClass(mod.target.classId)}`;
+        else if (mod.target.type === "class") targetStr = ` vs ${translateClass((mod.target as any).classId)}`;
         else if (mod.target.type === "skill") {
-          const sk = skillsEn.find((s) => s.name === mod.target.skillId);
-          targetStr = ` de [${sk?.description || sk?.name || mod.target.skillId}]`;
+          const targetSkillId = (mod.target as any).skillId;
+          const sk = skillsEn.find((s) => s.name === targetSkillId);
+          targetStr = ` de [${sk?.description || sk?.name || targetSkillId}]`;
         }
       }
 

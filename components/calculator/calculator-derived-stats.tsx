@@ -4,6 +4,7 @@ import { useState } from "react";
 import type {
   CharacterStatus,
   CalculatorModifierEffects,
+  CharacterStat,
 } from "@/packages/calculator-core/src";
 import skillsEn from "@/nightmare-data/normalized/skills/skills.en.json";
 
@@ -83,7 +84,7 @@ export function CalculatorDerivedStats({
   // 1. Atributos Básicos
   const statOrder = ["str", "agi", "vit", "int", "dex", "luk", "pow", "sta", "wis", "spl", "con", "crt"];
   statOrder.forEach((stat) => {
-    const val = modifierEffects.statBonuses?.[stat as any];
+    const val = modifierEffects.statBonuses?.[stat as CharacterStat];
     if (val && val > 0) {
       bonuses.push(`+${val} ${stat.toUpperCase()}`);
     }
