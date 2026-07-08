@@ -14,37 +14,29 @@ import {
 import { CalculatorItemPickerModal } from "./calculator-item-picker-modal";
 import { CalculatorCardEnchantModal } from "./calculator-card-enchant-modal";
 import type { CalculatorItemDetail } from "./calculator-item-data";
+import { useCalculatorBuildStore } from "./calculator-build-store";
 
 type CalculatorEquipmentPanelProps = {
-  itemContexts: Record<number, { refine?: number; grade?: number }>;
-  selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
   selectedItemDetails: Record<number, CalculatorItemDetail>;
-  selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
   copy: CalculatorDictionary;
-  onItemContextsChange: (
-    contexts: Record<number, { refine?: number; grade?: number }>,
-  ) => void;
-  onSelectedCardsBySlotChange: (
-    cardsBySlot: Partial<Record<EquipmentSlot, number[]>>,
-  ) => void;
-  onSelectedItemsBySlotChange: (
-    itemsBySlot: Partial<Record<EquipmentSlot, number>>,
-  ) => void;
 };
 
 export function CalculatorEquipmentPanel({
   copy,
-  itemContexts,
-  selectedCardsBySlot,
   selectedItemDetails,
-  selectedItemsBySlot,
-  onItemContextsChange,
-  onSelectedCardsBySlotChange,
-  onSelectedItemsBySlotChange,
 }: CalculatorEquipmentPanelProps) {
   const [activeTab, setActiveTab] = useState<"equip" | "special">("equip");
   const [editingSlot, setEditingSlot] = useState<EquipmentSlot | null>(null);
   const [editingCardsAndEnchantsSlot, setEditingCardsAndEnchantsSlot] = useState<EquipmentSlot | null>(null);
+
+  const itemContexts = useCalculatorBuildStore((s) => s.itemContexts);
+  const selectedCardsBySlot = useCalculatorBuildStore((s) => s.selectedCardsBySlot);
+  const selectedItemsBySlot = useCalculatorBuildStore((s) => s.selectedItemsBySlot);
+  const learnedSkills = useCalculatorBuildStore((s) => s.learnedSkills);
+  
+  const setItemContexts = useCalculatorBuildStore((s) => s.setItemContexts);
+  const setSelectedCardsBySlot = useCalculatorBuildStore((s) => s.setSelectedCardsBySlot);
+  const setSelectedItemsBySlot = useCalculatorBuildStore((s) => s.setSelectedItemsBySlot);
 
   const activeSlots =
     activeTab === "equip" ? calculatorEquipSlots : calculatorSpecialSlots;
@@ -91,10 +83,11 @@ export function CalculatorEquipmentPanel({
           selectedCardsBySlot={selectedCardsBySlot}
           selectedItemDetails={selectedItemDetails}
           selectedItemsBySlot={selectedItemsBySlot}
+          learnedSkills={learnedSkills}
           onClose={() => setEditingSlot(null)}
-          onItemContextsChange={onItemContextsChange}
-          onSelectedCardsBySlotChange={onSelectedCardsBySlotChange}
-          onSelectedItemsBySlotChange={onSelectedItemsBySlotChange}
+          onItemContextsChange={setItemContexts}
+          onSelectedCardsBySlotChange={setSelectedCardsBySlot}
+          onSelectedItemsBySlotChange={setSelectedItemsBySlot}
         />
       ) : null}
 
@@ -105,8 +98,10 @@ export function CalculatorEquipmentPanel({
           selectedCardsBySlot={selectedCardsBySlot}
           selectedItemDetails={selectedItemDetails}
           selectedItemsBySlot={selectedItemsBySlot}
+          itemContexts={itemContexts}
+          learnedSkills={learnedSkills}
           onClose={() => setEditingCardsAndEnchantsSlot(null)}
-          onSelectedCardsBySlotChange={onSelectedCardsBySlotChange}
+          onSelectedCardsBySlotChange={setSelectedCardsBySlot}
         />
       ) : null}
     </section>

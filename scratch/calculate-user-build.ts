@@ -7,10 +7,10 @@ import {
   SkillFormulaRegistry,
   CastTimingEngine,
   CriticalEngine,
-} from "./packages/calculator-core/src/index.ts";
-import itemsEn from "./nightmare-data/normalized/items/items.en.json";
-import skillsEn from "./nightmare-data/normalized/skills/skills.en.json";
-import monstersEn from "./nightmare-data/normalized/monsters/monsters.en.json";
+} from "../packages/calculator-core/src/index.ts";
+import itemsEn from "../nightmare-data/normalized/items/items.en.json";
+import skillsEn from "../nightmare-data/normalized/skills/skills.en.json";
+import monstersEn from "../nightmare-data/normalized/monsters/monsters.en.json";
 
 // 1. Setup Build
 const build = {
@@ -63,6 +63,9 @@ const character = new EffectiveCharacter(
     stats: {
       str: 20, agi: 103, vit: 100, int: 125, dex: 120, luk: 83,
       pow: 0, sta: 0, wis: 0, spl: 100, con: 14, crt: 0
+    },
+    learnedSkills: {
+      AG_TWOHANDSTAFF: 10,
     }
   },
   effects

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { LayoutDashboard } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import type { CurrentGuildContext } from "./guild-types";
 
@@ -12,50 +13,40 @@ export function GuildHomeRedirect() {
   const router = useRouter();
   const { dictionary } = useNightmareLocale();
   const t = dictionary.guild;
-  const [message, setMessage] = useState(t.loadingMessage);
+
+  const { data: context, error, isLoading } = useQuery<CurrentGuildContext, Error>({
+    queryKey: ["guilds-me"],
+    queryFn: async () => {
+      const response = await fetch(`${apiBaseUrl}/guilds/me`, {
+        credentials: "include",
+      });
+
+      if (response.status === 401) {
+        throw new GuildHomeStatusError(response.status);
+      }
+
+      if (!response.ok) {
+        throw new Error("Unable to load profile");
+      }
+
+      return (await response.json()) as CurrentGuildContext;
+    },
+    retry: false,
+  });
 
   useEffect(() => {
-    let isMounted = true;
-
-    async function resolveGuild() {
-      try {
-        const response = await fetch(`${apiBaseUrl}/guilds/me`, {
-          credentials: "include",
-        });
-
-        if (response.status === 401) {
-          router.replace("/login?next=/guilds");
-          return;
-        }
-
-        if (!response.ok) {
-          setMessage(t.loadError);
-          return;
-        }
-
-        const context = (await response.json()) as CurrentGuildContext;
-
-        if (context.activeGuild) {
-          router.replace(`/guilds/${context.activeGuild.slug}`);
-          return;
-        }
-
-        if (isMounted) {
-          router.replace("/profile");
-        }
-      } catch {
-        if (isMounted) {
-          setMessage(t.loadError);
-        }
+    if (error instanceof GuildHomeStatusError && error.status === 401) {
+      router.replace("/login?next=/guilds");
+    } else if (context) {
+      if (context.activeGuild) {
+        router.replace(`/guilds/${context.activeGuild.slug}`);
+      } else {
+        router.replace("/profile");
       }
     }
+  }, [context, error, router]);
 
-    void resolveGuild();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [router, t.loadError]);
+  const message = isLoading ? t.loadingMessage : (error ? t.loadError : t.loadingMessage);
 
   return (
     <main className="guild-page">
@@ -67,4 +58,10 @@ export function GuildHomeRedirect() {
       </section>
     </main>
   );
+}
+
+class GuildHomeStatusError extends Error {
+  constructor(readonly status: number) {
+    super("Guild home status error");
+  }
 }

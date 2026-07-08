@@ -19,12 +19,9 @@ export class AspdEngine {
         input.effectiveStats.agi ** 2 / 2 + input.effectiveStats.dex ** 2 / 5,
       ) /
       4;
-    const speedTotalBonus = 0;
-    const positiveEffectBonus =
-      (input.effectiveStats.agi + speedTotalBonus) / 200;
-    const baseWithStats = baseAspd + statBonus + positiveEffectBonus;
+    const baseWithStats = baseAspd + statBonus + (input.flatAspd ?? 0);
     const rateBonus = (195 - baseWithStats) * ((input.aspdRate ?? 0) / 100);
-    const aspd = baseWithStats + rateBonus + (input.flatAspd ?? 0);
+    const aspd = baseWithStats + rateBonus;
     const cap = input.baseLevel <= 99 ? 190 : 193;
 
     return Math.min(cap, Math.floor(aspd * 100) / 100);

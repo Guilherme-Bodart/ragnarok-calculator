@@ -1,11 +1,10 @@
 "use client";
 
-import { Sparkles, Network } from "lucide-react";
+import { Network } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
   increaseSkillWithRequirements,
   resolveSkillTreeJob,
-  type LearnedSkillLevels,
 } from "@/packages/calculator-core/src";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
@@ -22,30 +21,32 @@ import {
   CalculatorSkillTreePath,
 } from "./calculator-skill-tree-path";
 import { CalculatorSkillTreeToolbar } from "./calculator-skill-tree-toolbar";
+import { useCalculatorBuildStore } from "./calculator-build-store";
 
 type CalculatorSkillTreePanelProps = {
   copy: CalculatorDictionary;
-  learnedSkills: LearnedSkillLevels;
-  selectedClassId: string;
-  onLearnedSkillsChange: (skills: LearnedSkillLevels) => void;
 };
 
 export function CalculatorSkillTreePanel({
   copy,
-  learnedSkills,
-  selectedClassId,
-  onLearnedSkillsChange,
 }: CalculatorSkillTreePanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
+  
+  const selectedClassId = useCalculatorBuildStore((s) => s.selectedClassId);
+  const learnedSkills = useCalculatorBuildStore((s) => s.learnedSkills);
+  const setLearnedSkills = useCalculatorBuildStore((s) => s.setLearnedSkills);
+
   const resolvedJob = useMemo(
     () => resolveSkillTreeJob(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
   );
+  
   const learnedCount = Object.values(learnedSkills).reduce(
     (total, level) => total + level,
     0,
   );
+  
   const filteredSkills = resolvedJob.skills.filter((skill) => {
     const query = search.trim().toLowerCase();
 
@@ -59,14 +60,17 @@ export function CalculatorSkillTreePanel({
       skill.sourceJobName.toLowerCase().includes(query)
     );
   });
+  
   const skillGroups = useMemo(
     () => createCompactSkillGroups(resolvedJob.jobPath, resolvedJob.skills),
     [resolvedJob.jobPath, resolvedJob.skills],
   );
+  
   const filteredSkillIds = useMemo(
     () => new Set(filteredSkills.map((skill) => skill.id)),
     [filteredSkills],
   );
+  
   const visibleSkillGroups = useMemo(
     () =>
       skillGroups
@@ -79,8 +83,9 @@ export function CalculatorSkillTreePanel({
         .filter((group) => group.visibleSkills.length > 0),
     [filteredSkillIds, skillGroups],
   );
+
   function increaseSkill(skillId: string) {
-    onLearnedSkillsChange(
+    setLearnedSkills(
       increaseSkillWithRequirements(resolvedJob, skillId, learnedSkills),
     );
   }
@@ -95,7 +100,7 @@ export function CalculatorSkillTreePanel({
       nextSkills[skillId] = nextLevel;
     }
 
-    onLearnedSkillsChange(nextSkills);
+    setLearnedSkills(nextSkills);
   }
 
   return (

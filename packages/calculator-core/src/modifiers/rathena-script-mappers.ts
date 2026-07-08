@@ -55,6 +55,20 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("shortAttackRate", "addPercent", command, conditions, variables),
   bLongAtkRate: (command, conditions, variables) =>
     createModifier("longAttackRate", "addPercent", command, conditions, variables),
+  bSpCostRate: (command, conditions, variables) =>
+    createModifier("spCostRate", "addPercent", command, conditions, variables),
+  bUnbreakableArmor: (command, conditions) =>
+    createBooleanModifier("unbreakableArmor", command, conditions),
+  bUnbreakableWeapon: (command, conditions) =>
+    createBooleanModifier("unbreakableWeapon", command, conditions),
+  bUnbreakableShield: (command, conditions) =>
+    createBooleanModifier("unbreakableShield", command, conditions),
+  bUnbreakableHelm: (command, conditions) =>
+    createBooleanModifier("unbreakableHelm", command, conditions),
+  bUnbreakableShoes: (command, conditions) =>
+    createBooleanModifier("unbreakableShoes", command, conditions),
+  bUnbreakableGarment: (command, conditions) =>
+    createBooleanModifier("unbreakableGarment", command, conditions),
   bMatkRate: (command, conditions, variables) =>
     createModifier("matkRate", "addPercent", command, conditions, variables),
   bBaseAtk: (command, conditions, variables) =>
@@ -573,7 +587,13 @@ function createModifier(
     | "fixedCastRate"
     | "fixedCast"
     | "afterCastDelayRate"
-    | "spCostRate",
+    | "spCostRate"
+    | "unbreakableArmor"
+    | "unbreakableWeapon"
+    | "unbreakableShield"
+    | "unbreakableHelm"
+    | "unbreakableShoes"
+    | "unbreakableGarment",
   operator: "addFlat" | "addPercent",
   command: ParsedCommand,
   conditions: ModifierCondition[],
@@ -589,6 +609,34 @@ function createModifier(
     stat,
     operator,
     value,
+    target: {
+      type: "self",
+    },
+    conditions,
+    source: {
+      format: "rathena",
+      command: command.command,
+      raw: command.raw,
+      args: command.args,
+    },
+  };
+}
+
+function createBooleanModifier(
+  stat:
+    | "unbreakableArmor"
+    | "unbreakableWeapon"
+    | "unbreakableShield"
+    | "unbreakableHelm"
+    | "unbreakableShoes"
+    | "unbreakableGarment",
+  command: ParsedCommand,
+  conditions: ModifierCondition[],
+): NormalizedModifier {
+  return {
+    stat,
+    operator: "addFlat",
+    value: 1,
     target: {
       type: "self",
     },

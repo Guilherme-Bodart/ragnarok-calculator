@@ -12,15 +12,12 @@ import { CalculatorBuildsModal } from "./calculator-builds-modal";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import { CalculatorDerivedStats } from "./calculator-derived-stats";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
-import {
-  isFourthJobClassId,
-  isTranscendentEquivalentClassId,
-} from "./calculator-class-rules";
 import { CalculatorSkillTreePanel } from "./calculator-skill-tree-panel";
 import { CalculatorTargetPanel } from "./calculator-target-panel";
 import { useCalculatorBuildState } from "./use-calculator-build-state";
 import { useCalculatorDataset } from "./use-calculator-dataset";
 import { useCalculatorResult } from "./use-calculator-result";
+import { useCalculatorBuildStore } from "./calculator-build-store";
 
 export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
@@ -29,14 +26,28 @@ export function CalculatorWorkbench() {
   const [activeTab, setActiveTab] = useState<
     "character" | "equipment" | "combat"
   >("character");
+
+  // O adapter traz os Derived States complexos e metadados
   const build = useCalculatorBuildState(copy);
-  const { selectedSkillId, setSelectedSkillId, setSkillLevel, skillLevel } =
-    build;
+  
+  // Acesso direto à Store para estados primitivos que orquestram a interface no top-level
+  const selectedSkillId = useCalculatorBuildStore(s => s.selectedSkillId);
+  const skillLevel = useCalculatorBuildStore(s => s.skillLevel);
+  const setSelectedSkillId = useCalculatorBuildStore(s => s.setSelectedSkillId);
+  const setSkillLevel = useCalculatorBuildStore(s => s.setSkillLevel);
+  const baseLevel = useCalculatorBuildStore(s => s.baseLevel);
+  const jobLevel = useCalculatorBuildStore(s => s.jobLevel);
+  const stats = useCalculatorBuildStore(s => s.stats);
+  const selectedClassId = useCalculatorBuildStore(s => s.selectedClassId);
+  const selectedMonsterId = useCalculatorBuildStore(s => s.selectedMonsterId);
+  const itemContexts = useCalculatorBuildStore(s => s.itemContexts);
+
   const calculatorDataset = useCalculatorDataset({
     selectedCalculatorItems: build.selectedCalculatorItems,
     selectedClassSkills: build.selectedClassSkills,
     selectedMonsterDetail: build.selectedMonsterDetail,
   });
+
   const selectedSkill =
     calculatorDataset.skills.find((skill) => skill.id === selectedSkillId) ??
     build.selectedClassSkills[0] ??
@@ -45,22 +56,24 @@ export function CalculatorWorkbench() {
       name: "None",
       maxLevel: 1,
     };
+    
   const effectiveSkillLevel = Math.min(skillLevel, selectedSkill.maxLevel);
+
   const result = useCalculatorResult({
     activeBuffItemIds: build.activeBuffItemIds,
     activeBuffs: build.activeBuffs,
-    baseLevel: build.baseLevel,
+    baseLevel,
     calculatorDataset,
     effectiveLearnedSkills: build.effectiveLearnedSkills,
-    itemContexts: build.itemContexts,
-    jobLevel: build.jobLevel,
+    itemContexts,
+    jobLevel,
     resolvedCardItemIds: build.resolvedCardItemIds,
     resolvedEquipmentItemIds: build.resolvedEquipmentItemIds,
-    selectedClassId: build.selectedClassId,
-    selectedMonsterId: build.selectedMonsterId,
+    selectedClassId,
+    selectedMonsterId,
     selectedSkillId: selectedSkill.id,
     skillLevel: effectiveSkillLevel,
-    stats: build.stats,
+    stats,
   });
 
   useEffect(() => {
@@ -79,15 +92,6 @@ export function CalculatorWorkbench() {
     setSkillLevel,
     skillLevel,
   ]);
-
-  function handleSkillChange(skillId: string) {
-    const nextSkill =
-      build.selectedClassSkills.find((skill) => skill.id === skillId) ??
-      selectedSkill;
-
-    setSelectedSkillId(nextSkill.id);
-    setSkillLevel(Math.min(skillLevel, nextSkill.maxLevel));
-  }
 
   return (
     <main className="calculator-page">
@@ -162,28 +166,13 @@ export function CalculatorWorkbench() {
           {activeTab === "character" && (
             <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <CalculatorCharacterPanel
-                baseLevel={build.baseLevel}
                 characterStatus={result.characterStatus}
                 copy={copy}
-                isFourthJob={isFourthJobClassId(build.selectedClassId)}
-                isTranscendent={isTranscendentEquivalentClassId(
-                  build.selectedClassId,
-                )}
-                jobLevel={build.jobLevel}
-                selectedClassId={build.selectedClassId}
-                stats={build.stats}
                 skillTreeSlot={
                   <CalculatorSkillTreePanel
                     copy={copy}
-                    learnedSkills={build.learnedSkills}
-                    selectedClassId={build.selectedClassId}
-                    onLearnedSkillsChange={build.setLearnedSkills}
                   />
                 }
-                onBaseLevelChange={build.setBaseLevel}
-                onClassChange={build.handleClassChange}
-                onJobLevelChange={build.setJobLevel}
-                onStatsChange={build.setStats}
               />
             </div>
           )}
@@ -192,13 +181,7 @@ export function CalculatorWorkbench() {
             <div className="flex flex-col gap-5 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <CalculatorEquipmentPanel
                 copy={copy}
-                itemContexts={build.itemContexts}
-                selectedCardsBySlot={build.selectedCardsBySlot}
                 selectedItemDetails={build.selectedItemDetails}
-                selectedItemsBySlot={build.selectedItemsBySlot}
-                onItemContextsChange={build.setItemContexts}
-                onSelectedCardsBySlotChange={build.setSelectedCardsBySlot}
-                onSelectedItemsBySlotChange={build.setSelectedItemsBySlot}
               />
             </div>
           )}
@@ -211,17 +194,10 @@ export function CalculatorWorkbench() {
                 result={result}
                 resultMeta={result.meta}
                 selectedSkill={selectedSkill}
-                skillLevel={effectiveSkillLevel}
-                onSkillChange={handleSkillChange}
-                onSkillLevelChange={setSkillLevel}
               />
               <CalculatorBuffsPanel
-                activeBuffs={build.activeBuffs}
                 buffSkills={build.buffSkills}
                 copy={copy}
-                selectedBuffId={build.selectedBuffId}
-                onActiveBuffsChange={build.setActiveBuffs}
-                onSelectedBuffChange={build.setSelectedBuffId}
               />
             </div>
           )}
@@ -240,8 +216,6 @@ export function CalculatorWorkbench() {
             copy={copy}
             result={result}
             selectedMonster={build.selectedMonsterDetail}
-            selectedMonsterId={build.selectedMonsterId}
-            onMonsterChange={build.setSelectedMonsterId}
           />
         </div>
       </section>

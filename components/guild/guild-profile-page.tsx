@@ -13,6 +13,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
@@ -28,53 +29,37 @@ export function GuildProfilePage() {
   const router = useRouter();
   const { dictionary } = useNightmareLocale();
   const t = dictionary.guild.profile;
-  const [context, setContext] = useState<CurrentGuildContext | null>(null);
-  const [message, setMessage] = useState(t.loading);
-  const [isLoading, setIsLoading] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  useEffect(() => {
-    let isMounted = true;
+  const { data: context, error, isLoading } = useQuery<CurrentGuildContext, Error>({
+    queryKey: ["guilds-me"],
+    queryFn: async () => {
+      const response = await fetch(`${apiBaseUrl}/guilds/me`, {
+        credentials: "include",
+      });
 
-    async function loadProfile() {
-      try {
-        const response = await fetch(`${apiBaseUrl}/guilds/me`, {
-          credentials: "include",
-        });
-
-        if (response.status === 401) {
-          router.replace("/login?next=/profile");
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error("Unable to load profile");
-        }
-
-        const payload = (await response.json()) as CurrentGuildContext;
-
-        if (isMounted) {
-          setContext(payload);
-        }
-      } catch {
-        if (isMounted) {
-          setMessage(t.loadError);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+      if (response.status === 401) {
+        throw new GuildProfileStatusError(response.status);
       }
+
+      if (!response.ok) {
+        throw new Error("Unable to load profile");
+      }
+
+      return (await response.json()) as CurrentGuildContext;
+    },
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (error instanceof GuildProfileStatusError && error.status === 401) {
+      router.replace("/login?next=/profile");
     }
+  }, [error, router]);
 
-    void loadProfile();
+  const message = isLoading ? t.loading : (error ? t.loadError : t.loading);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [router, t.loadError]);
-
-  if (isLoading || !context) {
+  if (isLoading || !context || (error && error instanceof GuildProfileStatusError)) {
     return (
       <main className="guild-page">
         <div className="guild-grid-bg" />
@@ -159,4 +144,10 @@ export function GuildProfilePage() {
       </section>
     </main>
   );
+}
+
+class GuildProfileStatusError extends Error {
+  constructor(readonly status: number) {
+    super("Guild profile status error");
+  }
 }

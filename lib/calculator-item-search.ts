@@ -6,5 +6,5 @@ export function normalizeCalculatorItemSearchQuery(query: string | undefined) {
 }
 
 export function isCalculatorItemSearchReady(query: string | undefined) {
-  return true;
+  return normalizeCalculatorItemSearchQuery(query).length >= CALCULATOR_ITEM_SEARCH_MIN_LENGTH;
 }

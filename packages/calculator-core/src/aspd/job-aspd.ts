@@ -74,6 +74,15 @@ export const jobAspdGroups: JobAspdGroup[] = [
       mace: 148,
     },
   },
+  {
+    classIds: ["Mage", "Mage_High", "Wizard", "Wizard_High", "Warlock", "Arch_Mage"],
+    baseAspdByWeapon: {
+      bareHand: 156,
+      dagger: 140,
+      rod: 140,
+      twoHandRod: 140,
+    },
+  },
 ];
 
 export function getJobBaseAspd(classId: string | undefined, weaponType: WeaponType) {

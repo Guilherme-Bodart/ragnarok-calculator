@@ -10,6 +10,8 @@ import {
   isCalculatorItemSearchReady,
   normalizeCalculatorItemSearchQuery,
 } from "@/lib/calculator-item-search";
+import { CalculatorItemPreview } from "./calculator-item-preview";
+import { CalculatorCascadingEnchantSelect } from "./calculator-cascading-enchant-select";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import {
@@ -29,6 +31,8 @@ type CalculatorCardEnchantModalProps = {
   selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
   selectedItemDetails: Record<number, CalculatorItemDetail>;
   selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
+  itemContexts: Record<number, { refine?: number; grade?: number; options?: number[] }>;
+  learnedSkills?: Record<string, number>;
   onClose: () => void;
   onSelectedCardsBySlotChange: (
     cardsBySlot: Partial<Record<EquipmentSlot, number[]>>,
@@ -75,6 +79,8 @@ export function CalculatorCardEnchantModal({
   selectedCardsBySlot,
   selectedItemDetails,
   selectedItemsBySlot,
+  itemContexts,
+  learnedSkills,
   onClose,
   onSelectedCardsBySlotChange,
 }: CalculatorCardEnchantModalProps) {
@@ -149,12 +155,17 @@ export function CalculatorCardEnchantModal({
   }
 
   function getFilteredEnchantOptions(index: number) {
-    if (!validEnchants) return []; // Item não mapeado para encantos
-    const slotEnchants = validEnchants[index + 1];
-    if (!slotEnchants || slotEnchants.length === 0) return []; // Slot específico sem encantos
-
     const query = (enchantQueries[index] ?? "").trim().toLowerCase();
-    const options = allEnchants.filter(enc => slotEnchants.includes(enc.id));
+    
+    // Se o item tem mapeamento de encantos específicos para este slot, filtramos.
+    // Caso contrário (sem mapeamento), liberamos TODOS os encantos para escolha (fallback).
+    let options = allEnchants;
+    if (validEnchants) {
+      const slotEnchants = validEnchants[index + 1];
+      if (slotEnchants && slotEnchants.length > 0) {
+        options = allEnchants.filter(enc => slotEnchants.includes(enc.id));
+      }
+    }
 
     if (!query) return options;
     return options.filter((enc) =>
@@ -250,41 +261,59 @@ export function CalculatorCardEnchantModal({
             {Array.from({ length: 3 }, (_, index) => {
               const enchantIndex = cardSlotCount + index;
               const selectedEnchantId = selectedCards[enchantIndex];
-              const options = getFilteredEnchantOptions(index).slice(0, 100);
+              const allEnchants = getFilteredEnchantOptions(index);
+              const options = allEnchants.slice(0, 100);
 
               const currentDetail = selectedItemDetails[selectedEnchantId];
               const ensuredOptions = [...options];
               if (selectedEnchantId && currentDetail && !ensuredOptions.some(o => o.id === selectedEnchantId)) {
                 ensuredOptions.unshift({ ...currentDetail, cardSlots: null, hasModifiers: true } as any);
               }
+              
+              const cascadeOptions = [...allEnchants];
+              if (selectedEnchantId && currentDetail && !cascadeOptions.some(o => o.id === selectedEnchantId)) {
+                cascadeOptions.unshift({ ...currentDetail, cardSlots: null, hasModifiers: true } as any);
+              }
 
-              const isSlotDisabled = !validEnchants || !validEnchants[index + 1];
+              // Se o item tiver um mapeamento restrito e aquele slot for null/vazio de propósito (ex: arma com só 1 encanto), 
+              // O jogador sempre terá a liberdade de deixar vazio.
+              const isSlotDisabled = false;
+              const isSpecific = Boolean(validEnchants && validEnchants[index + 1] && (validEnchants[index + 1]?.length ?? 0) > 0);
 
               return (
                 <div key={`enchant-${index}`} className="flex flex-col gap-0.5">
                   <span className="text-[9px] text-slate-500 font-medium pl-0.5">Encant. {index + 1}</span>
-                  <RichSelect
-                    disabled={isSlotDisabled}
-                    groups={[{
-                      label: "Encantamentos",
-                      options: [
-                        { id: "empty", label: "Vazio" },
-                        ...ensuredOptions.map((enc) => ({
-                          id: String(enc.id),
-                          label: enc.name,
-                          icon: <CalculatorItemIcon itemId={enc.id} size={18} />,
-                        })),
-                      ],
-                    }]}
-                    searchable
-                    searchValue={enchantQueries[index] ?? ""}
-                    searchPlaceholder="Buscar encantamento..."
-                    emptyText={isSlotDisabled ? "Não encantável" : "Nenhum encantamento encontrado"}
-                    value={selectedEnchantId ? String(selectedEnchantId) : "empty"}
-                    onChange={(itemId) => selectCard(enchantIndex, itemId)}
-                    onSearchChange={(q) => setEnchantQueries((prev) => ({ ...prev, [index]: q }))}
-                    menuSize="compact"
-                  />
+                  {isSpecific ? (
+                    <RichSelect
+                      disabled={isSlotDisabled}
+                      groups={[{
+                        label: "Encantamentos Específicos",
+                        options: [
+                          { id: "empty", label: "Vazio" },
+                          ...ensuredOptions.map((enc) => ({
+                            id: String(enc.id),
+                            label: enc.name,
+                            icon: <CalculatorItemIcon itemId={enc.id} size={18} />,
+                          })),
+                        ],
+                      }]}
+                      searchable
+                      searchValue={enchantQueries[index] ?? ""}
+                      searchPlaceholder="Buscar encantamento..."
+                      emptyText="Nenhum encantamento encontrado"
+                      value={selectedEnchantId ? String(selectedEnchantId) : "empty"}
+                      onChange={(itemId) => selectCard(enchantIndex, itemId)}
+                      onSearchChange={(q) => setEnchantQueries((prev) => ({ ...prev, [index]: q }))}
+                      menuSize="compact"
+                    />
+                  ) : (
+                    <CalculatorCascadingEnchantSelect
+                      disabled={isSlotDisabled}
+                      options={cascadeOptions}
+                      value={selectedEnchantId ? String(selectedEnchantId) : "empty"}
+                      onChange={(itemId) => selectCard(enchantIndex, itemId)}
+                    />
+                  )}
                 </div>
               );
             })}
@@ -293,28 +322,37 @@ export function CalculatorCardEnchantModal({
 
         {/* Resumo dos efeitos selecionados */}
         {(selectedCards.some(Boolean)) && (
-          <div className="border-t border-slate-800 pt-2 mt-1">
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider select-none">
-              Efeitos Ativos
+          <div className="border-t border-slate-800 pt-3 mt-2">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider select-none mb-2 block">
+              Detalhes dos Itens Equipados
             </span>
-            <div className="flex flex-wrap gap-1 mt-1.5">
+            <div className="flex flex-col gap-3">
               {selectedCards.map((cardId, i) => {
                 if (!cardId) return null;
                 const detail = selectedItemDetails[cardId];
                 if (!detail) return null;
                 const isEnchant = i >= cardSlotCount;
                 return (
-                  <span
-                    key={`eff-${i}`}
-                    className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] border ${
-                      isEnchant
-                        ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
-                        : "bg-sky-500/10 text-sky-300 border-sky-500/20"
-                    }`}
-                  >
-                    <CalculatorItemIcon itemId={detail.id} size={14} />
-                    {detail.name}
-                  </span>
+                  <div key={`eff-detail-${i}`} className="bg-slate-900/50 border border-slate-800/50 rounded-lg p-2">
+                    <div className="flex items-center gap-2 mb-2 px-1">
+                      <CalculatorItemIcon itemId={detail.id} size={24} />
+                      <span className={`font-bold text-sm ${isEnchant ? "text-amber-300" : "text-sky-300"}`}>
+                        {detail.name}
+                      </span>
+                    </div>
+                    <div className="calc-panel p-0 bg-transparent shadow-none border-0">
+                      <CalculatorItemPreview
+                        cardOptions={[]}
+                        copy={copy}
+                        item={detail}
+                        itemContexts={{ [detail.id]: itemContexts[selectedItem.id] ?? { refine: 0, grade: 0 } }}
+                        selectedCards={selectedCards}
+                        selectedItemDetails={selectedItemDetails}
+                        selectedItemsBySlot={selectedItemsBySlot}
+                        learnedSkills={learnedSkills}
+                      />
+                    </div>
+                  </div>
                 );
               })}
             </div>

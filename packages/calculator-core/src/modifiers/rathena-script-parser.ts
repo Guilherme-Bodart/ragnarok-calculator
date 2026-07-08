@@ -34,6 +34,7 @@ export class RathenaScriptParser {
       grade: context.grade,
       baseLevel: context.baseLevel,
       learnedSkills: context.learnedSkills,
+      refinesBySlot: context.refinesBySlot,
       locals: {},
     };
 
@@ -82,7 +83,7 @@ export class RathenaScriptParser {
       /\.@g\s*=\s*getenchantgrade\(\)\s*;/g,
       "",
     );
-    const refineBlockExtraction = this.extractRefineBlocks(scriptWithoutBlocks);
+    const refineBlockExtraction = this.extractRefineBlocks(scriptWithoutBlocks, [], variables);
     segments.push(...refineBlockExtraction.segments);
     scriptWithoutBlocks = refineBlockExtraction.remainingScript;
     const gradeBlockExtraction = this.extractGradeBlocks(scriptWithoutBlocks);
@@ -95,17 +96,31 @@ export class RathenaScriptParser {
     const classBlockExtraction = this.extractClassBlocks(scriptWithoutBlocks);
     segments.push(...classBlockExtraction.segments);
     scriptWithoutBlocks = classBlockExtraction.remainingScript;
-    const equippedBlockExtraction = this.extractEquippedBlocks(scriptWithoutBlocks);
+    const equippedBlockExtraction = this.extractEquippedBlocks(scriptWithoutBlocks, [], variables);
     segments.push(...equippedBlockExtraction.segments);
     scriptWithoutBlocks = equippedBlockExtraction.remainingScript;
 
-    const inlineRefine = /if\s*\(\s*(?:getrefine\(\)|\.@r)\s*(>=|>|<=|<|==|!=)\s*(-?\d+)\s*\)\s*([^;]+;)/g;
+    const inlineRefine = /if\s*\(\s*(getrefine\(\)|\.@r|\.@[a-zA-Z0-9_]+)\s*(>=|>|<=|<|==|!=)\s*(-?\d+)\s*\)\s*([^;]+;)/g;
     const inlineGrade = /if\s*\(\s*(?:getenchantgrade\(\)|\.@g)\s*(>=|>|<=|<|==|!=)\s*(ENCHANTGRADE_[A-Z]+|-?\d+)\s*\)\s*([^;]+;)/g;
     const inlineEquipped = /if\s*\(\s*isequipped\s*\(\s*([\d\s,]+)\s*\)\s*\)\s*([^;]+;)/g;
 
     for (const match of scriptWithoutBlocks.matchAll(inlineRefine)) {
-      const [, operator, refineValue, statement] = match;
-      const condition = createRefineCondition(operator, refineValue);
+      const [, varExpr, operator, refineValue, statement] = match;
+      let condition: ModifierCondition | null = null;
+
+      const varName = varExpr.replace(".@", "");
+      const slotId = variables?.refineVariables?.[varName];
+
+      if (slotId !== undefined) {
+        condition = {
+           type: "equip_refine",
+           locationId: slotId,
+           operator: operator as any,
+           value: Number(refineValue),
+        };
+      } else if (varExpr === "getrefine()" || varExpr === ".@r") {
+        condition = createRefineCondition(operator, refineValue);
+      }
 
       if (condition) {
         segments.push({
@@ -177,6 +192,32 @@ export class RathenaScriptParser {
           return "";
         }
 
+        const equipRefineMatch = trimmedExpression.match(/^getequiprefinerycnt\s*\(\s*(EQI_[A-Z_]+|\d+)\s*\)$/);
+        if (equipRefineMatch) {
+          const slotArg = equipRefineMatch[1];
+          const slotMap: Record<string, number> = {
+            EQI_HEAD_TOP: 1, EQI_ARMOR: 2, EQI_HAND_L: 3, EQI_HAND_R: 4,
+            EQI_GARMENT: 5, EQI_SHOES: 6, EQI_ACC_L: 7, EQI_ACC_R: 8,
+            EQI_HEAD_MID: 9, EQI_HEAD_LOW: 10,
+          };
+          const slotId = /^\d+$/.test(slotArg) ? Number(slotArg) : slotMap[slotArg];
+          
+          if (slotId !== undefined) {
+            variables.refineVariables = {
+              ...variables.refineVariables,
+              [variableName]: slotId,
+            };
+            const value = evaluateRathenaExpression(trimmedExpression, variables);
+            if (value !== null) {
+              variables.locals = {
+                ...variables.locals,
+                [variableName]: value,
+              };
+            }
+            return "";
+          }
+        }
+
         const value = evaluateRathenaExpression(trimmedExpression, variables);
 
         if (value === null) {
@@ -195,10 +236,11 @@ export class RathenaScriptParser {
   private extractRefineBlocks(
     script: string,
     inheritedConditions: ModifierCondition[] = [],
+    variables?: ParserVariables,
   ) {
     const segments: ScriptSegment[] = [];
     const refineBlockPattern =
-      /if\s*\(\s*(?:getrefine\(\)|\.@r)\s*(>=|>|<=|<|==|!=)\s*(-?\d+)\s*\)\s*\{/g;
+      /if\s*\(\s*(getrefine\(\)|\.@r|\.@[a-zA-Z0-9_]+)\s*(>=|>|<=|<|==|!=)\s*(-?\d+)\s*\)\s*\{/g;
     let cursor = 0;
     let remainingScript = "";
 
@@ -214,18 +256,36 @@ export class RathenaScriptParser {
         continue;
       }
 
-      const [, operator, refineValue] = match;
-      const condition = createRefineCondition(operator, refineValue);
+      const [, varExpr, operator, refineValue] = match;
+      let condition: ModifierCondition | null = null;
+
+      const varName = varExpr.replace(".@", "");
+      const slotId = variables?.refineVariables?.[varName];
+
+      if (slotId !== undefined) {
+        condition = {
+           type: "equip_refine",
+           locationId: slotId,
+           operator: operator as any,
+           value: Number(refineValue),
+        };
+      } else if (varExpr === "getrefine()" || varExpr === ".@r") {
+        condition = createRefineCondition(operator, refineValue);
+      }
 
       remainingScript += script.slice(cursor, match.index);
 
       if (condition) {
         const blockBody = script.slice(braceStart + 1, braceEnd);
         segments.push(
-          ...this.extractNestedConditionedSegments(blockBody, [
-            ...inheritedConditions,
-            condition,
-          ]),
+          ...this.extractNestedConditionedSegments(
+            blockBody, 
+            [
+              ...inheritedConditions,
+              condition,
+            ],
+            variables
+          ),
         );
       }
 
@@ -291,6 +351,7 @@ export class RathenaScriptParser {
   private extractNestedConditionedSegments(
     script: string,
     inheritedConditions: ModifierCondition[],
+    variables?: ParserVariables,
   ): ScriptSegment[] {
     const segments: ScriptSegment[] = [];
     let remainingScript = script;
@@ -298,6 +359,7 @@ export class RathenaScriptParser {
     const refineBlockExtraction = this.extractRefineBlocks(
       remainingScript,
       inheritedConditions,
+      variables,
     );
     segments.push(...refineBlockExtraction.segments);
     remainingScript = refineBlockExtraction.remainingScript;
@@ -312,6 +374,7 @@ export class RathenaScriptParser {
     const equippedBlockExtraction = this.extractEquippedBlocks(
       remainingScript,
       inheritedConditions,
+      variables,
     );
     segments.push(...equippedBlockExtraction.segments);
     remainingScript = equippedBlockExtraction.remainingScript;
@@ -407,6 +470,7 @@ export class RathenaScriptParser {
   private extractEquippedBlocks(
     script: string,
     inheritedConditions: ModifierCondition[] = [],
+    variables?: ParserVariables,
   ) {
     const segments: ScriptSegment[] = [];
     const equipBlockPattern = /if\s*\(([^{}]+)\)\s*\{/g;
@@ -434,10 +498,14 @@ export class RathenaScriptParser {
       remainingScript += script.slice(cursor, match.index);
       const blockBody = script.slice(braceStart + 1, braceEnd);
       segments.push(
-        ...this.extractNestedConditionedSegments(blockBody, [
-          ...inheritedConditions,
-          ...conditions,
-        ]),
+        ...this.extractNestedConditionedSegments(
+          blockBody, 
+          [
+            ...inheritedConditions,
+            ...conditions,
+          ],
+          variables
+        ),
       );
       cursor = braceEnd + 1;
     }

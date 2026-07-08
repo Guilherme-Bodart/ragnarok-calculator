@@ -1,0 +1,230 @@
+{
+     "18849": {
+        "id": 18849,
+        "aegisName": "Celines_Ribbon",
+        "name": "Laço da Celine [1]",
+        "unidName": "Hairband",
+        "resName": "셀린느의리본",
+        "description": "Um laço luxuoso bordado com fios de ouro. Foi feito com muito carinho para Kimi pelo artesão de bonecas que a criou.\n--------------------------\n^0000ffDES +3.^000000\n^0000ffATQM +40.^000000\nA cada refino:\n^0000ffATQM +7.^000000\n--------------------------\nAo derrotar monstros com ataques mágicos:\n^0000ffRegenera 200 de HP.^000000\n--------------------------\n^0000ffDrena 50 de HP do usuário a cada 5 segundos.^000000\n--------------------------\nTipo: ^777777Equip. para cabeça^000000\nEquipa em: ^777777Topo^000000\nDEF: ^7777770^000000 DEFM: ^7777770^000000\nPeso: ^77777720^000000\nNível necessário: ^7777771^000000\nClasses: ^777777Todas^000000",
+        "slots": 1,
+        "itemTypeId": 2,
+        "itemSubTypeId": 512,
+        "itemLevel": null,
+        "attack": null,
+        "defense": 0,
+        "weight": 20,
+        "requiredLevel": 1,
+        "location": "Upper",
+        "compositionPos": null,
+        "usableClass": [
+            "all"
+        ],
+        "script": {
+            "dex": [
+                "3"
+            ],
+            "matk": [
+                "40",
+                "1---7"
+            ]
+        }
+    },
+      "450179": {
+        "id": 450179,
+        "aegisName": "Celine_Dress",
+        "name": "Vestido da Celine [1]",
+        "unidName": "Cotton Shirt",
+        "resName": "Bloody_Dress",
+        "description": "Um vestidinho feito a mão, super elegante e tão chique que é digno de ser usado até por uma bonequinha. As manchas vermelhas são somente adornos, e não tem relação com sua dona ou uma fábrica bem assustadora...\n-------------------------\n^0000FFATQM +50.^000000\n-------------------------\nRefino +7 ou mais:\n^0000FFConjuração variável -10%.^000000\nRefino +9 ou mais:\n^0000FFDano mágico de todas as propriedades +10%.^000000\nRefino +11 ou mais:\n^0000FFPós-conjuração -10%.^000000\nRefino +12 ou mais:\n^0000FFPós-conjuração -5% adicional.^000000\n-------------------------\n^FA4E09Conjunto^000000\n^FA4E09[Laço da Celine]^000000\nA cada refino do Laço:\n^0000FFDano mágico de propriedade Sagrado, Sombrio, Veneno e Fantasma +1%.^000000\nA cada refino da Armadura:\n^0000FFDano mágico de propriedade Sagrado, Sombrio, Veneno e Fantasma +1%.^000000\nSoma dos refinos +19 ou mais:\n^0000FFDano mágico +15%.^000000\nSoma dos refinos +23 ou mais:\n^0000FFDano mágico contra oponentes de todas as propriedades +20%.^000000\n-------------------------\n^FA4E09Conjunto^000000\n^FA4E09[Bracelete da Celine]^000000\nA cada refino da Armadura:\n^0000FFATQM +10.^000000\nArmadura com refino +9 ou mais:\n^0000FFConjuração variável -5%.^000000\nArmadura com refino +11 ou mais:\n^0000FFDano mágico de propriedade Água, Vento, Terra, Fogo e Neutro +10%.^000000\nArmadura com refino +13 ou mais:\n^0000FFTorna a armadura indestrutível em batalha.^000000\n-------------------------\n^FA4E09Conjunto^000000\n^FA4E09[Luva dos Espíritos Malignos]^000000\n^0000FFDano mágico +10%.^000000\n^0000FFPrecisão perfeita +10.^000000\n^0000FFDano mágico contra todos os Tamanhos +15%.^000000\nAo realizar ataques físicos:\n^0000FF5% de chance de ativar um [efeito] por 10 segundos.^000000\n-------------------------\n^CD3278Efeito:^000000\n^0000FFDano mágico contra todas as raças de monstros +15%.^000000\n-------------------------\nTipo: ^777777Armadura^000000\nDEF: ^77777740^000000 DEFM: ^7777770^000000\nPeso: ^77777750^000000\nNível necessário: ^777777130^000000\nClasses: ^777777Todas^000000",
+        "slots": 1,
+        "itemTypeId": 2,
+        "itemSubTypeId": 513,
+        "itemLevel": null,
+        "attack": null,
+        "defense": 40,
+        "weight": 50,
+        "requiredLevel": 130,
+        "location": null,
+        "compositionPos": null,
+        "usableClass": [
+            "all"
+        ],
+        "script": {
+            "matk": [
+                "50",
+                "EQUIP[Bracelete da Celine]1---10"
+            ],
+            "vct": [
+                "7===10",
+                "EQUIP[Bracelete da Celine]9===5"
+            ],
+            "m_my_element_all": [
+                "9===10"
+            ],
+            "acd": [
+                "11===10",
+                "12===5"
+            ],
+            "matkPercent": [
+                "EQUIP[Luva dos Espíritos Malignos]10",
+                "EQUIP[Laço da Celine]REFINE[headUpper,armor==19]===15"
+            ],
+            "perfectHit": [
+                "EQUIP[Luva dos Espíritos Malignos]10"
+            ],
+            "m_size_all": [
+                "EQUIP[Luva dos Espíritos Malignos]15"
+            ],
+            "m_element_all": [
+                "EQUIP[Laço da Celine]REFINE[headUpper,armor==23]===20"
+            ],
+            "m_my_element_holy": [
+                "EQUIP[Laço da Celine]REFINE[headUpper,armor==1]---1"
+            ],
+            "m_my_element_dark": [
+                "EQUIP[Laço da Celine]REFINE[headUpper,armor==1]---1"
+            ],
+            "m_my_element_poison": [
+                "EQUIP[Laço da Celine]REFINE[headUpper,armor==1]---1"
+            ],
+            "m_my_element_ghost": [
+                "EQUIP[Laço da Celine]REFINE[headUpper,armor==1]---1"
+            ],
+            "m_my_element_water": [
+                "EQUIP[Bracelete da Celine]11===10"
+            ],
+            "m_my_element_wind": [
+                "EQUIP[Bracelete da Celine]11===10"
+            ],
+            "m_my_element_earth": [
+                "EQUIP[Bracelete da Celine]11===10"
+            ],
+            "m_my_element_fire": [
+                "EQUIP[Bracelete da Celine]11===10"
+            ],
+            "m_my_element_neutral": [
+                "EQUIP[Bracelete da Celine]11===10"
+            ]
+        }
+    },
+
+        "32237": {
+        "id": 32237,
+        "aegisName": "Celine_Brooch_K",
+        "name": "Bracelete da Celine [1]",
+        "unidName": "Clip",
+        "resName": "Celine_Brooch",
+        "description": "Adereço confeccionado pelo artesão das bonecas. Ao vê-lo, Celine ficou obcecada e prometeu que nunca iria perdê-lo. Até agora...\n-------------------------\n^0000ffDano mágico +5%.^000000\n^0000ffConjuração variável -10%.^000000\n-------------------------\n^FA4E09Conjunto^000000\n^FA4E09[Luva dos Espíritos Malignos]^000000\n^0000ffATQ e ATQM +50.^000000\n^0000ffVelocidade de ataque +1.^000000\n-------------------------\n^FA4E09Conjunto^000000\n^FA4E09[Laço da Celine]^000000\n^0000ffConjuração fixa -0,3 segundos.^000000\nA cada refino do laço:\n^0000ffATQM +10.^000000\nRefino +7 ou mais:\n^0000ffDano mágico contra as raças Humano, Humanoide e Demônio +10%.^000000\nRefino +9 ou mais:\n^0000ffDano mágico de propriedade Água, Vento, Terra, Fogo e Neutro +10%.^000000\nRefino +11 ou mais:\n^0000ffDano mágico contra monstros Chefes +20%.^000000\n-------------------------\nTipo: ^777777Acessório^000000\nDEF: ^7777770^000000 DEFM: ^7777770^000000\nPeso: ^77777750^000000\nNível necessário: ^777777100^000000\nClasses: ^777777Todas^000000",
+        "slots": 1,
+        "itemTypeId": 2,
+        "itemSubTypeId": 517,
+        "itemLevel": null,
+        "attack": null,
+        "defense": 0,
+        "weight": 50,
+        "requiredLevel": 100,
+        "location": null,
+        "compositionPos": null,
+        "usableClass": [
+            "all"
+        ],
+        "script": {
+            "matkPercent": [
+                "5"
+            ],
+            "vct": [
+                "10"
+            ],
+            "atk": [
+                "EQUIP[Luva dos Espíritos Malignos]50"
+            ],
+            "matk": [
+                "EQUIP[Luva dos Espíritos Malignos]50",
+                "EQUIP[Laço da Celine]REFINE[headUpper==1]---10"
+            ],
+            "aspd": [
+                "EQUIP[Luva dos Espíritos Malignos]1"
+            ],
+            "fct": [
+                "EQUIP[Laço da Celine]0.3"
+            ],
+            "m_race_demihuman": [
+                "EQUIP[Laço da Celine]REFINE[headUpper==7]===10"
+            ],
+            "m_race_demon": [
+                "EQUIP[Laço da Celine]REFINE[headUpper==7]===10"
+            ],
+            "m_my_element_water": [
+                "EQUIP[Laço da Celine]REFINE[headUpper==9]===10"
+            ],
+            "m_my_element_wind": [
+                "EQUIP[Laço da Celine]REFINE[headUpper==9]===10"
+            ],
+            "m_my_element_earth": [
+                "EQUIP[Laço da Celine]REFINE[headUpper==9]===10"
+            ],
+            "m_my_element_fire": [
+                "EQUIP[Laço da Celine]REFINE[headUpper==9]===10"
+            ],
+            "m_my_element_neutral": [
+                "EQUIP[Laço da Celine]REFINE[headUpper==9]===10"
+            ],
+            "m_class_boss": [
+                "EQUIP[Laço da Celine]REFINE[headUpper==11]===20"
+            ]
+        }
+    },
+     "4392": {
+        "id": 4392,
+        "aegisName": "Observation_Card",
+        "name": "Carta Observação",
+        "unidName": "Dame of Sentinel Card",
+        "resName": "이름없는카드",
+        "description": "A cada 18 de VIT base:\n^0000ffDES +1.^000000\n-------------------------\nTipo: ^777777Carta^000000\nEquipa em: ^777777Armadura^000000\nPeso: ^7777771^000000",
+        "slots": 0,
+        "itemTypeId": 6,
+        "itemSubTypeId": 0,
+        "itemLevel": null,
+        "attack": null,
+        "defense": null,
+        "weight": 1,
+        "requiredLevel": null,
+        "location": null,
+        "compositionPos": 16,
+        "cardPrefix": "of Dexterity Switching",
+        "script": {
+            "dex": [
+                "SUM[vit==18]---1"
+            ]
+        }
+    },
+     "300269": {
+        "aegisName": "Eldest_Card",
+        "name": "Carta Ancião Primitivo",
+        "unidName": "Eldest Card",
+        "resName": "이름없는카드",
+        "description": "^0000FFSP máx.^000000 ^FF0000-25%.^000000\n^0000FFDano mágico de propriedade Fantasma +10%.^000000\n--------------------------\n^FA4E09Conjunto^000000\n^FA4E09Carta Observação^000000\nNv. base 200 ou mais:\n^0000FFA cada 40 de INT base:^000000\n^0000FFDano mágico de propriedade Fantasma +15%.^000000\n--------------------------\nTipo: ^777777Carta^000000\nEquipa em: ^777777Capa^000000\nPeso : ^7777771^000000",
+        "slots": 0,
+        "itemTypeId": 6,
+        "itemSubTypeId": 0,
+        "itemLevel": null,
+        "attack": null,
+        "matk": null,
+        "defense": null,
+        "weight": 1,
+        "requiredLevel": null,
+        "location": null,
+        "compositionPos": 4,
+        "usableClass": [
+            "all"
+        ],
+        "script": {
+            "m_my_element_ghost": [
+                "10",
+                "LEVEL[200]EQUIP[Carta Observação]int:40---15"
+            ]
+        },
+        "cardPrefix": "Eldest",
+        "id": 300269
+    }
+}

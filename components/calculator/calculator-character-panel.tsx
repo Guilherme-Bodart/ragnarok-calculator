@@ -5,7 +5,6 @@ import { Activity } from "lucide-react";
 import { PanelHeader } from "@/components/ui/panel-header";
 import {
   evaluateStatusPointBudget,
-  type CharacterStats,
   type CharacterStatus,
   type RoSkill,
 } from "@/packages/calculator-core/src";
@@ -16,42 +15,43 @@ import {
   type VisibleCalculatorStat,
 } from "./calculator-character-utils";
 import type { CalculatorDictionary } from "./calculator-i18n";
+import { useCalculatorBuildStore } from "./calculator-build-store";
+import { isFourthJobClassId, isTranscendentEquivalentClassId } from "./calculator-class-rules";
 
 export type CalculatorPanelSkill = RoSkill & {
   numericId?: number;
 };
 
 type CalculatorCharacterPanelProps = {
-  baseLevel: number;
   characterStatus: CharacterStatus;
   copy: CalculatorDictionary;
-  isFourthJob: boolean;
-  isTranscendent?: boolean;
-  jobLevel: number;
-  selectedClassId: string;
   skillTreeSlot: ReactNode;
-  stats: CharacterStats;
-  onBaseLevelChange: (baseLevel: number) => void;
-  onClassChange: (classId: string) => void;
-  onJobLevelChange: (jobLevel: number) => void;
-  onStatsChange: (stats: CharacterStats) => void;
 };
 
 export function CalculatorCharacterPanel({
-  baseLevel,
   characterStatus,
   copy,
-  isFourthJob,
-  isTranscendent,
-  jobLevel,
-  selectedClassId,
   skillTreeSlot,
-  stats,
-  onBaseLevelChange,
-  onClassChange,
-  onJobLevelChange,
-  onStatsChange,
 }: CalculatorCharacterPanelProps) {
+  const baseLevel = useCalculatorBuildStore((s) => s.baseLevel);
+  const setBaseLevel = useCalculatorBuildStore((s) => s.setBaseLevel);
+  
+  const jobLevel = useCalculatorBuildStore((s) => s.jobLevel);
+  const setJobLevel = useCalculatorBuildStore((s) => s.setJobLevel);
+  
+  const stats = useCalculatorBuildStore((s) => s.stats);
+  const setStats = useCalculatorBuildStore((s) => s.setStats);
+  
+  const selectedClassId = useCalculatorBuildStore((s) => s.selectedClassId);
+  // Não podemos chamar o store.handleClassChange diretamente se precisarmos passar manualBuffSkills.
+  // Porém, esse panel não faz a mudança de classe de verdade? Ah, ele repassa onClassChange pro Controls.
+  // Vamos ver como o onClassChange era feito... ele usava o handleClassChange que precisava de manualBuffSkills.
+  // Será melhor passar onClassChange como prop apenas?
+  // O plano Fase 2 é remover prop drilling. 
+  
+  const isFourthJob = isFourthJobClassId(selectedClassId);
+  const isTranscendent = isTranscendentEquivalentClassId(selectedClassId);
+
   const statusBudget = evaluateStatusPointBudget({
     baseLevel,
     isFourthJob,
@@ -60,7 +60,7 @@ export function CalculatorCharacterPanel({
   });
 
   function handleStatChange(stat: VisibleCalculatorStat, rawValue: number) {
-    onStatsChange(
+    setStats(
       resolveNextCalculatorStats({
         baseLevel,
         isFourthJob,
@@ -81,14 +81,7 @@ export function CalculatorCharacterPanel({
       />
 
       <CalculatorCharacterControls
-        baseLevel={baseLevel}
         copy={copy}
-        isFourthJob={isFourthJob}
-        jobLevel={jobLevel}
-        selectedClassId={selectedClassId}
-        onBaseLevelChange={onBaseLevelChange}
-        onClassChange={onClassChange}
-        onJobLevelChange={onJobLevelChange}
       />
 
       {skillTreeSlot}

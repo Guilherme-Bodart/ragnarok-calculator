@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowRight,
   Crown,
@@ -40,15 +41,14 @@ const localeStorageKey = "nightmare-locale";
 export function LoginPanel() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+  
   const [locale, setLocale] = useState<Locale>(getInitialLocale);
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState<AuthUser | null>(null);
   const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   const dictionary = dictionaries[locale];
   const t = dictionary.auth;
@@ -56,63 +56,34 @@ export function LoginPanel() {
   const visibleMessage =
     message || (searchParams.get("authError") === "google" ? t.googleError : "");
 
+  const { data: user, isLoading: isCheckingSession } = useQuery({
+    queryKey: ["session"],
+    queryFn: async () => {
+      const response = await fetch(`${apiBaseUrl}/auth/me`, {
+        credentials: "include",
+      });
+      if (!response.ok) return null;
+      const payload = await response.json() as { user: AuthUser | null };
+      return payload.user;
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
   useEffect(() => {
-    let isMounted = true;
-
-    async function loadSession() {
-      try {
-        const response = await fetch(`${apiBaseUrl}/auth/me`, {
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          return;
-        }
-
-        const payload = (await response.json()) as { user: AuthUser | null };
-
-        if (isMounted) {
-          setUser(payload.user);
-          if (payload.user) {
-            setMessage(t.sessionActive);
-            window.setTimeout(() => {
-              router.replace(nextPath);
-            }, 420);
-          }
-        }
-      } catch {
-        if (isMounted) {
-          setMessage(t.apiUnavailable);
-        }
-      } finally {
-        if (isMounted) {
-          setIsCheckingSession(false);
-        }
-      }
+    if (user) {
+      setMessage(t.sessionActive);
+      const timer = window.setTimeout(() => {
+        router.replace(nextPath);
+      }, 420);
+      return () => window.clearTimeout(timer);
     }
+  }, [user, nextPath, router, t.sessionActive]);
 
-    void loadSession();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [nextPath, router, t.apiUnavailable, t.sessionActive]);
-
-  function handleLocaleChange(nextLocale: Locale) {
-    setLocale(nextLocale);
-    window.localStorage.setItem(localeStorageKey, nextLocale);
-    document.documentElement.lang = nextLocale === "pt" ? "pt-BR" : nextLocale;
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoading(true);
-    setMessage("");
-
-    const payload =
-      mode === "register" ? { email, name, password } : { email, password };
-
-    try {
+  const authMutation = useMutation({
+    mutationFn: async () => {
+      const payload =
+        mode === "register" ? { email, name, password } : { email, password };
+        
       const response = await fetch(`${apiBaseUrl}/auth/${mode}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -126,19 +97,48 @@ export function LoginPanel() {
       };
 
       if (!response.ok || !data.user) {
-        setMessage(getAuthErrorMessage(data.message, t.authFailed));
-        return;
+        throw new Error(getAuthErrorMessage(data.message, t.authFailed));
       }
 
-      setUser(data.user);
+      return data.user;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["session"], data);
       setPassword("");
       setMessage(mode === "register" ? t.registered : t.loggedIn);
       router.replace(nextPath);
-    } catch {
+    },
+    onError: (error: Error) => {
+      setMessage(error.message || t.apiUnavailable);
+    },
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      await fetch(`${apiBaseUrl}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(["session"], null);
+      setMessage(t.loggedOut);
+    },
+    onError: () => {
       setMessage(t.apiUnavailable);
-    } finally {
-      setIsLoading(false);
-    }
+    },
+  });
+
+  function handleLocaleChange(nextLocale: Locale) {
+    setLocale(nextLocale);
+    window.localStorage.setItem(localeStorageKey, nextLocale);
+    document.documentElement.lang = nextLocale === "pt" ? "pt-BR" : nextLocale;
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setMessage("");
+    authMutation.mutate();
   }
 
   function handleGoogleSignIn() {
@@ -146,23 +146,7 @@ export function LoginPanel() {
     window.location.assign(`${apiBaseUrl}/auth/google?${params.toString()}`);
   }
 
-  async function handleLogout() {
-    setIsLoading(true);
-    setMessage("");
-
-    try {
-      await fetch(`${apiBaseUrl}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-      setUser(null);
-      setMessage(t.loggedOut);
-    } catch {
-      setMessage(t.apiUnavailable);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const isLoading = authMutation.isPending || logoutMutation.isPending;
 
   return (
     <main className="guild-auth-page">
@@ -272,7 +256,7 @@ export function LoginPanel() {
                     <LogIn size={16} />
                   )
                 }
-                onClick={handleLogout}
+                onClick={() => logoutMutation.mutate()}
                 type="button"
                 variant="ghost"
               >

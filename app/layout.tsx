@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Pixelify_Sans, Sora } from "next/font/google";
+import { QueryProvider } from "@/components/providers/query-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -42,7 +43,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${sora.variable} ${jetBrainsMono.variable} ${pixelifySans.variable}`}
       >
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

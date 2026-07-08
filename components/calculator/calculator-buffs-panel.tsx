@@ -7,27 +7,19 @@ import { PanelHeader } from "@/components/ui/panel-header";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import type { CalculatorPanelSkill } from "./calculator-character-panel";
 import { CalculatorBuffsModal } from "./calculator-buffs-modal";
-
-type ActiveBuffLevels = Record<string, number>;
+import { useCalculatorBuildStore } from "./calculator-build-store";
 
 type CalculatorBuffsPanelProps = {
-  activeBuffs: ActiveBuffLevels;
   buffSkills: CalculatorPanelSkill[];
   copy: CalculatorDictionary;
-  selectedBuffId: string;
-  onActiveBuffsChange: (buffs: ActiveBuffLevels) => void;
-  onSelectedBuffChange: (buffId: string) => void;
 };
 
 export function CalculatorBuffsPanel({
-  activeBuffs,
   buffSkills,
   copy,
-  selectedBuffId,
-  onActiveBuffsChange,
-  onSelectedBuffChange,
 }: CalculatorBuffsPanelProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const activeBuffs = useCalculatorBuildStore((s) => s.activeBuffs);
   const activeBuffCount = Object.keys(activeBuffs).length;
 
   return (
@@ -50,10 +42,8 @@ export function CalculatorBuffsPanel({
 
       {isModalOpen && (
         <CalculatorBuffsModal
-          activeBuffs={activeBuffs}
           buffSkills={buffSkills}
           copy={copy}
-          onActiveBuffsChange={onActiveBuffsChange}
           onClose={() => setIsModalOpen(false)}
         />
       )}

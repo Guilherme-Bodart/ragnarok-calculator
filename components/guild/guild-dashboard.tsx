@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LayoutDashboard } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { GuildAppShell } from "./guild-app-shell";
 import type { GuildDashboard as GuildDashboardData, MvpKillEntry } from "./guild-types";
@@ -11,72 +12,53 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api
 
 export function GuildDashboard({ slug }: { slug: string }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { dictionary } = useNightmareLocale();
   const t = dictionary.guild;
-  const [dashboard, setDashboard] = useState<GuildDashboardData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [notice, setNotice] = useState(t.loadingDashboardMessage);
 
-  const loadDashboard = useCallback(async () => {
-    const payload = await fetchDashboard(slug);
-    setDashboard(payload);
-    setNotice(t.connected);
-  }, [slug, t.connected]);
+  const { data: dashboard, isLoading, error, refetch } = useQuery<GuildDashboardData, Error>({
+    queryKey: ["guild-dashboard", slug],
+    queryFn: async () => {
+      const response = await fetch(`${apiBaseUrl}/guilds/${slug}/dashboard`, {
+        credentials: "include",
+      });
+
+      if (response.status === 401 || response.status === 403 || response.status === 404) {
+        throw new GuildDashboardStatusError(response.status);
+      }
+
+      if (!response.ok) {
+        throw new Error("Unable to load guild dashboard");
+      }
+
+      return (await response.json()) as GuildDashboardData;
+    },
+    retry: false,
+  });
 
   useEffect(() => {
-    let isMounted = true;
-
-    async function loadInitialDashboard() {
-    try {
-        const payload = await fetchDashboard(slug);
-
-        if (isMounted) {
-          setDashboard(payload);
-          setNotice(t.connected);
-        }
-      } catch (error) {
-        if (error instanceof GuildDashboardStatusError) {
-          router.replace(error.status === 401 ? `/login?next=/guilds/${slug}` : "/guilds");
-          return;
-        }
-
-        if (isMounted) {
-          setNotice(t.loadError);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
+    if (error instanceof GuildDashboardStatusError) {
+      router.replace(error.status === 401 ? `/login?next=/guilds/${slug}` : "/guilds");
     }
+  }, [error, router, slug]);
 
-    void loadInitialDashboard();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [router, slug, t.connected, t.loadError]);
+  const notice = isLoading ? t.loadingDashboardMessage : (error ? t.loadError : t.connected);
 
   async function refreshDashboard() {
-    try {
-      await loadDashboard();
-    } catch {
-      setNotice(t.loadError);
-    }
+    await refetch();
   }
 
   function handleCreateMvpEntry(entry: MvpKillEntry) {
-    setDashboard((current) =>
-      current
-        ? {
-            ...current,
-            mvpEntries: [entry, ...current.mvpEntries],
-          }
-        : current,
-    );
+    queryClient.setQueryData<GuildDashboardData>(["guild-dashboard", slug], (current) => {
+      if (!current) return current;
+      return {
+        ...current,
+        mvpEntries: [entry, ...current.mvpEntries],
+      };
+    });
   }
 
-  if (!dashboard) {
+  if (isLoading || !dashboard || (error && error instanceof GuildDashboardStatusError)) {
     return (
       <main className="guild-page">
         <div className="guild-grid-bg" />
@@ -97,22 +79,6 @@ export function GuildDashboard({ slug }: { slug: string }) {
       onRefreshDashboard={refreshDashboard}
     />
   );
-}
-
-async function fetchDashboard(slug: string) {
-  const response = await fetch(`${apiBaseUrl}/guilds/${slug}/dashboard`, {
-    credentials: "include",
-  });
-
-  if (response.status === 401 || response.status === 403 || response.status === 404) {
-    throw new GuildDashboardStatusError(response.status);
-  }
-
-  if (!response.ok) {
-    throw new Error("Unable to load guild dashboard");
-  }
-
-  return (await response.json()) as GuildDashboardData;
 }
 
 class GuildDashboardStatusError extends Error {

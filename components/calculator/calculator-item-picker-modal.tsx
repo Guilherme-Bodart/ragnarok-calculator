@@ -31,6 +31,7 @@ type CalculatorItemPickerModalProps = {
   selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
   selectedItemDetails: Record<number, CalculatorItemDetail>;
   selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
+  learnedSkills?: Record<string, number>;
   onClose: () => void;
   onItemContextsChange: (
     contexts: Record<number, { refine?: number; grade?: number }>,
@@ -50,6 +51,7 @@ export function CalculatorItemPickerModal({
   selectedCardsBySlot,
   selectedItemDetails,
   selectedItemsBySlot,
+  learnedSkills,
   onClose,
   onItemContextsChange,
   onSelectedCardsBySlotChange,
@@ -219,6 +221,7 @@ export function CalculatorItemPickerModal({
         selectedCards={selectedCards}
         selectedItemDetails={selectedItemDetails}
         selectedItemsBySlot={selectedItemsBySlot}
+        learnedSkills={learnedSkills}
       />
 
       <Button type="button" onClick={onClose} className="mt-4 w-full">

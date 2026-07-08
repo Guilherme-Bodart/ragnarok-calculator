@@ -12,6 +12,7 @@ import type {
 } from "@/packages/calculator-core/src";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorSkillIcon } from "./calculator-skill-icon";
+import { useCalculatorBuildStore } from "./calculator-build-store";
 
 export type CalculatorAttackSkill = RoSkill & {
   numericId?: number;
@@ -22,9 +23,6 @@ type CalculatorAttackPanelProps = {
   copy: CalculatorDictionary;
   resultMeta: CalculationMeta;
   selectedSkill: CalculatorAttackSkill;
-  skillLevel: number;
-  onSkillChange: (skillId: string) => void;
-  onSkillLevelChange: (skillLevel: number) => void;
   result?: CalculateDamageResult;
 };
 
@@ -33,15 +31,28 @@ export function CalculatorAttackPanel({
   copy,
   resultMeta,
   selectedSkill,
-  skillLevel,
-  onSkillChange,
-  onSkillLevelChange,
   result,
 }: CalculatorAttackPanelProps) {
+  const selectedSkillId = useCalculatorBuildStore((s) => s.selectedSkillId);
+  const setSelectedSkillId = useCalculatorBuildStore((s) => s.setSelectedSkillId);
+  
+  const skillLevel = useCalculatorBuildStore((s) => s.skillLevel);
+  const setSkillLevel = useCalculatorBuildStore((s) => s.setSkillLevel);
+
+  function handleSkillChange(skillId: string) {
+    const nextSkill =
+      availableSkills.find((skill) => skill.id === skillId) ?? selectedSkill;
+
+    setSelectedSkillId(nextSkill.id);
+    setSkillLevel(Math.min(skillLevel, nextSkill.maxLevel));
+  }
+
+  const effectiveSkillLevel = Math.min(skillLevel, selectedSkill.maxLevel);
+
   const hitCount =
-    selectedSkill.hitCountByLevel?.[String(skillLevel)] ?? selectedSkill.hitCount;
+    selectedSkill.hitCountByLevel?.[String(effectiveSkillLevel)] ?? selectedSkill.hitCount;
   const multiplier =
-    selectedSkill.baseMultiplierByLevel[String(skillLevel)] ??
+    selectedSkill.baseMultiplierByLevel[String(effectiveSkillLevel)] ??
     selectedSkill.baseMultiplierByLevel[String(selectedSkill.maxLevel)] ??
     100;
   const hasPrototypeWarning = resultMeta.precision === "prototype";
@@ -64,8 +75,8 @@ export function CalculatorAttackPanel({
       <div className="grid grid-cols-[minmax(0,1fr)_140px] gap-3">
         <Field label={copy.attack.skillLabel}>
           <RichSelect
-            value={selectedSkill.id}
-            onChange={onSkillChange}
+            value={selectedSkillId}
+            onChange={handleSkillChange}
             searchPlaceholder={copy.attack.searchPlaceholder}
             className="bg-slate-950/60 border-slate-700/50"
             groups={[
@@ -91,8 +102,8 @@ export function CalculatorAttackPanel({
             fit="fill"
             max={selectedSkill.maxLevel}
             prefix="Lv."
-            value={Math.min(skillLevel, selectedSkill.maxLevel)}
-            onChange={onSkillLevelChange}
+            value={effectiveSkillLevel}
+            onChange={setSkillLevel}
           />
         </Field>
       </div>

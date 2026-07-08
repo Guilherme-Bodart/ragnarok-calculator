@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Boxes, CopyPlus, Save, Trash2 } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { IconButton } from "@/components/ui/icon-button";
@@ -34,137 +35,111 @@ export function CalculatorBuildsModal({
   onRenameBuild,
 }: CalculatorBuildsModalProps) {
   const t = copy.builds;
-  const [builds, setBuilds] = useState<CalculatorAccountBuild[]>([]);
+  const queryClient = useQueryClient();
   const [message, setMessage] = useState("");
   const [selectedBuildId, setSelectedBuildId] = useState<string | null>(null);
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "saving" | "deleting" | "unauthenticated" | "error"
-  >("loading");
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["calculator-builds"],
+    queryFn: async () => {
+      const result = await listCalculatorAccountBuilds();
+      if (result.status === "unauthenticated") {
+        throw new CalculatorBuildsUnauthenticatedError();
+      }
+      return result.builds;
+    },
+    retry: false,
+  });
+
+  const builds = data ?? [];
   const selectedBuild = selectedBuildId
     ? builds.find((build) => build.id === selectedBuildId)
     : null;
-  const isBusy = status === "saving" || status === "deleting";
 
-  useEffect(() => {
-    let isCurrent = true;
-
-    listCalculatorAccountBuilds()
-      .then((result) => {
-        if (!isCurrent) return;
-
-        setBuilds(result.builds);
-        setStatus(
-          result.status === "unauthenticated" ? "unauthenticated" : "idle",
-        );
-        setMessage(
-          result.status === "unauthenticated"
-            ? t.unauthenticatedMessage
-            : "",
-        );
-      })
-      .catch(() => {
-        if (!isCurrent) return;
-
-        setStatus("error");
-        setMessage(t.loadError);
+  const createMutation = useMutation({
+    mutationFn: (payload: CalculatorBuildPayload) => saveCalculatorAccountBuild(payload),
+    onSuccess: (savedBuild) => {
+      queryClient.setQueryData<CalculatorAccountBuild[]>(["calculator-builds"], (old) => {
+        return old ? [savedBuild, ...old] : [savedBuild];
       });
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [t.loadError, t.unauthenticatedMessage]);
-
-  async function handleCreate() {
-    setStatus("saving");
-    setMessage("");
-
-    try {
-      const savedBuild = await saveCalculatorAccountBuild(currentBuild);
-
-      setBuilds((currentBuilds) => [
-        savedBuild,
-        ...currentBuilds.filter((build) => build.id !== savedBuild.id),
-      ]);
       setSelectedBuildId(savedBuild.id);
-      setStatus("idle");
       setMessage(t.savedMessage);
       onMarkAsSaved();
-    } catch (error: any) {
-      setStatus("error");
-      setMessage(error?.message || t.saveError);
-    }
-  }
+    },
+    onError: (err: Error) => setMessage(err.message || t.saveError),
+  });
 
-  async function handleUpdate() {
-    if (!selectedBuildId) {
-      return;
-    }
-
-    setStatus("saving");
-    setMessage("");
-
-    try {
-      const updatedBuild = await updateCalculatorAccountBuild(
-        selectedBuildId,
-        currentBuild,
-      );
-
-      setBuilds((currentBuilds) =>
-        currentBuilds.map((build) =>
-          build.id === updatedBuild.id ? updatedBuild : build,
-        ),
-      );
-      setStatus("idle");
+  const updateMutation = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: CalculatorBuildPayload }) => 
+      updateCalculatorAccountBuild(id, payload),
+    onSuccess: (updatedBuild) => {
+      queryClient.setQueryData<CalculatorAccountBuild[]>(["calculator-builds"], (old) => {
+        return old ? old.map((b) => b.id === updatedBuild.id ? updatedBuild : b) : [updatedBuild];
+      });
       setMessage(t.updatedMessage);
       onMarkAsSaved();
-    } catch (error: any) {
-      setStatus("error");
-      setMessage(error?.message || t.updateError);
-    }
-  }
+    },
+    onError: (err: Error) => setMessage(err.message || t.updateError),
+  });
 
-  async function handleDelete(buildId: string) {
-    setStatus("deleting");
-
-    try {
-      await deleteCalculatorAccountBuild(buildId);
-      setBuilds((currentBuilds) =>
-        currentBuilds.filter((build) => build.id !== buildId),
-      );
-      if (selectedBuildId === buildId) {
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteCalculatorAccountBuild(id),
+    onSuccess: (_, deletedId) => {
+      queryClient.setQueryData<CalculatorAccountBuild[]>(["calculator-builds"], (old) => {
+        return old ? old.filter((b) => b.id !== deletedId) : [];
+      });
+      if (selectedBuildId === deletedId) {
         setSelectedBuildId(null);
       }
-      setStatus("idle");
       setMessage(t.deletedMessage);
-    } catch {
-      setStatus("error");
-      setMessage(t.deleteError);
-    }
-  }
+    },
+    onError: () => setMessage(t.deleteError),
+  });
 
-  async function handleDuplicate(build: CalculatorAccountBuild) {
-    setStatus("saving");
-    setMessage("");
-
-    try {
+  const duplicateMutation = useMutation({
+    mutationFn: (build: CalculatorAccountBuild) => {
       const payload = cloneBuildPayload(build.payload);
       payload.name = `${build.name} ${t.duplicateSuffix}`;
-      const savedBuild = await saveCalculatorAccountBuild(payload);
-
-      setBuilds((currentBuilds) => [
-        savedBuild,
-        ...currentBuilds.filter(
-          (currentBuild) => currentBuild.id !== savedBuild.id,
-        ),
-      ]);
+      return saveCalculatorAccountBuild(payload);
+    },
+    onSuccess: (savedBuild) => {
+      queryClient.setQueryData<CalculatorAccountBuild[]>(["calculator-builds"], (old) => {
+        return old ? [savedBuild, ...old] : [savedBuild];
+      });
       setSelectedBuildId(savedBuild.id);
-      setStatus("idle");
       setMessage(t.duplicatedMessage);
       onMarkAsSaved();
-    } catch (error: any) {
-      setStatus("error");
-      setMessage(error?.message || t.duplicateError);
-    }
+    },
+    onError: (err: Error) => setMessage(err.message || t.duplicateError),
+  });
+
+  const isBusy = createMutation.isPending || updateMutation.isPending || deleteMutation.isPending || duplicateMutation.isPending;
+
+  // Process status message from fetch query
+  let statusMessage = message;
+  if (error) {
+    statusMessage = error instanceof CalculatorBuildsUnauthenticatedError ? t.unauthenticatedMessage : t.loadError;
+  }
+
+  function handleCreate() {
+    setMessage("");
+    createMutation.mutate(currentBuild);
+  }
+
+  function handleUpdate() {
+    if (!selectedBuildId) return;
+    setMessage("");
+    updateMutation.mutate({ id: selectedBuildId, payload: currentBuild });
+  }
+
+  function handleDelete(buildId: string) {
+    setMessage("");
+    deleteMutation.mutate(buildId);
+  }
+
+  function handleDuplicate(build: CalculatorAccountBuild) {
+    setMessage("");
+    duplicateMutation.mutate(build);
   }
 
   return (
@@ -211,7 +186,7 @@ export function CalculatorBuildsModal({
         ) : null}
 
         <div className="calculator-build-list" aria-live="polite">
-          {status === "loading" ? (
+          {isLoading ? (
             <p>{t.loading}</p>
           ) : builds.length > 0 ? (
             builds.map((build) => (
@@ -256,7 +231,7 @@ export function CalculatorBuildsModal({
           )}
         </div>
 
-        {message ? <p className="calculator-build-message">{message}</p> : null}
+        {statusMessage ? <p className="calculator-build-message">{statusMessage}</p> : null}
     </Modal>
   );
 }
@@ -270,4 +245,10 @@ function formatBuildDate(value: string) {
 
 function cloneBuildPayload(payload: CalculatorBuildPayload): CalculatorBuildPayload {
   return JSON.parse(JSON.stringify(payload)) as CalculatorBuildPayload;
+}
+
+class CalculatorBuildsUnauthenticatedError extends Error {
+  constructor() {
+    super("Unauthenticated");
+  }
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { EquipmentSlot } from "@/packages/calculator-core/src";
+import { useMemo } from "react";
 import {
   getCalculatorManualBuffSkills,
   getActiveCalculatorBuffItemIds,
@@ -10,12 +9,6 @@ import {
   calculatorBuildPayloadVersion,
   type CalculatorBuildPayload,
 } from "./calculator-build-payload";
-import {
-  calculatorBuildStorageKey,
-  createDefaultCalculatorBuild,
-  readSavedCalculatorBuild,
-} from "./calculator-build-storage";
-import { defaultCalculatorInput } from "./calculator-base-data";
 import { useCalculatorItemDetails } from "./use-calculator-item-details";
 import { useCalculatorMonsterDetail } from "./use-calculator-monster-detail";
 import type { CalculatorItemDetail } from "./calculator-item-data";
@@ -26,81 +19,52 @@ import {
 import {
   calculatorSkillTreeCatalog,
   calculatorSkillTreeClassOptions,
-  isFourthJobClassId,
 } from "./calculator-skill-tree-data";
 import type { CalculatorDictionary } from "./calculator-i18n";
+import { useCalculatorBuildStore } from "./calculator-build-store";
 
 export function useCalculatorBuildState(copy: CalculatorDictionary) {
-  const [savedBuild] = useState(createDefaultCalculatorBuild);
-  const hasLoadedSavedBuildRef = useRef(false);
-  const skipNextModificationRef = useRef(false);
-  const [buildName, setBuildName] = useState(savedBuild.name);
-  const [lastSavedAt, setLastSavedAt] = useState(Date.now());
-  const [lastModifiedAt, setLastModifiedAt] = useState(Date.now());
-  const [selectedClassId, setSelectedClassId] = useState(
-    savedBuild.character.selectedClassId,
-  );
-  const [learnedSkills, setLearnedSkills] = useState<Record<string, number>>(
-    savedBuild.tree.learnedSkills,
-  );
-  const [baseLevel, setBaseLevel] = useState(savedBuild.character.baseLevel);
-  const [jobLevel, setJobLevel] = useState(savedBuild.character.jobLevel);
-  const [stats, setStats] = useState(savedBuild.character.stats);
-  const [selectedSkillId, setSelectedSkillId] = useState(
-    savedBuild.attack.selectedSkillId,
-  );
-  const [skillLevel, setSkillLevel] = useState(savedBuild.attack.skillLevel);
-  const [selectedMonsterId, setSelectedMonsterId] = useState(
-    savedBuild.target.selectedMonsterId,
-  );
-  const [activeBuffs, setActiveBuffs] = useState<Record<string, number>>(
-    savedBuild.buffs.activeBuffs,
-  );
-  const [selectedBuffId, setSelectedBuffId] = useState(
-    savedBuild.buffs.selectedBuffId,
-  );
-  const [selectedItemsBySlot, setSelectedItemsBySlot] = useState<
-    Partial<Record<EquipmentSlot, number>>
-  >(savedBuild.equipment.selectedItemsBySlot);
-  const [selectedCardsBySlot, setSelectedCardsBySlot] = useState<
-    Partial<Record<EquipmentSlot, number[]>>
-  >(savedBuild.equipment.selectedCardsBySlot);
-  const [itemContexts, setItemContexts] = useState<
-    Record<number, { refine?: number; grade?: number }>
-  >(savedBuild.equipment.itemContexts);
+  const store = useCalculatorBuildStore();
 
   const { selectedItemDetails, setSelectedItemDetails } = useCalculatorItemDetails(
-    selectedItemsBySlot,
-    selectedCardsBySlot,
+    store.selectedItemsBySlot,
+    store.selectedCardsBySlot,
   );
+  
   const { selectedMonsterDetail, setSelectedMonsterDetail } =
-    useCalculatorMonsterDetail(selectedMonsterId);
+    useCalculatorMonsterDetail(store.selectedMonsterId);
 
   const selectedClassSkills = useMemo(
-    () => getCalculatorClassSkills(calculatorSkillTreeCatalog, selectedClassId),
-    [selectedClassId],
+    () => getCalculatorClassSkills(calculatorSkillTreeCatalog, store.selectedClassId),
+    [store.selectedClassId],
   );
+  
   const classBuffSkills = useMemo(
     () =>
-      getCalculatorClassBuffSkills(calculatorSkillTreeCatalog, selectedClassId),
-    [selectedClassId],
+      getCalculatorClassBuffSkills(calculatorSkillTreeCatalog, store.selectedClassId),
+    [store.selectedClassId],
   );
+  
   const manualBuffSkills = useMemo(
     () => getCalculatorManualBuffSkills(copy.buffs),
     [copy.buffs],
   );
+  
   const buffSkills = useMemo(
     () => [...manualBuffSkills, ...classBuffSkills],
     [classBuffSkills, manualBuffSkills],
   );
+  
   const equipmentItemIds = useMemo(
-    () => Object.values(selectedItemsBySlot).filter(isNumber),
-    [selectedItemsBySlot],
+    () => Object.values(store.selectedItemsBySlot).filter(isNumber),
+    [store.selectedItemsBySlot],
   );
+  
   const cardItemIds = useMemo(
-    () => Object.values(selectedCardsBySlot).flat().filter(isNumber),
-    [selectedCardsBySlot],
+    () => Object.values(store.selectedCardsBySlot).flat().filter(isNumber),
+    [store.selectedCardsBySlot],
   );
+  
   const selectedCalculatorItems = useMemo(
     () =>
       [...equipmentItemIds, ...cardItemIds]
@@ -108,245 +72,142 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
         .filter((item): item is CalculatorItemDetail => Boolean(item)),
     [cardItemIds, equipmentItemIds, selectedItemDetails],
   );
+  
   const resolvedEquipmentItemIds = useMemo(
     () => equipmentItemIds.filter((itemId) => Boolean(selectedItemDetails[itemId])),
     [equipmentItemIds, selectedItemDetails],
   );
+  
   const resolvedCardItemIds = useMemo(
     () => cardItemIds.filter((itemId) => Boolean(selectedItemDetails[itemId])),
     [cardItemIds, selectedItemDetails],
   );
+  
   const selectedClassName =
-    calculatorSkillTreeClassOptions.find((job) => job.id === selectedClassId)
-      ?.name ?? selectedClassId.replace(/_/g, " ");
+    calculatorSkillTreeClassOptions.find((job) => job.id === store.selectedClassId)
+      ?.name ?? store.selectedClassId.replace(/_/g, " ");
+      
   const effectiveLearnedSkills = useMemo(
-    () => ({ ...learnedSkills, ...activeBuffs }),
-    [activeBuffs, learnedSkills],
+    () => ({ ...store.learnedSkills, ...store.activeBuffs }),
+    [store.activeBuffs, store.learnedSkills],
   );
+  
   const activeBuffItemIds = useMemo(
-    () => getActiveCalculatorBuffItemIds(activeBuffs),
-    [activeBuffs],
+    () => getActiveCalculatorBuffItemIds(store.activeBuffs),
+    [store.activeBuffs],
   );
+  
   const currentBuild = useMemo<CalculatorBuildPayload>(
     () => ({
       version: calculatorBuildPayloadVersion,
-      name: buildName,
+      name: store.buildName,
       character: {
-        selectedClassId,
-        baseLevel,
-        jobLevel,
-        stats,
+        selectedClassId: store.selectedClassId,
+        baseLevel: store.baseLevel,
+        jobLevel: store.jobLevel,
+        stats: store.stats,
       },
       attack: {
-        selectedSkillId,
-        skillLevel,
+        selectedSkillId: store.selectedSkillId,
+        skillLevel: store.skillLevel,
       },
       tree: {
-        learnedSkills,
+        learnedSkills: store.learnedSkills,
       },
       equipment: {
-        itemContexts,
-        selectedCardsBySlot,
-        selectedItemsBySlot,
+        itemContexts: store.itemContexts,
+        selectedCardsBySlot: store.selectedCardsBySlot,
+        selectedItemsBySlot: store.selectedItemsBySlot,
       },
       buffs: {
-        activeBuffs,
-        selectedBuffId,
+        activeBuffs: store.activeBuffs,
+        selectedBuffId: store.selectedBuffId,
       },
       target: {
-        selectedMonsterId,
+        selectedMonsterId: store.selectedMonsterId,
       },
     }),
     [
-      activeBuffs,
-      baseLevel,
-      buildName,
-      itemContexts,
-      jobLevel,
-      learnedSkills,
-      selectedBuffId,
-      selectedCardsBySlot,
-      selectedClassId,
-      selectedItemsBySlot,
-      selectedMonsterId,
-      selectedSkillId,
-      skillLevel,
-      stats,
+      store.activeBuffs,
+      store.baseLevel,
+      store.buildName,
+      store.itemContexts,
+      store.jobLevel,
+      store.learnedSkills,
+      store.selectedBuffId,
+      store.selectedCardsBySlot,
+      store.selectedClassId,
+      store.selectedItemsBySlot,
+      store.selectedMonsterId,
+      store.selectedSkillId,
+      store.skillLevel,
+      store.stats,
     ],
   );
 
-  useEffect(() => {
-    if (!hasLoadedSavedBuildRef.current) {
-      return;
-    }
-
-    if (skipNextModificationRef.current) {
-      skipNextModificationRef.current = false;
-    } else {
-      setLastModifiedAt(Date.now());
-    }
-
-    window.localStorage.setItem(
-      calculatorBuildStorageKey,
-      JSON.stringify(currentBuild),
-    );
-  }, [currentBuild]);
-
-  useEffect(() => {
-    loadBuild(readSavedCalculatorBuild());
-    hasLoadedSavedBuildRef.current = true;
-  }, []);
-
-  const loadBuild = useCallback((nextBuild: CalculatorBuildPayload) => {
-    skipNextModificationRef.current = true;
-    setBuildName(nextBuild.name);
-    setSelectedClassId(nextBuild.character.selectedClassId);
-    setLearnedSkills(nextBuild.tree.learnedSkills);
-    setBaseLevel(nextBuild.character.baseLevel);
-    setJobLevel(nextBuild.character.jobLevel);
-    setStats(nextBuild.character.stats);
-    setSelectedSkillId(nextBuild.attack.selectedSkillId);
-    setSkillLevel(nextBuild.attack.skillLevel);
-    setSelectedMonsterId(nextBuild.target.selectedMonsterId);
-    setActiveBuffs(nextBuild.buffs.activeBuffs);
-    setSelectedBuffId(nextBuild.buffs.selectedBuffId);
-    setSelectedItemsBySlot(nextBuild.equipment.selectedItemsBySlot);
-    setSelectedCardsBySlot(nextBuild.equipment.selectedCardsBySlot);
-    setItemContexts(nextBuild.equipment.itemContexts);
-    setSelectedItemDetails({});
-    setSelectedMonsterDetail(null);
-    markAsSaved();
-  }, []);
-
-  function markAsSaved() {
-    const now = Date.now();
-    setLastSavedAt(now);
-    setLastModifiedAt(now);
-  }
-
-  function renameBuild(nextName: string) {
-    setBuildName(nextName);
-  }
-
   function handleClassChange(classId: string) {
-    const isFourthJob = isFourthJobClassId(classId);
-
-    setSelectedClassId(classId);
-    setLearnedSkills({});
-    setActiveBuffs({});
-    setJobLevel((currentJobLevel) =>
-      Math.min(currentJobLevel, isFourthJob ? 70 : 60),
-    );
-
-    const nextSkills = getCalculatorClassSkills(calculatorSkillTreeCatalog, classId);
-    const nextSkill = nextSkills[0];
-
-    if (nextSkill) {
-      setSelectedSkillId(nextSkill.id);
-      setSkillLevel(Math.min(skillLevel, nextSkill.maxLevel));
-    }
-
-    setSelectedBuffId(manualBuffSkills[0]?.id ?? "");
-
-    if (!isFourthJob) {
-      setStats((currentStats) => ({
-        ...currentStats,
-        pow: 0,
-        sta: 0,
-        wis: 0,
-        spl: 0,
-        con: 0,
-        crt: 0,
-      }));
-    }
+    store.handleClassChange(classId, manualBuffSkills);
   }
 
   function resetBuild() {
-    const defaultClassId =
-      defaultCalculatorInput.character.classId ?? "Dragon_Knight";
+    store.resetBuild();
+    setSelectedItemDetails({});
+    setSelectedMonsterDetail(null);
+  }
 
-    skipNextModificationRef.current = true;
-    window.localStorage.removeItem(calculatorBuildStorageKey);
-    setBuildName(createDefaultCalculatorBuild().name);
-
-    // Agora sim, reseta o form
-    setSelectedClassId(defaultClassId);
-    setStats({
-      str: 1,
-      agi: 1,
-      vit: 1,
-      int: 1,
-      dex: 1,
-      luk: 1,
-      pow: 0,
-      sta: 0,
-      wis: 0,
-      spl: 0,
-      con: 0,
-      crt: 0,
-    });
-    setBaseLevel(defaultCalculatorInput.character.baseLevel);
-    setJobLevel(defaultCalculatorInput.character.jobLevel);
-    setLearnedSkills({});
-    setSelectedSkillId(defaultCalculatorInput.skillId);
-    setSkillLevel(defaultCalculatorInput.skillLevel);
-    setSelectedMonsterId(defaultCalculatorInput.monsterId);
-    setActiveBuffs({});
-    setSelectedBuffId("");
-    setSelectedItemsBySlot({});
-    setSelectedCardsBySlot({});
-    setItemContexts({});
+  function loadBuild(nextBuild: CalculatorBuildPayload) {
+    store.loadBuild(nextBuild);
     setSelectedItemDetails({});
     setSelectedMonsterDetail(null);
   }
 
   return {
     activeBuffItemIds,
-    activeBuffs,
-    baseLevel,
-    buildName,
+    activeBuffs: store.activeBuffs,
+    baseLevel: store.baseLevel,
+    buildName: store.buildName,
     buffSkills,
     cardItemIds,
     effectiveLearnedSkills,
     equipmentItemIds,
     handleClassChange,
-    itemContexts,
-    jobLevel,
-    lastModifiedAt,
-    lastSavedAt,
-    learnedSkills,
+    itemContexts: store.itemContexts,
+    jobLevel: store.jobLevel,
+    lastModifiedAt: store.lastModifiedAt,
+    lastSavedAt: store.lastSavedAt,
+    learnedSkills: store.learnedSkills,
     loadBuild,
-    markAsSaved,
+    markAsSaved: store.markAsSaved,
     resetBuild,
     resolvedCardItemIds,
     resolvedEquipmentItemIds,
-    selectedBuffId,
+    selectedBuffId: store.selectedBuffId,
     selectedCalculatorItems,
-    selectedCardsBySlot,
-    selectedClassId,
+    selectedCardsBySlot: store.selectedCardsBySlot,
+    selectedClassId: store.selectedClassId,
     selectedClassName,
     selectedClassSkills,
     selectedItemDetails,
-    selectedItemsBySlot,
+    selectedItemsBySlot: store.selectedItemsBySlot,
     selectedMonsterDetail,
-    selectedMonsterId,
-    selectedSkillId,
-    setActiveBuffs,
-    setBaseLevel,
-    setItemContexts,
-    setJobLevel,
-    setLearnedSkills,
-    setSelectedBuffId,
-    setSelectedCardsBySlot,
-    setSelectedItemsBySlot,
-    setSelectedMonsterId,
-    setSelectedSkillId,
-    setSkillLevel,
-    setStats,
-    skillLevel,
-    stats,
+    selectedMonsterId: store.selectedMonsterId,
+    selectedSkillId: store.selectedSkillId,
+    setActiveBuffs: store.setActiveBuffs,
+    setBaseLevel: store.setBaseLevel,
+    setItemContexts: store.setItemContexts,
+    setJobLevel: store.setJobLevel,
+    setLearnedSkills: store.setLearnedSkills,
+    setSelectedBuffId: store.setSelectedBuffId,
+    setSelectedCardsBySlot: store.setSelectedCardsBySlot,
+    setSelectedItemsBySlot: store.setSelectedItemsBySlot,
+    setSelectedMonsterId: store.setSelectedMonsterId,
+    setSelectedSkillId: store.setSelectedSkillId,
+    setSkillLevel: store.setSkillLevel,
+    setStats: store.setStats,
+    skillLevel: store.skillLevel,
+    stats: store.stats,
     currentBuild,
-    renameBuild,
+    renameBuild: store.renameBuild,
   };
 }
 

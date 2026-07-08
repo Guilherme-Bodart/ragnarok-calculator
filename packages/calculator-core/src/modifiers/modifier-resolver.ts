@@ -61,6 +61,30 @@ export class ModifierResolver {
       );
     }
 
+    if (condition.type === "equip_refine") {
+      const slotMap: Record<number, string[]> = {
+        1: ["headTop"],
+        2: ["armor"],
+        3: ["shield", "weapon"],
+        4: ["weapon", "shield"],
+        5: ["garment"],
+        6: ["shoes"],
+        7: ["accessoryLeft"],
+        8: ["accessoryRight"],
+        9: ["headMid"],
+        10: ["headLow"],
+      };
+      const slots = slotMap[condition.locationId] || [];
+      let actualRefine = 0;
+      for (const slot of slots) {
+        if (context.refinesBySlot?.[slot] !== undefined) {
+          actualRefine = context.refinesBySlot[slot];
+          break;
+        }
+      }
+      return this.compare(actualRefine, condition.operator, condition.value);
+    }
+
     return false;
   }
 

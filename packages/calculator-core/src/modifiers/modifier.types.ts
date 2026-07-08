@@ -88,6 +88,12 @@ export const modifierConditionSchema = z.discriminatedUnion("type", [
     type: z.literal("equipped"),
     itemIds: z.array(z.number().int()),
   }),
+  z.object({
+    type: z.literal("equip_refine"),
+    locationId: z.number().int(),
+    operator: z.enum([">", ">=", "<", "<=", "==", "!="]),
+    value: z.number().int(),
+  }),
 ]);
 
 export const normalizedModifierSchema = z.object({
@@ -141,6 +147,12 @@ export const normalizedModifierSchema = z.object({
     "skillVariableCastRate",
     "skillFixedCastRate",
     "skillFixedCast",
+    "unbreakableArmor",
+    "unbreakableWeapon",
+    "unbreakableShield",
+    "unbreakableHelm",
+    "unbreakableShoes",
+    "unbreakableGarment",
     "raceDamageRate",
     "elementDamageRate",
     "sizeDamageRate",

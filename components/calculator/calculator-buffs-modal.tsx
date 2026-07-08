@@ -9,23 +9,23 @@ import type { CalculatorDictionary } from "./calculator-i18n";
 import type { CalculatorPanelSkill } from "./calculator-character-panel";
 import { CalculatorSkillIcon } from "./calculator-skill-icon";
 import { getCalculatorBuffGroup, getCalculatorBuffPreview } from "./calculator-buff-data";
+import { useCalculatorBuildStore } from "./calculator-build-store";
 
 type CalculatorBuffsModalProps = {
-  activeBuffs: Record<string, number>;
   buffSkills: CalculatorPanelSkill[];
   copy: CalculatorDictionary;
-  onActiveBuffsChange: (buffs: Record<string, number>) => void;
   onClose: () => void;
 };
 
 export function CalculatorBuffsModal({
-  activeBuffs,
   buffSkills,
   copy,
-  onActiveBuffsChange,
   onClose,
 }: CalculatorBuffsModalProps) {
   const [activeTab, setActiveTab] = useState<"buffs" | "consumables">("buffs");
+  
+  const activeBuffs = useCalculatorBuildStore((s) => s.activeBuffs);
+  const setActiveBuffs = useCalculatorBuildStore((s) => s.setActiveBuffs);
 
   const classSkills = buffSkills.filter(
     (skill) => getCalculatorBuffGroup(skill.id) === "class-skill",
@@ -44,12 +44,12 @@ export function CalculatorBuffsModal({
     } else {
       nextBuffs[skillId] = maxLevel;
     }
-    onActiveBuffsChange(nextBuffs);
+    setActiveBuffs(nextBuffs);
   }
 
   function setBuffLevel(skillId: string, level: number) {
     if (!activeBuffs[skillId]) return;
-    onActiveBuffsChange({
+    setActiveBuffs({
       ...activeBuffs,
       [skillId]: level,
     });

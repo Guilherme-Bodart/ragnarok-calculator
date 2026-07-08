@@ -10,6 +10,7 @@ import { CalculatorItemIcon } from "./calculator-item-icon";
 import { ItemModifierPipeline } from "@/packages/calculator-core/src";
 import skillsEn from "@/nightmare-data/normalized/skills/skills.en.json";
 import itemsEn from "@/nightmare-data/normalized/items/items.en.json";
+import comboIndexMap from "@/public/data/calculator/items/combos.json";
 
 function formatGameDescription(desc: string | undefined | null) {
   if (!desc) return null;
@@ -40,6 +41,7 @@ type CalculatorItemPreviewProps = {
   selectedCards: number[];
   selectedItemDetails: Record<number, CalculatorItemDetail>;
   selectedItemsBySlot?: Partial<Record<string, number>>; // Optional, to check combo active states
+  learnedSkills?: Record<string, number>;
 };
 
 function translateSize(size: string): string {
@@ -113,7 +115,13 @@ function formatModifierName(stat: string): string {
     criticalDamageRate: "Dano Crítico", perfectHitRate: "Precisão Perfeita",
     aspd: "ASPD", aspdRate: "ASPD", hit: "Precisão", flee: "Esquiva", crit: "Crítico",
     variableCastRate: "Conjuração variável", afterCastDelayRate: "Pós-conjuração",
-    fixedCast: "Conjuração fixa", spCostRate: "Custo de SP"
+    fixedCast: "Conjuração fixa", spCostRate: "Custo de SP",
+    unbreakableArmor: "Armadura Indestrutível",
+    unbreakableWeapon: "Arma Indestrutível",
+    unbreakableShield: "Escudo Indestrutível",
+    unbreakableHelm: "Capacete Indestrutível",
+    unbreakableShoes: "Sapatos Indestrutíveis",
+    unbreakableGarment: "Capa Indestrutível"
   };
   return statNames[stat] || stat.toUpperCase();
 }
@@ -126,6 +134,7 @@ export function CalculatorItemPreview({
   selectedCards,
   selectedItemDetails,
   selectedItemsBySlot = {},
+  learnedSkills,
 }: CalculatorItemPreviewProps) {
   const [collectionImageError, setCollectionImageError] = useState(false);
   const [tab, setTab] = useState(0); // 0: Propriedades, 1: Efeitos, 2: Conjuntos
@@ -139,6 +148,17 @@ export function CalculatorItemPreview({
 
     const refine = itemContexts[item.id]?.refine ?? 0;
     const grade = itemContexts[item.id]?.grade ?? 0;
+
+    const refinesBySlot: Record<string, number> = {};
+    const equippedItemIds: number[] = [];
+    for (const [slot, itemId] of Object.entries(selectedItemsBySlot)) {
+      if (itemId) {
+        equippedItemIds.push(itemId as number);
+        if (itemContexts[itemId as number]) {
+          refinesBySlot[slot] = itemContexts[itemId as number].refine ?? 0;
+        }
+      }
+    }
 
     // 1. Obter efeitos individuais
     // V(0,0) - Base
@@ -154,73 +174,13 @@ export function CalculatorItemPreview({
     // V(current_r, current_g) - Final com Grade
     const finalEffects = pipeline.getEffects(
       { rawScript: item.rawScript, modifiers: item.modifiers },
-      { refine, grade }
+      { refine, grade, refinesBySlot, equippedItemIds, learnedSkills }
     );
 
     const indEffects: { text: string; active: boolean }[] = [];
-    const setsList: { title: string; text: string; active: boolean }[] = [];
+    const setsList: { title: string; text: string; equipped: boolean; active: boolean }[] = [];
 
-    // Mapear todos os modificadores do item
-    finalEffects.inputModifiers.forEach((mod) => {
-      const isCombo = mod.conditions.some((c) => c.type === "equipped");
-
-      // Formatar as condições (ex: Refino >= 7)
-      const nonComboConds = mod.conditions.filter((c) => c.type !== "equipped");
-      const condsText = nonComboConds
-        .map((c) => {
-          if (c.type === "refine") return `Refino ${c.operator} ${c.value}`;
-          if (c.type === "grade") {
-            const grades = ["Nenhum", "D", "C", "B", "A"];
-            return `Grau ${c.operator} ${grades[c.value] ?? c.value}`;
-          }
-          return "";
-        })
-        .filter(Boolean)
-        .join(" & ");
-
-      const condSuffix = condsText ? ` (Requer ${condsText})` : "";
-
-      // Verificar se este modificador está ativo no refino/grau atual
-      const isActive = finalEffects.applicableModifiers.some(
-        (am) =>
-          am.stat === mod.stat &&
-          am.operator === mod.operator &&
-          JSON.stringify(am.target) === JSON.stringify(mod.target) &&
-          JSON.stringify(am.conditions) === JSON.stringify(mod.conditions)
-      );
-
-      // Calcular base, refino e grau dinamicamente
-      const currentVal = isActive
-        ? finalEffects.applicableModifiers.find(
-            (am) =>
-              am.stat === mod.stat &&
-              am.operator === mod.operator &&
-              JSON.stringify(am.target) === JSON.stringify(mod.target)
-          )?.value ?? mod.value
-        : mod.value;
-
-      // Buscar base correspondente
-      const baseMod = baseEffects.inputModifiers.find(
-        (bm) =>
-          bm.stat === mod.stat &&
-          bm.operator === mod.operator &&
-          JSON.stringify(bm.target) === JSON.stringify(mod.target)
-      );
-      const baseVal = baseMod ? baseMod.value : 0;
-
-      // Buscar refine correspondente
-      const refineOnlyMod = refineOnlyEffects.inputModifiers.find(
-        (rm) =>
-          rm.stat === mod.stat &&
-          rm.operator === mod.operator &&
-          JSON.stringify(rm.target) === JSON.stringify(mod.target)
-      );
-      const refineOnlyVal = refineOnlyMod ? refineOnlyMod.value : 0;
-
-      const refineBonus = refineOnlyVal - baseVal;
-      const gradeBonus = currentVal - refineOnlyVal;
-
-      // Formatar descrição
+    const formatMod = (mod: any) => {
       const name = formatModifierName(mod.stat);
       const isPercent = mod.stat.endsWith("Rate") || [
         "atkRate", "matkRate", "shortAttackRate", "longAttackRate",
@@ -241,9 +201,78 @@ export function CalculatorItemPreview({
           targetStr = ` de [${sk?.description || sk?.name || targetSkillId}]`;
         }
       }
+      let prefix = "";
+      if (mod.stat.startsWith("unbreakable")) {
+        return { name, unit: "", targetStr: "" };
+      }
+      return { name, unit, targetStr };
+    };
+
+    // Mapear todos os modificadores do item
+    finalEffects.inputModifiers.forEach((mod, index) => {
+      const isCombo = mod.conditions.some((c) => c.type === "equipped");
+
+      // Formatar as condições (ex: Refino >= 7)
+      const nonComboConds = mod.conditions.filter((c) => c.type !== "equipped");
+      const condsText = nonComboConds
+        .map((c) => {
+          if (c.type === "refine") return `Refino ${c.operator} ${c.value}`;
+          if (c.type === "grade") {
+            const grades = ["Nenhum", "D", "C", "B", "A"];
+            return `Grau ${c.operator} ${grades[c.value] ?? c.value}`;
+          }
+          if (c.type === "equip_refine") {
+            const slotMap: Record<number, string> = {
+              1: "Topo", 2: "Armadura", 3: "Escudo", 4: "Arma", 5: "Capa", 6: "Sapatos", 7: "Acessório Esq.", 8: "Acessório Dir.", 9: "Meio", 10: "Baixo"
+            };
+            return `Refino (${slotMap[c.locationId] || "Item"}) ${c.operator} ${c.value}`;
+          }
+          return "";
+        })
+        .filter(Boolean)
+        .join(" & ");
+
+      const condSuffix = condsText ? ` (Requer ${condsText})` : "";
+
+      // Verificar se este modificador está ativo no refino/grau atual
+      const isActive = finalEffects.applicableModifiers.some(
+        (am) =>
+          am.stat === mod.stat &&
+          am.operator === mod.operator &&
+          JSON.stringify(am.target) === JSON.stringify(mod.target) &&
+          JSON.stringify(am.conditions) === JSON.stringify(mod.conditions)
+      );
+
+      // Calcular base, refino e grau dinamicamente
+      const currentVal = isActive
+        ? finalEffects.applicableModifiers.find(
+            (am) => am === mod // since we use applicableModifiers which are references to the same objects if they passed resolver, wait, are they?
+            // Resolver filters the inputModifiers directly: `return modifiers.filter(...)` so they are the EXACT SAME objects.
+            // Let's just use mod.value! Wait, if it's active, the value in `mod` IS the current value! 
+            // `finalEffects.inputModifiers` contains the fully evaluated modifiers for the CURRENT context.
+          )?.value ?? mod.value
+        : mod.value;
+
+      // Buscar base correspondente
+      const baseMod = baseEffects.inputModifiers[index];
+      const baseVal = baseMod ? baseMod.value : 0;
+
+      // Buscar refine correspondente
+      const refineOnlyMod = refineOnlyEffects.inputModifiers[index];
+      const refineOnlyVal = refineOnlyMod ? refineOnlyMod.value : 0;
+
+      const refineBonus = refineOnlyVal - baseVal;
+      const gradeBonus = currentVal - refineOnlyVal;
+
+      // Formatar descrição
+      const { name, unit, targetStr } = formatMod(mod);
 
       let parts: string[] = [];
-      if (isActive) {
+      const isUnbreakable = mod.stat.startsWith("unbreakable");
+
+      if (isUnbreakable) {
+        parts.push(name + condSuffix);
+      } else if (isActive) {
         if (baseVal !== 0) {
           parts.push(`${name} +${baseVal}${unit}${targetStr}`);
         }
@@ -279,16 +308,68 @@ export function CalculatorItemPreview({
         setsList.push({
           title: `[${item.name}] + [${requiredNames.join(" + ")}]`,
           text: descText,
-          active: isComboActive,
+          equipped: isComboActive,
+          active: isActive,
         });
       } else {
         indEffects.push({ text: descText, active: isActive });
       }
     });
 
+    // Processar combos externos (itens que pedem o item atual no combo)
+    const externalComboItemIds = (comboIndexMap as Record<string, number[]>)[String(item.id)] || [];
+    for (const extId of externalComboItemIds) {
+      const extDbItem = itemsEn.find((i) => i.itemId === extId);
+      if (!extDbItem || !extDbItem.rawScript) continue;
+
+      try {
+        const extEffects = pipeline.getEffects(
+          { rawScript: extDbItem.rawScript, modifiers: [] },
+          { refine: 0, grade: 0, refinesBySlot, equippedItemIds } // Ignora refine e grade do item externo na preview
+        );
+
+        extEffects.inputModifiers.forEach((mod) => {
+          const equippedCond = mod.conditions.find((c) => c.type === "equipped");
+          if (!equippedCond || !equippedCond.itemIds.includes(item.id)) return;
+
+          const { name, unit, targetStr } = formatMod(mod);
+          const descText = `${name} +${mod.value}${unit}${targetStr}`;
+
+          const isExtEquipped = Object.values(selectedItemsBySlot).includes(extId);
+          const requiredItemIds = equippedCond.itemIds.filter((id) => id !== extId);
+          const isComboActive = isExtEquipped && requiredItemIds.every((id) =>
+            Object.values(selectedItemsBySlot).includes(id)
+          );
+
+          const requiredNames = equippedCond.itemIds.map((id) => {
+            const dbItem = itemsEn.find((i) => i.itemId === id);
+            return dbItem ? dbItem.name : `Item #${id}`;
+          });
+
+          const isActive = extEffects.applicableModifiers.some(
+            (am) =>
+              am.stat === mod.stat &&
+              am.operator === mod.operator &&
+              JSON.stringify(am.target) === JSON.stringify(mod.target) &&
+              JSON.stringify(am.conditions) === JSON.stringify(mod.conditions)
+          );
+
+          setsList.push({
+            title: `[${extDbItem.name}] + [${requiredNames.filter(n => n !== extDbItem.name).join(" + ")}]`,
+            text: descText,
+            equipped: isComboActive,
+            active: isActive,
+          });
+        });
+      } catch (e) {}
+    }
+
     const sortedSetsList = [...setsList].sort((a, b) => {
-      if (a.active === b.active) return 0;
-      return a.active ? -1 : 1;
+      if (a.equipped === b.equipped) {
+        if (a.active === b.active) return 0;
+        return a.active ? -1 : 1;
+      }
+      return a.equipped ? -1 : 1;
     });
 
     return { individualEffects: indEffects, comboEffects: sortedSetsList };
@@ -411,28 +492,37 @@ export function CalculatorItemPreview({
 
         {tab === 2 && (
           <div className="flex flex-col gap-2 p-1">
-            {comboEffects.map((combo, index) => (
+            {comboEffects.filter(c => c.equipped).map((combo, index) => (
               <div
-                key={index}
-                className={`p-1.5 rounded border text-[10px] flex flex-col gap-1 ${
+                key={`combo-${index}`}
+                className={`p-1.5 rounded border text-[10px] flex flex-col gap-1 transition-all ${
                   combo.active
                     ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-300"
-                    : "bg-slate-800/10 border-slate-800/30 text-slate-500"
+                    : "bg-slate-800/40 border-slate-800/50 text-slate-500"
                 }`}
               >
-                <div className="flex justify-between items-center font-bold">
-                  <span className="truncate max-w-[200px]" title={combo.title}>{combo.title}</span>
-                  <span className={`text-[9px] px-1 rounded uppercase tracking-wider ${
-                    combo.active ? "bg-emerald-500/20 text-emerald-400" : "bg-slate-800/40 text-slate-400"
-                  }`}>
-                    {combo.active ? "Ativo" : "Inativo"}
+                <div className="flex justify-between items-start font-bold gap-2">
+                  <span className={`leading-tight ${!combo.active ? "line-through" : ""}`} title={combo.title}>
+                    {combo.title}
                   </span>
+                  {combo.active ? (
+                    <span className="text-[9px] px-1 rounded uppercase tracking-wider bg-emerald-500/20 text-emerald-400 shrink-0 mt-0.5">
+                      Ativo
+                    </span>
+                  ) : (
+                    <span className="text-[9px] px-1 rounded uppercase tracking-wider bg-slate-800 text-slate-400 shrink-0 mt-0.5">
+                      Inativo
+                    </span>
+                  )}
                 </div>
-                <span className="text-[9.5px] italic pl-2 select-all">{combo.text}</span>
+                <span className={`text-[9.5px] italic pl-2 select-all ${!combo.active ? "line-through" : ""}`}>
+                  {combo.text}
+                </span>
               </div>
             ))}
-            {comboEffects.length === 0 && (
-              <div className="text-slate-500 italic text-[10.5px] p-2">Este item não faz parte de nenhum conjunto/combo.</div>
+            
+            {comboEffects.filter(c => c.equipped).length === 0 && (
+              <div className="text-slate-500 italic text-[10.5px] p-2">Este item não faz parte de nenhum conjunto/combo ativo nos seus equipamentos.</div>
             )}
           </div>
         )}

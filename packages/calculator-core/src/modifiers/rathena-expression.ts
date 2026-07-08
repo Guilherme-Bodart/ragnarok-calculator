@@ -312,7 +312,11 @@ class ExpressionParser {
     }
 
     if (token.type === "identifier") {
-      return this.parseFunctionCall(token.value);
+      const nextToken = this.tokens[this.index + 1];
+      if (nextToken?.type === "symbol" && nextToken.value === "(") {
+        return this.parseFunctionCall(token.value);
+      }
+      return this.parseConstant(token.value);
     }
 
     if (this.matchSymbol("(")) {
@@ -326,6 +330,24 @@ class ExpressionParser {
     }
 
     return null;
+  }
+
+  private parseConstant(name: string): number | null {
+    this.index += 1;
+    const constants: Record<string, number> = {
+      EQI_HEAD_TOP: 1,
+      EQI_ARMOR: 2,
+      EQI_HAND_L: 3,
+      EQI_HAND_R: 4,
+      EQI_GARMENT: 5,
+      EQI_SHOES: 6,
+      EQI_ACC_L: 7,
+      EQI_ACC_R: 8,
+      EQI_HEAD_MID: 9,
+      EQI_HEAD_LOW: 10,
+    };
+
+    return constants[name] ?? null;
   }
 
   private parseFunctionCall(functionName: string): number | null {

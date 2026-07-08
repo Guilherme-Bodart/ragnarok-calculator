@@ -13,24 +13,23 @@ import {
   type CalculatorMonsterIndexOption,
 } from "./calculator-monster-data";
 import { getBreakdownValue } from "./calculator-utils";
-
 import { CalculatorMonsterIcon } from "./calculator-monster-icon";
+import { useCalculatorBuildStore } from "./calculator-build-store";
 
 type CalculatorTargetPanelProps = {
   copy: CalculatorDictionary;
   result: CalculateDamageResult;
   selectedMonster: CalculatorMonsterDetail | null;
-  selectedMonsterId: number;
-  onMonsterChange: (monsterId: number) => void;
 };
 
 export function CalculatorTargetPanel({
   copy,
   result,
   selectedMonster,
-  selectedMonsterId,
-  onMonsterChange,
 }: CalculatorTargetPanelProps) {
+  const selectedMonsterId = useCalculatorBuildStore((s) => s.selectedMonsterId);
+  const setSelectedMonsterId = useCalculatorBuildStore((s) => s.setSelectedMonsterId);
+
   const [monsterQuery, setMonsterQuery] = useState("");
   const [monsterOptions, setMonsterOptions] = useState<
     CalculatorMonsterIndexOption[]
@@ -53,6 +52,7 @@ export function CalculatorTargetPanel({
     result.breakdown,
     "unsupportedModifierStatements",
   );
+  
   const options = useMemo(() => {
     const optionById = new Map(
       monsterOptions.map((monster) => [monster.id, monster]),
@@ -105,7 +105,6 @@ export function CalculatorTargetPanel({
 
   const reqHit = selectedMonster ? 200 + selectedMonster.level + (selectedMonster.agi ?? 0) : 0;
   
-  // Accuracy = (Hit + 100) - ReqHit. Cap at 100, Min 5.
   const hitDiff = result.characterStatus.hit + 100 - reqHit;
   const accuracy = selectedMonster ? Math.max(5, Math.min(100, hitDiff)) : 100;
 
@@ -125,7 +124,7 @@ export function CalculatorTargetPanel({
               className="text-xs bg-slate-900/60 border-slate-700/50"
               fit="fill"
               value={String(selectedMonsterId)}
-              onChange={(monsterId) => onMonsterChange(Number(monsterId))}
+              onChange={(monsterId) => setSelectedMonsterId(Number(monsterId))}
               searchValue={monsterQuery}
               onSearchChange={setMonsterQuery}
               searchPlaceholder={copy.target.searchPlaceholder}
@@ -267,4 +266,3 @@ function formatTime(seconds: number) {
   const remM = m % 60;
   return `${h}h ${remM}m`;
 }
-

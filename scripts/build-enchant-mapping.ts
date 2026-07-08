@@ -4,6 +4,16 @@ import * as path from 'path';
 // 1. Load the raw enchant data
 const rawEnchants = JSON.parse(fs.readFileSync('./scratch/enchant-raw.json', 'utf8'));
 
+// 1.5 Load nas-calc item.json to build an aegisName -> id lookup map
+const nasCalcItems = JSON.parse(fs.readFileSync('./scratch/nas-calc/src/assets/demo/data/item.json', 'utf8'));
+const aegisNameToId = new Map<string, number>();
+for (const key of Object.keys(nasCalcItems)) {
+  const item = nasCalcItems[key];
+  if (item && item.aegisName) {
+    aegisNameToId.set(item.aegisName, item.id);
+  }
+}
+
 // 2. Load our local item and enchant databases
 const itemsDir = './public/data/calculator/items';
 const categories = fs.readdirSync(itemsDir).filter(f => f.endsWith('.json'));
@@ -66,17 +76,15 @@ let mappedItemCount = 0;
 for (const entry of rawEnchants) {
    let itemId = entry.name;
    
-   // Tentar encontrar o aegisName do itemId na nossa base para mapear pelo ID do item real
-   // Isso garante que se o AegisName no banco mudar de nome, ainda conectamos pelo ID
-   let foundLocalEquip = ourEquipsList.find(eq => 
-     eq.searchText && eq.searchText.includes(itemId)
-   );
-
-   if (!foundLocalEquip) {
-      unmappedItemSet.add(itemId);
-      // We will still add it to the mapping under its string name as a fallback!
-   } else {
+   // Try to find the real ID from the nas-calc database
+   const exactId = aegisNameToId.get(itemId);
+   
+   let foundLocalEquip = false;
+   if (exactId && ourEquipsList.some(eq => eq.id === exactId)) {
+      foundLocalEquip = true;
       mappedItemCount++;
+   } else {
+      unmappedItemSet.add(itemId);
    }
 
    let mappedSlots: (number[] | null)[] = [];
@@ -100,8 +108,8 @@ for (const entry of rawEnchants) {
 
    // Register both by the AegisName string and by the numeric ID if found
    mapping[entry.name] = mappedSlots;
-   if (foundLocalEquip) {
-      mapping[foundLocalEquip.id] = mappedSlots;
+   if (foundLocalEquip && exactId) {
+      mapping[exactId] = mappedSlots;
    }
 }
 

@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { toRoItem, type RathenaNormalizedItem } from "../packages/calculator-core/src/datasets/rathena-normalized";
+import { generateVirtualEnchants } from "./generate-virtual-enchants";
 
 const root = process.cwd();
 const inputPath = path.join(root, "nightmare-data/normalized/items/items.en.json");
@@ -45,6 +46,7 @@ const locationToSlot: Record<string, string> = {
   Shoes: "shoes",
   Left_Accessory: "accessoryLeft",
   Right_Accessory: "accessoryRight",
+  Both_Accessory: "accessoryLeft",
   Costume_Head_Top: "costumeHeadTop",
   Costume_Head_Mid: "costumeHeadMid",
   Costume_Head_Low: "costumeHeadLow",
@@ -63,6 +65,8 @@ if (fs.existsSync(outputDir)) {
 fs.mkdirSync(outputDir, { recursive: true });
 
 const items = JSON.parse(fs.readFileSync(inputPath, "utf8")) as RathenaNormalizedItem[];
+items.push(...generateVirtualEnchants());
+
 const localizedItems = readLocalizedItems(localizedInputPath);
 const byCategory = new Map<string, any[]>(equipmentSlots.map((slot) => [slot, []]));
 const cards: any[] = [];
@@ -99,6 +103,7 @@ for (const item of items) {
   };
 
   if (item.type === "Card") {
+    mergedItemDetail.slots = undefined;
     cards.push(mergedItemDetail);
     continue;
   }
@@ -134,6 +139,39 @@ fs.writeFileSync(
 );
 
 console.log(`Generated ${byCategory.size} category files, cards, and consumables.`);
+
+import { ItemModifierPipeline } from "../packages/calculator-core/src";
+
+console.log("Building combo index...");
+const pipeline = new ItemModifierPipeline();
+const comboIndex: Record<number, number[]> = {};
+
+for (const item of items) {
+  if (!item.rawScript) continue;
+  try {
+    const effects = pipeline.getEffects({ rawScript: item.rawScript }, { refine: 0, grade: 0 });
+    for (const mod of effects.inputModifiers) {
+      const equippedCond = mod.conditions.find(c => c.type === "equipped");
+      if (equippedCond) {
+        for (const reqId of equippedCond.itemIds) {
+          if (reqId !== item.itemId) {
+            if (!comboIndex[reqId]) comboIndex[reqId] = [];
+            if (!comboIndex[reqId].includes(item.itemId)) {
+              comboIndex[reqId].push(item.itemId);
+            }
+          }
+        }
+      }
+    }
+  } catch(e) {}
+}
+
+fs.writeFileSync(
+  path.join(outputDir, "combos.json"),
+  JSON.stringify(comboIndex),
+  "utf8"
+);
+console.log("Generated combos.json index.");
 
 function getSlots(locations: any) {
   if (!locations) return [];

@@ -78,16 +78,34 @@ export class CharacterStatusEngine {
       addStatBonuses(baseStats, jobStatBonuses),
       itemStatBonuses,
     );
-    const traitEffects = this.traitEffectsFactory.fromStats(effectiveStats);
+    const weaponType = input.character.weaponType ?? "bareHand";
+    const isRanged = [
+      "bow", "revolver", "rifle", "gatlingGun", "shotgun",
+      "grenadeLauncher", "musicalInstrument", "whip"
+    ].includes(weaponType);
+
+    const passiveEffects = this.getPassiveSkillEffects(
+      input.character.learnedSkills,
+      weaponType
+    );
+
+    const baseTraitEffects = this.traitEffectsFactory.fromStats(effectiveStats);
+    const traitEffects = {
+      ...baseTraitEffects,
+      pAtk: baseTraitEffects.pAtk + (input.modifierEffects?.pAtk ?? 0) + passiveEffects.pAtk,
+      smatk: baseTraitEffects.smatk + (input.modifierEffects?.smatk ?? 0) + passiveEffects.smatk,
+    };
     const jobBasepoints = this.jobBasepointsFactory.fromClassAndBaseLevel(
       input.character.classId,
       input.character.baseLevel,
     );
-    // rAthena Renewal: Status ATK = STR + floor(STR/2) + floor(DEX/5) + floor(LUK/3) + floor(Level/4) + POW*5
+    // rAthena Renewal: Status ATK = (STR or DEX) + floor((STR or DEX)/2) + floor((DEX or STR)/5) + floor(LUK/3) + floor(Level/4) + POW*5
+    const primaryAtkStat = isRanged ? effectiveStats.dex : effectiveStats.str;
+    const secondaryAtkStat = isRanged ? effectiveStats.str : effectiveStats.dex;
     const statusAtk = Math.floor(
-      effectiveStats.str +
-        Math.floor(effectiveStats.str / 2) +
-        Math.floor(effectiveStats.dex / 5) +
+      primaryAtkStat +
+        Math.floor(primaryAtkStat / 2) +
+        Math.floor(secondaryAtkStat / 5) +
         Math.floor(effectiveStats.luk / 3) +
         Math.floor(input.character.baseLevel / 4) +
         traitEffects.statusAtk,
@@ -106,7 +124,6 @@ export class CharacterStatusEngine {
     const equipmentDefense = this.sumEquipmentPower(input.items ?? [], "defense");
     const flatAtk = input.modifierEffects?.flatAtk ?? 0;
     const flatMatk = input.modifierEffects?.flatMatk ?? 0;
-    const weaponType = input.character.weaponType ?? "bareHand";
 
     return {
       baseLevel: input.character.baseLevel,
@@ -131,12 +148,20 @@ export class CharacterStatusEngine {
       },
       jobBasepoints,
       maxHp: this.applyFlatAndRate(
-        this.calculateMaxHp(jobBasepoints.baseHp, effectiveStats.vit),
+        this.calculateMaxHp(
+          jobBasepoints.baseHp, 
+          effectiveStats.vit,
+          !!input.character.isTranscendent
+        ),
         input.modifierEffects?.maxHp ?? 0,
         input.modifierEffects?.maxHpRate ?? 0,
       ),
       maxSp: this.applyFlatAndRate(
-        this.calculateMaxSp(jobBasepoints.baseSp, effectiveStats.int),
+        this.calculateMaxSp(
+          jobBasepoints.baseSp, 
+          effectiveStats.int,
+          !!input.character.isTranscendent
+        ),
         input.modifierEffects?.maxSp ?? 0,
         input.modifierEffects?.maxSpRate ?? 0,
       ),
@@ -147,8 +172,8 @@ export class CharacterStatusEngine {
       ),
       statusAtk,
       statusMatk,
-      atk: statusAtk + equipmentAtk + flatAtk,
-      matk: statusMatk + equipmentMatk + flatMatk,
+      atk: statusAtk + equipmentAtk + flatAtk + passiveEffects.atk,
+      matk: statusMatk + equipmentMatk + flatMatk + passiveEffects.matk,
       defense: equipmentDefense + (input.modifierEffects?.flatDefense ?? 0),
       magicDefense: input.modifierEffects?.flatMagicDefense ?? 0,
       res: traitEffects.res + (input.modifierEffects?.flatRes ?? 0),
@@ -220,6 +245,27 @@ export class CharacterStatusEngine {
     };
   }
 
+  private getPassiveSkillEffects(
+    learnedSkills: Record<string, number> | undefined,
+    weaponType: string
+  ) {
+    const effects = {
+      atk: 0,
+      matk: 0,
+      smatk: 0,
+      pAtk: 0,
+    };
+
+    if (!learnedSkills) return effects;
+
+    // Arch Mage: Two-Handed Staff Mastery (AG_TWOHANDSTAFF)
+    if (weaponType === "twoHandRod" && learnedSkills["AG_TWOHANDSTAFF"]) {
+      effects.smatk += learnedSkills["AG_TWOHANDSTAFF"] * 2;
+    }
+
+    return effects;
+  }
+
   private sumEquipmentPower(
     items: RoItem[],
     stat: "attack" | "magicAttack" | "defense",
@@ -230,12 +276,16 @@ export class CharacterStatusEngine {
     }, 0);
   }
 
-  private calculateMaxHp(baseHp: number, vit: number) {
-    return baseHp > 0 ? Math.floor(baseHp * (1 + vit / 100)) : 0;
+  private calculateMaxHp(baseHp: number, vit: number, isTranscendent: boolean) {
+    if (baseHp <= 0) return 0;
+    const hp = Math.floor(baseHp * (1 + vit / 100));
+    return isTranscendent ? Math.floor(hp * 1.25) : hp;
   }
 
-  private calculateMaxSp(baseSp: number, int: number) {
-    return baseSp > 0 ? Math.floor(baseSp * (1 + int / 100)) : 0;
+  private calculateMaxSp(baseSp: number, int: number, isTranscendent: boolean) {
+    if (baseSp <= 0) return 0;
+    const sp = Math.floor(baseSp * (1 + int / 100));
+    return isTranscendent ? Math.floor(sp * 1.25) : sp;
   }
 
   private applyFlatAndRate(baseValue: number, flatBonus: number, rateBonus: number) {
