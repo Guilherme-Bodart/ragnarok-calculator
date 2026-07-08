@@ -1,0 +1,250 @@
+﻿\vitest.config.mts:22 - default
+\app\layout.tsx:36 - default
+\app\layout.tsx:30 - metadata
+\app\page.tsx:3 - default
+\lib\calculator-item-search.ts:1 - CALCULATOR_ITEM_SEARCH_MIN_LENGTH (used in module)
+\.next\types\routes.d.ts:22 - ParamsOf
+\.next\types\routes.d.ts:29 - PageRoutes (used in module)
+\.next\types\routes.d.ts:29 - RedirectRoutes (used in module)
+\.next\types\routes.d.ts:29 - RewriteRoutes (used in module)
+\app\calculator\page.tsx:10 - default
+\app\guilds\page.tsx:9 - default
+\app\guilds\page.tsx:4 - metadata
+\app\login\page.tsx:10 - default
+\app\login\page.tsx:5 - metadata
+\app\profile\page.tsx:9 - default
+\app\profile\page.tsx:4 - metadata
+\components\calculator\calculator-attack-panel.tsx:17 - CalculatorAttackSkill (used in module)
+\components\calculator\calculator-buff-data.ts:5 - calculatorBuffCatalogVersion (used in module)
+\components\calculator\calculator-buff-data.ts:7 - CalculatorBuffGroup (used in module)
+\components\calculator\calculator-buff-data.ts:9 - CalculatorBuffCatalogEntry (used in module)
+\components\calculator\calculator-buff-data.ts:99 - satisfies
+\components\calculator\calculator-buff-data.ts:99 - readonly
+\components\calculator\calculator-buff-data.ts:101 - calculatorBuffCatalog
+\components\calculator\calculator-build-payload.ts:53 - isCalculatorBuildPayload (used in module)
+\components\calculator\calculator-build-storage.ts:43 - readSavedCalculatorBuild
+\components\calculator\calculator-build-store.ts:14 - CalculatorBuildState (used in module)
+\components\calculator\calculator-build-store.ts:33 - CalculatorBuildActions (used in module)
+\components\calculator\calculator-build-store.ts:57 - CalculatorBuildStore (used in module)
+\components\calculator\calculator-card-select-grid.tsx:28 - CalculatorCardSelectGrid
+\components\calculator\calculator-cascading-enchant-select.tsx:17 - categorizeEnchants (used in module)
+\components\calculator\calculator-cascading-enchant-select.tsx:10 - EnchantCategoryNode (used in module)
+\components\calculator\calculator-character-utils.ts:41 - getCalculatorPresetStats
+\components\calculator\calculator-character-utils.ts:30 - satisfies (used in module)
+\components\calculator\calculator-equipment-slots.ts:32 - satisfies (used in module)
+\components\calculator\calculator-equipment-slots.ts:32 - readonly (used in module)
+\components\calculator\calculator-item-data.ts:26 - clearCalculatorItemsCache
+\components\calculator\calculator-item-data.ts:47 - fetchItemCategory (used in module)
+\components\calculator\calculator-item-picker-utils.ts:32 - selectedItemHasModifiers
+\components\calculator\calculator-skill-classification.ts:52 - isCalculatorActionSkill (used in module)
+\components\calculator\calculator-skill-classification.ts:58 - classifyCalculatorSkill (used in module)
+\components\calculator\calculator-skill-classification.ts:15 - CalculatorSkillKind (used in module)
+\components\calculator\calculator-skill-tooltip-formula.ts:1 - CalculatorSkillTooltipFormulaData (used in module)
+\components\calculator\calculator-skill-tree-data.ts:8 - isTranscendentEquivalentClassId
+\components\calculator\calculator-skill-tree-layout.ts:23 - SkillTreeLayoutCell (used in module)
+\components\calculator\calculator-skill-tree-layout.ts:28 - SkillTreeLayout (used in module)
+\components\calculator\use-calculator-auth.ts:14 - useCalculatorAuth
+\components\calculator\use-calculator-auth.ts:7 - AuthUser (used in module)
+\components\guild\guild-tool-types.ts:11 - GuildToolStatus (used in module)
+\components\guild\guild-types.ts:27 - GuildMember (used in module)
+\components\guild\guild-types.ts:37 - GuildInvite (used in module)
+\components\guild\guild-types.ts:45 - GuildTool (used in module)
+\components\guild\guild-types.ts:52 - GuildNotification (used in module)
+\components\guild\guild-types.ts:61 - GuildFeedItem (used in module)
+\components\guild\guild-types.ts:70 - GuildEvent (used in module)
+\components\guild\guild-types.ts:78 - CurrentGuildUser (used in module)
+\components\ui\field.tsx:30 - FieldValue
+\components\ui\pixel-card.tsx:9 - PixelCard
+\components\ui\rich-select.tsx:33 - RichSelectOption (used in module)
+\components\ui\rich-select.tsx:39 - RichSelectGroup (used in module)
+\content\i18n\index.ts:17 - isLocale
+\content\i18n\index.ts:5 - dictionaries (used in module)
+\content\i18n\index.ts:11 - Locale (used in module)
+\content\i18n\index.ts:12 - Dictionary
+\content\i18n\index.ts:14 - locales (used in module)
+\content\i18n\index.ts:15 - defaultLocale
+\.next\dev\types\routes.d.ts:22 - ParamsOf
+\.next\dev\types\routes.d.ts:29 - PageRoutes (used in module)
+\.next\dev\types\routes.d.ts:29 - RedirectRoutes (used in module)
+\.next\dev\types\routes.d.ts:29 - RewriteRoutes (used in module)
+\app\guilds\[slug]\page.tsx:15 - default
+\app\guilds\[slug]\page.tsx:10 - metadata
+\packages\calculator-core\src\index.ts:128 - mergeBuffEffects
+\packages\calculator-core\src\index.ts:29 - BuffEffect
+\packages\calculator-core\src\index.ts:6 - CalculationPrecision
+\packages\calculator-core\src\index.ts:8 - CalculationMeta
+\packages\calculator-core\src\index.ts:15 - DamageRange
+\packages\calculator-core\src\index.ts:28 - CalculateDamageResult
+\packages\calculator-core\src\index.ts:15 - CalculatorModifierEffects
+\packages\calculator-core\src\index.ts:77 - CalculatorModifierEffectsFactory
+\packages\calculator-core\src\index.ts:3 - CalculatorTraitEffects
+\packages\calculator-core\src\index.ts:14 - CalculatorTraitEffectsFactory
+\packages\calculator-core\src\index.ts:5 - CastTimingInput
+\packages\calculator-core\src\index.ts:12 - CastTimingResult
+\packages\calculator-core\src\index.ts:23 - CastTimingEngine
+\packages\calculator-core\src\index.ts:14 - BaseStat
+\packages\calculator-core\src\index.ts:15 - TraitStat
+\packages\calculator-core\src\index.ts:16 - CharacterStat
+\packages\calculator-core\src\index.ts:18 - CharacterStatus
+\packages\calculator-core\src\index.ts:53 - CharacterStatusEngineInput
+\packages\calculator-core\src\index.ts:60 - CharacterStatusEngine
+\packages\calculator-core\src\index.ts:52 - calculateDamageFromDataset
+\packages\calculator-core\src\index.ts:10 - CalculatorItemContext
+\packages\calculator-core\src\index.ts:16 - CalculateDamageInput
+\packages\calculator-core\src\index.ts:32 - CalculatorDataset
+\packages\calculator-core\src\index.ts:38 - CalculatorDataError
+\packages\calculator-core\src\index.ts:45 - CalculatorInputError
+\packages\calculator-core\src\index.ts:26 - DamageBreakdownGroup
+\packages\calculator-core\src\index.ts:34 - DamageBreakdownLine
+\packages\calculator-core\src\index.ts:42 - DamageFormulaInput
+\packages\calculator-core\src\index.ts:51 - DamageFormulaResult
+\packages\calculator-core\src\index.ts:93 - DamageFormulaPipeline
+\packages\calculator-core\src\index.ts:6 - DamageEngineInput
+\packages\calculator-core\src\index.ts:15 - DamageEngine
+\packages\calculator-core\src\index.ts:8 - EffectiveCharacter
+\packages\calculator-core\src\index.ts:10 - EffectiveCharacterBuilder
+\packages\calculator-core\src\index.ts:3 - DamageType
+\packages\calculator-core\src\index.ts:5 - ElementType
+\packages\calculator-core\src\index.ts:17 - MonsterSize
+\packages\calculator-core\src\index.ts:19 - MonsterRace
+\packages\calculator-core\src\index.ts:30 - MonsterClass
+\packages\calculator-core\src\index.ts:32 - WeaponType
+\packages\calculator-core\src\index.ts:57 - EquipmentSlot
+\packages\calculator-core\src\index.ts:79 - RoItem
+\packages\calculator-core\src\index.ts:95 - RoMonster
+\packages\calculator-core\src\index.ts:122 - RoSkill
+\packages\calculator-core\src\index.ts:141 - CharacterStats
+\packages\calculator-core\src\index.ts:156 - CalculatorCharacter
+\packages\calculator-core\src\aspd\index.ts:5 - AspdEngineInput
+\packages\calculator-core\src\aspd\index.ts:14 - AspdEngine
+\packages\calculator-core\src\aspd\index.ts:88 - getJobBaseAspd
+\packages\calculator-core\src\aspd\index.ts:3 - JobAspdGroup
+\packages\calculator-core\src\aspd\index.ts:8 - defaultBaseAspdByWeapon
+\packages\calculator-core\src\aspd\index.ts:34 - jobAspdGroups
+\packages\calculator-core\src\buffs\index.ts:3 - BuffResolverContext
+\packages\calculator-core\src\buffs\index.ts:9 - BuffResolver
+\packages\calculator-core\src\buffs\index.ts:11 - BuffRegistry
+\packages\calculator-core\src\buffs\index.ts:33 - globalBuffRegistry
+\packages\calculator-core\src\datasets\index.ts:76 - createCalculatorDatasetFromRathenaNormalized
+\packages\calculator-core\src\datasets\index.ts:86 - toRoItem
+\packages\calculator-core\src\datasets\index.ts:136 - toRoMonster
+\packages\calculator-core\src\datasets\index.ts:159 - toRoSkill
+\packages\calculator-core\src\datasets\index.ts:12 - RathenaNormalizedItem
+\packages\calculator-core\src\datasets\index.ts:26 - RathenaNormalizedMonster
+\packages\calculator-core\src\datasets\index.ts:49 - RathenaNormalizedSkill
+\packages\calculator-core\src\datasets\index.ts:70 - RathenaNormalizedDataset
+\packages\calculator-core\src\formulas\index.ts:5 - CriticalCalculationResult
+\packages\calculator-core\src\formulas\index.ts:12 - CriticalEngine
+\packages\calculator-core\src\formulas\index.ts:3 - getDefenseMultiplier
+\packages\calculator-core\src\formulas\index.ts:15 - getHardDefMultiplier
+\packages\calculator-core\src\formulas\index.ts:19 - getHardMdefMultiplier
+\packages\calculator-core\src\formulas\index.ts:3 - getElementMultiplier
+\packages\calculator-core\src\formulas\index.ts:16 - getAttackElement
+\packages\calculator-core\src\formulas\index.ts:5 - getMagicalBasePower
+\packages\calculator-core\src\formulas\index.ts:9 - sumMagicalEquipmentPower
+\packages\calculator-core\src\formulas\index.ts:13 - getMagicalModifierFlatPower
+\packages\calculator-core\src\formulas\index.ts:17 - getMagicalModifierFinalRateMultiplier
+\packages\calculator-core\src\formulas\index.ts:5 - getPhysicalBasePower
+\packages\calculator-core\src\formulas\index.ts:9 - sumPhysicalEquipmentPower
+\packages\calculator-core\src\formulas\index.ts:13 - getPhysicalModifierFlatPower
+\packages\calculator-core\src\formulas\index.ts:17 - getPhysicalModifierFinalRateMultiplier
+\packages\calculator-core\src\formulas\index.ts:6 - getSkillMultiplier
+\packages\calculator-core\src\job-basepoints\index.ts:8 - emptyJobBasepoints
+\packages\calculator-core\src\job-basepoints\index.ts:14 - JobBasepointsFactory
+\packages\calculator-core\src\job-basepoints\index.ts:1 - JobBasepointTable
+\packages\calculator-core\src\job-basepoints\index.ts:3 - JobBasepoints
+\packages\calculator-core\src\job-basepoints\index.ts:9 - JobBasepointsGroup
+\packages\calculator-core\src\job-stats\index.ts:4 - emptyStatBonus
+\packages\calculator-core\src\job-stats\index.ts:19 - JobStatBonusFactory
+\packages\calculator-core\src\job-stats\index.ts:1 - StatBonus
+\packages\calculator-core\src\job-stats\index.ts:16 - JobStatBonusEntry
+\packages\calculator-core\src\job-stats\index.ts:20 - JobStatBonusGroup
+\packages\calculator-core\src\modifiers\index.ts:12 - ItemModifierPipeline
+\packages\calculator-core\src\modifiers\index.ts:9 - ModifierAggregator
+\packages\calculator-core\src\modifiers\index.ts:5 - ModifierNormalizer
+\packages\calculator-core\src\modifiers\index.ts:8 - ModifierResolver
+\packages\calculator-core\src\modifiers\index.ts:4 - modifierOperatorSchema
+\packages\calculator-core\src\modifiers\index.ts:9 - modifierRaceIdSchema
+\packages\calculator-core\src\modifiers\index.ts:24 - modifierElementIdSchema
+\packages\calculator-core\src\modifiers\index.ts:38 - modifierSizeIdSchema
+\packages\calculator-core\src\modifiers\index.ts:39 - modifierClassIdSchema
+\packages\calculator-core\src\modifiers\index.ts:41 - modifierTargetSchema
+\packages\calculator-core\src\modifiers\index.ts:65 - modifierConditionSchema
+\packages\calculator-core\src\modifiers\index.ts:99 - normalizedModifierSchema
+\packages\calculator-core\src\modifiers\index.ts:190 - modifierParseResultSchema
+\packages\calculator-core\src\modifiers\index.ts:195 - aggregatedModifierSchema
+\packages\calculator-core\src\modifiers\index.ts:203 - modifierAggregationResultSchema
+\packages\calculator-core\src\modifiers\index.ts:207 - modifierResolutionContextSchema
+\packages\calculator-core\src\modifiers\index.ts:218 - itemModifierSourceSchema
+\packages\calculator-core\src\modifiers\index.ts:223 - itemModifierPipelineResultSchema
+\packages\calculator-core\src\modifiers\index.ts:230 - ModifierOperator
+\packages\calculator-core\src\modifiers\index.ts:231 - ModifierRaceId
+\packages\calculator-core\src\modifiers\index.ts:232 - ModifierElementId
+\packages\calculator-core\src\modifiers\index.ts:233 - ModifierSizeId
+\packages\calculator-core\src\modifiers\index.ts:234 - ModifierClassId
+\packages\calculator-core\src\modifiers\index.ts:235 - ModifierTarget
+\packages\calculator-core\src\modifiers\index.ts:236 - ModifierCondition
+\packages\calculator-core\src\modifiers\index.ts:237 - NormalizedModifier
+\packages\calculator-core\src\modifiers\index.ts:238 - ModifierParseResult
+\packages\calculator-core\src\modifiers\index.ts:239 - AggregatedModifier
+\packages\calculator-core\src\modifiers\index.ts:240 - ModifierAggregationResult
+\packages\calculator-core\src\modifiers\index.ts:243 - ModifierResolutionContext
+\packages\calculator-core\src\modifiers\index.ts:246 - ItemModifierSource
+\packages\calculator-core\src\modifiers\index.ts:247 - ItemModifierPipelineResult
+\packages\calculator-core\src\modifiers\index.ts:23 - RathenaScriptParser
+\packages\calculator-core\src\modifiers\rathena-script-mappers.ts:11 - ModifierMapper (used in module)
+\packages\calculator-core\src\modifiers\sample-analysis.ts:60 - readJsonSampleFile
+\packages\calculator-core\src\modifiers\sample-analysis.ts:64 - analyzeSamples
+\packages\calculator-core\src\modifiers\sample-analysis.ts:145 - extractUnsupportedCommand (used in module)
+\packages\calculator-core\src\modifiers\sample-analysis.ts:165 - classifyUnsupportedCommand (used in module)
+\packages\calculator-core\src\modifiers\sample-analysis.ts:5 - ItemScriptSample (used in module)
+\packages\calculator-core\src\modifiers\sample-analysis.ts:11 - SampleSetSummary (used in module)
+\packages\calculator-core\src\modifiers\sample-analysis.ts:18 - UnsupportedCommandExample (used in module)
+\packages\calculator-core\src\modifiers\sample-analysis.ts:24 - UnsupportedCommandReason (used in module)
+\packages\calculator-core\src\modifiers\sample-analysis.ts:33 - UnsupportedCommandReport (used in module)
+\packages\calculator-core\src\modifiers\sample-analysis.ts:40 - ItemScriptCoverageReport (used in module)
+\packages\calculator-core\src\rulesets\index.ts:3 - rulesetServerSchema
+\packages\calculator-core\src\rulesets\index.ts:4 - rulesetMechanicsSchema
+\packages\calculator-core\src\rulesets\index.ts:6 - rulesetContextSchema
+\packages\calculator-core\src\rulesets\index.ts:12 - defaultRulesetContext
+\packages\calculator-core\src\rulesets\index.ts:17 - RulesetServer
+\packages\calculator-core\src\rulesets\index.ts:18 - RulesetMechanics
+\packages\calculator-core\src\rulesets\index.ts:19 - RulesetContext
+\packages\calculator-core\src\skill-tree\index.ts:91 - createSkillTreeCatalog
+\packages\calculator-core\src\skill-tree\index.ts:116 - resolveSkillTreeJob
+\packages\calculator-core\src\skill-tree\index.ts:208 - canIncreaseSkill
+\packages\calculator-core\src\skill-tree\index.ts:218 - canDecreaseSkill
+\packages\calculator-core\src\skill-tree\index.ts:243 - increaseSkillWithRequirements
+\packages\calculator-core\src\skill-tree\index.ts:295 - getMissingRequirements
+\packages\calculator-core\src\skill-tree\index.ts:304 - formatSkillTreeJobName
+\packages\calculator-core\src\skill-tree\index.ts:1 - SkillTreeRawRequirement
+\packages\calculator-core\src\skill-tree\index.ts:6 - SkillTreeRawSkill
+\packages\calculator-core\src\skill-tree\index.ts:18 - SkillTreeRawJob
+\packages\calculator-core\src\skill-tree\index.ts:23 - SkillTreeRawDataset
+\packages\calculator-core\src\skill-tree\index.ts:28 - SkillTreeRawSkillInfo
+\packages\calculator-core\src\skill-tree\index.ts:35 - SkillTreeJobOption
+\packages\calculator-core\src\skill-tree\index.ts:41 - SkillTreeResolvedPathJob
+\packages\calculator-core\src\skill-tree\index.ts:47 - SkillTreeResolvedRawJob
+\packages\calculator-core\src\skill-tree\index.ts:55 - SkillTreeCatalog
+\packages\calculator-core\src\skill-tree\index.ts:62 - SkillTreeRequirement
+\packages\calculator-core\src\skill-tree\index.ts:68 - SkillTreeSkill
+\packages\calculator-core\src\skill-tree\index.ts:81 - ResolvedSkillTreeJob
+\packages\calculator-core\src\skill-tree\index.ts:89 - LearnedSkillLevels
+\packages\calculator-core\src\skills\index.ts:8 - GenericSkillFormula
+\packages\calculator-core\src\skills\index.ts:12 - SkillFormulaRegistry
+\packages\calculator-core\src\skills\index.ts:6 - SkillFormulaInput
+\packages\calculator-core\src\skills\index.ts:14 - SkillFormulaResult
+\packages\calculator-core\src\skills\index.ts:22 - SkillFormulaAdapter
+\packages\calculator-core\src\status-points\index.ts:50 - getRegularStatusPointsForBaseLevel
+\packages\calculator-core\src\status-points\index.ts:61 - getTraitStatusPointsForBaseLevel
+\packages\calculator-core\src\status-points\index.ts:67 - getRegularStatIncreaseCost
+\packages\calculator-core\src\status-points\index.ts:75 - getRegularStatCost
+\packages\calculator-core\src\status-points\index.ts:86 - evaluateStatusPointBudget
+\packages\calculator-core\src\status-points\index.ts:3 - regularStatusStatKeys
+\packages\calculator-core\src\status-points\index.ts:12 - traitStatusStatKeys
+\packages\calculator-core\src\status-points\index.ts:21 - RegularStatusStatKey
+\packages\calculator-core\src\status-points\index.ts:22 - TraitStatusStatKey
+\packages\calculator-core\src\status-points\index.ts:24 - StatusPointGroup
+\packages\calculator-core\src\status-points\index.ts:33 - StatusPointBudget
+\packages\calculator-core\src\status-points\index.ts:38 - StatusPointBudgetInput
+\packages\calculator-core\src\skills\classes\index.ts:49 - GuillotineCrossSkillFormula
