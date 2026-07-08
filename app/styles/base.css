@@ -66,7 +66,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 3px;
@@ -74,10 +76,8 @@ body {
 
 img,
 svg,
-path,
-button,
-input {
-  padding: initial;
+path {
+  padding: 0;
 }
 
 a {

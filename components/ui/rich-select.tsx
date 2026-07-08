@@ -269,12 +269,10 @@ export function RichSelect({
       >
         {selectedOption?.icon ? (
           <span className="ui-rich-select-icon">{selectedOption.icon}</span>
-        ) : hasIcons ? (
-          <span className="ui-rich-select-icon" aria-hidden="true" />
         ) : null}
         <span>{selectedOption?.label ?? value}</span>
         <span className="ui-rich-select-chevron">
-          <ChevronDown aria-hidden size={15} />
+          <ChevronDown aria-hidden size={16} className="text-slate-500 transition-transform" />
         </span>
       </button>
 
