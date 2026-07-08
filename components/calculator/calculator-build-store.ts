@@ -257,6 +257,7 @@ export const useCalculatorBuildStore = create<CalculatorBuildStore>()(
         },
       }),
       // Rehydrate extrai os dados do formato CalculatorBuildPayload (do persist) ou JSON bruto
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       merge: (persistedState: any, currentState) => {
         const migrated = migrateCalculatorBuildPayload(persistedState);
         

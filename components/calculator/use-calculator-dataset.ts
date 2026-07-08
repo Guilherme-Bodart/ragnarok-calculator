@@ -78,7 +78,7 @@ function mergeCalculatorMonsters(
       attack: 0,
       magicAttack: 0,
       elementResistanceRates: {},
-    } as any);
+    } as never);
   }
 
   return Array.from(monsterById.values());

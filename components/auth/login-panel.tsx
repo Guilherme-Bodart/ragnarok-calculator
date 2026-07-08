@@ -71,6 +71,7 @@ export function LoginPanel() {
 
   useEffect(() => {
     if (user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMessage(t.sessionActive);
       const timer = window.setTimeout(() => {
         router.replace(nextPath);

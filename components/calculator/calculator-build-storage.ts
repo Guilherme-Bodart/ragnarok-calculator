@@ -27,8 +27,8 @@ export function createDefaultCalculatorBuild(): CalculatorBuildPayload {
     },
     equipment: {
       itemContexts: archMageBuild.equipment.itemContexts as Record<number, { refine?: number; grade?: number }>,
-      selectedCardsBySlot: archMageBuild.equipment.selectedCardsBySlot as any,
-      selectedItemsBySlot: archMageBuild.equipment.selectedItemsBySlot as any,
+      selectedCardsBySlot: archMageBuild.equipment.selectedCardsBySlot as never,
+      selectedItemsBySlot: archMageBuild.equipment.selectedItemsBySlot as never,
     },
     buffs: {
       activeBuffs: {},
