@@ -87,7 +87,7 @@ describe("CalculatorService modifier integration", () => {
   it("applies supported rawScript modifiers alongside the current damage flow", () => {
     const service = new CalculatorService(
       createDataServiceStub([modifierItem]),
-      {} as any
+      {} as never
     );
 
     const result = service.calculateDamage(payload);
@@ -110,7 +110,7 @@ describe("CalculatorService modifier integration", () => {
         if (getrefine()>=7) bonus bAtkRate,20;
       `,
     };
-    const service = new CalculatorService(createDataServiceStub([refinedItem]), {} as any);
+    const service = new CalculatorService(createDataServiceStub([refinedItem]), {} as never);
 
     const withoutRefine = service.calculateDamage(payload);
     const withRefine = service.calculateDamage({
@@ -130,7 +130,7 @@ describe("CalculatorService modifier integration", () => {
           rawScript: "",
         },
       ]),
-      {} as any
+      {} as never
     );
 
     const result = service.calculateDamage({
@@ -159,7 +159,7 @@ describe("CalculatorService modifier integration", () => {
     };
     const service = new CalculatorService(
       createDataServiceStub([skillConditionItem]),
-      {} as any
+      {} as never
     );
 
     const withoutSkill = service.calculateDamage({
@@ -187,7 +187,7 @@ describe("CalculatorService modifier integration", () => {
     };
     const service = new CalculatorService(
       createDataServiceStub([classConditionItem]),
-      {} as any
+      {} as never
     );
 
     const withoutClass = service.calculateDamage({
@@ -215,7 +215,7 @@ describe("CalculatorService modifier integration", () => {
         bonus bStr,5;
       `,
     };
-    const service = new CalculatorService(createDataServiceStub([statItem]), {} as any);
+    const service = new CalculatorService(createDataServiceStub([statItem]), {} as never);
 
     const result = service.calculateDamage({
       ...payload,
@@ -233,7 +233,7 @@ describe("CalculatorService modifier integration", () => {
           rawScript: "",
         },
       ]),
-      {} as any
+      {} as never
     );
 
     const result = service.calculateDamage({
@@ -256,7 +256,7 @@ describe("CalculatorService modifier integration", () => {
           rawScript: "",
         },
       ]),
-      {} as any
+      {} as never
     );
 
     const result = service.calculateDamage({
@@ -272,7 +272,7 @@ describe("CalculatorService modifier integration", () => {
   });
 
   it("maps calculator input errors to bad request responses", () => {
-    const service = new CalculatorService(createDataServiceStub([modifierItem]), {} as any);
+    const service = new CalculatorService(createDataServiceStub([modifierItem]), {} as never);
 
     expect(() =>
       service.calculateDamage({
@@ -283,7 +283,7 @@ describe("CalculatorService modifier integration", () => {
   });
 
   it("maps missing calculator data to not found responses", () => {
-    const service = new CalculatorService(createDataServiceStub([modifierItem]), {} as any);
+    const service = new CalculatorService(createDataServiceStub([modifierItem]), {} as never);
 
     expect(() =>
       service.calculateDamage({

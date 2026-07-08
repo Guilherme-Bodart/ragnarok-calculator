@@ -73,7 +73,10 @@ export function CalculatorCharacterPanel({
   }
 
   return (
-    <section className="flex flex-col gap-3">
+    <section className="flex flex-col gap-4 backdrop-blur-md bg-[#020612]/60 border border-white/5 rounded-2xl p-5 shadow-2xl relative overflow-hidden">
+      {/* Glow effect */}
+      <div className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-sky-500/50 to-transparent"></div>
+
       <PanelHeader
         icon={<Activity size={17} />}
         title={copy.character.title}
@@ -86,22 +89,22 @@ export function CalculatorCharacterPanel({
 
       {skillTreeSlot}
 
-      <div className={`grid gap-x-8 gap-y-4 ${isFourthJob ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 max-w-4xl'}`}>
-        <div className="flex justify-between items-center text-xs p-3 rounded-lg border border-slate-700/50 bg-slate-900/60" aria-live="polite">
-          <span className="text-slate-400 font-medium">{copy.character.statusPoints}</span>
-          <strong className="text-sky-300 font-mono text-sm">
+      <div className={`grid gap-x-6 gap-y-4 ${isFourthJob ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+        <div className="flex justify-between items-center text-xs p-4 rounded-xl border border-white/5 bg-white/[0.02] shadow-inner transition-colors hover:bg-white/[0.04]" aria-live="polite">
+          <span className="text-slate-400 font-medium tracking-wide uppercase text-[10px]">{copy.character.statusPoints}</span>
+          <strong className="text-sky-300 font-mono text-sm drop-shadow-md">
             {statusBudget.regular.spent} / {statusBudget.regular.available}
           </strong>
         </div>
         
         {isFourthJob ? (
-          <div className="flex justify-between items-center text-xs p-3 rounded-lg border border-slate-700/50 bg-slate-900/60">
-            <span className="text-slate-400 font-medium">{copy.character.traitPoints}</span>
-            <strong className="text-amber-300 font-mono text-sm">
+          <div className="flex justify-between items-center text-xs p-4 rounded-xl border border-white/5 bg-white/[0.02] shadow-inner transition-colors hover:bg-white/[0.04]">
+            <span className="text-slate-400 font-medium tracking-wide uppercase text-[10px]">{copy.character.traitPoints}</span>
+            <strong className="text-amber-300 font-mono text-sm drop-shadow-md">
               {statusBudget.trait.spent} / {statusBudget.trait.available}
             </strong>
           </div>
-        ) : <div />}
+        ) : null}
       </div>
 
       <CalculatorCharacterStats

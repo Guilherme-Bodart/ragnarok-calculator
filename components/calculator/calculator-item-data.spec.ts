@@ -13,7 +13,7 @@ describe("calculator-item-data E2E", () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => [{ id: 1, name: "Poring Card" }],
-    } as any);
+    } as never);
 
     const result = await searchCalculatorItems({ kind: "card", limit: 10 });
     
@@ -26,7 +26,7 @@ describe("calculator-item-data E2E", () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => [{ id: 2, name: "Armor of Test" }],
-    } as any);
+    } as never);
 
     const result = await searchCalculatorItems({ slot: "armor", limit: 10 });
     
@@ -38,7 +38,7 @@ describe("calculator-item-data E2E", () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => [{ id: 640012, name: "Celine Vestido" }],
-    } as any);
+    } as never);
 
     const result = await getCalculatorItemDetail(640012, "armor");
     

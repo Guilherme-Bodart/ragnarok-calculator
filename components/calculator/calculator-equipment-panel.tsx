@@ -42,7 +42,9 @@ export function CalculatorEquipmentPanel({
     activeTab === "equip" ? calculatorEquipSlots : calculatorSpecialSlots;
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-5 backdrop-blur-md bg-[#020612]/60 border border-white/5 rounded-2xl p-5 shadow-2xl relative overflow-hidden">
+      {/* Glow effect */}
+      <div className="absolute top-0 right-1/4 w-1/3 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
       <PanelHeader
         icon={<Shield size={17} />}
         title={copy.equipment.title}

@@ -12,7 +12,7 @@ describe("calculator-monster-data E2E", () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => [{ id: 1002, name: "Poring" }],
-    } as any);
+    } as never);
 
     const result = await searchCalculatorMonsters({ limit: 10 });
     
@@ -25,7 +25,7 @@ describe("calculator-monster-data E2E", () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => ({ id: 1002, name: "Poring", hp: 50 }),
-    } as any);
+    } as never);
 
     const result = await getCalculatorMonsterDetail(1002);
     

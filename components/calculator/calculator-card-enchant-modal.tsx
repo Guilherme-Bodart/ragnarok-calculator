@@ -18,12 +18,11 @@ import {
   getCardSlotCount,
 } from "./calculator-item-picker-utils";
 import {
-  searchCalculatorItems,
-  fetchEnchantMapping,
   type CalculatorItemDetail,
   type CalculatorItemIndexOption,
 } from "./calculator-item-data";
 import { useDebouncedValue } from "./use-debounced-value";
+import { useEnchantModalData } from "./use-enchant-modal-data";
 
 type CalculatorCardEnchantModalProps = {
   copy: CalculatorDictionary;
@@ -66,7 +65,7 @@ function filterCardsForSlot(
   if (!validSlots) return cards;
 
   return cards.filter((card) => {
-    const cardSlots = (card as any).slots as string[] | undefined;
+    const cardSlots = (card as never).slots as string[] | undefined;
     // Se a carta não tem slot definido, pode ir em qualquer lugar
     if (!cardSlots || cardSlots.length === 0) return true;
     return cardSlots.some((s) => validSlots.includes(s));
@@ -84,37 +83,15 @@ export function CalculatorCardEnchantModal({
   onClose,
   onSelectedCardsBySlotChange,
 }: CalculatorCardEnchantModalProps) {
-  const [allCards, setAllCards] = useState<CalculatorItemIndexOption[]>([]);
-  const [allEnchants, setAllEnchants] = useState<CalculatorItemIndexOption[]>([]);
+  const { allCards, allEnchants, enchantMapping, isLoading } = useEnchantModalData();
 
-  // Uma query de busca por slot (card) e uma por slot (enchant)
   const [cardQueries, setCardQueries] = useState<Record<number, string>>({});
   const [enchantQueries, setEnchantQueries] = useState<Record<number, string>>({});
-  const [enchantMapping, setEnchantMapping] = useState<Record<string, (number[] | null)[]>>({});
 
   const selectedItemId = selectedItemsBySlot[editingSlot];
   const selectedItem = selectedItemId ? selectedItemDetails[selectedItemId] : undefined;
   const selectedCards = selectedCardsBySlot[editingSlot] ?? [];
   const cardSlotCount = getCardSlotCount(selectedItem);
-
-  // Carregar todas as cartas de uma vez
-  useEffect(() => {
-    searchCalculatorItems({ kind: "card", limit: 10000, query: "" })
-      .then((items) => {
-        const cardsOnly = items.filter((item) => (item as any).rawSubType !== "Enchant");
-        const enchantsOnly = items.filter((item) => (item as any).rawSubType === "Enchant");
-        setAllCards(cardsOnly);
-        setAllEnchants(enchantsOnly);
-      })
-      .catch(() => {
-        setAllCards([]);
-        setAllEnchants([]);
-      });
-
-    fetchEnchantMapping()
-      .then(setEnchantMapping)
-      .catch(() => setEnchantMapping({}));
-  }, []);
 
   // Cartas filtradas por slot de equipamento
   const filteredCards = useMemo(() => {
@@ -124,7 +101,7 @@ export function CalculatorCardEnchantModal({
   // Busca lista de encantamentos válidos para o equipamento selecionado
   const validEnchants = useMemo(() => {
     if (!selectedItem) return null;
-    const aegisName = (selectedItem as any).sourceName || "";
+    const aegisName = (selectedItem as never).sourceName || "";
     return enchantMapping[selectedItem.id] || enchantMapping[aegisName] || enchantMapping[selectedItem.name] || null;
   }, [selectedItem, enchantMapping]);
 
@@ -148,7 +125,7 @@ export function CalculatorCardEnchantModal({
     const query = (cardQueries[index] ?? "").trim().toLowerCase();
     if (!query) return filteredCards;
     return filteredCards.filter((card) =>
-      `${(card as any).searchText ?? ""} ${card.name} ${card.id}`
+      `${(card as never).searchText ?? ""} ${card.name} ${card.id}`
         .toLowerCase()
         .includes(query),
     );
@@ -169,7 +146,7 @@ export function CalculatorCardEnchantModal({
 
     if (!query) return options;
     return options.filter((enc) =>
-      `${(enc as any).searchText ?? ""} ${enc.name} ${enc.id}`
+      `${(enc as never).searchText ?? ""} ${enc.name} ${enc.id}`
         .toLowerCase()
         .includes(query),
     );
@@ -208,7 +185,7 @@ export function CalculatorCardEnchantModal({
               <Gem size={11} />
               Cartas ({cardSlotCount})
             </span>
-            <div className="grid gap-1.5" style={{ gridTemplateColumns: cardSlotCount <= 2 ? '1fr '.repeat(cardSlotCount) : '1fr 1fr' }}>
+            <div className={`grid gap-1.5 ${cardSlotCount === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
               {Array.from({ length: cardSlotCount }, (_, index) => {
                 const selectedCardId = selectedCards[index];
                 const options = getFilteredCardOptions(index).slice(0, 100);
@@ -217,12 +194,12 @@ export function CalculatorCardEnchantModal({
                 const currentDetail = selectedItemDetails[selectedCardId];
                 const ensuredOptions = [...options];
                 if (selectedCardId && currentDetail && !ensuredOptions.some(o => o.id === selectedCardId)) {
-                  ensuredOptions.unshift({ ...currentDetail, cardSlots: null, hasModifiers: true } as any);
+                  ensuredOptions.unshift({ ...currentDetail, cardSlots: null, hasModifiers: true } as never);
                 }
 
                 return (
                   <div key={`card-${index}`} className="flex flex-col gap-0.5">
-                    <span className="text-[9px] text-slate-500 font-medium pl-0.5">Carta {index + 1}</span>
+                    <span className="text-[11px] text-slate-500 font-medium pl-0.5">Carta {index + 1}</span>
                     <RichSelect
                       groups={[{
                         label: "Cartas",
@@ -257,7 +234,7 @@ export function CalculatorCardEnchantModal({
             <Sparkles size={11} />
             Encantamentos
           </span>
-          <div className="grid gap-1.5" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+          <div className="grid gap-1.5 grid-cols-3">
             {Array.from({ length: 3 }, (_, index) => {
               const enchantIndex = cardSlotCount + index;
               const selectedEnchantId = selectedCards[enchantIndex];
@@ -267,12 +244,12 @@ export function CalculatorCardEnchantModal({
               const currentDetail = selectedItemDetails[selectedEnchantId];
               const ensuredOptions = [...options];
               if (selectedEnchantId && currentDetail && !ensuredOptions.some(o => o.id === selectedEnchantId)) {
-                ensuredOptions.unshift({ ...currentDetail, cardSlots: null, hasModifiers: true } as any);
+                ensuredOptions.unshift({ ...currentDetail, cardSlots: null, hasModifiers: true } as never);
               }
               
               const cascadeOptions = [...allEnchants];
               if (selectedEnchantId && currentDetail && !cascadeOptions.some(o => o.id === selectedEnchantId)) {
-                cascadeOptions.unshift({ ...currentDetail, cardSlots: null, hasModifiers: true } as any);
+                cascadeOptions.unshift({ ...currentDetail, cardSlots: null, hasModifiers: true } as never);
               }
 
               // Se o item tiver um mapeamento restrito e aquele slot for null/vazio de propósito (ex: arma com só 1 encanto), 
@@ -282,7 +259,7 @@ export function CalculatorCardEnchantModal({
 
               return (
                 <div key={`enchant-${index}`} className="flex flex-col gap-0.5">
-                  <span className="text-[9px] text-slate-500 font-medium pl-0.5">Encant. {index + 1}</span>
+                  <span className="text-[11px] text-slate-500 font-medium pl-0.5">Encant. {index + 1}</span>
                   {isSpecific ? (
                     <RichSelect
                       disabled={isSlotDisabled}
