@@ -115,7 +115,7 @@ export class RathenaScriptParser {
         condition = {
            type: "equip_refine",
            locationId: slotId,
-           operator: operator as any,
+           operator: operator as never,
            value: Number(refineValue),
         };
       } else if (varExpr === "getrefine()" || varExpr === ".@r") {
@@ -266,7 +266,7 @@ export class RathenaScriptParser {
         condition = {
            type: "equip_refine",
            locationId: slotId,
-           operator: operator as any,
+           operator: operator as never,
            value: Number(refineValue),
         };
       } else if (varExpr === "getrefine()" || varExpr === ".@r") {

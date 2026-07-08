@@ -4,99 +4,105 @@ import type {
   SkillFormulaResult,
 } from "../skill-formula.types";
 
-/**
- * BÔNUS DE DANO BASE (Fácil Manutenção para o Servidor bRO / LATAM)
- * Você pode alterar esses valores abaixo caso o servidor aplique nerfs ou buffs nas skills.
- * Por exemplo, no rAthena puro, o base da Vulcan é 250 (250 * 5 = 1250%), 
- * mas se no bRO for 180 (180 * 5 = 900%), altere aqui.
- */
-const BASE_MULTIPLIERS = {
-  SOUL_VULCAN_STRIKE: 250, // Multiplicador por nível
-  MYSTERY_ILLUSION: 150,
-  TORNADO_STORM: 150,
-  RAIN_OF_CRYSTAL: 150,
-  FLORAL_FLARE_ROAD: 150,
-};
-
-const archMageFormulas: Record<
+const formulas: Record<
   string,
   (input: SkillFormulaInput) => SkillFormulaResult
 > = {
-  AG_SOUL_VC_STRIKE: (input) => {
-    // Formula: [ (Base Dmg * SkillLv) + (SPL * 3) ] * (BaseLevel / 100)
-    let baseDmg = BASE_MULTIPLIERS.SOUL_VULCAN_STRIKE * input.skillLevel;
-    let multiplier = baseDmg + (input.character.effectiveStats.spl || 0) * 3;
-    let finalMultiplier = (multiplier * input.character.baseLevel) / 100;
-
+  AG_SOUL_VC_STRIKE: (input) => ({
+    formulaId: "static:AG_SOUL_VC_STRIKE",
+    // C++: skillratio += -100 + 180 * skill_lv + 3 * spl
+    multiplier: ((180 * input.skillLevel + input.character.effectiveStats.spl * 3) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skillLevel + 2,
+    precision: "validated",
+  }),
+  AG_CRIMSON_ARROW: (input) => ({
+    formulaId: "static:AG_CRIMSON_ARROW",
+    // C++: skillratio += -100 + 400 * skill_lv + 3 * spl
+    multiplier: ((400 * input.skillLevel + input.character.effectiveStats.spl * 3) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_ALL_BLOOM: (input) => ({
+    formulaId: "static:AG_ALL_BLOOM",
+    // C++ (AG_ALL_BLOOM_ATK): skillratio += -100 + 200 + 1200 * skill_lv + 5 * spl
+    multiplier: ((200 + 1200 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_ASTRAL_STRIKE: (input) => {
+    // C++: skillratio += -100 + 300 + 1800 * skill_lv + 10 * spl
+    // If undead/dragon: + 100 + 300 * skill_lv
+    const isBonusRace = input.monster.race === "undead" || input.monster.race === "dragon";
+    let ratio = 300 + 1800 * input.skillLevel + input.character.effectiveStats.spl * 10;
+    if (isBonusRace) ratio += 100 + 300 * input.skillLevel;
+    
     return {
-      formulaId: "AG_SOUL_VC_STRIKE",
-      multiplier: finalMultiplier / 100,
-      hitCount: 7, // Hita 7 vezes no nv 5
+      formulaId: "static:AG_ASTRAL_STRIKE",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
       precision: "validated",
-    };
+    }
   },
-  AG_MYSTERY_ILLUSION: (input) => {
-    // Formula: [ (Base Dmg * SkillLv) + (SPL * 5) ] * (BaseLevel / 100)
-    let baseDmg = BASE_MULTIPLIERS.MYSTERY_ILLUSION * input.skillLevel;
-    let multiplier = baseDmg + (input.character.effectiveStats.spl || 0) * 5;
-    let finalMultiplier = (multiplier * input.character.baseLevel) / 100;
-
-    return {
-      formulaId: "AG_MYSTERY_ILLUSION",
-      multiplier: finalMultiplier / 100,
-      hitCount: 1, // Mystery Illusion causa dano por tick
-      precision: "validated",
-    };
-  },
-  AG_TORNADO_STORM: (input) => {
-    // Formula: [ (Base Dmg * SkillLv) + (SPL * 3) ] * (BaseLevel / 100)
-    let baseDmg = BASE_MULTIPLIERS.TORNADO_STORM * input.skillLevel;
-    let multiplier = baseDmg + (input.character.effectiveStats.spl || 0) * 3;
-    let finalMultiplier = (multiplier * input.character.baseLevel) / 100;
-
-    return {
-      formulaId: "AG_TORNADO_STORM",
-      multiplier: finalMultiplier / 100,
-      hitCount: 1, // Depende do level, mas normalmente considerado por hit de tornado
-      precision: "validated",
-    };
-  },
-  AG_RAIN_OF_CRYSTAL: (input) => {
-    // Formula: [ (Base Dmg * SkillLv) + (SPL * 5) ] * (BaseLevel / 100)
-    let baseDmg = BASE_MULTIPLIERS.RAIN_OF_CRYSTAL * input.skillLevel;
-    let multiplier = baseDmg + (input.character.effectiveStats.spl || 0) * 5;
-    let finalMultiplier = (multiplier * input.character.baseLevel) / 100;
-
-    return {
-      formulaId: "AG_RAIN_OF_CRYSTAL",
-      multiplier: finalMultiplier / 100,
-      hitCount: 1, // Dano em área/ticks
-      precision: "validated",
-    };
-  },
-  AG_FLORAL_FLARE_ROAD: (input) => {
-    // Formula: [ (Base Dmg * SkillLv) + (SPL * 5) ] * (BaseLevel / 100)
-    let baseDmg = BASE_MULTIPLIERS.FLORAL_FLARE_ROAD * input.skillLevel;
-    let multiplier = baseDmg + (input.character.effectiveStats.spl || 0) * 5;
-    let finalMultiplier = (multiplier * input.character.baseLevel) / 100;
-
-    return {
-      formulaId: "AG_FLORAL_FLARE_ROAD",
-      multiplier: finalMultiplier / 100,
-      hitCount: 1,
-      precision: "validated",
-    };
-  },
+  AG_ROCK_DOWN: (input) => ({
+    formulaId: "static:AG_ROCK_DOWN",
+    // C++: skillratio += -100 + 1550 * skill_lv + 5 * spl 
+    // (+300 * skill_lv if climax, we will assume no climax or add climax buff later)
+    multiplier: ((1550 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_STORM_CANNON: (input) => ({
+    formulaId: "static:AG_STORM_CANNON",
+    // C++: skillratio += -100 + 1550 * skill_lv + 5 * spl
+    multiplier: ((1550 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_RAIN_OF_CRYSTAL: (input) => ({
+    formulaId: "static:AG_RAIN_OF_CRYSTAL",
+    // C++: skillratio += -100 + 180 + 760 * skill_lv + 5 * spl
+    multiplier: ((180 + 760 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_STRANTUM_TREMOR: (input) => ({
+    formulaId: "static:AG_STRANTUM_TREMOR",
+    // C++: skillratio += -100 + 100 + 730 * skill_lv + 5 * spl
+    multiplier: ((100 + 730 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_TORNADO_STORM: (input) => ({
+    formulaId: "static:AG_TORNADO_STORM",
+    // C++: skillratio += -100 + 100 + 760 * skill_lv + 5 * spl
+    multiplier: ((100 + 760 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_VIOLENT_QUAKE: (input) => ({
+    formulaId: "static:AG_VIOLENT_QUAKE",
+    // C++: skillratio += -100 + 200 + 1200 * skill_lv + 5 * spl
+    multiplier: ((200 + 1200 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_MYSTERY_ILLUSION: (input) => ({
+    formulaId: "static:AG_MYSTERY_ILLUSION",
+    // C++: skillratio += -100 + 500 * skill_lv + 5 * spl
+    multiplier: ((500 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  })
 };
 
 export class ArchMageSkillFormula implements SkillFormulaAdapter {
   readonly id = "arch-mage";
 
-  supports(skill: { name: string }): boolean {
-    return skill.name in archMageFormulas;
+  supports(skill: { id: string }): boolean {
+    return skill.id in formulas;
   }
 
   calculate(input: SkillFormulaInput): SkillFormulaResult {
-    return archMageFormulas[input.skill.name](input);
+    return formulas[input.skill.id](input);
   }
 }

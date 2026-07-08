@@ -395,7 +395,7 @@ describe("DamageFormulaPipeline", () => {
       weaponLevel: 4,
       equipLevel: 100,
       source: "manual",
-    } as any;
+    } as never;
     const largeTarget: RoMonster = {
       ...neutralTarget,
       size: "large",
@@ -524,7 +524,7 @@ describe("DamageFormulaPipeline", () => {
       weaponLevel: 3,
       equipLevel: 27,
       source: "rathena",
-    } as any;
+    } as never;
 
     const resultWithoutEdp = pipeline.calculate({
       character: assassinCharacter,

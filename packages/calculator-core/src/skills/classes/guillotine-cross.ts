@@ -4,56 +4,41 @@ import type {
   SkillFormulaResult,
 } from "../skill-formula.types";
 
-const gcSkillFormulas: Record<
+const formulas: Record<
   string,
   (input: SkillFormulaInput) => SkillFormulaResult
 > = {
-  GC_CROSSIMPACT: (input) => {
-    // Cross Impact Formula (Renewal):
-    // Multiplier: (1000 + 150 * SkillLevel) * (BaseLevel / 100) %
-    // Hit Count: 7
-    // EDP (Enchant Deadly Poison) halves the final damage multiplier of Cross Impact in some formulas,
-    // or modifies the weapon attack. In kRO/Renewal, EDP gives +400% weapon ATK globally,
-    // but specific skills (like Cross Impact) might have their own multiplier halves.
-    // For now, we will apply the EDP damage modification for the skill.
-    // Assuming EDP halves the skill damage directly for Cross Impact (a common balance change in some servers, we can adjust later).
-    
-    let baseMultiplier = (1000 + 150 * input.skillLevel);
-    
-    if (input.modifierEffects.edpActive) {
-      // Typically EDP on Cross Impact is halved or reduced. Let's say * 0.5 for now,
-      // this can be refined with exact rAthena rules later.
-      baseMultiplier *= 0.5;
-    }
-    
-    const finalMultiplier = (baseMultiplier * input.character.baseLevel) / 100;
-
-    return {
-      formulaId: "GC_CROSSIMPACT",
-      multiplier: finalMultiplier / 100,
-      hitCount: 7,
-      precision: "validated",
-    };
-  },
-  GC_VENOMIMPRESS: (input) => {
-    // Venom Impress doesn't deal direct damage, but if used as an attack for some reason:
-    return {
-      formulaId: "GC_VENOMIMPRESS",
-      multiplier: 0,
-      hitCount: 1,
-      precision: "validated",
-    };
-  },
+  GC_CROSSIMPACT: (input) => ({
+    formulaId: "static:GC_CROSSIMPACT",
+    // C++: skillratio += -100 + 1400 + 150 * skill_lv;
+    multiplier: ((1400 + 150 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  GC_ROLLINGCUTTER: (input) => ({
+    formulaId: "static:GC_ROLLINGCUTTER",
+    // C++: skillratio += -100 + 50 + 80 * skill_lv;
+    multiplier: ((50 + 80 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  GC_CROSSRIPPERSLASHER: (input) => ({
+    formulaId: "static:GC_CROSSRIPPERSLASHER",
+    // C++: skillratio += -100 + 80 * skill_lv + (sstatus->agi * 3);
+    multiplier: ((80 * input.skillLevel + input.character.effectiveStats.agi * 3) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  })
 };
 
 export class GuillotineCrossSkillFormula implements SkillFormulaAdapter {
   readonly id = "guillotine-cross";
 
   supports(skill: { id: string }): boolean {
-    return skill.id in gcSkillFormulas;
+    return skill.id in formulas;
   }
 
   calculate(input: SkillFormulaInput): SkillFormulaResult {
-    return gcSkillFormulas[input.skill.id](input);
+    return formulas[input.skill.id](input);
   }
 }
