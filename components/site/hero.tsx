@@ -1,9 +1,8 @@
 import Image from "next/image";
-import { Calculator, MessageCircle } from "lucide-react";
+import { Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Dictionary } from "@/content/i18n";
 import { ParticleField } from "./particle-field";
-import { discordInviteUrl } from "./site-links";
 
 type HeroProps = {
   siteName: string;

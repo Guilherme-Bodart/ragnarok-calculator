@@ -1,5 +1,4 @@
 import type { Dictionary } from "@/content/i18n";
-import { discordInviteUrl } from "./site-links";
 
 type SiteHeaderProps = {
   t: Dictionary["nav"];
