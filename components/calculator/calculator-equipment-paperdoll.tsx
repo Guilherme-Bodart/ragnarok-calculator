@@ -50,18 +50,38 @@ export function CalculatorEquipmentPaperdoll({
       {slots.map((slot) => {
         const Icon = slot.icon;
         const label = copy.equipment.slots[slot.id];
-        const itemId = selectedItemsBySlot[slot.id];
-        const item = itemId ? selectedItemDetails[itemId] : null;
+        let itemId = selectedItemsBySlot[slot.id];
+        let item = itemId ? selectedItemDetails[itemId] : null;
+
+        const weaponId = selectedItemsBySlot["weapon" as EquipmentSlot];
+        const weaponItem = weaponId ? selectedItemDetails[weaponId] : null;
+        const isTwoHandedWeapon = weaponItem && [
+          "twoHandSword", "twoHandSpear", "twoHandStaff", "twoHandAxe",
+          "bow", "katar", "rifle", "shotgun", "gatlingGun", "grenadeLauncher",
+          "musicalInstrument", "whip"
+        ].includes(weaponItem.weaponType ?? "");
+
+        const isVisualTwoHandedOccupied = Boolean(slot.id === "shield" && isTwoHandedWeapon);
+        if (isVisualTwoHandedOccupied) {
+          itemId = weaponId;
+          item = weaponItem;
+        }
 
         return (
           <button
             type="button"
             className={`equipment-slot relative flex items-center justify-start gap-3 overflow-hidden min-w-0 transition-all duration-300 rounded-lg p-2.5 border 
-              ${item ? 'bg-gradient-to-br from-sky-900/60 to-slate-900/80 border-sky-500/30 shadow-[inset_0_0_15px_rgba(14,165,233,0.1)] hover:border-sky-400/50 hover:shadow-[0_4px_20px_rgba(56,189,248,0.2)]' : 'bg-slate-900/40 border-slate-700/50 hover:bg-slate-800/60 hover:border-slate-500/50'}`}
+              ${item ? 'bg-gradient-to-br from-sky-900/60 to-slate-900/80 border-sky-500/30 shadow-[inset_0_0_15px_rgba(14,165,233,0.1)] hover:border-sky-400/50 hover:shadow-[0_4px_20px_rgba(56,189,248,0.2)]' : 'bg-slate-900/40 border-slate-700/50 hover:bg-slate-800/60 hover:border-slate-500/50'}
+              ${isVisualTwoHandedOccupied ? 'opacity-60 saturate-50' : ''}`}
+
             data-slot-area={slot.area}
             key={slot.id}
             aria-label={`${label}: ${item?.name ?? copy.equipment.empty}`}
-            onClick={() => onEditSlot(slot.id)}
+            onClick={() => {
+              if (isVisualTwoHandedOccupied) return;
+              onEditSlot(slot.id);
+            }}
+            disabled={isVisualTwoHandedOccupied}
           >
             {item ? (
               <div className="shrink-0 p-1 bg-slate-950/50 rounded-md border border-slate-700/50 shadow-sm">

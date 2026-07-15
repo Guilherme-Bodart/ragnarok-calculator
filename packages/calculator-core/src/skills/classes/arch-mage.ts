@@ -8,13 +8,18 @@ const formulas: Record<
   string,
   (input: SkillFormulaInput) => SkillFormulaResult
 > = {
-  AG_SOUL_VC_STRIKE: (input) => ({
-    formulaId: "static:AG_SOUL_VC_STRIKE",
-    // C++: skillratio += -100 + 180 * skill_lv + 3 * spl
-    multiplier: ((180 * input.skillLevel + input.character.effectiveStats.spl * 3) * input.character.baseLevel) / 100 / 100,
-    hitCount: input.skillLevel + 2,
-    precision: "validated",
-  }),
+  AG_SOUL_VC_STRIKE: (input) => {
+    const hitCount = input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount;
+    // Formula per hit: (180 * skillLevel + 3 * SPL) * BaseLv / 100
+    const perHitRatio = (180 * input.skillLevel) + (input.character.effectiveStats.spl * 3);
+    const multiplier = (perHitRatio * input.character.baseLevel / 100 / 100) * hitCount;
+    return {
+      formulaId: "static:AG_SOUL_VC_STRIKE",
+      multiplier,
+      hitCount,
+      precision: "validated",
+    };
+  },
   AG_CRIMSON_ARROW: (input) => ({
     formulaId: "static:AG_CRIMSON_ARROW",
     // C++: skillratio += -100 + 400 * skill_lv + 3 * spl

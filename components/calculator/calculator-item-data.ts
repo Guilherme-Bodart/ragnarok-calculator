@@ -1,4 +1,4 @@
-import type { RoItem } from "@/packages/calculator-core/src";
+import { type RoItem, type EquipmentSlot } from "@/packages/calculator-core/src";
 
 export type CalculatorItemIndexOption = CalculatorItemDetail & {
   sourceName?: string | null;
@@ -8,7 +8,11 @@ export type CalculatorItemIndexOption = CalculatorItemDetail & {
 };
 
 export type CalculatorItemDetail = RoItem & {
-  refineable: boolean;
+  slots?: EquipmentSlot[];
+  sourceName?: string;
+  searchText?: string;
+  description?: string;
+  refineable?: boolean;
   rawType?: string | null;
   rawSubType?: string | null;
 };

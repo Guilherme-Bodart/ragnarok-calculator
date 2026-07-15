@@ -6,8 +6,16 @@ export function getMagicalBasePower(character: EffectiveCharacter) {
   return character.statusMatk;
 }
 
-export function sumMagicalEquipmentPower(items: RoItem[]) {
-  return items.reduce((total, item) => total + (item.magicAttack ?? 0), 0);
+export function sumMagicalEquipmentPower(items: RoItem[], effects?: CalculatorModifierEffects) {
+  return items.reduce((total, item) => {
+    let base = item.magicAttack ?? 0;
+
+    if (effects?.recognizedSpell && item.slots?.includes("weapon") && item.weaponLevel) {
+      base += Math.floor(base * (item.weaponLevel * 0.1));
+    }
+
+    return total + base;
+  }, 0);
 }
 
 export function getMagicalModifierFlatPower(effects: CalculatorModifierEffects) {

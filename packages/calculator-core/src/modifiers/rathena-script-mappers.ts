@@ -49,6 +49,12 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     createModifier("pAtk", "addFlat", command, conditions, variables),
   bSMatk: (command, conditions, variables) =>
     createModifier("smatk", "addFlat", command, conditions, variables),
+  bHPlus: (command, conditions, variables) =>
+    createModifier("healPlus", "addFlat", command, conditions, variables),
+  bCrate: (command, conditions, variables) =>
+    createModifier("criticalDamageRate", "addFlat", command, conditions, variables),
+  bCRate: (command, conditions, variables) =>
+    createModifier("criticalDamageRate", "addFlat", command, conditions, variables),
   bAtkRate: (command, conditions, variables) =>
     createModifier("atkRate", "addPercent", command, conditions, variables),
   bShortAtkRate: (command, conditions, variables) =>
@@ -87,7 +93,7 @@ export const BONUS_MAPPERS: Record<string, ModifierMapper> = {
     const [, rathenaElementId] = command.args;
     const elementId = toInternalElementId(rathenaElementId);
 
-    if (!elementId || elementId === "all") {
+    if (!elementId) {
       return null;
     }
 
@@ -372,6 +378,8 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
       variables,
       "addFlat",
     ),
+  bSkillCooldown: (command, conditions, variables) =>
+    createSkillModifier("skillCooldown", command, conditions, variables, "addFlat"),
   bMagicAtkEle: (command, conditions, variables) => {
     const [, rathenaElementId, value] = command.args;
     const elementId = toInternalElementId(rathenaElementId);
@@ -541,59 +549,7 @@ export const BONUS2_MAPPERS: Record<string, ModifierMapper> = {
 };
 
 function createModifier(
-  stat:
-    | "atk"
-    | "matk"
-    | "str"
-    | "agi"
-    | "vit"
-    | "int"
-    | "dex"
-    | "luk"
-    | "pow"
-    | "sta"
-    | "wis"
-    | "spl"
-    | "con"
-    | "crt"
-    | "allStats"
-    | "pAtk"
-    | "smatk"
-    | "atkRate"
-    | "shortAttackRate"
-    | "longAttackRate"
-    | "matkRate"
-    | "baseAtk"
-    | "defense"
-    | "magicDefense"
-    | "res"
-    | "mres"
-    | "weaponElement"
-    | "maxHp"
-    | "maxHpRate"
-    | "maxSp"
-    | "maxSpRate"
-    | "maxAp"
-    | "maxApRate"
-    | "hit"
-    | "perfectHitRate"
-    | "flee"
-    | "crit"
-    | "criticalDamageRate"
-    | "healPower"
-    | "aspd"
-    | "aspdRate"
-    | "variableCastRate"
-    | "fixedCastRate"
-    | "fixedCast"
-    | "afterCastDelayRate"
-    | "spCostRate"
-    | "unbreakableArmor"
-    | "unbreakableWeapon"
-    | "unbreakableShield"
-    | "unbreakableHelm"
-    | "unbreakableShoes"
-    | "unbreakableGarment",
+  stat: NormalizedModifier["stat"],
   operator: "addFlat" | "addPercent",
   command: ParsedCommand,
   conditions: ModifierCondition[],
@@ -651,32 +607,7 @@ function createBooleanModifier(
 }
 
 function createTargetedModifier(
-  stat:
-    | "raceDamageRate"
-    | "elementDamageRate"
-    | "sizeDamageRate"
-    | "skillDamageRate"
-    | "magicRaceDamageRate"
-    | "magicElementDamageRate"
-    | "magicSizeDamageRate"
-    | "classDamageRate"
-    | "magicClassDamageRate"
-    | "magicElementAttackRate"
-    | "ignoreDefenseRate"
-    | "ignoreMagicDefenseRate"
-    | "ignoreDefenseClassRate"
-    | "ignoreMagicDefenseClassRate"
-    | "ignoreDefenseSizeRate"
-    | "ignoreMagicDefenseSizeRate"
-    | "incomingRaceDamageReductionRate"
-    | "incomingElementDamageReductionRate"
-    | "incomingClassDamageReductionRate"
-    | "incomingSizeDamageReductionRate"
-    | "criticalRaceDamageRate"
-    | "weaponElement"
-    | "skillVariableCastRate"
-    | "skillFixedCastRate"
-    | "skillFixedCast",
+  stat: NormalizedModifier["stat"],
   target: NormalizedModifier["target"],
   command: ParsedCommand,
   conditions: ModifierCondition[],
@@ -699,7 +630,7 @@ function createTargetedModifier(
 }
 
 function createSkillModifier(
-  stat: "skillVariableCastRate" | "skillFixedCastRate" | "skillFixedCast",
+  stat: "skillVariableCastRate" | "skillFixedCastRate" | "skillFixedCast" | "skillCooldown",
   command: ParsedCommand,
   conditions: ModifierCondition[],
   variables: ParserVariables,

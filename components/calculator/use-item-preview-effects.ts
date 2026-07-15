@@ -14,7 +14,7 @@ function translateRace(race: string): string {
   const map: Record<string, string> = {
     formless: "Amorfo", undead: "Morto-Vivo", brute: "Bruto", plant: "Planta",
     insect: "Inseto", fish: "Peixe", demon: "Demônio", demihuman: "Humanoide",
-    angel: "Anjo", dragon: "Dragão", player: "Jogador", playerdoram: "Doram", all: "Todos",
+    angel: "Anjo", dragon: "Dragão", player: "Jogador", playerhuman: "Humanoide (Jogador)", playerdoram: "Doram", all: "Todas as Raças",
   };
   return map[race.toLowerCase()] || race;
 }

@@ -59,14 +59,14 @@ export function categorizeEnchants(options: CalculatorItemIndexOption[]): Enchan
   };
 
   const races = {
-    Amorfo: "Formless", "Morto-Vivo": "Undead", Bruto: "Brute", Planta: "Plant",
+    Todos: "All", Amorfo: "Formless", "Morto-Vivo": "Undead", Bruto: "Brute", Planta: "Plant",
     Inseto: "Insect", Peixe: "Fish", Demônio: "Demon", "Demi-Humano": "DemiHuman",
     Anjo: "Angel", Dragão: "Dragon"
   };
-  const sizes = { Pequeno: "Small", Médio: "Medium", Grande: "Large" };
-  const classes = { Normal: "Normal", Chefe: "Boss", Todos: "All" };
+  const sizes = { Todos: "All", Pequeno: "Small", Médio: "Medium", Grande: "Large" };
+  const classes = { Todos: "All", Normal: "Normal", Chefe: "Boss" };
   const elements = {
-    Neutro: "Neutral", Água: "Water", Terra: "Earth", Fogo: "Fire", Vento: "Wind",
+    Todos: "All", Neutro: "Neutral", Água: "Water", Terra: "Earth", Fogo: "Fire", Vento: "Wind",
     Veneno: "Poison", Sagrado: "Holy", Sombrio: "Dark", Fantasma: "Ghost", "Maldito": "Undead"
   };
 

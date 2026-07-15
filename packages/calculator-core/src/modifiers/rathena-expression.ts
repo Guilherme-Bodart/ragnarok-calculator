@@ -5,6 +5,7 @@ type ExpressionVariables = {
   learnedSkills?: Record<string, number | undefined>;
   locals?: Record<string, number | undefined>;
   refinesBySlot?: Record<string, number>;
+  stats?: Record<string, number>;
 };
 
 type Token =
@@ -95,6 +96,16 @@ function tokenizeExpression(expression: string): Token[] | null {
       tokens.push({ type: "identifier", value: match[0] });
       index += match[0].length;
       continue;
+    }
+
+    if (expression.startsWith("readparam", index)) {
+      const match = expression.slice(index).match(/^readparam\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)/);
+      if (match) {
+        const paramName = match[1].toLowerCase().replace(/^b/, "");
+        tokens.push({ type: "variable", value: paramName });
+        index += match[0].length;
+        continue;
+      }
     }
 
     if (expression.startsWith(".@", index)) {
@@ -345,6 +356,12 @@ class ExpressionParser {
       EQI_ACC_R: 8,
       EQI_HEAD_MID: 9,
       EQI_HEAD_LOW: 10,
+      bStr: 1,
+      bAgi: 2,
+      bVit: 3,
+      bInt: 4,
+      bDex: 5,
+      bLuk: 6,
     };
 
     return constants[name] ?? null;
@@ -436,6 +453,20 @@ class ExpressionParser {
       return 0;
     }
 
+    if (functionName === "readparam" && args.length === 1) {
+      const statMap: Record<number, string> = {
+        1: "str",
+        2: "agi",
+        3: "vit",
+        4: "int",
+        5: "dex",
+        6: "luk",
+      };
+      const statName = statMap[args[0]];
+      if (!statName) return 0;
+      return this.variables.stats?.[statName] ?? 0;
+    }
+
     return null;
   }
 
@@ -514,14 +545,21 @@ class ExpressionParser {
       Ele_Dark: 7,
       Ele_Ghost: 8,
       Ele_Undead: 9,
+      bStr: 1,
+      bAgi: 2,
+      bVit: 3,
+      bInt: 4,
+      bDex: 5,
+      bLuk: 6,
     };
     if (constants[variable] !== undefined) {
       return constants[variable];
     }
 
-    if (variable === "refine") return this.variables.refine ?? null;
-    if (variable === "grade") return this.variables.grade ?? null;
-    if (variable === "baseLevel") return this.variables.baseLevel ?? null;
+    if (variable === "refine") return this.variables.locals?.["r"] ?? this.variables.refine ?? null;
+    if (variable === "grade") return this.variables.locals?.["g"] ?? this.variables.grade ?? null;
+    if (variable === "baseLevel") return this.variables.locals?.["baseLevel"] ?? this.variables.baseLevel ?? null;
+    if (this.variables.stats?.[variable] !== undefined) return this.variables.stats[variable];
 
     return this.variables.locals?.[variable] ?? null;
   }

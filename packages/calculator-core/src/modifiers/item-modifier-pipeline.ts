@@ -37,15 +37,15 @@ export class ItemModifierPipeline {
     source: ItemModifierSource,
     context: ModifierResolutionContext,
   ) {
+    if (source.rawScript) {
+      return this.normalizer.fromRawScript(source.rawScript, context);
+    }
+
     if (source.modifiers) {
       return {
         modifiers: source.modifiers,
         unsupportedStatements: [],
       };
-    }
-
-    if (source.rawScript) {
-      return this.normalizer.fromRawScript(source.rawScript, context);
     }
 
     return {

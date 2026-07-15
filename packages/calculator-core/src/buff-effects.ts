@@ -116,8 +116,11 @@ export type BuffEffect = {
   /** MaxSP % */
   maxSpRate?: number;
 
-  /** Flag especial para Enchant Deadly Poison (EDP) */
+  /** Indica se EDP está ativo (Assassins) */
   edpActive?: boolean;
+
+  /** Indica se Maestria Arcana está ativa (Warlocks) */
+  recognizedSpell?: boolean;
 };
 
 /**
@@ -167,6 +170,7 @@ export function mergeBuffEffects(
     // weaponElement: último buff que definir um elemento vence (ex: endow > conversor)
     if (buff.weaponElement !== undefined) result.weaponElement = buff.weaponElement;
     if (buff.edpActive !== undefined) result.edpActive = buff.edpActive;
+    if (buff.recognizedSpell !== undefined) result.recognizedSpell = buff.recognizedSpell;
 
     result.raceDamageRate = mergeRecord(result.raceDamageRate, buff.raceDamageRate);
     result.elementDamageRate = mergeRecord(result.elementDamageRate, buff.elementDamageRate);

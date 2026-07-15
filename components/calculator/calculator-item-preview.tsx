@@ -151,7 +151,7 @@ export function CalculatorItemPreview({
       <div className="flex-1 min-h-[90px] max-h-[140px] overflow-y-auto custom-scrollbar">
         {tab === 0 && (
           <div className="p-1">
-            {formatGameDescription((item as never).description) ?? (
+            {formatGameDescription((item as any).description) ?? (
               <p className="text-slate-500 italic text-[11px]">Sem descrição disponível.</p>
             )}
           </div>

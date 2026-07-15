@@ -10,6 +10,7 @@ import {
   type StatBonus,
 } from "./job-stats";
 import type { CalculatorCharacter, CharacterStats, RoItem } from "./ro-types";
+import { getWeaponRefineAtk } from "./formulas/weapon";
 
 export type BaseStat = "str" | "agi" | "vit" | "int" | "dex" | "luk";
 export type TraitStat = "pow" | "sta" | "wis" | "spl" | "con" | "crt";
@@ -78,7 +79,20 @@ export class CharacterStatusEngine {
       addStatBonuses(baseStats, jobStatBonuses),
       itemStatBonuses,
     );
-    const weaponType = input.character.weaponType ?? "bareHand";
+    let weaponType = input.character.weaponType;
+    let weaponLevel = input.character.weaponLevel;
+    
+    if (!weaponType && input.items) {
+      const weapon = input.items.find((item) => item.weaponType !== undefined);
+      if (weapon) {
+        weaponType = weapon.weaponType;
+        weaponLevel = weapon.weaponLevel;
+      }
+    }
+    
+    weaponType = weaponType ?? "bareHand";
+    weaponLevel = weaponLevel ?? 0;
+
     const isRanged = [
       "bow", "revolver", "rifle", "gatlingGun", "shotgun",
       "grenadeLauncher", "musicalInstrument", "whip"
@@ -124,6 +138,7 @@ export class CharacterStatusEngine {
     const equipmentDefense = this.sumEquipmentPower(input.items ?? [], "defense");
     const flatAtk = input.modifierEffects?.flatAtk ?? 0;
     const flatMatk = input.modifierEffects?.flatMatk ?? 0;
+    const weaponRefinePower = getWeaponRefineAtk(weaponLevel, input.character.weaponRefine ?? 0);
 
     return {
       baseLevel: input.character.baseLevel,
@@ -132,7 +147,7 @@ export class CharacterStatusEngine {
       baseJob: input.character.baseJob,
       isTranscendent: input.character.isTranscendent ?? false,
       weaponType,
-      weaponLevel: input.character.weaponLevel ?? 0,
+      weaponLevel,
       weaponRefine: input.character.weaponRefine ?? 0,
       baseStats,
       jobStatBonuses,
@@ -172,8 +187,8 @@ export class CharacterStatusEngine {
       ),
       statusAtk,
       statusMatk,
-      atk: statusAtk + equipmentAtk + flatAtk + passiveEffects.atk,
-      matk: statusMatk + equipmentMatk + flatMatk + passiveEffects.matk,
+      atk: statusAtk + equipmentAtk + flatAtk + weaponRefinePower + passiveEffects.atk,
+      matk: statusMatk + equipmentMatk + flatMatk + weaponRefinePower + passiveEffects.matk,
       defense: equipmentDefense + (input.modifierEffects?.flatDefense ?? 0),
       magicDefense: input.modifierEffects?.flatMagicDefense ?? 0,
       res: traitEffects.res + (input.modifierEffects?.flatRes ?? 0),

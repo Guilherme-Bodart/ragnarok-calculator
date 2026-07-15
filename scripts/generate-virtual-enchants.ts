@@ -73,16 +73,15 @@ export function generateVirtualEnchants(): RathenaNormalizedItem[] {
   // Ignorar penalidade de tamanho
   pushItem(`Ignorar Penalidade de Tamanho`, `bonus bIgnoreSizeWeapon, 1;`);
 
-  // Raças, Classes, Tamanhos, Elementos
   const races = {
-    Amorfo: "Formless", "Morto-Vivo": "Undead", Bruto: "Brute", Planta: "Plant",
+    Todos: "All", Amorfo: "Formless", "Morto-Vivo": "Undead", Bruto: "Brute", Planta: "Plant",
     Inseto: "Insect", Peixe: "Fish", Demônio: "Demon", "Demi-Humano": "DemiHuman",
     Anjo: "Angel", Dragão: "Dragon"
   };
-  const sizes = { Pequeno: "Small", Médio: "Medium", Grande: "Large" };
+  const sizes = { Todos: "All", Pequeno: "Small", Médio: "Medium", Grande: "Large" };
   const classes = { Normal: "Normal", Chefe: "Boss", Todos: "All" };
   const elements = {
-    Neutro: "Neutral", Água: "Water", Terra: "Earth", Fogo: "Fire", Vento: "Wind",
+    Todos: "All", Neutro: "Neutral", Água: "Water", Terra: "Earth", Fogo: "Fire", Vento: "Wind",
     Veneno: "Poison", Sagrado: "Holy", Sombrio: "Dark", Fantasma: "Ghost", "Maldito": "Undead"
   };
 

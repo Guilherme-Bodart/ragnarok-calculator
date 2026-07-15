@@ -101,11 +101,18 @@ export class DamageFormulaPipeline {
     const context = this.createContext(input);
     // Em RO Renewal, a fórmula da Skill normalmente representa o dano TOTAL da habilidade.
     // Os hits (hitCount) apenas dividem esse dano visualmente.
-    const total = Math.max(1, context.singleHitDamage);
-    const damagePerHit = Math.max(1, Math.floor(total / Math.max(1, context.hitCount)));
-    
-    const minimum = Math.max(1, Math.floor(total * 0.95));
+    let total = Math.max(1, context.singleHitDamage);
+    let minimum = Math.max(1, Math.floor(total * 0.95));
     const maximum = Math.max(1, Math.floor(total * 1.05));
+
+    if (input.modifierEffects.recognizedSpell && input.skill.damageType === "magical") {
+      // Recognized Spell (Maestria Arcana) removes weapon MATK variance and locks it to maximum.
+      // In our abstract variance model, this shifts the average and minimum up to the maximum.
+      total = maximum;
+      minimum = maximum;
+    }
+
+    const damagePerHit = Math.max(1, Math.floor(total / Math.max(1, context.hitCount)));
 
     let criticalChance: number | undefined;
     let criticalDamage: number | undefined;
@@ -150,7 +157,7 @@ export class DamageFormulaPipeline {
       ? getMagicalBasePower(input.character)
       : getPhysicalBasePower(input.character);
     const equipmentPower = magical
-      ? sumMagicalEquipmentPower(input.items)
+      ? (console.log("weaponLevels: ", input.items.map(i => i.weaponLevel)), sumMagicalEquipmentPower(input.items, input.modifierEffects))
       : sumPhysicalEquipmentPower(input.items);
     const modifierFlatPower = magical
       ? getMagicalModifierFlatPower(input.modifierEffects)
@@ -178,9 +185,10 @@ export class DamageFormulaPipeline {
           input.monster,
           input.skill,
         );
-    const weaponRefinePower = magical
-      ? 0
-      : getWeaponRefineAtk(input.character.weaponLevel, input.character.weaponRefine);
+    const weaponRefinePower = getWeaponRefineAtk(
+      input.character.weaponLevel,
+      input.character.weaponRefine,
+    );
     const weaponSizeMultiplier = magical
       ? 1
       : getWeaponSizeMultiplier(input.character.weaponType, input.monster.size);

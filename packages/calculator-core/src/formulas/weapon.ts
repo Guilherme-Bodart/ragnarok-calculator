@@ -13,6 +13,27 @@ export function getWeaponRefineAtk(weaponLevel: number, weaponRefine: number) {
   return weaponRefine * (refinePowerByLevel[weaponLevel] ?? refinePowerByLevel[4]);
 }
 
+export function getWeaponOverUpgradeAtk(weaponLevel: number, weaponRefine: number) {
+  if (weaponRefine <= 0) return 0;
+  
+  const safeRefineByLevel: Record<number, number> = {
+    1: 7,
+    2: 6,
+    3: 5,
+    4: 4,
+  };
+  const overUpgradePowerByLevel: Record<number, number> = {
+    1: 3,
+    2: 5,
+    3: 8,
+    4: 14,
+  };
+  
+  const safeRefine = safeRefineByLevel[weaponLevel] ?? 4;
+  const overRefines = Math.max(0, weaponRefine - safeRefine);
+  return overRefines * (overUpgradePowerByLevel[weaponLevel] ?? 14);
+}
+
 export function getWeaponSizeMultiplier(
   weaponType: WeaponType | undefined,
   targetSize: MonsterSize,

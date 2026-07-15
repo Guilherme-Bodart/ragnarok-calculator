@@ -23,7 +23,7 @@ export function toInternalRaceId(
     RC_Fish: "fish",
     RC_Demon: "demon",
     RC_DemiHuman: "demihuman",
-    RC_Player_Human: "demihuman",
+    RC_Player_Human: "playerHuman",
     RC_Player_Doram: "playerDoram",
     RC_Angel: "angel",
     RC_Dragon: "dragon",

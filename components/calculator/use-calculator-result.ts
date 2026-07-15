@@ -33,7 +33,7 @@ export function useCalculatorResult({
   effectiveLearnedSkills: CalculatorInput["learnedSkills"];
   itemContexts: Record<number, { refine?: number; grade?: number }>;
   jobLevel: number;
-  resolvedCardItemIds: number[];
+  resolvedCardItemIds: { id: number; slot: string }[];
   resolvedEquipmentItemIds: number[];
   selectedClassId: string;
   selectedMonsterId: number;

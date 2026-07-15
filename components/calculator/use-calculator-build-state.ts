@@ -73,15 +73,38 @@ export function useCalculatorBuildState(copy: CalculatorDictionary) {
     [cardItemIds, equipmentItemIds, selectedItemDetails],
   );
   
-  const resolvedEquipmentItemIds = useMemo(
-    () => equipmentItemIds.filter((itemId) => Boolean(selectedItemDetails[itemId])),
-    [equipmentItemIds, selectedItemDetails],
-  );
+  const resolvedEquipmentItemIds = useMemo(() => {
+    let ids = Object.entries(store.selectedItemsBySlot)
+      .map(([slot, itemId]) => ({ slot, itemId: itemId as number }))
+      .filter((entry) => Boolean(entry.itemId && selectedItemDetails[entry.itemId]));
+
+    const weaponId = store.selectedItemsBySlot["weapon"];
+    const weaponItem = weaponId ? selectedItemDetails[weaponId] : null;
+    const isTwoHandedWeapon = weaponItem && [
+      "twoHandSword", "twoHandSpear", "twoHandRod", "twoHandAxe",
+      "bow", "katar", "rifle", "shotgun", "gatlingGun", "grenadeLauncher",
+      "musicalInstrument", "whip"
+    ].includes(weaponItem.weaponType ?? "");
+
+    if (isTwoHandedWeapon) {
+      ids = ids.filter((entry) => entry.slot !== "shield");
+    }
+
+    return ids.map((entry) => entry.itemId);
+  }, [store.selectedItemsBySlot, selectedItemDetails]);
   
-  const resolvedCardItemIds = useMemo(
-    () => cardItemIds.filter((itemId) => Boolean(selectedItemDetails[itemId])),
-    [cardItemIds, selectedItemDetails],
-  );
+  const resolvedCardItemIds = useMemo(() => {
+    const arr: { id: number; slot: string }[] = [];
+    for (const [slot, cards] of Object.entries(store.selectedCardsBySlot)) {
+      if (!Array.isArray(cards)) continue;
+      for (const id of cards) {
+        if (typeof id === "number" && selectedItemDetails[id]) {
+          arr.push({ id, slot });
+        }
+      }
+    }
+    return arr;
+  }, [store.selectedCardsBySlot, selectedItemDetails]);
   
   const selectedClassName =
     calculatorSkillTreeClassOptions.find((job) => job.id === store.selectedClassId)

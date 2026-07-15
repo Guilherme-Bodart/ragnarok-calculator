@@ -21,8 +21,11 @@ export type CalculatorModifierEffects = {
   flatRes: number;
   flatMres: number;
   weaponElement?: ElementType;
+  edpActive?: boolean;
+  recognizedSpell?: boolean;
   pAtk: number;
   smatk: number;
+  healPlus: number;
   atkRate: number;
   shortAttackRate: number;
   longAttackRate: number;
@@ -71,15 +74,13 @@ export type CalculatorModifierEffects = {
   incomingSizeDamageReductionRate: Partial<Record<ModifierSizeId, number>>;
   criticalRaceDamageRate: Partial<Record<ModifierRaceId, number>>;
   unsupportedStatements: string[];
-  edpActive?: boolean;
 };
 
 export class CalculatorModifierEffectsFactory {
   constructor(private readonly pipeline = new ItemModifierPipeline()) { }
 
   fromItems(
-    items: RoItem[],
-    contextByItemId: ReadonlyMap<number, ModifierResolutionContext> = new Map(),
+    itemsWithContext: { item: RoItem; context?: ModifierResolutionContext }[],
     baseContext: ModifierResolutionContext = {},
   ): CalculatorModifierEffects {
     const effects: CalculatorModifierEffects = {
@@ -106,6 +107,7 @@ export class CalculatorModifierEffectsFactory {
       weaponElement: undefined,
       pAtk: 0,
       smatk: 0,
+      healPlus: 0,
       atkRate: 0,
       shortAttackRate: 0,
       longAttackRate: 0,
@@ -156,31 +158,45 @@ export class CalculatorModifierEffectsFactory {
       unsupportedStatements: [],
     };
 
-    const refinesBySlot: Record<string, number> = {};
-    for (const item of items) {
-      const ref = contextByItemId.get(item.id)?.refine ?? 0;
-      if (item.slots) {
-        for (const slot of item.slots) {
-          refinesBySlot[slot] = ref;
+    const refinesBySlotFromContext: Record<string, number> = {};
+    const allBucketsAccumulated: any[] = [];
+    for (const { context: itemCtx } of itemsWithContext) {
+        if (itemCtx && itemCtx.refine !== undefined && itemCtx.slots) {
+            for (const slot of itemCtx.slots) {
+                const normalized = slot.replace(/_([a-zA-Z])/g, (_: string, char: string) => char.toUpperCase()).replace(/^[A-Z]/, (c: string) => c.toLowerCase());
+                refinesBySlotFromContext[normalized] = itemCtx.refine;
+            }
         }
-      }
     }
 
-    for (const item of items) {
+    const refinesBySlot = {
+      ...Object.fromEntries(
+        Object.entries(baseContext.stats || {}).filter(([k]) => k.startsWith("refine_"))
+      ),
+      ...refinesBySlotFromContext
+    };
+
+    for (const { item, context: itemCtx } of itemsWithContext) {
       const result = this.pipeline.getEffects(
         {
-          rawScript: item.rawScript,
+          rawScript: item.rawScript || "",
           modifiers: item.modifiers,
         },
         {
           ...baseContext,
-          equippedItemIds: items.map((i) => i.id),
+          equippedItemIds: itemsWithContext.map((i) => i.item.id),
+          itemId: item.id,
+          refine: itemCtx?.refine,
+          grade: itemCtx?.grade,
           refinesBySlot,
-          ...(contextByItemId.get(item.id) ?? {}),
         },
       );
 
-      effects.unsupportedStatements.push(...result.unsupportedStatements);
+      allBucketsAccumulated.push(...result.aggregation.buckets);
+
+      for (const st of result.unsupportedStatements) {
+        effects.unsupportedStatements.push(st);
+      }
 
       for (const bucket of result.aggregation.buckets) {
         if (bucket.target.type === "self" && isCharacterStat(bucket.stat)) {
@@ -234,7 +250,7 @@ export class CalculatorModifierEffectsFactory {
           continue;
         }
 
-        if (bucket.stat === "matk" && bucket.target.type === "self") {
+        if (bucket.stat === "matk" && bucket.operator === "addFlat") {
           effects.flatMatk += bucket.value;
           continue;
         }
@@ -246,6 +262,11 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "smatk" && bucket.target.type === "self") {
           effects.smatk += bucket.value;
+          continue;
+        }
+
+        if (bucket.stat === "healPlus" && bucket.target.type === "self") {
+          effects.healPlus += bucket.value;
           continue;
         }
 
@@ -626,6 +647,7 @@ export class CalculatorModifierEffectsFactory {
       }
     }
 
+    Object.assign(effects, { allBuckets: allBucketsAccumulated });
     return effects;
   }
 

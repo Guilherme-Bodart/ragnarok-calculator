@@ -84,6 +84,8 @@ export type RoItem = {
   attack?: number;
   magicAttack?: number;
   defense?: number;
+  weaponLevel?: number;
+  weaponType?: WeaponType;
   cardSlots?: number;
   isTwoHanded?: boolean;
   rawScript?: string;

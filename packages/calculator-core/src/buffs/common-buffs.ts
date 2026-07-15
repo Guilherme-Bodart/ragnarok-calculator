@@ -17,3 +17,7 @@ globalBuffRegistry.register("AL_INCAGI", ({ level }) => ({
 globalBuffRegistry.register("ASC_EDP", () => ({
   edpActive: true,
 }));
+
+globalBuffRegistry.register("WL_RECOGNIZEDSPELL", () => ({
+  recognizedSpell: true,
+}));

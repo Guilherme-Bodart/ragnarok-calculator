@@ -16,6 +16,7 @@ export const modifierRaceIdSchema = z.enum([
   "fish",
   "demon",
   "demihuman",
+  "playerHuman",
   "playerDoram",
   "angel",
   "dragon",
@@ -115,6 +116,8 @@ export const normalizedModifierSchema = z.object({
     "allStats",
     "pAtk",
     "smatk",
+    "healPlus",
+    "criticalDamageRate",
     "atkRate",
     "shortAttackRate",
     "longAttackRate",
@@ -135,7 +138,6 @@ export const normalizedModifierSchema = z.object({
     "perfectHitRate",
     "flee",
     "crit",
-    "criticalDamageRate",
     "healPower",
     "aspd",
     "aspdRate",
@@ -147,6 +149,7 @@ export const normalizedModifierSchema = z.object({
     "skillVariableCastRate",
     "skillFixedCastRate",
     "skillFixedCast",
+    "skillCooldown",
     "unbreakableArmor",
     "unbreakableWeapon",
     "unbreakableShield",
@@ -212,7 +215,10 @@ export const modifierResolutionContextSchema = z.object({
   learnedSkills: z.record(z.string(), z.number().int().min(0)).optional(),
   ruleset: rulesetContextSchema.optional(),
   equippedItemIds: z.array(z.number().int()).optional(),
+  itemId: z.number().int().optional(),
+  slots: z.array(z.string()).optional(),
   refinesBySlot: z.record(z.string(), z.number().int().min(0)).optional(),
+  stats: z.record(z.string(), z.number().min(0)).optional(),
 });
 
 export const itemModifierSourceSchema = z.object({

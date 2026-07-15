@@ -3,11 +3,13 @@ import type { CharacterStatus, CalculatorModifierEffects, CharacterStat } from "
 import skillsEn from "@/nightmare-data/normalized/skills/skills.en.json";
 
 function translateSize(size: string): string {
+  if (size.toLowerCase() === "all") return "Todos os Tamanhos";
   const map: Record<string, string> = { small: "Pequeno", medium: "Médio", large: "Grande" };
   return map[size.toLowerCase()] || size;
 }
 
 function translateRace(race: string): string {
+  if (race.toLowerCase() === "all") return "Todas as Raças";
   const map: Record<string, string> = {
     formless: "Amorfo", undead: "Morto-Vivo", brute: "Bruto", plant: "Planta",
     insect: "Inseto", fish: "Peixe", demon: "Demônio", demihuman: "Humanoide",
@@ -17,6 +19,7 @@ function translateRace(race: string): string {
 }
 
 function translateElement(element: string): string {
+  if (element.toLowerCase() === "all") return "Todas as Propriedades";
   const map: Record<string, string> = {
     neutral: "Neutro", water: "Água", earth: "Terra", fire: "Fogo", wind: "Vento",
     poison: "Veneno", holy: "Sagrado", shadow: "Sombrio", ghost: "Fantasma", undead: "Maldito",
@@ -25,12 +28,14 @@ function translateElement(element: string): string {
 }
 
 function translateClass(cls: string): string {
+  if (cls.toLowerCase() === "all") return "Todas as Classes";
   const map: Record<string, string> = { normal: "Normal", boss: "Chefe", guardian: "Guardião" };
   return map[cls.toLowerCase()] || cls;
 }
 
 export function useDerivedStatsBonuses(
-  modifierEffects: CalculatorModifierEffects
+  modifierEffects: CalculatorModifierEffects,
+  characterStatus?: CharacterStatus
 ) {
   return useMemo(() => {
     const bonuses: string[] = [];
@@ -41,6 +46,9 @@ export function useDerivedStatsBonuses(
       const val = modifierEffects.statBonuses?.[stat as CharacterStat];
       if (val && val > 0) bonuses.push(`+${val} ${stat.toUpperCase()}`);
     });
+    
+    if (modifierEffects.pAtk && modifierEffects.pAtk > 0) bonuses.push(`+${modifierEffects.pAtk} P.Atk`);
+    if (modifierEffects.smatk && modifierEffects.smatk > 0) bonuses.push(`+${modifierEffects.smatk} S.Matk`);
 
     // 2. HP / SP / AP
     if (modifierEffects.maxHp && modifierEffects.maxHp > 0) bonuses.push(`+${modifierEffects.maxHp} HP máximo`);
@@ -51,9 +59,12 @@ export function useDerivedStatsBonuses(
     if (modifierEffects.maxApRate && modifierEffects.maxApRate > 0) bonuses.push(`+${modifierEffects.maxApRate}% AP máximo`);
 
     // 3. ATK / MATK / DEF / MDEF
-    if (modifierEffects.flatAtk && modifierEffects.flatAtk > 0) bonuses.push(`+${modifierEffects.flatAtk} ATQ`);
+    const weaponAtk = characterStatus?.atk ? characterStatus.atk - (characterStatus.statusAtk ?? 0) : modifierEffects.flatAtk;
+    const weaponMatk = characterStatus?.matk ? characterStatus.matk - (characterStatus.statusMatk ?? 0) : modifierEffects.flatMatk;
+    
+    if (weaponAtk && weaponAtk > 0) bonuses.push(`+${weaponAtk} ATQ (Arma + Equips)`);
     if (modifierEffects.atkRate && modifierEffects.atkRate > 0) bonuses.push(`+${modifierEffects.atkRate}% ATQ da arma`);
-    if (modifierEffects.flatMatk && modifierEffects.flatMatk > 0) bonuses.push(`+${modifierEffects.flatMatk} ATQM`);
+    if (weaponMatk && weaponMatk > 0) bonuses.push(`+${weaponMatk} ATQM (Arma + Equips)`);
     if (modifierEffects.matkRate && modifierEffects.matkRate > 0) bonuses.push(`+${modifierEffects.matkRate}% Dano mágico`);
     if (modifierEffects.flatDefense && modifierEffects.flatDefense > 0) bonuses.push(`+${modifierEffects.flatDefense} DEF`);
     if (modifierEffects.flatMagicDefense && modifierEffects.flatMagicDefense > 0) bonuses.push(`+${modifierEffects.flatMagicDefense} DEFM`);
@@ -68,6 +79,8 @@ export function useDerivedStatsBonuses(
     if (modifierEffects.flee && modifierEffects.flee > 0) bonuses.push(`+${modifierEffects.flee} Esquiva`);
     if (modifierEffects.crit && modifierEffects.crit > 0) bonuses.push(`+${modifierEffects.crit} Crítico`);
     if (modifierEffects.criticalDamageRate && modifierEffects.criticalDamageRate > 0) bonuses.push(`+${modifierEffects.criticalDamageRate}% Dano Crítico`);
+    if (modifierEffects.healPlus && modifierEffects.healPlus > 0) bonuses.push(`+${modifierEffects.healPlus}% Efetividade de Cura`);
+    if (modifierEffects.healPower && modifierEffects.healPower > 0) bonuses.push(`+${modifierEffects.healPower}% Poder de Cura`);
     if (modifierEffects.shortAttackRate && modifierEffects.shortAttackRate > 0) bonuses.push(`+${modifierEffects.shortAttackRate}% Dano físico corpo a corpo`);
     if (modifierEffects.longAttackRate && modifierEffects.longAttackRate > 0) bonuses.push(`+${modifierEffects.longAttackRate}% Dano físico a distância`);
 
@@ -116,6 +129,9 @@ export function useDerivedStatsBonuses(
     Object.entries(modifierEffects.magicClassDamageRate || {}).forEach(([cls, val]) => {
       if (val) bonuses.push(`+${val}% Dano mágico contra classe ${translateClass(cls)}`);
     });
+    Object.entries(modifierEffects.criticalRaceDamageRate || {}).forEach(([race, val]) => {
+      if (val) bonuses.push(`+${val}% Dano Crítico contra raça ${translateRace(race)}`);
+    });
 
     // 10. Ignored Defenses
     Object.entries(modifierEffects.ignoreDefenseRate || {}).forEach(([race, val]) => {
@@ -136,6 +152,20 @@ export function useDerivedStatsBonuses(
     });
     Object.entries(modifierEffects.ignoreMagicDefenseSizeRate || {}).forEach(([sz, val]) => {
       if (val) bonuses.push(`${val}% Ignora DEFM (${translateSize(sz)})`);
+    });
+
+    // 10.5 Resistências
+    Object.entries(modifierEffects.incomingRaceDamageReductionRate || {}).forEach(([race, val]) => {
+      if (val) bonuses.push(`+${val}% Resistência a ataques de ${translateRace(race)}`);
+    });
+    Object.entries(modifierEffects.incomingElementDamageReductionRate || {}).forEach(([ele, val]) => {
+      if (val) bonuses.push(`+${val}% Resistência a ataques da prop. ${translateElement(ele)}`);
+    });
+    Object.entries(modifierEffects.incomingSizeDamageReductionRate || {}).forEach(([sz, val]) => {
+      if (val) bonuses.push(`+${val}% Resistência a ataques de tamanho ${translateSize(sz)}`);
+    });
+    Object.entries(modifierEffects.incomingClassDamageReductionRate || {}).forEach(([cls, val]) => {
+      if (val) bonuses.push(`+${val}% Resistência a ataques de classe ${translateClass(cls)}`);
     });
 
     // 11. Skill damages

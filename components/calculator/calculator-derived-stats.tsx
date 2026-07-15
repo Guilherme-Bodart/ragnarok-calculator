@@ -25,7 +25,7 @@ export function CalculatorDerivedStats({
   const dex2int1 = dex * 2 + int;
 
   // Compilar bônus de equipamentos para a página 2+
-  const bonuses = useDerivedStatsBonuses(modifierEffects);
+  const bonuses = useDerivedStatsBonuses(modifierEffects, status);
 
   const itemsPerPage = 40;
   const totalPages = 1 + Math.ceil(bonuses.length / itemsPerPage);

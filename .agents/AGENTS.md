@@ -36,3 +36,6 @@ Mantenha a modularidade rigorosa baseada na arquitetura do projeto:
 
 ## 8. Escopo Anti-Bloat
 - Nunca altere dezenas de arquivos de domínios diferentes ao mesmo tempo. Divida tarefas complexas em etapas menores.
+
+## 9. Transparência e Comunicação
+- Sempre se comunique explicando passo a passo o que você está pensando, pesquisando e alterando. O usuário gosta de acompanhar a sua linha de raciocínio de forma transparente antes e durante os testes. Vá falando o que você está fazendo.

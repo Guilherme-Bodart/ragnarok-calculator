@@ -100,6 +100,8 @@ export function CalculatorTargetPanel({
   const fct = Number(getBreakdownValue(result.breakdown, "fixedCastMs")) || 0;
   const delay = Number(getBreakdownValue(result.breakdown, "afterCastDelayMs")) || 0;
   const cd = Number(getBreakdownValue(result.breakdown, "cooldownMs")) || 0;
+  const hits = Number(getBreakdownValue(result.breakdown, "hits")) || 1;
+  const damagePerHit = hits > 1 ? Math.max(1, Math.floor(result.damage.total / hits)).toLocaleString() : null;
   
   const skillPerSec = cycleTimeMs > 0 ? (1000 / cycleTimeMs).toFixed(2) : "0.00";
 
@@ -207,6 +209,9 @@ export function CalculatorTargetPanel({
                {totalDamage}
              </strong>
              <span className="text-[10px] text-slate-400 mt-1">{result.damage.minimum.toLocaleString()} - {result.damage.maximum.toLocaleString()} (avg: {averageDamage})</span>
+             {damagePerHit && (
+               <span className="text-[11px] text-sky-200 mt-0.5 font-medium">Dano por Hit: {damagePerHit} ({hits} hits)</span>
+             )}
            </div>
            
            <div className="flex flex-col items-end text-right">

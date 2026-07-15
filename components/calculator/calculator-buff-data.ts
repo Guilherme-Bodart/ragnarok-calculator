@@ -164,11 +164,13 @@ export function getCalculatorBuffPreview(buffId: string) {
 
   const effects = new CalculatorModifierEffectsFactory().fromItems([
     {
-      id: item.itemId,
-      name: item.name,
-      kind: "consumable",
-      rawScript: item.rawScript,
-      source: item.source,
+      item: {
+        id: item.itemId,
+        name: item.name,
+        kind: "consumable",
+        rawScript: item.rawScript,
+        source: item.source as any,
+      }
     },
   ]);
   const previewParts = [

@@ -201,8 +201,8 @@ function isItemContextRecord(
     Object.values(value).every(
       (context) =>
         isRecord(context) &&
-        (!("refine" in context) || isFiniteNumber(context.refine)) &&
-        (!("grade" in context) || isFiniteNumber(context.grade)),
+        (!("refine" in context) || context.refine === null || isFiniteNumber(context.refine)) &&
+        (!("grade" in context) || context.grade === null || isFiniteNumber(context.grade)),
     )
   );
 }
@@ -222,7 +222,7 @@ function isCardSlotRecord(
   return (
     isRecord(value) &&
     Object.values(value).every(
-      (cards) => Array.isArray(cards) && cards.every(isFiniteNumber),
+      (cards) => Array.isArray(cards) && cards.every(c => c === null || isFiniteNumber(c)),
     )
   );
 }

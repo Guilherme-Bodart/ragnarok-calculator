@@ -7,6 +7,7 @@ import type {
   RoItem,
   RoMonster,
   RoSkill,
+  WeaponType,
 } from "../ro-types";
 
 export type RathenaNormalizedItem = {
@@ -20,6 +21,7 @@ export type RathenaNormalizedItem = {
   slots?: number | null;
   locations?: Record<string, boolean> | null;
   rawScript?: string | null;
+  weaponLevel?: number | null;
   source: "rathena";
 };
 
@@ -94,9 +96,40 @@ export function toRoItem(item: RathenaNormalizedItem): RoItem {
     slots: getItemSlots(item.locations),
     cardSlots: numberOrUndefined(item.slots),
     isTwoHanded: Boolean(item.locations?.Both_Hand),
+    weaponType: getWeaponType(item.subType),
+    weaponLevel: numberOrUndefined(item.weaponLevel),
     rawScript: item.rawScript ?? undefined,
     source: "rathena",
   };
+}
+
+function getWeaponType(subType?: string | null): WeaponType | undefined {
+  if (!subType) return undefined;
+  const map: Record<string, WeaponType> = {
+    "1hSword": "oneHandSword",
+    "2hSword": "twoHandSword",
+    "Dagger": "dagger",
+    "Katar": "katar",
+    "1hAxe": "oneHandAxe",
+    "2hAxe": "twoHandAxe",
+    "Huuma": "huuma",
+    "Mace": "mace",
+    "1hSpear": "oneHandSpear",
+    "2hSpear": "twoHandSpear",
+    "2hStaff": "twoHandRod",
+    "Book": "book",
+    "Staff": "rod",
+    "Bow": "bow",
+    "Knuckle": "knuckle",
+    "Musical": "musicalInstrument",
+    "Whip": "whip",
+    "Revolver": "revolver",
+    "Rifle": "rifle",
+    "Shotgun": "shotgun",
+    "Gatling": "gatlingGun",
+    "Grenade": "grenadeLauncher",
+  };
+  return map[subType];
 }
 
 function getItemSlots(

@@ -65,7 +65,7 @@ function filterCardsForSlot(
   if (!validSlots) return cards;
 
   return cards.filter((card) => {
-    const cardSlots = (card as never).slots as string[] | undefined;
+    const cardSlots = (card as any).slots as string[] | undefined;
     // Se a carta não tem slot definido, pode ir em qualquer lugar
     if (!cardSlots || cardSlots.length === 0) return true;
     return cardSlots.some((s) => validSlots.includes(s));
@@ -93,15 +93,16 @@ export function CalculatorCardEnchantModal({
   const selectedCards = selectedCardsBySlot[editingSlot] ?? [];
   const cardSlotCount = getCardSlotCount(selectedItem);
 
-  // Cartas filtradas por slot de equipamento
   const filteredCards = useMemo(() => {
     return filterCardsForSlot(allCards, editingSlot);
   }, [allCards, editingSlot]);
 
+  const isCostume = editingSlot.startsWith("costume");
+
   // Busca lista de encantamentos válidos para o equipamento selecionado
   const validEnchants = useMemo(() => {
     if (!selectedItem) return null;
-    const aegisName = (selectedItem as never).sourceName || "";
+    const aegisName = (selectedItem as any).sourceName || "";
     return enchantMapping[selectedItem.id] || enchantMapping[aegisName] || enchantMapping[selectedItem.name] || null;
   }, [selectedItem, enchantMapping]);
 
@@ -125,7 +126,7 @@ export function CalculatorCardEnchantModal({
     const query = (cardQueries[index] ?? "").trim().toLowerCase();
     if (!query) return filteredCards;
     return filteredCards.filter((card) =>
-      `${(card as never).searchText ?? ""} ${card.name} ${card.id}`
+      `${(card as any).searchText ?? ""} ${card.name} ${card.id}`
         .toLowerCase()
         .includes(query),
     );
@@ -142,11 +143,22 @@ export function CalculatorCardEnchantModal({
       if (slotEnchants && slotEnchants.length > 0) {
         options = allEnchants.filter(enc => slotEnchants.includes(enc.id));
       }
+    } else if (isCostume) {
+      // Filtragem por slot visual baseada no nome da pedra/encantamento
+      options = allEnchants.filter((enc) => {
+        const name = enc.name.toLowerCase();
+        if (enc.id < 0) return true; // Mantém encantamentos virtuais disponíveis para testes
+        if (editingSlot === "costumeHeadTop") return name.includes("(top)") || name.includes("(topo)");
+        if (editingSlot === "costumeHeadMid") return name.includes("(mid)") || name.includes("(meio)");
+        if (editingSlot === "costumeHeadLow") return name.includes("(low)") || name.includes("(baixo)");
+        if (editingSlot === "costumeGarment") return name.includes("(garment)") || name.includes("(capa)");
+        return true;
+      });
     }
 
     if (!query) return options;
     return options.filter((enc) =>
-      `${(enc as never).searchText ?? ""} ${enc.name} ${enc.id}`
+      `${(enc as any).searchText ?? ""} ${enc.name} ${enc.id}`
         .toLowerCase()
         .includes(query),
     );
@@ -179,7 +191,7 @@ export function CalculatorCardEnchantModal({
     >
       <div className="flex flex-col gap-3">
         {/* Cartas */}
-        {cardSlotCount > 0 && (
+        {cardSlotCount > 0 && !isCostume && (
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] text-sky-400 font-bold uppercase tracking-wider select-none flex items-center gap-1.5">
               <Gem size={11} />
@@ -234,8 +246,8 @@ export function CalculatorCardEnchantModal({
             <Sparkles size={11} />
             Encantamentos
           </span>
-          <div className="grid gap-1.5 grid-cols-3">
-            {Array.from({ length: 3 }, (_, index) => {
+          <div className={`grid gap-1.5 ${isCostume ? 'grid-cols-1' : 'grid-cols-3'}`}>
+            {Array.from({ length: isCostume ? 1 : 3 }, (_, index) => {
               const enchantIndex = cardSlotCount + index;
               const selectedEnchantId = selectedCards[enchantIndex];
               const allEnchants = getFilteredEnchantOptions(index);
@@ -256,15 +268,16 @@ export function CalculatorCardEnchantModal({
               // O jogador sempre terá a liberdade de deixar vazio.
               const isSlotDisabled = false;
               const isSpecific = Boolean(validEnchants && validEnchants[index + 1] && (validEnchants[index + 1]?.length ?? 0) > 0);
+              const showCascading = !isSpecific && !isCostume;
 
               return (
                 <div key={`enchant-${index}`} className="flex flex-col gap-0.5">
                   <span className="text-[11px] text-slate-500 font-medium pl-0.5">Encant. {index + 1}</span>
-                  {isSpecific ? (
+                  {!showCascading ? (
                     <RichSelect
                       disabled={isSlotDisabled}
                       groups={[{
-                        label: "Encantamentos Específicos",
+                        label: isCostume ? "Pedras e Visuais" : "Encantamentos Específicos",
                         options: [
                           { id: "empty", label: "Vazio" },
                           ...ensuredOptions.map((enc) => ({

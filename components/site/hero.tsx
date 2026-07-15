@@ -41,7 +41,7 @@ export function Hero({ siteName, t }: HeroProps) {
             {t.primaryAction}
           </Button>
           <Button
-            href="/calculator"
+            href="#"
             variant="secondary"
             icon={<Calculator aria-hidden className="size-4" />}
           >

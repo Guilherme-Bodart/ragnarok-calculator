@@ -19,4 +19,5 @@ export type ParserVariables = {
   locals?: Record<string, number | undefined>;
   refineVariables?: Record<string, number>;
   refinesBySlot?: Record<string, number>;
+  stats?: Record<string, number>;
 };
