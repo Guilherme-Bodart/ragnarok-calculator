@@ -18,7 +18,7 @@ export function SiteHeader({ t }: SiteHeaderProps) {
         {navItems.map((item) => (
           <a
             href={item.href}
-            key={item.href}
+            key={item.label}
             rel={item.external ? "noreferrer" : undefined}
             target={item.external ? "_blank" : undefined}
           >
