@@ -9,7 +9,6 @@ export function SiteHeader({ t }: SiteHeaderProps) {
   const navItems = [
     { label: t.calculator, href: "#" },
     { label: t.guild, href: "#" },
-    { label: t.discord, href: discordInviteUrl, external: true },
   ];
 
   return (
