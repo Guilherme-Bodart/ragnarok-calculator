@@ -282,6 +282,21 @@ export function calculateDamageFromDataset(
 
 
 
+  // Combo: Celine's Ribbon (18849) + Celine's Dress (450179)
+  if (hasCelineRibbon && hasCelineDress) {
+    const ribbonCtx = input.itemContexts.find(c => c.itemId === 18849);
+    const dressCtx = input.itemContexts.find(c => c.itemId === 450179);
+    const ribbonRefine = ribbonCtx?.refine ?? 0;
+    const dressRefine = dressCtx?.refine ?? 0;
+    const refineSum = ribbonRefine + dressRefine;
+    
+    if (refineSum >= 19) {
+      if (typeof modifierEffects.magicElementAttackRate === "object") {
+        modifierEffects.magicElementAttackRate.all = (modifierEffects.magicElementAttackRate.all ?? 0) + 15;
+      }
+    }
+  }
+
   const characterStatus = new CharacterStatusEngine().calculate({
     character: {
       ...input.character,

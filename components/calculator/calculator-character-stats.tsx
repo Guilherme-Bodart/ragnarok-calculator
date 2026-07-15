@@ -58,7 +58,7 @@ export function CalculatorCharacterStats({
         </div>
 
         {/* Input Area */}
-        <div className="flex items-center gap-1.5 flex-1 justify-center">
+        <div className="flex items-center gap-1.5 flex-1 justify-center relative">
           <button
             type="button"
             onClick={decrement}
@@ -76,6 +76,17 @@ export function CalculatorCharacterStats({
             className="w-12 h-8 bg-slate-950/50 border border-slate-800 text-center font-mono font-bold text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 rounded-lg hide-arrows"
           />
 
+          {/* Bonus (Na frente do status) */}
+          {statBonus > 0 ? (
+            <div className="absolute left-[calc(50%+1.5rem)] ml-2 flex items-center shrink-0">
+              <span className="text-sm font-mono font-bold text-emerald-400 drop-shadow-md">+{statBonus}</span>
+            </div>
+          ) : statBonus < 0 ? (
+            <div className="absolute left-[calc(50%+1.5rem)] ml-2 flex items-center shrink-0">
+              <span className="text-sm font-mono font-bold text-red-400 drop-shadow-md">{statBonus}</span>
+            </div>
+          ) : null}
+
           <button
             type="button"
             onClick={increment}
@@ -83,15 +94,6 @@ export function CalculatorCharacterStats({
           >
             <Plus size={14} />
           </button>
-        </div>
-
-        {/* Bonus */}
-        <div className="w-8 shrink-0 flex items-center justify-start pl-1">
-          {statBonus > 0 ? (
-            <span className="text-xs font-mono font-bold text-emerald-400">+{statBonus}</span>
-          ) : statBonus < 0 ? (
-            <span className="text-xs font-mono font-bold text-red-400">{statBonus}</span>
-          ) : null}
         </div>
 
         {/* Cost */}
