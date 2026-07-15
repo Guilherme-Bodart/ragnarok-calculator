@@ -7,8 +7,8 @@ type SiteHeaderProps = {
 
 export function SiteHeader({ t }: SiteHeaderProps) {
   const navItems = [
-    { label: t.calculator, href: "#" },
-    { label: t.guild, href: "#" },
+    { label: t.calculator, href: "/calculator" },
+    { label: t.guild, href: "/login" },
   ];
 
   return (

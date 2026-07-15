@@ -22,7 +22,7 @@ export function GuildSaasShowcase({ t }: GuildSaasShowcaseProps) {
               <FeaturePill key={feature}>{feature}</FeaturePill>
             ))}
           </div>
-          <Button href="#">{t.action}</Button>
+          <Button href="/login">{t.action}</Button>
         </div>
 
         <div className="guild-workspace-preview reveal reveal-delay-2" aria-label={t.previewLabel}>

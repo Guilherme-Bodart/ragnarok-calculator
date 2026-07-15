@@ -60,7 +60,6 @@ export function NightmareLanding() {
         <Hero t={t.hero} siteName={t.meta.siteName} />
         <Manifesto t={t.values} />
         <GuildSaasShowcase t={t.agenda} />
-        <Recruitment t={t.recruitment} />
       </main>
       <SiteFooter t={t.meta} />
       <SpriteStage />

@@ -33,15 +33,7 @@ export function Hero({ siteName, t }: HeroProps) {
 
         <div className="cta-row reveal reveal-delay-3">
           <Button
-            href={discordInviteUrl}
-            icon={<MessageCircle aria-hidden className="size-4" />}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {t.primaryAction}
-          </Button>
-          <Button
-            href="#"
+            href="/calculator"
             variant="secondary"
             icon={<Calculator aria-hidden className="size-4" />}
           >
