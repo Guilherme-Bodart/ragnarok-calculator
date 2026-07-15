@@ -55,7 +55,14 @@ export const calculateDamageSchema = z.object({
   ruleset: rulesetContextSchema.default(defaultRulesetContext),
   learnedSkills: z.record(z.string(), z.number().int().min(0)).default({}),
   equipmentItemIds: z.array(z.number().int().positive()).default([]),
-  cardItemIds: z.array(z.number().int().positive()).default([]),
+  cardItemIds: z
+    .array(
+      z.object({
+        id: z.number().int().positive(),
+        slot: z.string().min(1),
+      }),
+    )
+    .default([]),
   buffItemIds: z.array(z.number().int().positive()).default([]),
   itemContexts: z
     .array(

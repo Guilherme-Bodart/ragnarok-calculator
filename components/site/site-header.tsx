@@ -6,7 +6,7 @@ type SiteHeaderProps = {
 };
 
 export function SiteHeader({ t }: SiteHeaderProps) {
-  const navItems = [
+  const navItems: Array<{ label: string; href: string; external?: boolean }> = [
     { label: t.calculator, href: "/calculator" },
     { label: t.guild, href: "/login" },
   ];

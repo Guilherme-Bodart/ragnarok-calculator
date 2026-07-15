@@ -6,6 +6,7 @@ import { PanelHeader } from "@/components/ui/panel-header";
 import {
   evaluateStatusPointBudget,
   type CharacterStatus,
+  type CharacterStats,
   type RoSkill,
 } from "@/packages/calculator-core/src";
 import { CalculatorCharacterControls } from "./calculator-character-controls";
