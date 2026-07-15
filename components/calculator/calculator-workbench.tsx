@@ -167,7 +167,20 @@ export function CalculatorWorkbench() {
             <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <CalculatorCharacterPanel
                 characterStatus={result.characterStatus}
-                statBonuses={result.modifierEffects.statBonuses}
+                statBonuses={{
+                  str: result.characterStatus.effectiveStats.str - result.characterStatus.baseStats.str,
+                  agi: result.characterStatus.effectiveStats.agi - result.characterStatus.baseStats.agi,
+                  vit: result.characterStatus.effectiveStats.vit - result.characterStatus.baseStats.vit,
+                  int: result.characterStatus.effectiveStats.int - result.characterStatus.baseStats.int,
+                  dex: result.characterStatus.effectiveStats.dex - result.characterStatus.baseStats.dex,
+                  luk: result.characterStatus.effectiveStats.luk - result.characterStatus.baseStats.luk,
+                  pow: result.characterStatus.effectiveStats.pow - result.characterStatus.baseStats.pow,
+                  sta: result.characterStatus.effectiveStats.sta - result.characterStatus.baseStats.sta,
+                  wis: result.characterStatus.effectiveStats.wis - result.characterStatus.baseStats.wis,
+                  spl: result.characterStatus.effectiveStats.spl - result.characterStatus.baseStats.spl,
+                  con: result.characterStatus.effectiveStats.con - result.characterStatus.baseStats.con,
+                  crt: result.characterStatus.effectiveStats.crt - result.characterStatus.baseStats.crt,
+                }}
                 copy={copy}
                 skillTreeSlot={
                   <CalculatorSkillTreePanel
