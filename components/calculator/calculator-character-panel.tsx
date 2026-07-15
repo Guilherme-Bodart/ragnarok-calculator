@@ -24,12 +24,14 @@ export type CalculatorPanelSkill = RoSkill & {
 
 type CalculatorCharacterPanelProps = {
   characterStatus: CharacterStatus;
+  statBonuses?: Partial<CharacterStats>;
   copy: CalculatorDictionary;
   skillTreeSlot: ReactNode;
 };
 
 export function CalculatorCharacterPanel({
   characterStatus,
+  statBonuses,
   copy,
   skillTreeSlot,
 }: CalculatorCharacterPanelProps) {
@@ -110,6 +112,7 @@ export function CalculatorCharacterPanel({
       <CalculatorCharacterStats
         isFourthJob={isFourthJob}
         stats={stats}
+        statBonuses={statBonuses}
         onStatChange={handleStatChange}
       />
     </section>

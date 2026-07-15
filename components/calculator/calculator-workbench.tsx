@@ -167,6 +167,7 @@ export function CalculatorWorkbench() {
             <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <CalculatorCharacterPanel
                 characterStatus={result.characterStatus}
+                statBonuses={result.modifierEffects.statBonuses}
                 copy={copy}
                 skillTreeSlot={
                   <CalculatorSkillTreePanel

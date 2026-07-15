@@ -14,12 +14,14 @@ import {
 type CalculatorCharacterStatsProps = {
   isFourthJob: boolean;
   stats: CharacterStats;
+  statBonuses?: Partial<CharacterStats>;
   onStatChange: (stat: VisibleCalculatorStat, rawValue: number) => void;
 };
 
 export function CalculatorCharacterStats({
   isFourthJob,
   stats,
+  statBonuses,
   onStatChange,
 }: CalculatorCharacterStatsProps) {
   const renderStatRow = (stat: VisibleCalculatorStat) => {
@@ -27,6 +29,7 @@ export function CalculatorCharacterStats({
     const minVal = isRegular ? 1 : 0;
     const maxVal = isRegular ? 130 : 110;
     const currentValue = stats[stat.key];
+    const statBonus = statBonuses?.[stat.key] ?? 0;
 
     // Calculate cost for next point
     let cost = 0;
@@ -80,6 +83,15 @@ export function CalculatorCharacterStats({
           >
             <Plus size={14} />
           </button>
+        </div>
+
+        {/* Bonus */}
+        <div className="w-8 shrink-0 flex items-center justify-start pl-1">
+          {statBonus > 0 ? (
+            <span className="text-xs font-mono font-bold text-emerald-400">+{statBonus}</span>
+          ) : statBonus < 0 ? (
+            <span className="text-xs font-mono font-bold text-red-400">{statBonus}</span>
+          ) : null}
         </div>
 
         {/* Cost */}
