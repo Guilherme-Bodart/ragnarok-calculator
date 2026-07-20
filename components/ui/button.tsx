@@ -3,6 +3,7 @@ import type {
   ButtonHTMLAttributes,
   ReactNode,
 } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 type SharedButtonProps = {
@@ -40,10 +41,10 @@ export function Button({
     };
 
     return (
-      <a className={classes} {...anchorProps}>
+      <Link className={classes} {...anchorProps}>
         {icon}
         <span>{children}</span>
-      </a>
+      </Link>
     );
   }
 

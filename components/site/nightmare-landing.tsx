@@ -10,7 +10,6 @@ import {
 import { Hero } from "@/components/site/hero";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { Manifesto } from "@/components/site/manifesto";
-import { Recruitment } from "@/components/site/recruitment";
 import { GuildSaasShowcase } from "@/components/site/guild-saas-showcase";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";

@@ -86,7 +86,7 @@ export function CalculatorCharacterStats({
         </div>
 
         {/* Bonus (Na frente do status) */}
-        <div className="w-10 shrink-0 flex items-center justify-start pl-2">
+        <div className="w-12 shrink-0 flex items-center justify-start pl-3 ml-2">
           {statBonus > 0 ? (
             <span className="text-sm font-mono font-bold text-emerald-400 drop-shadow-md">+{statBonus}</span>
           ) : statBonus < 0 ? (
