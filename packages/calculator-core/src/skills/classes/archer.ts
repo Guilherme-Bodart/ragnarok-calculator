@@ -22,7 +22,14 @@ const formulas: Record<
     multiplier: (150 + 10 * input.skillLevel) / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  AC_CHARGEARROW: (input) => ({
+    formulaId: "static:AC_CHARGEARROW",
+    // C++: base_skillratio += 50; (starts at 100 => 150%)
+    multiplier: 150 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class ArcherSkillFormula implements SkillFormulaAdapter {

@@ -63,7 +63,46 @@ const formulas: Record<
       hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
       precision: "validated",
     }
-  }
+  },
+  CD_FRAMEN: (input) => {
+    // C++ framen.cpp: skillratio += -100 + 1300 * skill_lv + 5 * CD_FIDUS_ANIMUS * skill_lv + 5 * spl (+ 50 * skill_lv vs undead/demon); RE_LVL_DMOD(100);
+    const fidusLv = input.character.learnedSkills?.["CD_FIDUS_ANIMUS"] ?? 0;
+    const isUndeadOrDemon = input.monster.race === "undead" || input.monster.race === "demon";
+    const raceBonus = isUndeadOrDemon ? 50 * input.skillLevel : 0;
+    const ratio = (1300 + 5 * fidusLv) * input.skillLevel + 5 * input.character.effectiveStats.spl + raceBonus;
+    return {
+      formulaId: "static:CD_FRAMEN",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  CD_EFFLIGO: (input) => {
+    // C++ effligo.cpp: skillratio += -100 + 1800 * skill_lv + 7 * pow + 8 * CD_MACE_BOOK_M (+ 200 * skill_lv + 7 * CD_MACE_BOOK_M vs undead/demon); RE_LVL_DMOD(100);
+    const masteryLv = input.character.learnedSkills?.["CD_MACE_BOOK_M"] ?? 0;
+    const isUndeadOrDemon = input.monster.race === "undead" || input.monster.race === "demon";
+    let ratio = 1800 * input.skillLevel + 7 * input.character.effectiveStats.pow + 8 * masteryLv;
+    if (isUndeadOrDemon) {
+      ratio += 200 * input.skillLevel + 7 * masteryLv;
+    }
+    return {
+      formulaId: "static:CD_EFFLIGO",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  CD_DIVINUS_FLOS: (input) => {
+    // C++ divinusflos.cpp: skillratio += -100 + 4000 * skill_lv + 70 * CD_FIDUS_ANIMUS + 10 * spl; RE_LVL_DMOD(100);
+    const fidusLv = input.character.learnedSkills?.["CD_FIDUS_ANIMUS"] ?? 0;
+    const ratio = 4000 * input.skillLevel + 70 * fidusLv + 10 * input.character.effectiveStats.spl;
+    return {
+      formulaId: "static:CD_DIVINUS_FLOS",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
 };
 
 export class CardinalSkillFormula implements SkillFormulaAdapter {

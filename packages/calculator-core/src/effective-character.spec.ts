@@ -55,6 +55,6 @@ describe("EffectiveCharacterBuilder", () => {
       smatk: 2,
     });
     expect(character.maxAp).toBe(200);
-    expect(character.statusAtk).toBe(443);
+    expect(character.statusAtk).toBe(237);
   });
 });

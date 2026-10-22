@@ -14,7 +14,15 @@ const formulas: Record<
     multiplier: 130 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  PR_TURNUNDEAD: (input) => ({
+    formulaId: "static:PR_TURNUNDEAD",
+    // C++ Renewal battle.cpp: 100% MATK + (baseLevel + int + skill_lv * 10) when not instant-killing
+    multiplier: 1.0,
+    bonusFlatDamage: input.character.baseLevel + input.character.effectiveStats.int + input.skillLevel * 10,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class HighPriestPriestSkillFormula implements SkillFormulaAdapter {

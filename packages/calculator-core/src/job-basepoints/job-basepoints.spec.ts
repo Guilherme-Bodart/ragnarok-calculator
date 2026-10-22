@@ -30,8 +30,8 @@ describe("JobBasepointsFactory", () => {
 
   it("supports fourth job AP basepoints", () => {
     expect(factory.fromClassAndBaseLevel("Dragon_Knight", 200)).toEqual({
-      baseHp: 0,
-      baseSp: 0,
+      baseHp: 25328,
+      baseSp: 1169,
       baseAp: 200,
     });
   });

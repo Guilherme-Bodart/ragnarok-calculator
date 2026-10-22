@@ -35,7 +35,28 @@ const formulas: Record<
     multiplier: ((80 + 240 * input.skillLevel + input.character.effectiveStats.pow * 5) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  MT_RUSH_STRIKE: (input) => ({
+    formulaId: "static:MT_RUSH_STRIKE",
+    // C++: skillratio += -100 + 3500 * skill_lv + 5 * sstatus->pow; RE_LVL_DMOD(100);
+    multiplier: ((3500 * input.skillLevel + 5 * input.character.effectiveStats.pow) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  MT_POWERFUL_SWING: (input) => ({
+    formulaId: "static:MT_POWERFUL_SWING",
+    // C++: skillratio += -100 + 300 + 850 * skill_lv + 5 * sstatus->pow; RE_LVL_DMOD(100);
+    multiplier: ((300 + 850 * input.skillLevel + 5 * input.character.effectiveStats.pow) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  MT_ENERGY_CANNONADE: (input) => ({
+    formulaId: "static:MT_ENERGY_CANNONADE",
+    // C++: skillratio += -100 + 250 + 750 * skill_lv + 5 * sstatus->pow; RE_LVL_DMOD(100);
+    multiplier: ((250 + 750 * input.skillLevel + 5 * input.character.effectiveStats.pow) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class MeisterSkillFormula implements SkillFormulaAdapter {

@@ -53,7 +53,28 @@ const formulas: Record<
     multiplier: (100 + 40 * input.skillLevel) / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  KN_SPEARSTAB: (input) => ({
+    formulaId: "static:KN_SPEARSTAB",
+    // C++: base_skillratio += 20 * skill_lv; (starts at 100)
+    multiplier: (100 + 20 * input.skillLevel) / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  KN_SPEARBOOMERANG: (input) => ({
+    formulaId: "static:KN_SPEARBOOMERANG",
+    // C++: base_skillratio += 50 * skill_lv; (starts at 100)
+    multiplier: (100 + 50 * input.skillLevel) / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  KN_CHARGEATK: (input) => ({
+    formulaId: "static:KN_CHARGEATK",
+    // C++ Renewal: base_skillratio += 600; (total 700%)
+    multiplier: 7.0,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class KnightCrusaderSkillFormula implements SkillFormulaAdapter {

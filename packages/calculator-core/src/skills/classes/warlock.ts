@@ -56,7 +56,35 @@ const formulas: Record<
     multiplier: ((1000 + input.skillLevel * 200 + input.character.effectiveStats.int) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  WL_FROSTMISTY: (input) => ({
+    formulaId: "static:WL_FROSTMISTY",
+    // C++: skillratio += -100 + 200 + 100 * skill_lv; RE_LVL_DMOD(100);
+    multiplier: ((200 + 100 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  WL_DRAINLIFE: (input) => ({
+    formulaId: "static:WL_DRAINLIFE",
+    // C++: skillratio += -100 + 200 * skill_lv + sstatus->int_; RE_LVL_DMOD(100);
+    multiplier: ((200 * input.skillLevel + input.character.effectiveStats.int) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  WL_HELLINFERNO: (input) => ({
+    formulaId: "static:WL_HELLINFERNO",
+    // C++: Fire (400 * skill_lv) + Dark (600 * skill_lv) = 1000 * skill_lv total; RE_LVL_DMOD(100);
+    multiplier: ((1000 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  WL_RELEASE: (input) => ({
+    formulaId: "static:WL_RELEASE",
+    // C++: Released elemental sphere attack (WL_SUMMON_ATK_*); RE_LVL_DMOD(100);
+    multiplier: ((100 + 50 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class WarlockSkillFormula implements SkillFormulaAdapter {

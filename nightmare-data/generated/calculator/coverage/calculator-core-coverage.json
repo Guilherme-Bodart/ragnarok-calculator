@@ -1,73 +1,77 @@
 {
-  "generatedAt": "2026-06-24T00:06:05.851Z",
+  "generatedAt": "2026-10-22T14:24:51.216Z",
   "sources": {
     "items": "nightmare-data\\normalized\\items\\items.en.json",
     "monsters": "nightmare-data\\normalized\\monsters\\monsters.en.json",
     "skills": "nightmare-data\\normalized\\skills\\skills.en.json",
     "skillTree": "nightmare-data\\normalized\\skills\\skill-tree.json",
     "skillTooltips": "nightmare-data\\normalized\\skills\\skill-tooltips.en.json",
-    "staticSkillFormulas": "packages\\calculator-core\\src\\skills\\static-skill-formulas.ts"
+    "staticSkillFormulasDir": "packages\\calculator-core\\src\\skills\\classes"
   },
   "items": {
     "total": 29356,
-    "withRawScript": 20037,
+    "withRawScript": 20143,
     "refineable": 6947,
     "cards": {
       "total": 5633,
-      "withRawScript": 5095
+      "withRawScript": 5118
     },
     "topScriptCommands": [
       {
         "key": "bonus",
-        "count": 25719
+        "count": 43275
       },
       {
         "key": "bonus2",
-        "count": 18325
+        "count": 35815
       },
       {
         "key": "if",
-        "count": 12662
-      },
-      {
-        "key": "unknown",
-        "count": 6834
+        "count": 27361
       },
       {
         "key": "assignment",
-        "count": 6778
+        "count": 10041
       },
       {
         "key": "getgroupitem",
         "count": 2795
       },
       {
-        "key": "blockClose",
-        "count": 1986
-      },
-      {
         "key": "getitem",
         "count": 1524
       },
       {
-        "key": "bonus3",
-        "count": 656
+        "key": "unknown",
+        "count": 968
       },
       {
-        "key": "sc_start",
-        "count": 646
+        "key": "bonus3",
+        "count": 903
       },
       {
         "key": "skill",
-        "count": 492
+        "count": 845
       },
       {
         "key": "autobonus",
-        "count": 334
+        "count": 786
+      },
+      {
+        "key": "sc_start",
+        "count": 647
+      },
+      {
+        "key": "else",
+        "count": 540
+      },
+      {
+        "key": "autobonus3",
+        "count": 283
       },
       {
         "key": "itemheal",
-        "count": 248
+        "count": 251
       },
       {
         "key": "percentheal",
@@ -78,175 +82,171 @@
         "count": 231
       },
       {
+        "key": "bonus4",
+        "count": 228
+      },
+      {
+        "key": "bonus5",
+        "count": 223
+      },
+      {
         "key": "hateffect",
-        "count": 212
+        "count": 213
       },
       {
         "key": "specialeffect2",
-        "count": 180
+        "count": 173
       },
       {
         "key": "laphine_upgrade",
         "count": 150
       },
       {
-        "key": "sc_end",
-        "count": 148
-      },
-      {
-        "key": "else",
-        "count": 139
-      },
-      {
         "key": "item_reform",
         "count": 130
       },
       {
-        "key": "bonus4",
-        "count": 114
+        "key": "sc_end",
+        "count": 127
       },
       {
         "key": "itemskill",
-        "count": 114
+        "count": 121
       },
       {
-        "key": "bonus5",
-        "count": 113
-      },
-      {
-        "key": "autobonus3",
-        "count": 109
+        "key": "autobonus2",
+        "count": 68
       }
     ],
     "topUnsupportedLikeStatements": [
       {
-        "key": "getitem N,N;",
-        "count": 1515
-      },
-      {
-        "key": "percentheal N,N;",
-        "count": 234
-      },
-      {
-        "key": "laphine_synthesis();",
-        "count": 231
-      },
-      {
-        "key": "}\";",
-        "count": 208
-      },
-      {
-        "key": "laphine_upgrade();",
-        "count": 150
-      },
-      {
-        "key": "item_reform();",
-        "count": 130
-      },
-      {
-        "key": "itemheal rand(N,N),N;",
-        "count": 115
-      },
-      {
-        "key": "}\",N,N,BF_WEAPON;",
-        "count": 108
-      },
-      {
-        "key": "} } } if (.@g>=ENCHANTGRADE_D) { bonus bPAtk,N;",
-        "count": 88
-      },
-      {
-        "key": "itemheal N,N;",
-        "count": 81
-      },
-      {
-        "key": "}\",N,N,BF_MAGIC;",
-        "count": 80
-      },
-      {
-        "key": "} if (.@r>=N) { bonus bMaxHPrate,N;",
-        "count": 77
-      },
-      {
-        "key": "} if (.@r>=N) { bonus bBaseAtk,N;",
-        "count": 73
-      },
-      {
-        "key": "pet;",
-        "count": 67
-      },
-      {
-        "key": "rentitem N,N;",
-        "count": 66
-      },
-      {
-        "key": "bonus3 bAddMonsterIdDropItem,N,N,N;",
-        "count": 62
+        "key": ".@val += N;",
+        "count": 82
       },
       {
         "key": "mercenary_create N,N;",
-        "count": 59
+        "count": 61
       },
       {
-        "key": "} if (.@r>=N) { bonus bDelayrate,-N;",
-        "count": 53
+        "key": "/* unknown rate */;",
+        "count": 34
       },
       {
-        "key": "} if (.@r>=N) { bonus2 bAddSize,Size_All,N;",
-        "count": 49
+        "key": "/* average value */;",
+        "count": 32
       },
       {
-        "key": "} if (.@r>=N) { bonus bVariableCastrate,-N;",
-        "count": 48
+        "key": "/*Unknow Rate*/;",
+        "count": 29
       },
       {
-        "key": "autobonus \"{ bonus bUseSPrate,-N;",
-        "count": 46
+        "key": "break;",
+        "count": 27
       },
       {
-        "key": "skill \"AL_HEAL\",N;",
-        "count": 44
+        "key": "getitembound N,N,Bound_Account;",
+        "count": 22
       },
       {
-        "key": "specialeffect2 EF_POTION_BERSERK;",
-        "count": 44
+        "key": ".@dmg += N;",
+        "count": 21
       },
       {
-        "key": "} } } bonus bBaseAtk,N*(.@r/N);",
-        "count": 43
+        "key": ".@bonus += N;",
+        "count": 20
       },
       {
-        "key": "} } } if (.@g>=ENCHANTGRADE_D) { bonus bSMatk,N;",
-        "count": 41
+        "key": ".@t += N;",
+        "count": 20
       },
       {
-        "key": ".@r = getequiprefinerycnt(EQI_HEAD_TOP);",
-        "count": 38
+        "key": "/*getitem N,N;",
+        "count": 16
       },
       {
-        "key": "} } } if (.@g >= ENCHANTGRADE_D) { bonus bAtkRate,N;",
-        "count": 38
+        "key": "/* TODO */;",
+        "count": 15
       },
       {
-        "key": "skill \"AL_TELEPORT\",N;",
-        "count": 38
+        "key": "/*Unknown Rate*/;",
+        "count": 15
       },
       {
-        "key": "} if (.@r>=N) { bonus bLongAtkRate,N;",
-        "count": 36
+        "key": ".@aspd += N;",
+        "count": 13
       },
       {
-        "key": "} if (.@r>=N) { bonus bAspdRate,N;",
-        "count": 33
+        "key": ".@hp += N;",
+        "count": 11
+      },
+      {
+        "key": "/*rentitem N,N;",
+        "count": 11
+      },
+      {
+        "key": "setfont N;",
+        "count": 9
+      },
+      {
+        "key": ".@sp += N;",
+        "count": 8
+      },
+      {
+        "key": "/* Safe to N Weapon Certificate */;",
+        "count": 8
+      },
+      {
+        "key": "callfunc \"F_CashCity\",N;",
+        "count": 8
+      },
+      {
+        "key": "sc_start4 SC_LIMIT_POWER_BOOSTER,N,N,N,N,N;",
+        "count": 8
+      },
+      {
+        "key": ".@matk += N;",
+        "count": 7
+      },
+      {
+        "key": "*/ rentitem N,N;",
+        "count": 7
+      },
+      {
+        "key": "/* Confirm: Success rate */;",
+        "count": 7
+      },
+      {
+        "key": "/* Safe to N Armor Certificate */;",
+        "count": 7
+      },
+      {
+        "key": "item_enchant(N);",
+        "count": 7
+      },
+      {
+        "key": "sc_start2 SC_L_LIFEPOTION,N,-N,N;",
+        "count": 7
+      },
+      {
+        "key": "sc_start2 SC_S_LIFEPOTION,N,-N,N;",
+        "count": 7
+      },
+      {
+        "key": ".@hpsp += N;",
+        "count": 6
+      },
+      {
+        "key": "/* Greed Scroll */;",
+        "count": 6
       }
     ]
   },
   "monsters": {
     "total": 2675,
-    "withRace": 2671,
-    "withElement": 2671,
-    "withDefense": 2338,
-    "withMagicDefense": 2278
+    "withRace": 2675,
+    "withElement": 2675,
+    "withDefense": 2675,
+    "withMagicDefense": 2675
   },
   "skills": {
     "normalizedTotal": 1635,
@@ -256,47 +256,408 @@
     },
     "actionSkills": {
       "total": 334,
-      "staticFormulaCoverage": 5,
+      "staticFormulaCoverage": 334,
       "tooltipInferredCoverage": 114,
-      "fallbackLikely": 219,
-      "sampleFallbackSkillIds": [
-        "AC_CHARGEARROW",
-        "AL_HOLYLIGHT",
-        "MC_MAMMONITE",
-        "MC_CARTREVOLUTION",
-        "TF_POISON",
-        "TF_SPRINKLESAND",
-        "TF_THROWSTONE",
-        "KN_CHARGEATK",
-        "PR_TURNUNDEAD",
-        "WZ_EARTHSPIKE",
-        "HT_LANDMINE",
-        "HT_FREEZINGTRAP",
-        "HT_BLASTMINE",
-        "HT_CLAYMORETRAP",
-        "HT_PHANTASMIC",
-        "HT_POWER",
-        "AS_VENOMKNIFE",
-        "MO_EXTREMITYFIST",
-        "MO_BALKYOUNG",
-        "GS_FLING",
-        "GS_TRIPLEACTION",
-        "GS_BULLSEYE",
-        "GS_TRACKING",
-        "GS_DISARM",
-        "GS_PIERCINGSHOT"
-      ]
+      "fallbackLikely": 0,
+      "sampleFallbackSkillIds": []
     },
     "formulas": {
       "static": {
-        "total": 6,
+        "total": 393,
         "skillIds": [
+          "ABC_ABYSS_FLAME",
+          "ABC_ABYSS_SQUARE",
+          "ABC_ABYSS_STRIKE",
+          "ABC_CHAIN_REACTION_SHOT",
+          "ABC_CHASING_BREAK",
+          "ABC_CHASING_SHOT",
+          "ABC_DEFT_STAB",
+          "ABC_FRENZY_SHOT",
+          "ABC_HIT_AND_SLIDING",
+          "ABC_UNLUCKY_RUSH",
+          "AB_ADORAMUS",
+          "AB_JUDEX",
+          "AC_CHARGEARROW",
+          "AC_DOUBLE",
+          "AC_SHOWER",
+          "AG_ALL_BLOOM",
+          "AG_ASTRAL_STRIKE",
+          "AG_CRIMSON_ARROW",
+          "AG_DEADLY_PROJECTION",
+          "AG_FLORAL_FLARE_ROAD",
+          "AG_MYSTERY_ILLUSION",
+          "AG_RAIN_OF_CRYSTAL",
+          "AG_ROCK_DOWN",
+          "AG_SOUL_VC_STRIKE",
+          "AG_STORM_CANNON",
+          "AG_STRANTUM_TREMOR",
+          "AG_TORNADO_STORM",
+          "AG_VIOLENT_QUAKE",
+          "AL_HOLYLIGHT",
+          "AL_RUWACH",
+          "AM_ACIDTERROR",
+          "ASC_BREAKER",
+          "ASC_METEORASSAULT",
+          "AS_GRIMTOOTH",
+          "AS_SONICBLOW",
+          "AS_SPLASHER",
+          "AS_VENOMKNIFE",
+          "AS_VENOMSPLATTER",
+          "BA_MUSICALSTRIKE",
+          "BO_ACIDIFIED_ZONE_FIRE",
+          "BO_ACIDIFIED_ZONE_GROUND",
+          "BO_ACIDIFIED_ZONE_WATER",
+          "BO_ACIDIFIED_ZONE_WIND",
+          "BO_DUST_EXPLOSION",
+          "BO_EXPLOSIVE_POWDER",
+          "BO_MAYHEMIC_THORNS",
+          "BO_MYSTERY_POWDER",
+          "CD_ARBITRIUM",
+          "CD_DIVINUS_FLOS",
+          "CD_EFFLIGO",
+          "CD_FLAMEN",
+          "CD_FRAMEN",
+          "CD_PETITIO",
+          "CD_PNEUMATICUS_PROCELLA",
+          "CG_ARROWVULCAN",
+          "CH_CHAINCRUSH",
+          "CH_PALMSTRIKE",
+          "CH_TIGERFIST",
+          "CR_ACIDDEMONSTRATION",
+          "CR_GRANDCROSS",
+          "CR_HOLYCROSS",
+          "CR_SHIELDBOOMERANG",
+          "CR_SHIELDCHARGE",
+          "DC_THROWARROW",
+          "DK_DRAGONIC_AURA",
+          "DK_DRAGONIC_BREATH",
+          "DK_DRAGONIC_PIERCE",
+          "DK_HACKANDSLASHER",
+          "DK_HACK_AND_SLASHER",
+          "DK_MADNESS_CRUSHER",
+          "DK_SERVANTWEAPON",
+          "DK_SERVANT_WEAPON",
+          "DK_SERVANT_W_DEMOL",
+          "DK_SERVANT_W_DEMON",
+          "DK_SERVANT_W_PHANTOM",
+          "DK_STORMSLASH",
+          "DK_STORM_SLASH",
+          "EM_CONFLAGRATION",
+          "EM_DIAMOND_STORM",
+          "EM_LIGHTNING_LAND",
+          "EM_PSYCHIC_STREAM",
+          "EM_TERRA_DRIVE",
+          "EM_VENOM_SWAMP",
+          "GC_CROSSIMPACT",
+          "GC_CROSSRIPPERSLASHER",
+          "GC_DARKCROW",
+          "GC_DARKILLUSION",
+          "GC_ROLLINGCUTTER",
+          "GC_VENOMPRESSURE",
+          "GN_CARTCANNON",
+          "GN_CRAZYWEED_ATK",
+          "GN_DEMONIC_FIRE",
+          "GN_FIRE_EXPANSION",
+          "GN_ILLUSIONDOPING",
+          "GN_SPORE_EXPLOSION",
+          "GN_THORNS_TRAP",
+          "GN_WALLOFTHORN",
+          "GS_BULLSEYE",
+          "GS_DESPERADO",
+          "GS_DISARM",
+          "GS_DUST",
+          "GS_FLING",
+          "GS_FULLBUSTER",
+          "GS_GROUNDDRIFT",
+          "GS_PIERCINGSHOT",
+          "GS_RAPIDSHOWER",
+          "GS_SPREADATTACK",
+          "GS_TRACKING",
+          "GS_TRIPLEACTION",
+          "HN_DOUBLEBOWLINGBASH",
+          "HN_JACK_FROST_NOVA",
+          "HN_JUPITEL_THUNDER_STORM",
+          "HN_MEGA_SONIC_BLOW",
+          "HN_METEOR_STORM_BUSTER",
+          "HN_NAPALM_VULCAN_STRIKE",
+          "HN_SHIELD_CHAIN_RUSH",
+          "HN_SPIRAL_PIERCE_MAX",
+          "HT_BLASTMINE",
+          "HT_BLITZBEAT",
+          "HT_CLAYMORETRAP",
+          "HT_FREEZINGTRAP",
+          "HT_LANDMINE",
+          "HT_PHANTASMIC",
+          "HT_POWER",
+          "HW_GRAVITATION",
+          "HW_MAGICCRASHER",
+          "HW_NAPALMVULCAN",
+          "IG_CROSS_RAIN",
+          "IG_GRAND_JUDGEMENT",
+          "IG_IMPERIAL_CROSS",
+          "IG_IMPERIAL_PRESSURE",
+          "IG_JUDGEMENT_CROSS",
+          "IG_OVERSLASH",
+          "IG_RADIANT_SPEAR",
+          "IG_SHIELD_SHOOTING",
+          "IQ_BLAZING_FLAME_BLAST",
+          "IQ_FIRST_BRAND",
+          "IQ_MASSIVE_FLAME_BLASTER",
+          "IQ_MASSIVE_F_BLASTER",
+          "IQ_OLEUM_SANCTUM",
+          "IQ_SECOND_FAITH",
+          "IQ_SECOND_FLAME",
+          "IQ_SECOND_JUDGEMENT",
+          "IQ_THIRD_CONSECRATION",
+          "IQ_THIRD_FLAME_BOMB",
+          "IQ_THIRD_PUNISH",
           "KN_BOWLINGBASH",
+          "KN_CHARGEATK",
+          "KN_PIERCE",
+          "KN_SPEARBOOMERANG",
+          "KN_SPEARSTAB",
+          "KO_BAKURETSU",
+          "KO_HAPPOKUNAI",
+          "KO_HUUMARANKA",
+          "KO_JYUMONJIKIRI",
+          "KO_KAIHOU",
+          "KO_MAKIBISHI",
+          "KO_MUCHANAGE",
+          "KO_SETSUDAN",
+          "KO_ZENKAI",
+          "LG_BANISHINGPOINT",
+          "LG_CANNONSPEAR",
+          "LG_EARTHDRIVE",
+          "LG_HESPERUSLIT",
+          "LG_MOONSLASHER",
+          "LG_OVERBRAND",
+          "LG_PINPOINTATTACK",
+          "LG_RAGEBURST",
+          "LG_RAYOFGENESIS",
+          "LG_SHIELDPRESS",
+          "LK_HEADCRUSH",
+          "LK_JOINTBEAT",
+          "LK_SPIRALPIERCE",
+          "MC_CARTREVOLUTION",
+          "MC_MAMMONITE",
           "MG_COLDBOLT",
+          "MG_FIREBALL",
           "MG_FIREBOLT",
+          "MG_FIREWALL",
+          "MG_FROSTDIVER",
           "MG_LIGHTNINGBOLT",
+          "MG_NAPALMBEAT",
+          "MG_SOULSTRIKE",
+          "MG_THUNDERSTORM",
+          "MO_BALKYOUNG",
+          "MO_CHAINCOMBO",
+          "MO_COMBOFINISH",
+          "MO_EXTREMITYFIST",
+          "MO_FINGEROFFENSIVE",
+          "MO_INVESTIGATE",
+          "MO_TRIPLEATTACK",
+          "MT_ENERGY_CANNONADE",
+          "MT_MIGHTY_SMASH",
+          "MT_POWERFUL_SWING",
+          "MT_RUSH_QUAKE",
+          "MT_RUSH_STRIKE",
+          "MT_SPARK_BLASTER",
+          "MT_TRIPLE_LASER",
+          "NC_ARMSCANNON",
+          "NC_AXEBOOMERANG",
+          "NC_BOOSTKNUCKLE",
+          "NC_COLDSLOWER",
+          "NC_FLAMELAUNCHER",
+          "NC_MAGMA_ERUPTION",
+          "NC_PILEBUNKER",
+          "NC_POWERSWING",
+          "NC_VULCANARM",
+          "NJ_BAKUENRYU",
+          "NJ_HUUJIN",
+          "NJ_HUUMA",
+          "NJ_HYOUSENSOU",
+          "NJ_HYOUSYOURAKU",
+          "NJ_ISSEN",
+          "NJ_KAMAITACHI",
+          "NJ_KASUMIKIRI",
+          "NJ_KIRIKAGE",
+          "NJ_KOUENKA",
+          "NJ_KUNAI",
+          "NJ_RAIGEKISAI",
+          "NJ_SYURIKEN",
+          "NJ_ZENYNAGE",
+          "NW_BASIC_GRENADE",
+          "NW_GRENADES_DROPPING",
+          "NW_HASTY_FIRE_IN_THE_HOLE",
+          "NW_MAGAZINE_FOR_ONE",
+          "NW_MIDNIGHT_FALLEN",
+          "NW_MISSION_BOMBARD",
+          "NW_ONLY_ONE_BULLET",
+          "NW_SPIRAL_SHOOTING",
+          "NW_WILD_FIRE",
+          "NW_WILD_SHOT",
+          "PA_PRESSURE",
+          "PA_SACRIFICE",
+          "PA_SHIELDCHAIN",
+          "PF_SOULBURN",
+          "PR_MAGNUS",
+          "PR_TURNUNDEAD",
+          "RA_AIMEDBOLT",
+          "RA_ARROWSTORM",
+          "RA_CLUSTERBOMB",
+          "RA_FIRINGTRAP",
+          "RA_ICEBOUNDTRAP",
+          "RA_WUGBITE",
+          "RA_WUGSTRIKE",
+          "RG_BACKSTAP",
+          "RG_INTIMIDATE",
+          "RG_RAID",
+          "RK_DRAGONBREATH",
+          "RK_DRAGONBREATH_WATER",
+          "RK_HUNDREDSPEAR",
+          "RK_IGNITIONBREAK",
+          "RK_PHANTOMTHRUST",
+          "RK_SONICWAVE",
+          "RK_STORMBLAST",
+          "RK_WINDCUTTER",
+          "RL_AM_BLAST",
+          "RL_BANISHING_BUSTER",
+          "RL_D_TAIL",
+          "RL_FIREDANCE",
+          "RL_FIRE_RAIN",
+          "RL_HAMMER_OF_GOD",
+          "RL_H_MINE",
+          "RL_MASS_SPIRAL",
+          "RL_R_TRIP",
+          "RL_SLUGSHOT",
+          "RL_S_STORM",
+          "SC_FATALMENACE",
+          "SC_TRIANGLESHOT",
+          "SHC_CROSS_SLASH",
+          "SHC_ETERNAL_SLASH",
+          "SHC_FATAL_SHADOW_CROW",
+          "SHC_IMPACT_CRATER",
+          "SHC_SAVAGE_IMPACT",
+          "SHC_SHADOW_STAB",
+          "SH_CHUL_HO_BATTERING",
+          "SH_CHUL_HO_SONIC_CLAW",
+          "SH_HYUN_ROKS_BREEZE",
+          "SH_HYUN_ROK_CANNON",
+          "SH_HYUN_ROK_SPIRIT_POWER",
+          "SJ_BOOKOFCREATINGSTAR",
+          "SJ_FALLINGSTAR_ATK",
+          "SJ_FLASHKICK",
+          "SJ_FULLMOONKICK",
+          "SJ_NEWMOONKICK",
+          "SJ_NOVAEXPLOSING",
+          "SJ_PROMINENCEKICK",
+          "SJ_SOLARBURST",
+          "SKE_ALL_IN_THE_SKY",
+          "SKE_NOON_BLAST",
+          "SKE_RISING_SUN",
+          "SKE_SKY_MOON",
+          "SKE_STAR_BURST",
+          "SKE_STAR_LIGHT_KICK",
+          "SKE_SUNSET_BLAST",
+          "SL_SMA",
+          "SL_STIN",
+          "SL_STUN",
           "SM_BASH",
-          "SM_MAGNUM"
+          "SM_MAGNUM",
+          "SN_FALCONASSAULT",
+          "SN_SHARPSHOOTING",
+          "SOA_CIRCLE_OF_DIRECTIONS_AND_ELEMENTALS",
+          "SOA_TALISMAN_OF_BLACK_TORTOISE",
+          "SOA_TALISMAN_OF_BLUE_DRAGON",
+          "SOA_TALISMAN_OF_FOUR_BEARING_GOD",
+          "SOA_TALISMAN_OF_RED_PHOENIX",
+          "SOA_TALISMAN_OF_SOUL_STEALING",
+          "SO_CLOUD_KILL",
+          "SO_DIAMONDDUST",
+          "SO_EARTHGRAVE",
+          "SO_POISON_BUSTER",
+          "SO_PSYCHIC_WAVE",
+          "SO_VARETYR_SPEAR",
+          "SP_CURSEEXPLOSION",
+          "SP_SHA",
+          "SP_SOULEXPLOSION",
+          "SP_SPA",
+          "SP_SWHOO",
+          "SR_DRAGONCOMBO",
+          "SR_GATEOFHELL",
+          "SR_GENTLETOUCH_QUIET",
+          "SR_KNUCKLEARROW",
+          "SR_RAMPAGEBLASTER",
+          "SR_RIDEINLIGHTNING",
+          "SR_SKYNETBLOW",
+          "SR_TIGERCANNON",
+          "SS_FUUMAKOUCHIKU",
+          "SS_FUUMASHOUAKU",
+          "SS_KAGEGARI",
+          "SS_KAGEGISSEN",
+          "SS_KINRYUUHOU",
+          "SS_KUNAIWAIKYOKU",
+          "SS_RAIDENPOU",
+          "SS_REIKETSUHOU",
+          "SS_SEKIENHOU",
+          "SS_SHIMIRU",
+          "SS_TOKEDASU",
+          "SU_BITE",
+          "SU_CN_METEOR",
+          "SU_LUNATICCARROTBEAT",
+          "SU_PICKYPECK",
+          "SU_SCAROFTAROU",
+          "SU_SCRATCH",
+          "SU_SVG_SPIRIT",
+          "SU_SV_STEMSPEAR",
+          "TF_POISON",
+          "TF_SANDATTACK",
+          "TF_SPRINKLESAND",
+          "TF_THROWSTONE",
+          "TK_COUNTER",
+          "TK_DOWNKICK",
+          "TK_JUMPKICK",
+          "TK_STORMKICK",
+          "TK_TURNKICK",
+          "TR_METALIC_FURY",
+          "TR_METALLIC_FURY",
+          "TR_RHYTHMICAL_WAVE",
+          "TR_RHYTHMSHOOTING",
+          "TR_ROSEBLOSSOM",
+          "WH_CRESCIVE_BOLT",
+          "WH_DEEPBLINDTRAP",
+          "WH_FLAMETRAP",
+          "WH_GALESTORM",
+          "WH_HAWKBOOMERANG",
+          "WH_HAWKRUSH",
+          "WH_SOLIDTRAP",
+          "WH_SWIFTTRAP",
+          "WH_WILD_WALK",
+          "WL_CHAINLIGHTNING",
+          "WL_COMET",
+          "WL_CRIMSONROCK",
+          "WL_DRAINLIFE",
+          "WL_EARTHSTRAIN",
+          "WL_FROSTMISTY",
+          "WL_HELLINFERNO",
+          "WL_JACKFROST",
+          "WL_RELEASE",
+          "WL_SOULEXPANSION",
+          "WL_TETRAVORTEX",
+          "WM_GREAT_ECHO",
+          "WM_METALICSOUND",
+          "WM_REVERBERATION",
+          "WM_SEVERE_RAINSTORM_MELEE",
+          "WS_CARTTERMINATION",
+          "WZ_EARTHSPIKE",
+          "WZ_FIREPILLAR",
+          "WZ_FROSTNOVA",
+          "WZ_HEAVENDRIVE",
+          "WZ_JUPITEL",
+          "WZ_METEOR",
+          "WZ_STORMGUST",
+          "WZ_VERMILION",
+          "WZ_WATERBALL"
         ]
       },
       "tooltipInferred": {

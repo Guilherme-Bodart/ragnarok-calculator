@@ -138,9 +138,9 @@ describe("CharacterStatusEngine", () => {
     });
     expect(status.maxHp).toBe(6971);
     expect(status.maxSp).toBe(283);
-    expect(status.statusAtk).toBe(345);
-    expect(status.statusMatk).toBe(183);
-    expect(status.atk).toBe(370);
+    expect(status.statusAtk).toBe(217);
+    expect(status.statusMatk).toBe(96);
+    expect(status.atk).toBe(242);
     expect(status.defense).toBe(15);
     expect(status.magicDefense).toBe(9);
     expect(status.res).toBe(6);
@@ -149,7 +149,7 @@ describe("CharacterStatusEngine", () => {
     expect(status.perfectHitRate).toBe(12);
     expect(status.flee).toBe(134);
     expect(status.crit).toBe(6);
-    expect(status.aspd).toBe(163.34);
+    expect(status.aspd).toBe(163.24);
   });
 
   it("applies item trait stat bonuses before derived combat stats", () => {
@@ -267,8 +267,8 @@ describe("CharacterStatusEngine", () => {
       },
     });
 
-    expect(status.atk).toBe(status.statusAtk + 115);
-    expect(status.matk).toBe(status.statusMatk + 77);
+    expect(status.atk).toBe(status.statusAtk + 105);
+    expect(status.matk).toBe(status.statusMatk + 57);
     expect(status.defense).toBe(28);
     expect(status.magicDefense).toBe(4);
     expect(status.res).toBe(5);

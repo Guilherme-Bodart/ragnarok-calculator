@@ -868,4 +868,54 @@ describe("ModifierNormalizer", () => {
       'autobonus3 "{ bonus bAtkRate,-50; bonus bNoKnockback; }",1000,5000;',
     ]);
   });
+
+  it("supports bAllTraitStats, bIgnoreResRaceRate, bIgnoreDefRace, and nested isequipped + getequiprefinerycnt blocks", () => {
+    const result = normalizer.fromRawScript(
+      `
+      bonus bAllTraitStats,2;
+      bonus bIgnoreDefRace,RC_Brute;
+      bonus2 bIgnoreResRaceRate,RC_DemiHuman,25;
+      bonus2 bIgnoreMResRaceRate,RC_All,15;
+      if (isequipped(29001, 29002)) {
+        .@r_weapon = getequiprefinerycnt(EQI_HAND_R);
+        if (.@r_weapon >= 10) {
+          bonus bBaseAtk,50;
+        }
+      }
+    `,
+      { refinesBySlot: { weapon: 10 } },
+    );
+
+    expect(result.unsupportedStatements).toEqual([]);
+    expect(result.modifiers).toContainEqual(
+      expect.objectContaining({
+        stat: "allTraitStats",
+        value: 2,
+      }),
+    );
+    expect(result.modifiers).toContainEqual(
+      expect.objectContaining({
+        stat: "ignoreDefenseRate",
+        value: 100,
+        target: { type: "race", raceId: "brute" },
+      }),
+    );
+    expect(result.modifiers).toContainEqual(
+      expect.objectContaining({
+        stat: "ignoreDefenseRate",
+        value: 25,
+        target: { type: "race", raceId: "demihuman" },
+      }),
+    );
+    expect(result.modifiers).toContainEqual(
+      expect.objectContaining({
+        stat: "baseAtk",
+        value: 50,
+        conditions: [
+          { type: "equipped", itemIds: [29001, 29002] },
+          { type: "equip_refine", locationId: 4, operator: ">=", value: 10 },
+        ],
+      }),
+    );
+  });
 });

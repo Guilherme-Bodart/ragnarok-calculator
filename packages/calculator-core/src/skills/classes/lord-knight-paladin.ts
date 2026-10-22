@@ -44,7 +44,14 @@ const formulas: Record<
     bonusFlatDamage: input.character.maxHp * 0.09,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  PA_PRESSURE: (input) => ({
+    formulaId: "static:PA_PRESSURE",
+    // C++ Renewal: skillratio += -100 + 500 + 150 * skill_lv; RE_LVL_DMOD(100);
+    multiplier: ((500 + 150 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class LordKnightPaladinSkillFormula implements SkillFormulaAdapter {

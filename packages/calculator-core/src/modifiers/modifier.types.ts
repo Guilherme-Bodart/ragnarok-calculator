@@ -114,6 +114,7 @@ export const normalizedModifierSchema = z.object({
     "con",
     "crt",
     "allStats",
+    "allTraitStats",
     "pAtk",
     "smatk",
     "healPlus",

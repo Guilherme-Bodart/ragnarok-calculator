@@ -27,7 +27,28 @@ const formulas: Record<
       hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
       precision: "validated",
     };
-  }
+  },
+  TR_METALIC_FURY: (input) => {
+    // C++: skillratio += -100 + 3850 * skill_lv; RE_LVL_DMOD(100);
+    const ratio = 3850 * input.skillLevel;
+    return {
+      formulaId: "static:TR_METALIC_FURY",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  TR_RHYTHMICAL_WAVE: (input) => {
+    // C++: skillratio += -100 + 250 + 3650 * skill_lv + TR_STAGE_MANNER * 25 + 5 * sstatus->spl; RE_LVL_DMOD(100);
+    const stageMannerLv = input.character.learnedSkills?.["TR_STAGE_MANNER"] ?? 0;
+    const ratio = 250 + 3650 * input.skillLevel + stageMannerLv * 25 + 5 * input.character.effectiveStats.spl;
+    return {
+      formulaId: "static:TR_RHYTHMICAL_WAVE",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
 };
 
 export class TroubadourTrouvereSkillFormula implements SkillFormulaAdapter {

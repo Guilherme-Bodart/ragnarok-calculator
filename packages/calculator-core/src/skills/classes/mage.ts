@@ -35,7 +35,14 @@ const formulas: Record<
     multiplier: 50 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  MG_THUNDERSTORM: (input) => ({
+    formulaId: "static:MG_THUNDERSTORM",
+    // C++ Renewal: 100% MATK per hit
+    multiplier: 1.0,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skillLevel,
+    precision: "validated",
+  }),
 };
 
 export class MageSkillFormula implements SkillFormulaAdapter {

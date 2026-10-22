@@ -1,6 +1,6 @@
 "use client";
 
-import { Crosshair } from "lucide-react";
+import { Crosshair, Sparkles, Zap } from "lucide-react";
 import { Field } from "@/components/ui/field";
 import { NumberSelect } from "@/components/ui/number-select";
 import { PanelHeader } from "@/components/ui/panel-header";
@@ -13,6 +13,7 @@ import type {
 import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorSkillIcon } from "./calculator-skill-icon";
 import { useCalculatorBuildStore } from "./calculator-build-store";
+import { getBreakdownValue } from "./calculator-utils";
 
 export type CalculatorAttackSkill = RoSkill & {
   numericId?: number;
@@ -49,30 +50,61 @@ export function CalculatorAttackPanel({
 
   const effectiveSkillLevel = Math.min(skillLevel, selectedSkill.maxLevel);
 
+  const breakdownHits = result
+    ? Number(getBreakdownValue(result.breakdown, "hits"))
+    : 0;
   const hitCount =
-    selectedSkill.hitCountByLevel?.[String(effectiveSkillLevel)] ?? selectedSkill.hitCount;
-  const multiplier =
+    breakdownHits > 0
+      ? breakdownHits
+      : (selectedSkill.hitCountByLevel?.[String(effectiveSkillLevel)] ??
+        selectedSkill.hitCount);
+
+  const breakdownMultiplier = result
+    ? Number(getBreakdownValue(result.breakdown, "skillMultiplier"))
+    : 0;
+  const fallbackMultiplierPercent =
     selectedSkill.baseMultiplierByLevel[String(effectiveSkillLevel)] ??
     selectedSkill.baseMultiplierByLevel[String(selectedSkill.maxLevel)] ??
     100;
+  const effectiveMultiplierRatio =
+    breakdownMultiplier > 0
+      ? breakdownMultiplier
+      : fallbackMultiplierPercent / 100;
+  const effectiveMultiplierPercent = Math.round(effectiveMultiplierRatio * 100);
+
   const hasPrototypeWarning = resultMeta.precision === "prototype";
   
   const elementMap: Record<string, string> = {
-    neutral: "Neutro", water: "Água", earth: "Terra", fire: "Fogo", wind: "Vento",
-    poison: "Veneno", holy: "Sagrado", dark: "Sombrio", ghost: "Fantasma", undead: "Maldito"
+    neutral: "Neutro",
+    water: "Água",
+    earth: "Terra",
+    fire: "Fogo",
+    wind: "Vento",
+    poison: "Veneno",
+    holy: "Sagrado",
+    dark: "Sombrio",
+    ghost: "Fantasma",
+    undead: "Maldito",
+    weapon: "Arma",
   };
-  const translatedElement = selectedSkill.element ? (elementMap[selectedSkill.element] || selectedSkill.element) : "Arma";
-  const translatedDamageType = selectedSkill.damageType === "magical" ? "Mágico" : "Físico";
+  const rawElement =
+    result?.breakdown.find((b) => b.key === "attackElement")?.value ??
+    selectedSkill.element ??
+    "weapon";
+  const translatedElement =
+    elementMap[String(rawElement).toLowerCase()] || String(rawElement);
+  const translatedDamageType =
+    selectedSkill.damageType === "magical" ? "Mágico" : "Físico";
 
   return (
-    <aside className="flex flex-col gap-4 p-5 rounded-xl border border-rose-500/10 bg-slate-900/40 shadow-[0_8px_30px_rgb(0,0,0,0.3)] backdrop-blur-md">
+    <aside className="flex flex-col gap-4 p-5 rounded-2xl border border-sky-500/15 bg-[#020612]/75 shadow-[0_12px_36px_rgb(0,0,0,0.45)] backdrop-blur-xl">
       <PanelHeader
-        icon={<Crosshair size={17} />}
+        icon={<Crosshair size={17} className="text-sky-400" />}
         title={copy.attack.title}
-        meta={hasPrototypeWarning ? copy.attack.prototypeMeta : undefined}
+        meta={hasPrototypeWarning ? copy.attack.prototypeMeta : resultMeta.formulaId}
       />
 
-      <div className="grid grid-cols-[minmax(0,1fr)_140px] gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_140px] gap-3">
         <Field label={copy.attack.skillLabel}>
           <RichSelect
             value={selectedSkillId}
@@ -108,22 +140,51 @@ export function CalculatorAttackPanel({
         </Field>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
-        <div className="flex flex-col p-2.5 rounded-lg bg-slate-900/60 border border-slate-700/50">
-          <strong className="text-xs font-bold text-slate-200 capitalize">{translatedDamageType}</strong>
-          <span className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">{copy.attack.damageTypeLabel}</span>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-1">
+        <div className="flex flex-col p-3 rounded-xl bg-slate-900/70 border border-slate-800/80">
+          <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+            {copy.attack.damageTypeLabel}
+          </span>
+          <strong className="text-sm font-black text-slate-100 capitalize mt-1 flex items-center gap-1.5">
+            {selectedSkill.damageType === "magical" ? (
+              <Sparkles size={13} className="text-indigo-400 shrink-0" />
+            ) : (
+              <Zap size={13} className="text-amber-400 shrink-0" />
+            )}
+            {translatedDamageType}
+          </strong>
         </div>
-        <div className="flex flex-col p-2.5 rounded-lg bg-slate-900/60 border border-slate-700/50">
-          <strong className="text-xs font-bold text-slate-200 capitalize">{translatedElement}</strong>
-          <span className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">{copy.attack.elementLabel}</span>
+
+        <div className="flex flex-col p-3 rounded-xl bg-slate-900/70 border border-slate-800/80">
+          <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+            {copy.attack.elementLabel}
+          </span>
+          <strong className="text-sm font-black text-sky-200 capitalize mt-1">
+            {translatedElement}
+          </strong>
         </div>
-        <div className="flex flex-col p-2.5 rounded-lg bg-slate-900/60 border border-slate-700/50">
-          <strong className="text-xs font-bold text-slate-200">{hitCount}</strong>
-          <span className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">{copy.attack.hitsLabel}</span>
+
+        <div className="flex flex-col p-3 rounded-xl bg-slate-900/70 border border-slate-800/80">
+          <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+            {copy.attack.hitsLabel}
+          </span>
+          <strong className="text-sm font-black text-slate-100 mt-1 tabular-nums">
+            {hitCount} {hitCount === 1 ? "hit" : "hits"}
+          </strong>
         </div>
-        <div className="flex flex-col p-2.5 rounded-lg bg-slate-900/60 border border-slate-700/50">
-          <strong className="text-xs font-bold text-slate-200">{(multiplier / 100).toFixed(2)}x</strong>
-          <span className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">{copy.attack.multiplierLabel}</span>
+
+        <div className="flex flex-col p-3 rounded-xl bg-sky-950/30 border border-sky-500/25">
+          <span className="text-[10px] text-sky-300/80 uppercase font-bold tracking-wider">
+            {copy.attack.multiplierLabel}
+          </span>
+          <div className="flex items-baseline gap-1.5 mt-1">
+            <strong className="text-sm font-black text-sky-300 tabular-nums">
+              {effectiveMultiplierPercent.toLocaleString()}%
+            </strong>
+            <small className="text-[10px] font-mono text-slate-400">
+              ({effectiveMultiplierRatio.toFixed(2)}x)
+            </small>
+          </div>
         </div>
       </div>
     </aside>

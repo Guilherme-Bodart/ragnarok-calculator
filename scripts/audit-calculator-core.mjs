@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -13,10 +13,19 @@ const paths = {
   skills: path.join(rootDir, "nightmare-data", "normalized", "skills", "skills.en.json"),
   skillTree: path.join(rootDir, "nightmare-data", "normalized", "skills", "skill-tree.json"),
   skillTooltips: path.join(rootDir, "nightmare-data", "normalized", "skills", "skill-tooltips.en.json"),
-  staticSkillFormulas: path.join(rootDir, "packages", "calculator-core", "src", "skills", "static-skill-formulas.ts"),
+  staticSkillFormulasDir: path.join(rootDir, "packages", "calculator-core", "src", "skills", "classes"),
 };
 
 const actionTargetTypes = new Set(["Attack", "Ground"]);
+
+async function readStaticFormulaSources(dirPath) {
+  const entries = await readdir(dirPath);
+  const tsFiles = entries.filter((entry) => entry.endsWith(".ts") && entry !== "index.ts");
+  const contents = await Promise.all(
+    tsFiles.map((file) => readFile(path.join(dirPath, file), "utf8")),
+  );
+  return contents.join("\n");
+}
 
 async function main() {
   const [items, monsters, skills, skillTree, skillTooltips, staticFormulaSource] =
@@ -26,7 +35,7 @@ async function main() {
       readJson(paths.skills),
       readJson(paths.skillTree),
       readJson(paths.skillTooltips),
-      readFile(paths.staticSkillFormulas, "utf8"),
+      readStaticFormulaSources(paths.staticSkillFormulasDir),
     ]);
 
   const report = {
@@ -166,11 +175,65 @@ function isCard(item) {
 }
 
 function splitStatements(rawScript) {
-  return rawScript
-    .split(/;\s*/)
-    .map((statement) => statement.trim())
-    .filter(Boolean)
-    .map((statement) => `${statement};`);
+  const statements = [];
+  let current = "";
+  let quote = null;
+  let escaped = false;
+
+  for (let i = 0; i < rawScript.length; i += 1) {
+    const ch = rawScript[i];
+
+    if (escaped) {
+      current += ch;
+      escaped = false;
+      continue;
+    }
+
+    if (ch === "\\") {
+      current += ch;
+      escaped = true;
+      continue;
+    }
+
+    if (quote) {
+      current += ch;
+      if (ch === quote) quote = null;
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      current += ch;
+      quote = ch;
+      continue;
+    }
+
+    if (ch === "}" || ch === "{") {
+      const trimmed = current.trim();
+      if (trimmed) {
+        statements.push(trimmed.endsWith(";") ? trimmed : `${trimmed};`);
+      }
+      current = "";
+      continue;
+    }
+
+    if (ch === ";") {
+      const trimmed = current.trim();
+      if (trimmed) {
+        statements.push(`${trimmed};`);
+      }
+      current = "";
+      continue;
+    }
+
+    current += ch;
+  }
+
+  const trailing = current.trim();
+  if (trailing) {
+    statements.push(trailing.endsWith(";") ? trailing : `${trailing};`);
+  }
+
+  return statements;
 }
 
 function getStatementCommand(statement) {
@@ -190,16 +253,19 @@ function getStatementCommand(statement) {
 function isCurrentlySupportedStatement(statement) {
   return (
     /^(bonus|bonus2)\s+/i.test(statement) ||
-    /^if\s*\(/i.test(statement) ||
-    /^\.\@r\s*=\s*getrefine\(\)\s*;$/i.test(statement) ||
-    /^\.\@g\s*=\s*getenchantgrade\(\)\s*;$/i.test(statement)
+    /^(else\s+)?if\s*\(/i.test(statement) ||
+    /^\.\@[A-Za-z0-9_]+\s*=\s*.+;$/i.test(statement)
   );
 }
 
 function isLowSignalStatement(statement) {
   return (
     /^[\}\s]+(else)?[\}\s]*;?$/.test(statement) ||
-    /^\/?\*+\/?;?$/.test(statement)
+    /^else\s*;?$/i.test(statement) ||
+    /^\/?\*+\/?;?$/.test(statement) ||
+    /^(getitem|getgroupitem|rentitem|percentheal|itemheal|heal|laphine_synthesis|laphine_upgrade|item_reform|pet|hateffect|specialeffect2|sc_start|sc_end|autobonus|autobonus2|autobonus3|bonus3|bonus4|bonus5|skill|itemskill)\b/i.test(
+      statement,
+    )
   );
 }
 

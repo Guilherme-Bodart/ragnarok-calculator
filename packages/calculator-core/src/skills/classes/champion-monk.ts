@@ -63,7 +63,22 @@ const formulas: Record<
     multiplier: (100 * input.skillLevel) / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  MO_EXTREMITYFIST: (input) => ({
+    formulaId: "static:MO_EXTREMITYFIST",
+    // C++ asurastrike.cpp + battle.cpp: base_skillratio = 800 + sp * 10; atk = 250 + 150 * skill_lv
+    multiplier: Math.min(500000, 800 + input.character.maxSp * 10) / 100,
+    bonusFlatDamage: 250 + 150 * input.skillLevel,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  MO_BALKYOUNG: (input) => ({
+    formulaId: "static:MO_BALKYOUNG",
+    // C++ Renewal kiexplosion.cpp: base_skillratio += 700; (starts at 100 => 800%)
+    multiplier: 8.0,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class ChampionMonkSkillFormula implements SkillFormulaAdapter {

@@ -59,7 +59,58 @@ const formulas: Record<
       hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
       precision: "validated",
     };
-  }
+  },
+  LG_CANNONSPEAR: (input) => {
+    // C++: skillratio += -100 + skill_lv * (120 + sstatus->str); RE_LVL_DMOD(100);
+    const ratio = input.skillLevel * (120 + input.character.effectiveStats.str);
+    return {
+      formulaId: "static:LG_CANNONSPEAR",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  LG_BANISHINGPOINT: (input) => {
+    // C++: skillratio += -100 + (100 * skill_lv) + pc_checkskill(sd, SM_BASH) * 70; RE_LVL_DMOD(100);
+    const bashLv = input.character.learnedSkills?.["SM_BASH"] ?? 0;
+    const ratio = 100 * input.skillLevel + bashLv * 70;
+    return {
+      formulaId: "static:LG_BANISHINGPOINT",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  LG_PINPOINTATTACK: (input) => {
+    // C++: skillratio += -100 + 100 * skill_lv + 5 * status_get_agi(src); RE_LVL_DMOD(120);
+    const ratio = 100 * input.skillLevel + 5 * input.character.effectiveStats.agi;
+    return {
+      formulaId: "static:LG_PINPOINTATTACK",
+      multiplier: (ratio * input.character.baseLevel) / 120 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  LG_RAGEBURST: (input) => {
+    // C++: skillratio += 2900 + (max_hp - hp); RE_LVL_DMOD(100); (assuming full Rage spheres / standard burst)
+    const ratio = 3000;
+    return {
+      formulaId: "static:LG_RAGEBURST",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  LG_HESPERUSLIT: (input) => {
+    // C++: skillratio += -100 + 300 * skill_lv + sstatus->vit / 6; RE_LVL_DMOD(100);
+    const ratio = 300 * input.skillLevel + Math.floor(input.character.effectiveStats.vit / 6);
+    return {
+      formulaId: "static:LG_HESPERUSLIT",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
 };
 
 export class RoyalGuardSkillFormula implements SkillFormulaAdapter {

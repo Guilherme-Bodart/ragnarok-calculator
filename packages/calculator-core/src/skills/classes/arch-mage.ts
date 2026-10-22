@@ -46,7 +46,7 @@ const formulas: Record<
       multiplier: (ratio * input.character.baseLevel) / 100 / 100,
       hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
       precision: "validated",
-    }
+    };
   },
   AG_ROCK_DOWN: (input) => ({
     formulaId: "static:AG_ROCK_DOWN",
@@ -97,7 +97,21 @@ const formulas: Record<
     multiplier: ((500 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  AG_DEADLY_PROJECTION: (input) => ({
+    formulaId: "static:AG_DEADLY_PROJECTION",
+    // C++: skillratio += -100 + 2800 * skill_lv + 5 * sstatus->spl; RE_LVL_DMOD(100);
+    multiplier: ((2800 * input.skillLevel + 5 * input.character.effectiveStats.spl) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AG_FLORAL_FLARE_ROAD: (input) => ({
+    formulaId: "static:AG_FLORAL_FLARE_ROAD",
+    // C++: skillratio += -100 + 50 + 740 * skill_lv + 5 * sstatus->spl; RE_LVL_DMOD(100);
+    multiplier: ((50 + 740 * input.skillLevel + 5 * input.character.effectiveStats.spl) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class ArchMageSkillFormula implements SkillFormulaAdapter {

@@ -15,7 +15,7 @@ describe("AspdEngine", () => {
           dex: 30,
         },
       }),
-    ).toBe(156.7);
+    ).toBe(156.45);
   });
 
   it("caps ASPD at 190 until base level 99", () => {

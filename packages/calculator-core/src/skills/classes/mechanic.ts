@@ -35,7 +35,42 @@ const formulas: Record<
     multiplier: ((400 + 350 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  NC_BOOSTKNUCKLE: (input) => ({
+    formulaId: "static:NC_BOOSTKNUCKLE",
+    // C++: skillratio += -100 + 260 * skill_lv + sstatus->dex; RE_LVL_DMOD(100);
+    multiplier: ((260 * input.skillLevel + input.character.effectiveStats.dex) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NC_PILEBUNKER: (input) => ({
+    formulaId: "static:NC_PILEBUNKER",
+    // C++: skillratio += 200 + 100 * skill_lv + status_get_str(src); (starts at 100 => 300 + 100 * skill_lv + str); RE_LVL_DMOD(100);
+    multiplier: ((300 + 100 * input.skillLevel + input.character.effectiveStats.str) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NC_FLAMELAUNCHER: (input) => ({
+    formulaId: "static:NC_FLAMELAUNCHER",
+    // C++: skillratio += 200 + 300 * skill_lv; (starts at 100 => 300 + 300 * skill_lv); RE_LVL_DMOD(150);
+    multiplier: ((300 + 300 * input.skillLevel) * input.character.baseLevel) / 150 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NC_COLDSLOWER: (input) => ({
+    formulaId: "static:NC_COLDSLOWER",
+    // C++: skillratio += 200 + 300 * skill_lv; (starts at 100 => 300 + 300 * skill_lv); RE_LVL_DMOD(150);
+    multiplier: ((300 + 300 * input.skillLevel) * input.character.baseLevel) / 150 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NC_MAGMA_ERUPTION: (input) => ({
+    formulaId: "static:NC_MAGMA_ERUPTION",
+    // C++: base_skillratio += 350 + 50 * skill_lv; (starts at 100 => 450 + 50 * skill_lv)
+    multiplier: (450 + 50 * input.skillLevel) / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class MechanicSkillFormula implements SkillFormulaAdapter {

@@ -37,6 +37,19 @@ export class ItemModifierPipeline {
     source: ItemModifierSource,
     context: ModifierResolutionContext,
   ) {
+    const hasDynamicScript =
+      source.rawScript &&
+      /(\.\@|getrefine|getenchantgrade|getequiprefinerycnt|BaseLevel|getskilllv|readparam|isequipped)/i.test(
+        source.rawScript,
+      );
+
+    if (source.modifiers && !hasDynamicScript) {
+      return {
+        modifiers: source.modifiers,
+        unsupportedStatements: [],
+      };
+    }
+
     if (source.rawScript) {
       return this.normalizer.fromRawScript(source.rawScript, context);
     }

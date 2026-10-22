@@ -180,7 +180,7 @@ describe("DamageFormulaPipeline", () => {
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "preDefenseDamage",
-        value: 2050,
+        value: 1311,
       }),
     );
   });

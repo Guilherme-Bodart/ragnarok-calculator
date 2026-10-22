@@ -1,6 +1,13 @@
 "use client";
 
-import { Boxes, FlaskConical, RotateCcw } from "lucide-react";
+import {
+  Boxes,
+  FlaskConical,
+  RotateCcw,
+  Shield,
+  Sparkles,
+  User,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -31,16 +38,20 @@ export function CalculatorWorkbench() {
   const build = useCalculatorBuildState(copy);
   
   // Acesso direto à Store para estados primitivos que orquestram a interface no top-level
-  const selectedSkillId = useCalculatorBuildStore(s => s.selectedSkillId);
-  const skillLevel = useCalculatorBuildStore(s => s.skillLevel);
-  const setSelectedSkillId = useCalculatorBuildStore(s => s.setSelectedSkillId);
-  const setSkillLevel = useCalculatorBuildStore(s => s.setSkillLevel);
-  const baseLevel = useCalculatorBuildStore(s => s.baseLevel);
-  const jobLevel = useCalculatorBuildStore(s => s.jobLevel);
-  const stats = useCalculatorBuildStore(s => s.stats);
-  const selectedClassId = useCalculatorBuildStore(s => s.selectedClassId);
-  const selectedMonsterId = useCalculatorBuildStore(s => s.selectedMonsterId);
-  const itemContexts = useCalculatorBuildStore(s => s.itemContexts);
+  const selectedSkillId = useCalculatorBuildStore((s) => s.selectedSkillId);
+  const skillLevel = useCalculatorBuildStore((s) => s.skillLevel);
+  const setSelectedSkillId = useCalculatorBuildStore((s) => s.setSelectedSkillId);
+  const setSkillLevel = useCalculatorBuildStore((s) => s.setSkillLevel);
+  const baseLevel = useCalculatorBuildStore((s) => s.baseLevel);
+  const jobLevel = useCalculatorBuildStore((s) => s.jobLevel);
+  const stats = useCalculatorBuildStore((s) => s.stats);
+  const selectedClassId = useCalculatorBuildStore((s) => s.selectedClassId);
+  const selectedMonsterId = useCalculatorBuildStore((s) => s.selectedMonsterId);
+  const itemContexts = useCalculatorBuildStore((s) => s.itemContexts);
+  const selectedItemsBySlot = useCalculatorBuildStore((s) => s.selectedItemsBySlot);
+
+  const equippedCount = Object.values(selectedItemsBySlot).filter(Boolean).length;
+  const activeBuffCount = Object.values(build.activeBuffs).filter((lvl) => lvl > 0).length;
 
   const calculatorDataset = useCalculatorDataset({
     selectedCalculatorItems: build.selectedCalculatorItems,
@@ -139,27 +150,43 @@ export function CalculatorWorkbench() {
       <section className="calculator-workspace" aria-label={copy.workspaceAria}>
         {/* COLUNA 1: CONFIGURAÇÃO (Lado Esquerdo - 60%) */}
         <div className="calculator-config-column flex flex-col gap-3 min-w-0">
-          <nav className="calculator-tabs-nav grid grid-cols-3 gap-1.5">
+          <nav
+            className="calculator-tabs-nav grid grid-cols-3 gap-2 p-1.5 rounded-2xl bg-[#020612]/80 border border-sky-500/15 shadow-lg backdrop-blur-md"
+            aria-label="Seções da Calculadora"
+          >
             <Button
-              className="text-[9.5px] sm:text-[11px] px-1 sm:px-2 py-1.5 h-8 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
+              icon={<User size={14} />}
+              className="text-[10px] sm:text-xs px-2 sm:px-3 py-2 h-9 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
               variant={activeTab === "character" ? "primary" : "ghost"}
               onClick={() => setActiveTab("character")}
             >
               Personagem & Skills
             </Button>
             <Button
-              className="text-[9.5px] sm:text-[11px] px-1 sm:px-2 py-1.5 h-8 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
+              icon={<Shield size={14} />}
+              className="text-[10px] sm:text-xs px-2 sm:px-3 py-2 h-9 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
               variant={activeTab === "equipment" ? "primary" : "ghost"}
               onClick={() => setActiveTab("equipment")}
             >
-              Equipamentos
+              <span>Equipamentos</span>
+              {equippedCount > 0 && (
+                <span className="ml-1.5 px-1.5 py-0.2 rounded-full bg-sky-500/20 border border-sky-400/30 text-[10px] font-mono text-sky-200">
+                  {equippedCount}
+                </span>
+              )}
             </Button>
             <Button
-              className="text-[9.5px] sm:text-[11px] px-1 sm:px-2 py-1.5 h-8 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
+              icon={<Sparkles size={14} />}
+              className="text-[10px] sm:text-xs px-2 sm:px-3 py-2 h-9 font-bold whitespace-nowrap overflow-hidden text-ellipsis"
               variant={activeTab === "combat" ? "primary" : "ghost"}
               onClick={() => setActiveTab("combat")}
             >
-              Combate & Buffs
+              <span>Combate & Buffs</span>
+              {activeBuffCount > 0 && (
+                <span className="ml-1.5 px-1.5 py-0.2 rounded-full bg-amber-500/20 border border-amber-400/35 text-[10px] font-mono text-amber-200">
+                  {activeBuffCount}
+                </span>
+              )}
             </Button>
           </nav>
 
@@ -227,9 +254,11 @@ export function CalculatorWorkbench() {
           </div>
 
           <CalculatorTargetPanel
+            availableSkills={build.selectedClassSkills}
             copy={copy}
             result={result}
             selectedMonster={build.selectedMonsterDetail}
+            selectedSkill={selectedSkill}
           />
         </div>
       </section>

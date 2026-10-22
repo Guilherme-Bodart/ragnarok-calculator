@@ -51,7 +51,53 @@ const formulas: Record<
       hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
       precision: "validated",
     };
-  }
+  },
+  RK_PHANTOMTHRUST: (input) => {
+    // C++: skillratio += -100 + 50 * skill_lv + 10 * (sd ? pc_checkskill(sd,KN_SPEARMASTERY) : 5); RE_LVL_DMOD(150);
+    const spearMasteryLv = input.character.learnedSkills?.["KN_SPEARMASTERY"] ?? 0;
+    const ratio = 50 * input.skillLevel + 10 * spearMasteryLv;
+    return {
+      formulaId: "static:RK_PHANTOMTHRUST",
+      multiplier: (ratio * input.character.baseLevel) / 150 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  RK_DRAGONBREATH: (input) => {
+    // C++ battle.cpp: damagevalue = (hp / 50 + max_sp / 4) * skill_lv * (lv > 100 ? lv / 100 : 1) * (90 + 10 * RK_DRAGONTRAINING + (DK_DRAGONIC_AURA >= 1 ? pow / 5 : 0)) / 100
+    const trainingLv = input.character.learnedSkills?.["RK_DRAGONTRAINING"] ?? 5;
+    const hasDragonicAura = (input.character.learnedSkills?.["DK_DRAGONIC_AURA"] ?? 0) >= 1;
+    const powBonus = hasDragonicAura ? Math.floor(input.character.effectiveStats.pow / 5) : 0;
+    const baseDmg = (Math.floor(input.character.maxHp / 50) + Math.floor(input.character.maxSp / 4)) * input.skillLevel;
+    const lvScaled = input.character.baseLevel > 100
+      ? Math.floor((baseDmg * input.character.baseLevel) / 100)
+      : baseDmg;
+    const trainingScaled = Math.floor((lvScaled * (90 + 10 * trainingLv + powBonus)) / 100);
+    return {
+      formulaId: "static:RK_DRAGONBREATH",
+      multiplier: 1.0,
+      bonusFlatDamage: trainingScaled,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  RK_DRAGONBREATH_WATER: (input) => {
+    const trainingLv = input.character.learnedSkills?.["RK_DRAGONTRAINING"] ?? 5;
+    const hasDragonicAura = (input.character.learnedSkills?.["DK_DRAGONIC_AURA"] ?? 0) >= 1;
+    const powBonus = hasDragonicAura ? Math.floor(input.character.effectiveStats.pow / 5) : 0;
+    const baseDmg = (Math.floor(input.character.maxHp / 50) + Math.floor(input.character.maxSp / 4)) * input.skillLevel;
+    const lvScaled = input.character.baseLevel > 100
+      ? Math.floor((baseDmg * input.character.baseLevel) / 100)
+      : baseDmg;
+    const trainingScaled = Math.floor((lvScaled * (90 + 10 * trainingLv + powBonus)) / 100);
+    return {
+      formulaId: "static:RK_DRAGONBREATH_WATER",
+      multiplier: 1.0,
+      bonusFlatDamage: trainingScaled,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
 };
 
 export class RuneKnightSkillFormula implements SkillFormulaAdapter {

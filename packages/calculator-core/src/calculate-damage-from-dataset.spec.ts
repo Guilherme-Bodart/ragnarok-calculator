@@ -144,7 +144,7 @@ describe("calculateDamageFromDataset", () => {
       {
         ...input,
         equipmentItemIds: [refineItem.id],
-        cardItemIds: [skillItem.id],
+        cardItemIds: [{ id: skillItem.id, slot: "weapon" }],
         learnedSkills: { SM_BASH: 10 },
         itemContexts: [{ itemId: refineItem.id, refine: 7 }],
       },

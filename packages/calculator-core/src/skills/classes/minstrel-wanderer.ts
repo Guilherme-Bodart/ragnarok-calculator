@@ -22,7 +22,25 @@ const formulas: Record<
     multiplier: ((600 + 120 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  WM_REVERBERATION: (input) => ({
+    formulaId: "static:WM_REVERBERATION",
+    // C++: skillratio += -100 + 700 + 300 * skill_lv; RE_LVL_DMOD(100);
+    multiplier: ((700 + 300 * input.skillLevel) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  WM_GREAT_ECHO: (input) => {
+    // C++: skillratio += -100 + 250 + 500 * skill_lv + WM_LESSON * 50; RE_LVL_DMOD(100);
+    const lessonLv = input.character.learnedSkills?.["WM_LESSON"] ?? 0;
+    const ratio = 250 + 500 * input.skillLevel + lessonLv * 50;
+    return {
+      formulaId: "static:WM_GREAT_ECHO",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
 };
 
 export class MinstrelWandererSkillFormula implements SkillFormulaAdapter {

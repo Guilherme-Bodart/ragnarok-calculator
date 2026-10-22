@@ -77,6 +77,147 @@ const formulas: Record<
     multiplier: (3500 + 300 * input.skillLevel) / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
+  }),
+  RL_H_MINE: (input) => ({
+    formulaId: "static:RL_H_MINE",
+    // C++: skillratio += -100 + 200 + 200 * skill_lv;
+    multiplier: (200 + 200 * input.skillLevel) / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_BASIC_GRENADE: (input) => ({
+    formulaId: "static:NW_BASIC_GRENADE",
+    // C++: skillratio += -100 + 1500 + 2100 * skill_lv + pc_checkskill(sd, NW_GRENADE_MASTERY) * 50 + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((1500 +
+        2100 * input.skillLevel +
+        (input.character.learnedSkills?.["NW_GRENADE_MASTERY"] ?? 0) * 50 +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_ONLY_ONE_BULLET: (input) => ({
+    formulaId: "static:NW_ONLY_ONE_BULLET",
+    // C++: skillratio += -100 + 1200 + 3000 * skill_lv + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((1200 +
+        3000 * input.skillLevel +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_SPIRAL_SHOOTING: (input) => ({
+    formulaId: "static:NW_SPIRAL_SHOOTING",
+    // C++: skillratio += -100 + 1200 + 1700 * skill_lv + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((1200 +
+        1700 * input.skillLevel +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_MAGAZINE_FOR_ONE: (input) => ({
+    formulaId: "static:NW_MAGAZINE_FOR_ONE",
+    // C++: skillratio += -100 + 250 + 500 * skill_lv + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((250 +
+        500 * input.skillLevel +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_WILD_FIRE: (input) => ({
+    formulaId: "static:NW_WILD_FIRE",
+    // C++: skillratio += -100 + 1500 + 3000 * skill_lv + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((1500 +
+        3000 * input.skillLevel +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_HASTY_FIRE_IN_THE_HOLE: (input) => ({
+    formulaId: "static:NW_HASTY_FIRE_IN_THE_HOLE",
+    // C++: skillratio += -100 + 1500 + 1500 * skill_lv + pc_checkskill(sd, NW_GRENADE_MASTERY) * 20 + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((1500 +
+        1500 * input.skillLevel +
+        (input.character.learnedSkills?.["NW_GRENADE_MASTERY"] ?? 0) * 20 +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_GRENADES_DROPPING: (input) => ({
+    formulaId: "static:NW_GRENADES_DROPPING",
+    // C++: skillratio += -100 + 550 + 850 * skill_lv + pc_checkskill(sd, NW_GRENADE_MASTERY) * 30 + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((550 +
+        850 * input.skillLevel +
+        (input.character.learnedSkills?.["NW_GRENADE_MASTERY"] ?? 0) * 30 +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_MISSION_BOMBARD: (input) => ({
+    formulaId: "static:NW_MISSION_BOMBARD",
+    // C++: skillratio += -100 + 800 + 200 * skill_lv + pc_checkskill(sd, NW_GRENADE_MASTERY) * 30 + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((800 +
+        200 * input.skillLevel +
+        (input.character.learnedSkills?.["NW_GRENADE_MASTERY"] ?? 0) * 30 +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_WILD_SHOT: (input) => ({
+    formulaId: "static:NW_WILD_SHOT",
+    // C++: skillratio += -100 + 870 + 180 * skill_lv + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((870 +
+        180 * input.skillLevel +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  NW_MIDNIGHT_FALLEN: (input) => ({
+    formulaId: "static:NW_MIDNIGHT_FALLEN",
+    // C++: skillratio += -100 + 2400 + 800 * skill_lv + 5 * sstatus->con; RE_LVL_DMOD(100);
+    multiplier:
+      ((2400 +
+        800 * input.skillLevel +
+        5 * (input.character.effectiveStats.con ?? 0)) *
+        input.character.baseLevel) /
+      100 /
+      100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
   })
 };
 

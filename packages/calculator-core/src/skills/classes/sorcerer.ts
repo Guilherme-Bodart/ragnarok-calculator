@@ -51,7 +51,21 @@ const formulas: Record<
       hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
       precision: "validated",
     };
-  }
+  },
+  SO_POISON_BUSTER: (input) => ({
+    formulaId: "static:SO_POISON_BUSTER",
+    // C++: skillratio += -100 + 1000 + 300 * skill_lv + sstatus->int_; RE_LVL_DMOD(100);
+    multiplier: ((1000 + 300 * input.skillLevel + input.character.effectiveStats.int) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  SO_CLOUD_KILL: (input) => ({
+    formulaId: "static:SO_CLOUD_KILL",
+    // C++: skillratio += -100 + 40 * skill_lv + sstatus->int_ * 3; RE_LVL_DMOD(100);
+    multiplier: ((40 * input.skillLevel + input.character.effectiveStats.int * 3) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class SorcererSkillFormula implements SkillFormulaAdapter {

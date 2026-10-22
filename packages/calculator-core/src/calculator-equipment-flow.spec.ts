@@ -84,7 +84,7 @@ const input: CalculateDamageInput = {
     },
   },
   equipmentItemIds: [weapon.id],
-  cardItemIds: [card.id],
+  cardItemIds: [{ id: card.id, slot: "weapon" }],
   buffItemIds: [],
   itemContexts: [{ itemId: weapon.id, refine: 7 }],
   monsterId: monster.id,

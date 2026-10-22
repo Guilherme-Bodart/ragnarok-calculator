@@ -157,7 +157,7 @@ export class DamageFormulaPipeline {
       ? getMagicalBasePower(input.character)
       : getPhysicalBasePower(input.character);
     const equipmentPower = magical
-      ? (console.log("weaponLevels: ", input.items.map(i => i.weaponLevel)), sumMagicalEquipmentPower(input.items, input.modifierEffects))
+      ? sumMagicalEquipmentPower(input.items, input.modifierEffects)
       : sumPhysicalEquipmentPower(input.items);
     const modifierFlatPower = magical
       ? getMagicalModifierFlatPower(input.modifierEffects)
@@ -446,8 +446,8 @@ export class DamageFormulaPipeline {
 }
 
 function getTargetedRate<TTarget extends string>(
-  rates: Partial<Record<TTarget | "all", number>>,
+  rates: Partial<Record<TTarget | "all", number>> | undefined,
   target: TTarget | undefined,
 ) {
-  return (target ? rates[target] ?? 0 : 0) + (rates.all ?? 0);
+  return (target ? rates?.[target] ?? 0 : 0) + (rates?.all ?? 0);
 }

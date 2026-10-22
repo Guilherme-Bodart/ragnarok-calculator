@@ -53,7 +53,14 @@ const formulas: Record<
     multiplier: ((400 * input.skillLevel + input.character.effectiveStats.pow * 5) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  BO_DUST_EXPLOSION: (input) => ({
+    formulaId: "static:BO_DUST_EXPLOSION",
+    // C++: skillratio += -100 + 500 + 620 * skill_lv + 5 * sstatus->pow; RE_LVL_DMOD(100);
+    multiplier: ((500 + 620 * input.skillLevel + 5 * input.character.effectiveStats.pow) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class BioloSkillFormula implements SkillFormulaAdapter {

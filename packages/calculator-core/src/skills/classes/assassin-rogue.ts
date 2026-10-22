@@ -42,7 +42,28 @@ const formulas: Record<
     multiplier: (50 + 150 * input.skillLevel) / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  AS_SPLASHER: (input) => ({
+    formulaId: "static:AS_SPLASHER",
+    // C++: base_skillratio += -100 + 400 + 100 * skill_lv;
+    multiplier: (400 + 100 * input.skillLevel) / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  AS_VENOMKNIFE: (input) => ({
+    formulaId: "static:AS_VENOMKNIFE",
+    // C++ Renewal: base_skillratio += 400; (total 500%)
+    multiplier: 5.0,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  RG_INTIMIDATE: (input) => ({
+    formulaId: "static:RG_INTIMIDATE",
+    // C++: base_skillratio += 30 * skill_lv; (starts at 100)
+    multiplier: (100 + 30 * input.skillLevel) / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class AssassinRogueSkillFormula implements SkillFormulaAdapter {

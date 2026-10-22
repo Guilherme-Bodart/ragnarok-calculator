@@ -64,7 +64,32 @@ const formulas: Record<
     multiplier: ((500 + 2000 * input.skillLevel + input.character.effectiveStats.pow * 5) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  IQ_MASSIVE_F_BLASTER: (input) => {
+    // C++: skillratio += -100 + 2300 * skill_lv + 15 * sstatus->pow (+ 150 * skill_lv vs brute/demon); RE_LVL_DMOD(100);
+    const raceBonus = input.monster.race === "brute" || input.monster.race === "demon" ? 150 * input.skillLevel : 0;
+    const ratio = 2300 * input.skillLevel + input.character.effectiveStats.pow * 15 + raceBonus;
+    return {
+      formulaId: "static:IQ_MASSIVE_F_BLASTER",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  IQ_FIRST_BRAND: (input) => ({
+    formulaId: "static:IQ_FIRST_BRAND",
+    // C++: skillratio += -100 + 1200 * skill_lv + 5 * sstatus->pow; RE_LVL_DMOD(100);
+    multiplier: ((1200 * input.skillLevel + 5 * input.character.effectiveStats.pow) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  IQ_BLAZING_FLAME_BLAST: (input) => ({
+    formulaId: "static:IQ_BLAZING_FLAME_BLAST",
+    // C++: skillratio += -100 + 2000 + 3800 * skill_lv + 10 * sstatus->pow; RE_LVL_DMOD(100);
+    multiplier: ((2000 + 3800 * input.skillLevel + 10 * input.character.effectiveStats.pow) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class InquisitorSkillFormula implements SkillFormulaAdapter {

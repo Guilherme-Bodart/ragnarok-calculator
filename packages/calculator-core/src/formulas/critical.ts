@@ -29,8 +29,8 @@ export class CriticalEngine {
     const modifierCritDamageRate = modifierEffects.criticalDamageRate ?? 0;
     
     // Bônus específico contra a raça (bCritAtkRace)
-    const raceCritDamageRate = monster ? (modifierEffects.criticalRaceDamageRate[monster.race] ?? 0) : 0;
-    const allRaceCritDamageRate = modifierEffects.criticalRaceDamageRate["all"] ?? 0;
+    const raceCritDamageRate = monster ? (modifierEffects.criticalRaceDamageRate?.[monster.race] ?? 0) : 0;
+    const allRaceCritDamageRate = modifierEffects.criticalRaceDamageRate?.["all"] ?? 0;
 
     const totalCritBonus = traitCritDamageRate + modifierCritDamageRate + raceCritDamageRate + allRaceCritDamageRate;
 

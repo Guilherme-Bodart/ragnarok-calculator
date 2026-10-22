@@ -28,7 +28,28 @@ const formulas: Record<
     multiplier: ((80 * input.skillLevel + input.character.effectiveStats.agi * 3) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  GC_DARKILLUSION: (input) => ({
+    formulaId: "static:GC_DARKILLUSION",
+    // C++: 100% ATK (with chance to trigger Cross Impact)
+    multiplier: 1.0,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  GC_VENOMPRESSURE: (input) => ({
+    formulaId: "static:GC_VENOMPRESSURE",
+    // C++: base_skillratio += 900; (total 1000%)
+    multiplier: 10.0,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
+  GC_DARKCROW: (input) => ({
+    formulaId: "static:GC_DARKCROW",
+    // C++: base_skillratio += 100 * (skill_lv - 1); (starts at 100 => 100 * skill_lv)
+    multiplier: (100 * input.skillLevel) / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class GuillotineCrossSkillFormula implements SkillFormulaAdapter {

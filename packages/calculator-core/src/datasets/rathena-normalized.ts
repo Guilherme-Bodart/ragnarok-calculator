@@ -90,6 +90,7 @@ export function toRoItem(item: RathenaNormalizedItem): RoItem {
     id: item.itemId,
     name: item.name,
     kind: getItemKind(item.type),
+    bonuses: [],
     attack: numberOrUndefined(item.attack),
     magicAttack: numberOrUndefined(item.magicAttack),
     defense: numberOrUndefined(item.defense),

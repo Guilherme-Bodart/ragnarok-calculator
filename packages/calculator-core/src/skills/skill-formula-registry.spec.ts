@@ -181,8 +181,8 @@ describe("SkillFormulaRegistry", () => {
       }),
     ).toEqual({
       formulaId: "static:AG_SOUL_VC_STRIKE",
-      // LATAM 180% por nível: (180*5 + spl:100 * 3 + jobBonusSpl) * baseLevel:229 / 100
-      multiplier: 28.166999999999998,
+      // LATAM 180% por nível: (180*5 + spl:100 * 3 + jobBonusSpl) * baseLevel:229 / 100 * hitCount:7
+      multiplier: 197.16899999999998,
       hitCount: 7,
       precision: "validated",
     });
@@ -230,5 +230,227 @@ describe("SkillFormulaRegistry", () => {
       hitCount: 3,
       precision: "validated",
     });
+  });
+
+  it("supports complete Swordman lineage skills up to Dragon Knight and Imperial Guard", () => {
+    const registry = new SkillFormulaRegistry();
+
+    const spearStab = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "KN_SPEARSTAB" },
+      skillLevel: 10,
+    });
+    expect(spearStab.formulaId).toBe("static:KN_SPEARSTAB");
+    expect(spearStab.multiplier).toBe(3);
+
+    const hackAndSlasher = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "DK_HACKANDSLASHER" },
+      skillLevel: 10,
+    });
+    expect(hackAndSlasher.formulaId).toBe("static:DK_HACKANDSLASHER");
+    expect(hackAndSlasher.precision).toBe("validated");
+
+    const imperialCross = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "IG_IMPERIAL_CROSS" },
+      skillLevel: 5,
+    });
+    expect(imperialCross.formulaId).toBe("static:IG_IMPERIAL_CROSS");
+    expect(imperialCross.precision).toBe("validated");
+  });
+
+  it("supports complete Mage lineage skills up to Arch Mage and Elemental Master", () => {
+    const registry = new SkillFormulaRegistry();
+
+    const jupitel = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "WZ_JUPITEL", damageType: "magical" },
+      skillLevel: 10,
+    });
+    expect(jupitel.formulaId).toBe("static:WZ_JUPITEL");
+    expect(jupitel.hitCount).toBe(12);
+    expect(jupitel.precision).toBe("validated");
+
+    const deadlyProjection = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "AG_DEADLY_PROJECTION", damageType: "magical" },
+      skillLevel: 5,
+    });
+    expect(deadlyProjection.formulaId).toBe("static:AG_DEADLY_PROJECTION");
+    expect(deadlyProjection.precision).toBe("validated");
+
+    const psychicStream = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "EM_PSYCHIC_STREAM", damageType: "magical" },
+      skillLevel: 5,
+    });
+    expect(psychicStream.formulaId).toBe("static:EM_PSYCHIC_STREAM");
+    expect(psychicStream.precision).toBe("validated");
+  });
+
+  it("supports complete Thief lineage skills up to Shadow Cross and Abyss Chaser", () => {
+    const registry = new SkillFormulaRegistry();
+
+    const envenom = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "TF_POISON" },
+      skillLevel: 10,
+    });
+    expect(envenom.formulaId).toBe("static:TF_POISON");
+    expect(envenom.bonusFlatDamage).toBe(150);
+
+    const fatalShadowCrow = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "SHC_FATAL_SHADOW_CROW" },
+      skillLevel: 5,
+    });
+    expect(fatalShadowCrow.formulaId).toBe("static:SHC_FATAL_SHADOW_CROW");
+    expect(fatalShadowCrow.precision).toBe("validated");
+
+    const deftStab = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "ABC_DEFT_STAB" },
+      skillLevel: 10,
+    });
+    expect(deftStab.formulaId).toBe("static:ABC_DEFT_STAB");
+    expect(deftStab.precision).toBe("validated");
+  });
+
+  it("supports complete Archer lineage skills up to Windhawk and Troubadour/Trouvere", () => {
+    const registry = new SkillFormulaRegistry();
+
+    const blitzBeat = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "HT_BLITZBEAT" },
+      skillLevel: 5,
+    });
+    expect(blitzBeat.formulaId).toBe("static:HT_BLITZBEAT");
+    expect(blitzBeat.hitCount).toBe(5);
+    expect(blitzBeat.bonusFlatDamage).toBe(500);
+
+    const hawkBoomerang = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "WH_HAWKBOOMERANG" },
+      skillLevel: 5,
+    });
+    expect(hawkBoomerang.formulaId).toBe("static:WH_HAWKBOOMERANG");
+    expect(hawkBoomerang.precision).toBe("validated");
+
+    const metallicFury = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "TR_METALIC_FURY", damageType: "magical" },
+      skillLevel: 5,
+    });
+    expect(metallicFury.formulaId).toBe("static:TR_METALIC_FURY");
+    expect(metallicFury.precision).toBe("validated");
+  });
+
+  it("supports complete Merchant lineage skills up to Meister and Biolo", () => {
+    const registry = new SkillFormulaRegistry();
+
+    const boostKnuckle = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "NC_BOOSTKNUCKLE" },
+      skillLevel: 5,
+    });
+    expect(boostKnuckle.formulaId).toBe("static:NC_BOOSTKNUCKLE");
+    expect(boostKnuckle.precision).toBe("validated");
+
+    const rushStrike = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "MT_RUSH_STRIKE" },
+      skillLevel: 5,
+    });
+    expect(rushStrike.formulaId).toBe("static:MT_RUSH_STRIKE");
+    expect(rushStrike.precision).toBe("validated");
+
+    const dustExplosion = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "BO_DUST_EXPLOSION" },
+      skillLevel: 5,
+    });
+    expect(dustExplosion.formulaId).toBe("static:BO_DUST_EXPLOSION");
+    expect(dustExplosion.precision).toBe("validated");
+  });
+
+  it("supports complete Acolyte lineage skills up to Cardinal and Inquisitor", () => {
+    const registry = new SkillFormulaRegistry();
+
+    const asura = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "MO_EXTREMITYFIST" },
+      skillLevel: 5,
+    });
+    expect(asura.formulaId).toBe("static:MO_EXTREMITYFIST");
+    expect(asura.bonusFlatDamage).toBe(1000);
+
+    const framen = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "CD_FRAMEN", damageType: "magical" },
+      skillLevel: 5,
+    });
+    expect(framen.formulaId).toBe("static:CD_FRAMEN");
+    expect(framen.precision).toBe("validated");
+
+    const blazingFlameBlast = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "IQ_BLAZING_FLAME_BLAST" },
+      skillLevel: 5,
+    });
+    expect(blazingFlameBlast.formulaId).toBe("static:IQ_BLAZING_FLAME_BLAST");
+    expect(blazingFlameBlast.precision).toBe("validated");
+  });
+
+  it("supports complete Expanded lineage skills up to Night Watch, Shinkiro/Shiranui, Soul Ascetic, Sky Emperor, Spirit Handler and Hyper Novice", () => {
+    const registry = new SkillFormulaRegistry();
+
+    const midnightFallen = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "NW_MIDNIGHT_FALLEN" },
+      skillLevel: 5,
+    });
+    expect(midnightFallen.formulaId).toBe("static:NW_MIDNIGHT_FALLEN");
+    expect(midnightFallen.precision).toBe("validated");
+
+    const kagegissen = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "SS_KAGEGISSEN" },
+      skillLevel: 5,
+    });
+    expect(kagegissen.formulaId).toBe("static:SS_KAGEGISSEN");
+    expect(kagegissen.precision).toBe("validated");
+
+    const blueDragon = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "SOA_TALISMAN_OF_BLUE_DRAGON", damageType: "magical" },
+      skillLevel: 5,
+    });
+    expect(blueDragon.formulaId).toBe("static:SOA_TALISMAN_OF_BLUE_DRAGON");
+    expect(blueDragon.precision).toBe("validated");
+
+    const noonBlast = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "SKE_NOON_BLAST" },
+      skillLevel: 5,
+    });
+    expect(noonBlast.formulaId).toBe("static:SKE_NOON_BLAST");
+    expect(noonBlast.precision).toBe("validated");
+
+    const sonicClaw = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "SH_CHUL_HO_SONIC_CLAW" },
+      skillLevel: 5,
+    });
+    expect(sonicClaw.formulaId).toBe("static:SH_CHUL_HO_SONIC_CLAW");
+    expect(sonicClaw.precision).toBe("validated");
+
+    const megaSonicBlow = registry.calculate({
+      ...input,
+      skill: { ...input.skill, id: "HN_MEGA_SONIC_BLOW" },
+      skillLevel: 5,
+    });
+    expect(megaSonicBlow.formulaId).toBe("static:HN_MEGA_SONIC_BLOW");
+    expect(megaSonicBlow.precision).toBe("validated");
   });
 });

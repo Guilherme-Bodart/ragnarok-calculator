@@ -59,9 +59,6 @@ export class ModifierResolver {
       const result = condition.itemIds.every((id) =>
         context.equippedItemIds!.includes(id),
       );
-      // if (condition.itemIds.includes(4392)) {
-        console.log("CHECKING EQUIPPED FOR:", condition.itemIds, context.equippedItemIds, "RESULT:", result);
-      // }
       return result;
     }
 

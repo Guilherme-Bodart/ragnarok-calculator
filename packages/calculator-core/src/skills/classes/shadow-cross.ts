@@ -19,15 +19,13 @@ const formulas: Record<
     };
   },
   SHC_ETERNAL_SLASH: (input) => {
-    // Let's assume standard formula derived from similar pattern if C++ wasn't fully extracted, 
-    // but eternal slash has a known pattern. If not present, fallback safely.
-    // Assuming 100 + 150 * skillLevel + pow * 5 as a fallback.
-    const ratio = 150 * input.skillLevel + input.character.effectiveStats.pow * 5;
+    // C++: skillratio += -100 + 300 * skill_lv + 2 * sstatus->pow; RE_LVL_DMOD(100);
+    const ratio = 300 * input.skillLevel + input.character.effectiveStats.pow * 2;
     return {
       formulaId: "static:SHC_ETERNAL_SLASH",
       multiplier: (ratio * input.character.baseLevel) / 100 / 100,
       hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
-      precision: "inferred",
+      precision: "validated",
     };
   },
   SHC_IMPACT_CRATER: (input) => {
@@ -49,7 +47,28 @@ const formulas: Record<
       hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
       precision: "validated",
     };
-  }
+  },
+  SHC_FATAL_SHADOW_CROW: (input) => {
+    // C++: skillratio += -100 + 1300 * skill_lv + 10 * sstatus->pow (+ 150 * skill_lv vs demihuman/dragon); RE_LVL_DMOD(100);
+    const raceBonus = input.monster.race === "demihuman" || input.monster.race === "dragon" ? 150 * input.skillLevel : 0;
+    const ratio = 1300 * input.skillLevel + 10 * input.character.effectiveStats.pow + raceBonus;
+    return {
+      formulaId: "static:SHC_FATAL_SHADOW_CROW",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  SHC_CROSS_SLASH: (input) => {
+    // C++: skillratio += -100 + 300 * skill_lv + 5 * sstatus->pow; RE_LVL_DMOD(100);
+    const ratio = 300 * input.skillLevel + 5 * input.character.effectiveStats.pow;
+    return {
+      formulaId: "static:SHC_CROSS_SLASH",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
 };
 
 export class ShadowCrossSkillFormula implements SkillFormulaAdapter {

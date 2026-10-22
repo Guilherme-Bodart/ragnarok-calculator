@@ -80,9 +80,15 @@ export class CalculatorModifierEffectsFactory {
   constructor(private readonly pipeline = new ItemModifierPipeline()) { }
 
   fromItems(
-    itemsWithContext: { item: RoItem; context?: ModifierResolutionContext }[],
+    rawItemsWithContext: (
+      | RoItem
+      | { item: RoItem; context?: ModifierResolutionContext }
+    )[],
     baseContext: ModifierResolutionContext = {},
   ): CalculatorModifierEffects {
+    const itemsWithContext = rawItemsWithContext.map((entry) =>
+      "item" in entry ? entry : { item: entry },
+    );
     const effects: CalculatorModifierEffects = {
       statBonuses: {
         str: 0,
@@ -207,6 +213,14 @@ export class CalculatorModifierEffectsFactory {
 
         if (bucket.stat === "allStats" && bucket.target.type === "self") {
           for (const stat of baseStats) {
+            effects.statBonuses[stat] += bucket.value;
+          }
+
+          continue;
+        }
+
+        if (bucket.stat === "allTraitStats" && bucket.target.type === "self") {
+          for (const stat of traitStats) {
             effects.statBonuses[stat] += bucket.value;
           }
 

@@ -134,6 +134,20 @@ export class RathenaScriptParser {
     const equippedBlockExtraction = this.extractEquippedBlocks(scriptWithoutBlocks, [], variables);
     segments.push(...equippedBlockExtraction.segments);
     scriptWithoutBlocks = equippedBlockExtraction.remainingScript;
+    const equipRefineBlockExtraction = this.extractEquipRefineryCntBlocks(
+      scriptWithoutBlocks,
+      [],
+      variables,
+    );
+    segments.push(...equipRefineBlockExtraction.segments);
+    scriptWithoutBlocks = equipRefineBlockExtraction.remainingScript;
+    const staticIfBlockExtraction = this.extractStaticIfBlocks(
+      scriptWithoutBlocks,
+      [],
+      variables,
+    );
+    segments.push(...staticIfBlockExtraction.segments);
+    scriptWithoutBlocks = staticIfBlockExtraction.remainingScript;
 
     const inlineRefine = /if\s*\(\s*(getrefine\(\)|\.@r|\.@[a-zA-Z0-9_]+)\s*(>=|>|<=|<|==|!=)\s*(-?\d+)\s*\)\s*([^;]+;)/g;
     const inlineGrade = /if\s*\(\s*(?:getenchantgrade\(\)|\.@g)\s*(>=|>|<=|<|==|!=)\s*(ENCHANTGRADE_[A-Z]+|-?\d+)\s*\)\s*([^;]+;)/g;
@@ -240,6 +254,7 @@ export class RathenaScriptParser {
             variables.refineVariables = {
               ...variables.refineVariables,
               [variableName]: slotId,
+              [`.@${variableName}`]: slotId,
             };
             const value = evaluateRathenaExpression(trimmedExpression, variables);
             if (value !== null) {
@@ -477,7 +492,9 @@ export class RathenaScriptParser {
     variables?: ParserVariables,
   ): ScriptSegment[] {
     const segments: ScriptSegment[] = [];
-    let remainingScript = script;
+    let remainingScript = variables
+      ? this.extractAssignments(script, variables)
+      : script;
 
     const nestedStaticIfBlockExtraction = this.extractStaticIfBlocks(
       remainingScript,

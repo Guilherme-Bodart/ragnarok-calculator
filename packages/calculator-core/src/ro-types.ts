@@ -90,6 +90,7 @@ export type RoItem = {
   isTwoHanded?: boolean;
   rawScript?: string;
   modifiers?: NormalizedModifier[];
+  bonuses?: unknown[];
   source: "manual" | "iwdb" | "rathena";
   sourceUrl?: string;
 };

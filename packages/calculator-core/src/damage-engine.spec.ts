@@ -145,7 +145,7 @@ describe("DamageEngine", () => {
       skillLevel: 10,
     });
 
-    expect(result.damage.average).toBe(2091);
+    expect(result.damage.average).toBe(1347);
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "hits",

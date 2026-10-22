@@ -47,7 +47,51 @@ const formulas: Record<
     multiplier: ((400 + 2000 * input.skillLevel + input.character.effectiveStats.pow * 7) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  IG_JUDGEMENT_CROSS: (input) => {
+    // C++: skillratio += -100 + 1950 * skill_lv + 10 * sstatus->spl (+ 150 * skill_lv vs plant/insect); RE_LVL_DMOD(100);
+    const raceBonus = input.monster.race === "plant" || input.monster.race === "insect" ? 150 * input.skillLevel : 0;
+    const ratio = 1950 * input.skillLevel + 10 * input.character.effectiveStats.spl + raceBonus;
+    return {
+      formulaId: "static:IG_JUDGEMENT_CROSS",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  IG_IMPERIAL_CROSS: (input) => {
+    // C++: skillratio += -100 + 1650 + 1350 * skill_lv + pc_checkskill(sd, IG_SPEAR_SWORD_M) * 25 + 5 * sstatus->pow; RE_LVL_DMOD(100);
+    const masteryLv = input.character.learnedSkills?.["IG_SPEAR_SWORD_M"] ?? 0;
+    const ratio = 1650 + 1350 * input.skillLevel + masteryLv * 25 + 5 * input.character.effectiveStats.pow;
+    return {
+      formulaId: "static:IG_IMPERIAL_CROSS",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  IG_RADIANT_SPEAR: (input) => {
+    // C++: skillratio += -100 + 3500 + 1150 * skill_lv + pc_checkskill(sd, IG_SPEAR_SWORD_M) * 50 + 5 * sstatus->pow; RE_LVL_DMOD(100);
+    const masteryLv = input.character.learnedSkills?.["IG_SPEAR_SWORD_M"] ?? 0;
+    const ratio = 3500 + 1150 * input.skillLevel + masteryLv * 50 + 5 * input.character.effectiveStats.pow;
+    return {
+      formulaId: "static:IG_RADIANT_SPEAR",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
+  IG_IMPERIAL_PRESSURE: (input) => {
+    // C++: skillratio += -100 + 5600 + 1850 * skill_lv + 7 * sstatus->spl + 50 * pc_checkskill(sd, IG_SPEAR_SWORD_M); RE_LVL_DMOD(100);
+    const masteryLv = input.character.learnedSkills?.["IG_SPEAR_SWORD_M"] ?? 0;
+    const ratio = 5600 + 1850 * input.skillLevel + 7 * input.character.effectiveStats.spl + 50 * masteryLv;
+    return {
+      formulaId: "static:IG_IMPERIAL_PRESSURE",
+      multiplier: (ratio * input.character.baseLevel) / 100 / 100,
+      hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+      precision: "validated",
+    };
+  },
 };
 
 export class ImperialGuardSkillFormula implements SkillFormulaAdapter {

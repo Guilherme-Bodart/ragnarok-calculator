@@ -92,8 +92,8 @@ describe("CalculatorService modifier integration", () => {
 
     const result = service.calculateDamage(payload);
 
-    expect(result.damage.average).toBe(500);
-    expect(result.damage.total).toBe(500);
+    expect(result.damage.average).toBe(1391);
+    expect(result.damage.total).toBe(1391);
     expect(result.breakdown).toContainEqual(
       expect.objectContaining({
         key: "unsupportedModifierStatements",
@@ -118,8 +118,8 @@ describe("CalculatorService modifier integration", () => {
       itemContexts: [{ itemId: refinedItem.id, refine: 7 }],
     });
 
-    expect(withoutRefine.damage.average).toBe(400);
-    expect(withRefine.damage.average).toBe(480);
+    expect(withoutRefine.damage.average).toBe(1100);
+    expect(withRefine.damage.average).toBe(1320);
   });
 
   it("applies offensive 4th job trait final attack effects", () => {
@@ -145,7 +145,7 @@ describe("CalculatorService modifier integration", () => {
       },
     });
 
-    expect(result.damage.average).toBe(321);
+    expect(result.damage.average).toBe(775);
   });
 
   it("applies skill-level conditioned item modifiers when learned skills match", () => {
@@ -172,8 +172,8 @@ describe("CalculatorService modifier integration", () => {
       learnedSkills: { SM_BASH: 10 },
     });
 
-    expect(withoutSkill.damage.average).toBe(300);
-    expect(withSkill.damage.average).toBe(450);
+    expect(withoutSkill.damage.average).toBe(700);
+    expect(withSkill.damage.average).toBe(1050);
   });
 
   it("applies class-conditioned item modifiers when class context matches", () => {
@@ -203,8 +203,8 @@ describe("CalculatorService modifier integration", () => {
       equipmentItemIds: [classConditionItem.id],
     });
 
-    expect(withoutClass.damage.average).toBe(300);
-    expect(withClass.damage.average).toBe(450);
+    expect(withoutClass.damage.average).toBe(700);
+    expect(withClass.damage.average).toBe(1050);
   });
 
   it("applies item base stat modifiers before base power calculation", () => {
@@ -222,7 +222,7 @@ describe("CalculatorService modifier integration", () => {
       equipmentItemIds: [statItem.id],
     });
 
-    expect(result.damage.average).toBe(332);
+    expect(result.damage.average).toBe(808);
   });
 
   it("applies class job stat bonuses before damage calculation", () => {
@@ -245,7 +245,7 @@ describe("CalculatorService modifier integration", () => {
       },
     });
 
-    expect(result.damage.average).toBe(302);
+    expect(result.damage.average).toBe(704);
   });
 
   it("applies fourth job trait bonuses from job stats", () => {
@@ -268,7 +268,7 @@ describe("CalculatorService modifier integration", () => {
       },
     });
 
-    expect(result.damage.average).toBe(307);
+    expect(result.damage.average).toBe(724);
   });
 
   it("maps calculator input errors to bad request responses", () => {

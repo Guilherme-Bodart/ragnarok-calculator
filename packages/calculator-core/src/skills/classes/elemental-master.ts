@@ -37,7 +37,14 @@ const formulas: Record<
     multiplier: ((500 + 2400 * input.skillLevel + input.character.effectiveStats.spl * 5) * input.character.baseLevel) / 100 / 100,
     hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
     precision: "validated",
-  })
+  }),
+  EM_PSYCHIC_STREAM: (input) => ({
+    formulaId: "static:EM_PSYCHIC_STREAM",
+    // C++: skillratio += -100 + 1000 + 3500 * skill_lv + 5 * sstatus->spl; RE_LVL_DMOD(100);
+    multiplier: ((1000 + 3500 * input.skillLevel + 5 * input.character.effectiveStats.spl) * input.character.baseLevel) / 100 / 100,
+    hitCount: input.skill.hitCountByLevel?.[String(input.skillLevel)] ?? input.skill.hitCount,
+    precision: "validated",
+  }),
 };
 
 export class ElementalMasterSkillFormula implements SkillFormulaAdapter {
