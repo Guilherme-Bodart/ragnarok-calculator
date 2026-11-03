@@ -722,18 +722,7 @@ export function BuildsHubPage() {
 
   return (
     <div className="min-h-screen bg-[#090b10] text-slate-100 flex flex-col">
-      <AppNavbar
-        rightSlot={
-          <button
-            type="button"
-            onClick={() => router.push("/calculator")}
-            className="inline-flex items-center gap-2 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 px-3.5 py-1.5 text-xs font-bold text-sky-100 transition-colors cursor-pointer"
-          >
-            <span>Abrir Calculadora</span>
-            <ArrowRight size={14} />
-          </button>
-        }
-      />
+      <AppNavbar />
 
       <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-8 sm:px-6 flex flex-col gap-6">
         {/* HERO BANNER & ACTIVE CALCULATOR BUILD SAVER */}

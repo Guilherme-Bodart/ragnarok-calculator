@@ -84,25 +84,7 @@ export function NightmareLanding() {
         }}
       />
 
-      <AppNavbar
-        rightSlot={
-          <div className="flex items-center gap-2">
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#121620] hover:bg-white/10 px-3 py-1.5 text-xs font-bold text-slate-200 transition-colors no-underline"
-            >
-              <span>Entrar</span>
-            </Link>
-            <Link
-              href="/calculator"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 px-3.5 py-1.5 text-xs font-bold text-sky-100 transition-colors no-underline"
-            >
-              <span>Abrir Planner</span>
-              <ArrowRight size={13} />
-            </Link>
-          </div>
-        }
-      />
+      <AppNavbar />
 
       <LanguageSwitcher
         locale={locale}

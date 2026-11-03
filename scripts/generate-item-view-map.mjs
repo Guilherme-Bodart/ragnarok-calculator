@@ -7,8 +7,7 @@ const rootDir = path.resolve(__dirname, "..");
 const outPath = path.join(
   rootDir,
   "public",
-  "data",
-  "calculator",
+  "sprites",
   "item-view-map.json",
 );
 

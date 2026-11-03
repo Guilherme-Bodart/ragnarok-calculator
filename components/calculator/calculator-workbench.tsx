@@ -152,26 +152,27 @@ export function CalculatorWorkbench() {
     <div className="min-h-screen bg-[#090b10] text-slate-100 flex flex-col">
       <div className="calculator-grid-bg" />
 
-      {/* UNIFIED APP NAVBAR WITH PLANNER CONTROLS */}
-      <AppNavbar
-        rightSlot={
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Active Build Name Input */}
-            <div className="hidden sm:flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#0d1017] px-2.5 py-1">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
-                Build:
-              </span>
-              <input
-                type="text"
-                value={build.buildName}
-                onChange={(e) => build.renameBuild(e.target.value)}
-                placeholder="Nome da build..."
-                maxLength={60}
-                className="w-36 bg-transparent text-xs font-bold text-slate-100 focus:outline-none focus:text-sky-300"
-              />
-            </div>
+      {/* UNIFIED FIXED APP NAVBAR (Identical across all pages) */}
+      <AppNavbar />
 
-            {/* Quick Save to Builds Hub */}
+      {/* CALCULATOR BUILD SUB-TOOLBAR (Inside page, keeps global header 100% static) */}
+      <div className="mx-auto w-full max-w-[1760px] px-4 pt-4 sm:px-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#0d1017]/95 px-4 py-2.5 shadow-lg">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-sky-400 font-bold shrink-0">
+              Build Ativa:
+            </span>
+            <input
+              type="text"
+              value={build.buildName}
+              onChange={(e) => build.renameBuild(e.target.value)}
+              placeholder="Nome da build..."
+              maxLength={60}
+              className="w-full max-w-xs rounded-md bg-[#090b10] border border-white/10 px-2.5 py-1 text-xs font-bold text-slate-100 focus:outline-none focus:border-sky-400/50"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={handleQuickSaveBuild}
@@ -186,16 +187,14 @@ export function CalculatorWorkbench() {
               <span>{justSaved ? "Build Salva!" : "Salvar Build"}</span>
             </button>
 
-            {/* Open Full Builds Page */}
             <Link
               href="/builds"
               className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#121620] hover:bg-white/10 px-3 py-1.5 text-xs font-bold text-slate-200 transition-colors no-underline"
             >
               <Boxes size={14} className="text-sky-400" />
-              <span>Galeria de Builds</span>
+              <span>Importar / Galeria</span>
             </Link>
 
-            {/* Reset Build */}
             <button
               type="button"
               onClick={build.resetBuild}
@@ -203,11 +202,11 @@ export function CalculatorWorkbench() {
               title={copy.resetAction}
             >
               <RotateCcw size={13} />
-              <span className="hidden md:inline">{copy.resetAction}</span>
+              <span>{copy.resetAction}</span>
             </button>
           </div>
-        }
-      />
+        </div>
+      </div>
 
       {/* MOBILE / TABLET SECTION SWITCHER (Hidden on Desktop XL 3-Column Cockpit) */}
       <div className="xl:hidden mx-auto w-full max-w-[1760px] px-4 pt-4">

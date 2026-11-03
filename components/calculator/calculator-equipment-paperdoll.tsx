@@ -43,7 +43,7 @@ let cachedItemViewMapPromise: Promise<ItemViewMap> | null = null;
 
 function fetchItemViewMap(): Promise<ItemViewMap> {
   if (cachedItemViewMapPromise) return cachedItemViewMapPromise;
-  cachedItemViewMapPromise = fetch("/data/calculator/item-view-map.json")
+  cachedItemViewMapPromise = fetch("/sprites/item-view-map.json")
     .then(async (res) => {
       if (!res.ok) return { headgear: {}, garment: {} };
       return (await res.json()) as ItemViewMap;
