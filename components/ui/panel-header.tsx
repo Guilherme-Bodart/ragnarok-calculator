@@ -8,12 +8,18 @@ type PanelHeaderProps = {
 
 export function PanelHeader({ icon, meta, title }: PanelHeaderProps) {
   return (
-    <div className="flex items-center justify-between gap-4 p-4 mb-4 backdrop-blur-md bg-[#061122]/40 border-b border-white/10 rounded-t-2xl shadow-sm">
-      <span className="flex items-center gap-2 text-[15px] font-bold text-slate-100 uppercase tracking-widest">
-        <span className="text-sky-400">{icon}</span>
-        {title}
+    <div className="flex items-center justify-between gap-3 pb-3 border-b border-sky-500/15 w-full">
+      <span className="flex items-center gap-2 text-xs font-black text-sky-100 uppercase tracking-widest">
+        {icon ? (
+          <span className="text-sky-400 flex items-center shrink-0">{icon}</span>
+        ) : null}
+        <span>{title}</span>
       </span>
-      {meta ? <small className="text-xs font-semibold text-slate-400">{meta}</small> : null}
+      {meta ? (
+        <small className="text-xs font-semibold text-slate-400 shrink-0">
+          {meta}
+        </small>
+      ) : null}
     </div>
   );
 }
