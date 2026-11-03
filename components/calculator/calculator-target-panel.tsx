@@ -287,10 +287,8 @@ export function CalculatorTargetPanel({
                       medium: "M",
                       large: "L",
                     };
-                    const sizeStr =
-                      monster.size && sizeMap[monster.size]
-                        ? sizeMap[monster.size]
-                        : "";
+                    const normalizedSize = monster.size?.toLowerCase() ?? "";
+                    const sizeStr = sizeMap[normalizedSize] ?? "";
                     const extra = [raceStr, sizeStr].filter(Boolean).join(" ");
 
                     return {

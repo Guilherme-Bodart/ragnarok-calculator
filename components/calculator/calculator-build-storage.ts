@@ -57,6 +57,9 @@ export function readSavedCalculatorBuild(): CalculatorBuildPayload {
     const migratedBuild = migrateCalculatorBuildPayload(parsedBuild);
 
     if (migratedBuild) {
+      if (migratedBuild.target.selectedMonsterId === 999999) {
+        migratedBuild.target.selectedMonsterId = defaultCalculatorInput.monsterId;
+      }
       return migratedBuild;
     }
   } catch {
