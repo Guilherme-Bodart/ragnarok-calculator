@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { ChevronDown } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Check, ChevronDown, Search, Sparkles } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
 import { calculatorSkillTreeClassGroups } from "./calculator-skill-tree-data";
 import { isFourthJobClassId } from "./calculator-class-rules";
@@ -13,120 +13,135 @@ type CalculatorClassSelectorProps = {
   onClassChange: (classId: string) => void;
 };
 
-function getClassTier(classId: string): number {
-  if (isFourthJobClassId(classId)) return 4;
-  
-  const idStr = classId.toLowerCase();
-  
-  // 3rd Class
-  if (
-    idStr.includes("rune_knight") || idStr.includes("royal_guard") ||
-    idStr.includes("warlock") || idStr.includes("sorcerer") ||
-    idStr.includes("ranger") || idStr.includes("minstrel") || idStr.includes("wanderer") || idStr.includes("maestro") ||
-    idStr.includes("arch_bishop") || idStr.includes("sura") ||
-    idStr.includes("mechanic") || idStr.includes("genetic") ||
-    idStr.includes("guillotine_cross") || idStr.includes("shadow_chaser") ||
-    idStr.includes("super_novice_e") || idStr.includes("kagerou") || idStr.includes("oboro") ||
-    idStr.includes("rebellion") || idStr.includes("star_emperor") || idStr.includes("soul_reaper") ||
-    idStr.includes("emperor") || idStr.includes("reaper")
-  ) {
-    return 3;
-  }
-  
-  // 1st Class & Novice & Extended
-  const firstClasses = [
-    "novice", "novice_high", "supernovice", "super_novice", "baby",
-    "swordman", "swordman_high", "baby_swordman",
-    "mage", "mage_high", "magician", "baby_mage",
-    "archer", "archer_high", "baby_archer",
-    "acolyte", "acolyte_high", "baby_acolyte",
-    "merchant", "merchant_high", "baby_merchant",
-    "thief", "thief_high", "baby_thief",
-    "ninja", "gunslinger", "taekwon", "taekwon_kid", "summoner", "doram"
-  ];
-  
-  if (firstClasses.includes(idStr)) {
-    return 1;
-  }
+type ClassTierFilter = "all" | "4th" | "3rd";
 
-  // Everything else is 2nd Class (Knight, Wizard, Hunter, etc.)
-  return 2;
+function getClassTierGroup(classId: string): "4th" | "3rd" {
+  return isFourthJobClassId(classId) ? "4th" : "3rd";
 }
 
-const tierLabels: Record<number, string> = {
-  4: "4th Class",
-  3: "3rd Class",
-  2: "2nd Class",
-  1: "1st Class",
-};
+function getCanonicalSpriteId(classId: string): string {
+  return classId.replace(/_T2$/, "").replace(/_T$/, "").replace(/2$/, "");
+}
 
 export function CalculatorClassSelector({
   selectedClassId,
   onClassChange,
 }: CalculatorClassSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTier, setActiveTier] = useState<number>(4);
+  const [activeTier, setActiveTier] = useState<ClassTierFilter>("4th");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const allClasses = useMemo(() => calculatorSkillTreeClassGroups.flatMap((g) => g.options), []);
+  const allClasses = useMemo(
+    () =>
+      calculatorSkillTreeClassGroups.flatMap((group) =>
+        group.options.map((opt) => ({
+          ...opt,
+          branchLabel: group.label,
+          tier: getClassTierGroup(opt.id),
+        })),
+      ),
+    [],
+  );
+
   const currentClass = allClasses.find((c) => c.id === selectedClassId);
 
   const displayedClasses = useMemo(() => {
-    return allClasses.filter((job) => getClassTier(job.id) === activeTier);
-  }, [allClasses, activeTier]);
+    const normalizedSearch = searchQuery.trim().toLowerCase();
+    return allClasses.filter((job) => {
+      if (normalizedSearch) {
+        return (
+          job.name.toLowerCase().includes(normalizedSearch) ||
+          job.branchLabel.toLowerCase().includes(normalizedSearch) ||
+          job.id.toLowerCase().includes(normalizedSearch)
+        );
+      }
+      if (activeTier === "all") return true;
+      return job.tier === activeTier;
+    });
+  }, [allClasses, activeTier, searchQuery]);
 
   return (
     <>
       <button
         type="button"
-        className="flex items-center justify-between w-full h-10 px-3 py-2 bg-slate-950/60 border border-slate-700/50 rounded-lg text-sm font-medium text-slate-100 hover:bg-slate-900/80 transition-all focus:outline-none focus:ring-1 focus:ring-sky-500/50"
+        className="flex items-center justify-between w-full h-10 px-3 py-2 bg-[#131722] border border-white/10 rounded-lg text-sm font-bold text-slate-100 hover:bg-[#191f2e] hover:border-sky-400/35 transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-sky-500/50"
         onClick={() => setIsOpen(true)}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
           {currentClass ? (
             <CalculatorClassOptionPortrait
               classId={currentClass.id}
               name={currentClass.name}
             />
           ) : null}
-          <span className="truncate">{currentClass?.name ?? "Selecione uma Classe"}</span>
+          <span className="truncate">
+            {currentClass?.name ?? "Selecionar Classe"}
+          </span>
         </div>
-        <ChevronDown size={16} className="text-slate-500" />
+        <ChevronDown size={15} className="text-slate-400 shrink-0" />
       </button>
 
       {isOpen && (
         <Modal
           ariaLabel="Selecionar Classe"
           closeLabel="Fechar"
-          title="Selecionar Classe"
+          title="Escolher Classe"
+          meta="Clique em uma classe para carregá-la imediatamente no planner"
           size="xl"
           onClose={() => setIsOpen(false)}
-          className="bg-slate-900/95 border-sky-500/20 backdrop-blur-xl shadow-2xl"
+          className="bg-[#0d1017]/98 border-white/10 backdrop-blur-2xl shadow-2xl"
         >
-          <div className="flex flex-col p-4 gap-6 min-h-[60vh]">
-            
-            <div className="flex items-center justify-between border-b border-slate-700/50 pb-4">
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Classes</span>
-                <div className="relative">
-                  <select
-                    value={activeTier}
-                    onChange={(e) => setActiveTier(Number(e.target.value))}
-                    className="appearance-none bg-slate-950/80 border border-slate-700/50 text-slate-200 text-lg font-bold py-2 pl-4 pr-10 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 cursor-pointer"
+          <div className="flex flex-col gap-4">
+            {/* Filter & Search Toolbar */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-3 border-b border-white/8">
+              <div className="inline-flex items-center gap-1 p-1 rounded-lg bg-[#080a0f] border border-white/8">
+                {(
+                  [
+                    { id: "4th", label: "4ª Classes" },
+                    { id: "3rd", label: "3ª & Expandidas" },
+                    { id: "all", label: "Todas" },
+                  ] as const
+                ).map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => {
+                      setActiveTier(tab.id);
+                      setSearchQuery("");
+                    }}
+                    className={cn(
+                      "px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer border",
+                      activeTier === tab.id && !searchQuery
+                        ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
+                        : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-white/5",
+                    )}
                   >
-                    <option value={4}>4th Class</option>
-                    <option value={3}>3rd Class</option>
-                    <option value={2}>2nd Class</option>
-                    <option value={1}>1st Class</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-500 pointer-events-none" size={20} />
-                </div>
+                    {tab.label}
+                  </button>
+                ))}
               </div>
-              <span className="text-sm text-slate-500 font-medium italic">Double click to select your class!</span>
+
+              <div className="relative flex-1 sm:max-w-[260px]">
+                <Search
+                  size={14}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+                />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Buscar classe (ex: Arch Mage, Sura)..."
+                  className="w-full h-9 pl-8 pr-3 rounded-lg bg-[#080a0f] border border-white/10 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-400/50"
+                />
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            {/* Compact PoE2 / Maxroll Style Class Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[62vh] overflow-y-auto custom-scrollbar pr-1">
               {displayedClasses.map((job) => {
                 const isSelected = job.id === selectedClassId;
+                const spriteId = getCanonicalSpriteId(job.id);
+
                 return (
                   <button
                     key={job.id}
@@ -135,44 +150,72 @@ export function CalculatorClassSelector({
                       onClassChange(job.id);
                       setIsOpen(false);
                     }}
-                    onDoubleClick={() => {
-                      onClassChange(job.id);
-                      setIsOpen(false);
-                    }}
                     className={cn(
-                      "flex flex-col items-center justify-between p-2 rounded-md border-2 transition-all duration-300 relative overflow-hidden group aspect-[3/4] shadow-md hover:shadow-xl",
+                      "group relative flex flex-col items-center justify-between p-3 rounded-xl border transition-all duration-150 cursor-pointer overflow-hidden text-left",
                       isSelected
-                        ? "bg-gradient-to-b from-sky-900/40 to-slate-900 border-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.4)]"
-                        : "bg-slate-900/60 border-slate-700/50 hover:bg-slate-800 hover:border-sky-500/50 hover:-translate-y-1.5"
+                        ? "bg-gradient-to-b from-sky-950/55 via-[#131824] to-[#0e121b] border-sky-400/55 shadow-[0_0_20px_rgba(56,189,248,0.18)]"
+                        : "bg-[#121620]/90 border-white/8 hover:bg-[#171c29] hover:border-sky-400/35",
                     )}
                   >
-                    {/* Background glow */}
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    
-                    {/* Top right icon placeholder */}
-                    <div className="absolute top-2 right-2 w-8 h-8 bg-slate-950/50 rounded flex items-center justify-center border border-slate-700/50 z-20 shadow-sm group-hover:border-sky-500/50 transition-colors">
-                       <span className="text-[12px] opacity-70 group-hover:opacity-100 transition-opacity">⚔️</span>
+                    {/* Top Branch + Tier Pill */}
+                    <div className="w-full flex items-center justify-between gap-1 z-10">
+                      <span className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400 truncate">
+                        {job.branchLabel}
+                      </span>
+                      {isSelected ? (
+                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-400/40 text-[9px] font-bold text-sky-200">
+                          <Check size={10} /> Ativa
+                        </span>
+                      ) : (
+                        <span
+                          className={cn(
+                            "px-1.5 py-0.5 rounded text-[9px] font-mono font-bold border",
+                            job.tier === "4th"
+                              ? "bg-amber-500/12 border-amber-400/25 text-amber-300"
+                              : "bg-slate-800/80 border-white/10 text-slate-400",
+                          )}
+                        >
+                          {job.tier === "4th" ? "4th" : "3rd"}
+                        </span>
+                      )}
                     </div>
 
-                    <div className="flex-1 w-full flex items-center justify-center relative z-10 pt-6 pb-3">
+                    {/* Sprite Showcase */}
+                    <div className="relative flex items-center justify-center w-full h-28 my-1 z-10">
+                      <div className="absolute w-16 h-16 rounded-full bg-sky-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={`/sprites/classes/${job.id}.png`}
+                        src={`/sprites/classes/${spriteId}.png`}
                         alt={job.name}
-                        className="object-contain w-auto h-[130%] max-h-[160px] drop-shadow-[0_6px_10px_rgba(0,0,0,0.5)] transform translate-y-1 group-hover:scale-110 transition-transform duration-300"
+                        className="h-24 w-auto object-contain [image-rendering:pixelated] drop-shadow-[0_6px_12px_rgba(0,0,0,0.65)] group-hover:scale-105 transition-transform duration-150"
                         loading="lazy"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
+                          (e.target as HTMLImageElement).style.display = "none";
                         }}
                       />
                     </div>
 
-                    <div className="w-full mt-auto z-20 bg-slate-950/80 py-2 px-2 border-t border-slate-800 shadow-lg group-hover:border-sky-500/30 transition-colors">
-                      <span className={cn(
-                        "block text-sm font-extrabold text-center drop-shadow-md leading-tight tracking-wide",
-                        isSelected ? "text-sky-300" : "text-slate-300 group-hover:text-white"
-                      )}>
+                    {/* Class Name Footer */}
+                    <div className="w-full pt-2 border-t border-white/6 flex items-center justify-between gap-1 z-10">
+                      <strong
+                        className={cn(
+                          "text-xs font-extrabold truncate",
+                          isSelected
+                            ? "text-sky-200"
+                            : "text-slate-100 group-hover:text-white",
+                        )}
+                      >
                         {job.name}
-                      </span>
+                      </strong>
+                      <Sparkles
+                        size={11}
+                        className={cn(
+                          "shrink-0 transition-opacity",
+                          isSelected
+                            ? "text-sky-400 opacity-100"
+                            : "text-slate-500 opacity-0 group-hover:opacity-100",
+                        )}
+                      />
                     </div>
                   </button>
                 );

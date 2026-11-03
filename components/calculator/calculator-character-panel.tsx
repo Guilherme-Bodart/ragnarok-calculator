@@ -114,12 +114,12 @@ export function CalculatorCharacterPanel({
   );
 
   return (
-    <section className="flex flex-col gap-4 backdrop-blur-xl bg-[#020612]/85 border border-sky-500/20 rounded-xl p-5 shadow-xl relative overflow-hidden">
+    <section className="flex flex-col gap-4 backdrop-blur-xl bg-[#0d1017]/95 border border-white/10 rounded-xl p-5 shadow-xl relative overflow-hidden">
       <PanelHeader
         icon={<Activity size={16} className="text-sky-400" />}
         title={copy.character.title}
         meta={
-          <span className="text-sky-200 text-xs font-mono font-bold tracking-wide">
+          <span className="text-slate-200 text-xs font-mono font-bold tracking-wide">
             Base {baseLevel} / Job {jobLevel}
           </span>
         }
@@ -136,7 +136,7 @@ export function CalculatorCharacterPanel({
       >
         {/* Status Points Budget Card */}
         <div
-          className="flex flex-col gap-2 p-3 rounded-xl border border-slate-800/85 bg-slate-950/60"
+          className="flex flex-col gap-2 p-3 rounded-xl border border-white/[0.08] bg-[#121620]/90"
           aria-live="polite"
         >
           <div className="flex justify-between items-center text-xs">
@@ -154,7 +154,7 @@ export function CalculatorCharacterPanel({
               </strong>
             </div>
           </div>
-          <div className="w-full h-1.5 rounded-full bg-slate-900 overflow-hidden">
+          <div className="w-full h-1.5 rounded-full bg-[#090b10] overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-sky-500 to-cyan-300 shadow-[0_0_10px_rgba(56,189,248,0.45)] transition-[width] duration-300 ease-out"
               style={{ width: `${regularRatio}%` }}
@@ -164,7 +164,7 @@ export function CalculatorCharacterPanel({
 
         {/* Trait Points Budget Card */}
         {isFourthJob ? (
-          <div className="flex flex-col gap-2 p-3 rounded-xl border border-slate-800/85 bg-slate-950/60">
+          <div className="flex flex-col gap-2 p-3 rounded-xl border border-white/[0.08] bg-[#121620]/90">
             <div className="flex justify-between items-center text-xs">
               <span className="text-slate-300 font-bold tracking-wider uppercase text-[10.5px]">
                 {copy.character.traitPoints}
@@ -180,7 +180,7 @@ export function CalculatorCharacterPanel({
                 </strong>
               </div>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-slate-900 overflow-hidden">
+            <div className="w-full h-1.5 rounded-full bg-[#090b10] overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 shadow-[0_0_10px_rgba(245,158,11,0.4)] transition-[width] duration-300 ease-out"
                 style={{ width: `${traitRatio}%` }}

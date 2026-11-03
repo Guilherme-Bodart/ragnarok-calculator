@@ -30,24 +30,24 @@ export function CalculatorDerivedStats({
   const fctSeconds = Number((modifierEffects.fixedCast / 1000).toFixed(1));
 
   return (
-    <section className="flex flex-col gap-3.5 p-4 rounded-xl border border-sky-500/20 bg-[#020612]/85 shadow-xl backdrop-blur-xl text-xs font-mono text-slate-300 w-full">
+    <section className="flex flex-col gap-3.5 p-4 rounded-xl border border-white/10 bg-[#0d1017]/95 shadow-xl backdrop-blur-xl text-xs font-mono text-slate-300 w-full">
       {/* Header & Segmented Switcher */}
-      <div className="flex items-center justify-between gap-2 border-b border-sky-500/15 pb-3 select-none">
+      <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3 select-none">
         <div className="flex items-center gap-2">
           <Gauge size={16} className="text-sky-400 shrink-0" />
-          <span className="text-xs text-sky-100 font-black uppercase tracking-widest font-sans">
+          <span className="text-xs text-slate-100 font-black uppercase tracking-widest font-sans">
             Status & Bônus
           </span>
         </div>
 
-        <div className="inline-flex items-center gap-1 p-1 rounded-lg bg-slate-950/90 border border-slate-800/90">
+        <div className="inline-flex items-center gap-1 p-1 rounded-lg bg-[#090b10] border border-white/10">
           <button
             type="button"
             onClick={() => setActiveTab("combat")}
             className={`px-2.5 py-1 rounded-md text-[10px] font-sans font-bold uppercase tracking-wider transition-colors cursor-pointer border ${
               activeTab === "combat"
                 ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
-                : "text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-800/50"
+                : "text-slate-400 hover:text-slate-200 border-transparent hover:bg-white/[0.04]"
             }`}
           >
             Status
@@ -58,12 +58,12 @@ export function CalculatorDerivedStats({
             className={`px-2.5 py-1 rounded-md text-[10px] font-sans font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer border ${
               activeTab === "modifiers"
                 ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
-                : "text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-800/50"
+                : "text-slate-400 hover:text-slate-200 border-transparent hover:bg-white/[0.04]"
             }`}
           >
             <Sparkles size={10} className="text-amber-400 shrink-0" />
             <span>Modificadores</span>
-            <span className="px-1.5 py-0.5 rounded bg-slate-900 text-sky-300 font-mono text-[9.5px] leading-none border border-slate-700/80 tabular-nums">
+            <span className="px-1.5 py-0.5 rounded bg-[#121620] text-sky-300 font-mono text-[9.5px] leading-none border border-white/10 tabular-nums">
               {bonuses.length}
             </span>
           </button>

@@ -224,19 +224,19 @@ export function CalculatorTargetPanel({
     ELEMENT_AURA_STYLES[monsterElementKey] ?? ELEMENT_AURA_STYLES.neutral;
 
   return (
-    <aside className="flex flex-col gap-0 p-0 rounded-xl border border-sky-500/20 bg-[#020612]/85 shadow-xl backdrop-blur-xl flex-1 overflow-hidden relative min-h-0">
+    <aside className="flex flex-col gap-0 p-0 rounded-xl border border-white/10 bg-[#0d1017]/95 shadow-xl backdrop-blur-xl flex-1 overflow-hidden relative min-h-0">
       {/* QUICK ACTIVE SKILL BAR (Always accessible from any tab) */}
       {availableSkills.length > 0 && (
-        <div className="flex flex-col gap-3 p-4 border-b border-sky-500/15 bg-slate-950/40">
+        <div className="flex flex-col gap-3 p-4 border-b border-white/10 bg-[#121620]/60">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <Crosshair size={15} className="text-sky-400 shrink-0" />
-              <span className="text-xs font-black uppercase tracking-widest text-sky-100">
+              <span className="text-xs font-black uppercase tracking-widest text-slate-100">
                 Habilidade Simulada
               </span>
             </div>
             <div className="flex items-center gap-1.5 text-[10px] font-mono tabular-nums">
-              <span className="px-2 py-0.5 rounded-md bg-slate-900/90 border border-slate-700/70 text-slate-300 flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-md bg-[#090b10] border border-white/10 text-slate-300 flex items-center gap-1">
                 {activeSkill.damageType === "magical" ? (
                   <Sparkles size={10} className="text-indigo-400" />
                 ) : (
@@ -290,11 +290,11 @@ export function CalculatorTargetPanel({
       )}
 
       {/* MONSTER SECTION */}
-      <div className="flex flex-col p-4 border-b border-sky-500/15 bg-slate-950/20 relative">
+      <div className="flex flex-col p-4 border-b border-white/10 bg-[#090b10]/30 relative">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 shrink-0">
           <div className="flex items-center gap-2 shrink-0">
             <Swords size={15} className="text-sky-400 shrink-0" />
-            <h2 className="text-xs font-black text-sky-100 uppercase tracking-widest">
+            <h2 className="text-xs font-black text-slate-100 uppercase tracking-widest">
               {copy.target.title}
             </h2>
           </div>
