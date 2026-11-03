@@ -52,36 +52,39 @@ export function CalculatorBuffsPanel({
   }
 
   return (
-    <section className="flex flex-col gap-4 p-5 rounded-2xl border border-sky-500/15 bg-[#020612]/75 shadow-[0_12px_36px_rgb(0,0,0,0.45)] backdrop-blur-xl">
-      <div className="flex items-center justify-between gap-2">
-        <PanelHeader
-          icon={<Sparkles size={17} className="text-amber-400" />}
-          title={copy.buffs.title}
-          meta={`${activeBuffEntries.length} ${copy.buffs.activeMeta}`}
-        />
-
-        {activeBuffEntries.length > 0 && (
-          <button
-            type="button"
-            onClick={clearAllBuffs}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold text-rose-300/90 hover:text-rose-200 bg-rose-950/30 hover:bg-rose-950/60 border border-rose-500/25 transition-colors cursor-pointer"
-            title="Desativar todos os buffs"
-          >
-            <Trash2 size={12} />
-            Limpar
-          </button>
-        )}
-      </div>
+    <section className="flex flex-col gap-4 p-5 rounded-xl border border-sky-500/20 bg-[#020612]/85 shadow-xl backdrop-blur-xl">
+      <PanelHeader
+        icon={<Sparkles size={16} className="text-amber-400" />}
+        title={copy.buffs.title}
+        meta={
+          <span className="inline-flex items-center gap-3">
+            <span>
+              {activeBuffEntries.length} {copy.buffs.activeMeta}
+            </span>
+            {activeBuffEntries.length > 0 && (
+              <button
+                type="button"
+                onClick={clearAllBuffs}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-bold text-rose-300 hover:text-rose-200 bg-rose-950/35 hover:bg-rose-950/65 border border-rose-500/30 transition-colors cursor-pointer"
+                title="Desativar todos os buffs"
+              >
+                <Trash2 size={11} />
+                Limpar
+              </button>
+            )}
+          </span>
+        }
+      />
 
       {activeBuffEntries.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {activeBuffEntries.map((buff) => (
             <div
               key={buff.id}
-              className="group flex items-center justify-between gap-2.5 px-3 py-2 rounded-xl bg-slate-900/75 border border-sky-500/20 hover:border-sky-400/40 transition-all"
+              className="group flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg bg-slate-900/75 border border-slate-800/90 hover:border-sky-500/30 transition-colors"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="shrink-0 p-1 rounded-lg bg-slate-950/80 border border-slate-800">
+                <div className="shrink-0 p-1 rounded-md bg-slate-950/80 border border-slate-800">
                   <CalculatorSkillIcon
                     name={buff.name}
                     numericId={buff.numericId}
@@ -93,7 +96,7 @@ export function CalculatorBuffsPanel({
                       {buff.name}
                     </strong>
                     {buff.maxLevel > 1 && (
-                      <span className="shrink-0 px-1.5 py-0.5 rounded bg-sky-500/15 border border-sky-400/30 text-[10px] font-mono font-bold text-sky-300">
+                      <span className="shrink-0 px-1.5 py-0.5 rounded bg-sky-500/15 border border-sky-400/30 text-[10px] font-mono font-bold text-sky-300 leading-none">
                         Lv.{buff.level}
                       </span>
                     )}
@@ -118,7 +121,7 @@ export function CalculatorBuffsPanel({
           ))}
         </div>
       ) : (
-        <div className="flex items-center justify-center py-4 px-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/30 text-xs text-slate-400">
+        <div className="flex items-center justify-center py-4 px-3 rounded-lg border border-dashed border-slate-800 bg-slate-950/30 text-xs text-slate-400">
           Nenhum buff ou consumível ativo no momento.
         </div>
       )}
@@ -126,7 +129,7 @@ export function CalculatorBuffsPanel({
       <div className="flex flex-col gap-3 w-full">
         <Button
           icon={<Plus size={15} />}
-          className="bg-sky-600/90 hover:bg-sky-500 text-white shadow-[0_0_20px_rgba(2,132,199,0.35)] border-sky-400/40 h-10 w-full font-bold uppercase tracking-wider text-xs"
+          className="w-full h-10"
           type="button"
           onClick={() => setIsModalOpen(true)}
         >

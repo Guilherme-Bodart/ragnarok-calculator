@@ -17,7 +17,10 @@ type CalculatorEquipmentPaperdollProps = {
   selectedItemDetails: Record<number, CalculatorItemDetail>;
   selectedCardsBySlot: Partial<Record<EquipmentSlot, number[]>>;
   selectedItemsBySlot: Partial<Record<EquipmentSlot, number>>;
-  itemContexts?: Record<number, { refine?: number; grade?: number; options?: number[] }>;
+  itemContexts?: Record<
+    number,
+    { refine?: number; grade?: number; options?: number[] }
+  >;
   slots: readonly CalculatorEquipmentSlotDefinition[];
   onEditSlot: (slotId: EquipmentSlot) => void;
   onEditCardsAndEnchants: (slotId: EquipmentSlot) => void;
@@ -74,13 +77,13 @@ export function CalculatorEquipmentPaperdoll({
     >
       {/* CENTER CHARACTER AVATAR SHOWCASE */}
       <div
-        className="equipment-avatar bg-gradient-to-b from-sky-950/20 via-slate-950/60 to-slate-950/90 border border-sky-500/20 shadow-[inset_0_0_60px_rgba(14,165,233,0.12)] rounded-2xl overflow-hidden relative flex flex-col items-center justify-between p-4"
+        className="equipment-avatar bg-gradient-to-b from-sky-950/20 via-slate-950/60 to-slate-950/90 border border-sky-500/20 rounded-xl overflow-hidden relative flex flex-col items-center justify-between p-4"
         aria-hidden="true"
       >
-        <div className="equipment-avatar-ring animate-pulse opacity-60 shadow-[0_0_60px_rgba(56,189,248,0.3)] border-sky-400/30" />
+        <div className="equipment-avatar-ring opacity-50 border-sky-400/25" />
 
         {/* Top Class Badge */}
-        <div className="z-10 flex items-center gap-2 px-3 py-1 rounded-full bg-slate-950/80 border border-sky-500/25 text-[10px] font-mono text-sky-200 shadow-md">
+        <div className="z-10 flex items-center gap-2 px-3 py-1 rounded-md bg-slate-950/85 border border-sky-500/25 text-[10px] font-mono text-sky-200">
           <span className="font-bold uppercase tracking-wider text-sky-300">
             {currentClassName}
           </span>
@@ -96,7 +99,7 @@ export function CalculatorEquipmentPaperdoll({
           <img
             src={`/sprites/classes/${selectedClassId}.png`}
             alt={currentClassName}
-            className="max-h-[220px] w-auto object-contain drop-shadow-[0_12px_24px_rgba(2,132,199,0.45)] transition-transform duration-500 hover:scale-105 select-none"
+            className="max-h-[220px] w-auto object-contain drop-shadow-[0_10px_20px_rgba(2,132,199,0.35)] select-none"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = "none";
             }}
@@ -104,8 +107,8 @@ export function CalculatorEquipmentPaperdoll({
         </div>
 
         {/* Bottom Arcane Pedestal Glow */}
-        <div className="z-10 w-3/4 h-2 rounded-full bg-sky-400/25 blur-sm" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-sky-950/40 pointer-events-none" />
+        <div className="z-10 w-3/4 h-1.5 rounded-full bg-sky-400/20 blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-sky-950/35 pointer-events-none" />
       </div>
 
       {slots.map((slot) => {
@@ -167,10 +170,10 @@ export function CalculatorEquipmentPaperdoll({
           <div
             data-slot-area={slot.area}
             key={slot.id}
-            className={`equipment-slot group relative flex flex-col justify-between overflow-hidden min-w-0 transition-all duration-200 rounded-xl p-2.5 border ${
+            className={`equipment-slot group relative flex flex-col justify-between overflow-hidden min-w-0 transition-colors duration-150 rounded-xl p-2.5 border ${
               item
-                ? "bg-gradient-to-br from-sky-950/55 via-slate-900/85 to-slate-950/90 border-sky-500/35 shadow-[inset_0_0_18px_rgba(14,165,233,0.1)] hover:border-sky-400/60 hover:shadow-[0_4px_20px_rgba(56,189,248,0.18)]"
-                : "bg-slate-900/45 border-slate-800/80 hover:bg-slate-900/75 hover:border-slate-600/60"
+                ? "bg-slate-900/80 border-sky-500/35 hover:border-sky-400/55 hover:bg-slate-900"
+                : "bg-slate-900/45 border-slate-800/80 hover:bg-slate-900/75 hover:border-slate-700"
             } ${isVisualTwoHandedOccupied ? "opacity-55 saturate-50" : ""}`}
           >
             {/* Quick Unequip Button on Hover */}
@@ -183,7 +186,7 @@ export function CalculatorEquipmentPaperdoll({
                   e.stopPropagation();
                   onUnequipSlot(slot.id);
                 }}
-                className="absolute top-1.5 right-1.5 z-20 opacity-0 group-hover:opacity-100 p-1 rounded-md bg-slate-950/85 text-slate-400 hover:text-rose-300 hover:bg-rose-950/70 border border-slate-700/60 transition-all cursor-pointer"
+                className="absolute top-1.5 right-1.5 z-20 opacity-0 group-hover:opacity-100 p-1 rounded-md bg-slate-950/90 text-slate-400 hover:text-rose-300 hover:bg-rose-950/70 border border-slate-700/60 transition-opacity cursor-pointer"
               >
                 <X size={12} />
               </button>
@@ -201,12 +204,12 @@ export function CalculatorEquipmentPaperdoll({
               disabled={isVisualTwoHandedOccupied}
             >
               {item ? (
-                <div className="shrink-0 p-1.5 bg-slate-950/75 rounded-lg border border-sky-500/25 shadow-sm">
-                  <CalculatorItemIcon itemId={item.id} size={30} />
+                <div className="shrink-0 p-1.5 bg-slate-950/80 rounded-lg border border-sky-500/25">
+                  <CalculatorItemIcon itemId={item.id} size={28} />
                 </div>
               ) : (
-                <div className="shrink-0 p-2 rounded-lg bg-slate-950/40 border border-slate-800/70 opacity-45 text-slate-400 group-hover:opacity-75 transition-opacity">
-                  <Icon size={22} />
+                <div className="shrink-0 p-2 rounded-lg bg-slate-950/45 border border-slate-800/70 opacity-50 text-slate-400 group-hover:opacity-80 transition-opacity">
+                  <Icon size={20} />
                 </div>
               )}
 
@@ -220,7 +223,7 @@ export function CalculatorEquipmentPaperdoll({
                     {label}
                   </span>
                   {isVisualTwoHandedOccupied && (
-                    <span className="text-[8.5px] font-mono uppercase px-1 py-0.2 rounded bg-slate-800 text-slate-300">
+                    <span className="text-[8.5px] font-mono uppercase px-1 py-0.5 rounded bg-slate-800 text-slate-300">
                       2 Mãos
                     </span>
                   )}
@@ -228,13 +231,13 @@ export function CalculatorEquipmentPaperdoll({
 
                 <div className="flex items-center gap-1 w-full min-w-0 mt-0.5">
                   {refine > 0 && !isVisualTwoHandedOccupied && (
-                    <span className="shrink-0 px-1.5 py-0.2 rounded bg-amber-500/20 border border-amber-400/40 text-[10px] font-mono font-black text-amber-300">
+                    <span className="shrink-0 px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/40 text-[10px] font-mono font-black text-amber-300 leading-none">
                       +{refine}
                     </span>
                   )}
                   {gradeBadge && !isVisualTwoHandedOccupied && (
                     <span
-                      className={`shrink-0 px-1.5 py-0.2 rounded border text-[9.5px] font-mono font-black ${gradeBadge.className}`}
+                      className={`shrink-0 px-1.5 py-0.5 rounded border text-[9.5px] font-mono font-black leading-none ${gradeBadge.className}`}
                     >
                       [{gradeBadge.label}]
                     </span>
@@ -271,9 +274,9 @@ export function CalculatorEquipmentPaperdoll({
                         return (
                           <span
                             key={`card-${i}`}
-                            className={`w-2 h-2 rounded-full border transition-all ${
+                            className={`w-2 h-2 rounded-full border transition-colors ${
                               hasCard
-                                ? "bg-sky-400 border-sky-200 shadow-[0_0_6px_rgba(56,189,248,0.9)]"
+                                ? "bg-sky-400 border-sky-200"
                                 : "bg-slate-900 border-slate-600"
                             }`}
                           />
@@ -290,9 +293,9 @@ export function CalculatorEquipmentPaperdoll({
                       return (
                         <span
                           key={`enchant-${i}`}
-                          className={`w-2 h-2 rounded-sm border transition-all ${
+                          className={`w-2 h-2 rounded-sm border transition-colors ${
                             hasEnchant
-                              ? "bg-amber-400 border-amber-200 shadow-[0_0_6px_rgba(245,158,11,0.9)]"
+                              ? "bg-amber-400 border-amber-200"
                               : "bg-slate-900 border-slate-600"
                           }`}
                         />

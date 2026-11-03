@@ -10,12 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorSkillTreeBoard } from "./calculator-skill-tree-board";
-import {
-  calculatorSkillTreeCatalog,
-} from "./calculator-skill-tree-data";
-import {
-  createCompactSkillGroups,
-} from "./calculator-skill-tree-layout";
+import { calculatorSkillTreeCatalog } from "./calculator-skill-tree-data";
+import { createCompactSkillGroups } from "./calculator-skill-tree-layout";
 import {
   CalculatorSkillTreeGroupHeading,
   CalculatorSkillTreePath,
@@ -32,7 +28,7 @@ export function CalculatorSkillTreePanel({
 }: CalculatorSkillTreePanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
-  
+
   const selectedClassId = useCalculatorBuildStore((s) => s.selectedClassId);
   const learnedSkills = useCalculatorBuildStore((s) => s.learnedSkills);
   const setLearnedSkills = useCalculatorBuildStore((s) => s.setLearnedSkills);
@@ -41,12 +37,12 @@ export function CalculatorSkillTreePanel({
     () => resolveSkillTreeJob(calculatorSkillTreeCatalog, selectedClassId),
     [selectedClassId],
   );
-  
+
   const learnedCount = Object.values(learnedSkills).reduce(
     (total, level) => total + level,
     0,
   );
-  
+
   const filteredSkills = resolvedJob.skills.filter((skill) => {
     const query = search.trim().toLowerCase();
 
@@ -60,17 +56,17 @@ export function CalculatorSkillTreePanel({
       skill.sourceJobName.toLowerCase().includes(query)
     );
   });
-  
+
   const skillGroups = useMemo(
     () => createCompactSkillGroups(resolvedJob.jobPath, resolvedJob.skills),
     [resolvedJob.jobPath, resolvedJob.skills],
   );
-  
+
   const filteredSkillIds = useMemo(
     () => new Set(filteredSkills.map((skill) => skill.id)),
     [filteredSkills],
   );
-  
+
   const visibleSkillGroups = useMemo(
     () =>
       skillGroups
@@ -105,11 +101,24 @@ export function CalculatorSkillTreePanel({
 
   return (
     <>
-      <div className="flex items-center justify-between gap-4 p-3 rounded-lg border border-slate-700/50 bg-slate-900/60 w-full">
-        <div className="flex items-center justify-between flex-1 text-sm px-2">
-          <span className="text-slate-400 font-medium">{copy.skillTree.title}</span>
+      <div className="flex items-center justify-between gap-4 px-3.5 py-2.5 rounded-xl border border-slate-800/90 bg-slate-900/55 w-full">
+        <div className="flex items-center gap-2 text-xs">
+          <Network size={15} className="text-sky-400 shrink-0" />
+          <span className="text-slate-200 font-bold">
+            {copy.skillTree.title}
+          </span>
+          {learnedCount > 0 && (
+            <span className="px-1.5 py-0.5 rounded bg-sky-500/15 border border-sky-400/30 text-[10px] font-mono font-bold text-sky-300">
+              {learnedCount} pts
+            </span>
+          )}
         </div>
-        <Button type="button" variant="link" onClick={() => setIsOpen(true)} className="text-xs mr-2 uppercase font-bold tracking-wide">
+        <Button
+          type="button"
+          variant="link"
+          onClick={() => setIsOpen(true)}
+          className="text-xs uppercase font-bold tracking-wider"
+        >
           {copy.skillTree.openAction}
         </Button>
       </div>

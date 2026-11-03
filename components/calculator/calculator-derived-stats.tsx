@@ -28,24 +28,24 @@ export function CalculatorDerivedStats({
   const equipMatk = status.matk - status.statusMatk;
 
   return (
-    <section className="flex flex-col gap-3 p-4 rounded-2xl border border-sky-500/20 bg-[#020612]/85 shadow-[0_12px_36px_rgb(0,0,0,0.5)] backdrop-blur-xl text-xs font-mono text-slate-300 w-full">
+    <section className="flex flex-col gap-3.5 p-4 rounded-xl border border-sky-500/20 bg-[#020612]/85 shadow-xl backdrop-blur-xl text-xs font-mono text-slate-300 w-full">
       {/* Header & Segmented Switcher */}
-      <div className="flex items-center justify-between gap-2 border-b border-sky-500/15 pb-2.5 select-none">
+      <div className="flex items-center justify-between gap-2 border-b border-sky-500/15 pb-3 select-none">
         <div className="flex items-center gap-2">
-          <Gauge size={15} className="text-sky-400" />
-          <span className="text-[11px] text-sky-100 font-black uppercase tracking-widest font-sans">
+          <Gauge size={16} className="text-sky-400 shrink-0" />
+          <span className="text-xs text-sky-100 font-black uppercase tracking-widest font-sans">
             Status & Bônus
           </span>
         </div>
 
-        <div className="inline-flex items-center p-0.5 rounded-lg bg-slate-950/90 border border-slate-800">
+        <div className="inline-flex items-center gap-1 p-1 rounded-lg bg-slate-950/90 border border-slate-800/90">
           <button
             type="button"
             onClick={() => setActiveTab("combat")}
-            className={`px-2.5 py-1 rounded-md text-[10px] font-sans font-bold uppercase tracking-wider transition-all cursor-pointer ${
+            className={`px-2.5 py-1 rounded-md text-[10px] font-sans font-bold uppercase tracking-wider transition-colors cursor-pointer border ${
               activeTab === "combat"
-                ? "bg-sky-500/20 text-sky-200 border border-sky-400/35 shadow-sm"
-                : "text-slate-400 hover:text-slate-200 border border-transparent"
+                ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
+                : "text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-800/50"
             }`}
           >
             Status
@@ -53,15 +53,15 @@ export function CalculatorDerivedStats({
           <button
             type="button"
             onClick={() => setActiveTab("modifiers")}
-            className={`px-2.5 py-1 rounded-md text-[10px] font-sans font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
+            className={`px-2.5 py-1 rounded-md text-[10px] font-sans font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer border ${
               activeTab === "modifiers"
-                ? "bg-sky-500/20 text-sky-200 border border-sky-400/35 shadow-sm"
-                : "text-slate-400 hover:text-slate-200 border border-transparent"
+                ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
+                : "text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-800/50"
             }`}
           >
-            <Sparkles size={10} className="text-amber-400" />
+            <Sparkles size={10} className="text-amber-400 shrink-0" />
             <span>Modificadores</span>
-            <span className="px-1.5 py-0.2 rounded-full bg-slate-900 text-sky-300 font-mono text-[9.5px] border border-slate-700">
+            <span className="px-1.5 py-0.5 rounded bg-slate-900 text-sky-300 font-mono text-[9.5px] leading-none border border-slate-700/80">
               {bonuses.length}
             </span>
           </button>
@@ -70,8 +70,8 @@ export function CalculatorDerivedStats({
 
       {/* Top Vital & Alt+Q Strip (Always Visible) */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <div className="flex flex-col px-2.5 py-1.5 rounded-xl bg-rose-950/25 border border-rose-500/25">
-          <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-rose-300/80">
+        <div className="flex flex-col px-3 py-2 rounded-lg bg-rose-950/25 border border-rose-500/25">
+          <span className="text-[9.5px] font-sans font-bold uppercase tracking-wider text-rose-300/85">
             HP Máximo
           </span>
           <strong className="text-xs font-black text-rose-300 tabular-nums mt-0.5">
@@ -79,8 +79,8 @@ export function CalculatorDerivedStats({
           </strong>
         </div>
 
-        <div className="flex flex-col px-2.5 py-1.5 rounded-xl bg-cyan-950/25 border border-cyan-500/25">
-          <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-cyan-300/80">
+        <div className="flex flex-col px-3 py-2 rounded-lg bg-cyan-950/25 border border-cyan-500/25">
+          <span className="text-[9.5px] font-sans font-bold uppercase tracking-wider text-cyan-300/85">
             SP Máximo
           </span>
           <strong className="text-xs font-black text-cyan-300 tabular-nums mt-0.5">
@@ -88,8 +88,8 @@ export function CalculatorDerivedStats({
           </strong>
         </div>
 
-        <div className="flex flex-col px-2.5 py-1.5 rounded-xl bg-amber-950/20 border border-amber-500/25">
-          <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-amber-300/80">
+        <div className="flex flex-col px-3 py-2 rounded-lg bg-amber-950/20 border border-amber-500/25">
+          <span className="text-[9.5px] font-sans font-bold uppercase tracking-wider text-amber-300/85">
             Alt+Q ATK
           </span>
           <strong className="text-xs font-black text-amber-300 tabular-nums mt-0.5">
@@ -98,8 +98,8 @@ export function CalculatorDerivedStats({
           </strong>
         </div>
 
-        <div className="flex flex-col px-2.5 py-1.5 rounded-xl bg-sky-950/25 border border-sky-500/25">
-          <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-sky-300/80">
+        <div className="flex flex-col px-3 py-2 rounded-lg bg-sky-950/25 border border-sky-500/25">
+          <span className="text-[9.5px] font-sans font-bold uppercase tracking-wider text-sky-300/85">
             Alt+Q MATK
           </span>
           <strong className="text-xs font-black text-sky-300 tabular-nums mt-0.5">
@@ -272,7 +272,7 @@ function StatCell({
 
   return (
     <div
-      className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-colors ${
+      className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg border transition-colors ${
         highlight
           ? "bg-sky-950/30 border-sky-500/25"
           : "bg-slate-900/60 border-slate-800/80"

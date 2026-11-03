@@ -113,12 +113,9 @@ export function CalculatorCharacterPanel({
   );
 
   return (
-    <section className="flex flex-col gap-4 backdrop-blur-xl bg-[#020612]/75 border border-sky-500/15 rounded-2xl p-5 shadow-2xl relative overflow-hidden">
-      {/* Glow effect */}
-      <div className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-sky-500/50 to-transparent" />
-
+    <section className="flex flex-col gap-4 backdrop-blur-xl bg-[#020612]/85 border border-sky-500/20 rounded-xl p-5 shadow-xl relative overflow-hidden">
       <PanelHeader
-        icon={<Activity size={17} className="text-sky-400" />}
+        icon={<Activity size={16} className="text-sky-400" />}
         title={copy.character.title}
         meta={
           <span className="text-sky-200 text-xs font-mono font-bold tracking-wide">
@@ -138,11 +135,11 @@ export function CalculatorCharacterPanel({
       >
         {/* Status Points Budget Card */}
         <div
-          className="flex flex-col gap-2 p-3.5 rounded-xl border border-sky-500/20 bg-slate-900/60 shadow-inner"
+          className="flex flex-col gap-2 p-3 rounded-xl border border-slate-800/90 bg-slate-900/55"
           aria-live="polite"
         >
           <div className="flex justify-between items-center text-xs">
-            <span className="text-slate-300 font-bold tracking-wide uppercase text-[10.5px]">
+            <span className="text-slate-300 font-bold tracking-wider uppercase text-[10.5px]">
               {copy.character.statusPoints}
             </span>
             <div className="flex items-center gap-2 font-mono">
@@ -154,7 +151,7 @@ export function CalculatorCharacterPanel({
               </strong>
             </div>
           </div>
-          <div className="w-full h-1.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
+          <div className="w-full h-1.5 rounded-full bg-slate-950 overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-sky-500 to-cyan-300 transition-all duration-300"
               style={{ width: `${regularRatio}%` }}
@@ -164,9 +161,9 @@ export function CalculatorCharacterPanel({
 
         {/* Trait Points Budget Card */}
         {isFourthJob ? (
-          <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-amber-500/20 bg-slate-900/60 shadow-inner">
+          <div className="flex flex-col gap-2 p-3 rounded-xl border border-slate-800/90 bg-slate-900/55">
             <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-300 font-bold tracking-wide uppercase text-[10.5px]">
+              <span className="text-slate-300 font-bold tracking-wider uppercase text-[10.5px]">
                 {copy.character.traitPoints}
               </span>
               <div className="flex items-center gap-2 font-mono">
@@ -178,7 +175,7 @@ export function CalculatorCharacterPanel({
                 </strong>
               </div>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
+            <div className="w-full h-1.5 rounded-full bg-slate-950 overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-300"
                 style={{ width: `${traitRatio}%` }}

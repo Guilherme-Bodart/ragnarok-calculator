@@ -35,8 +35,10 @@ export function CalculatorAttackPanel({
   result,
 }: CalculatorAttackPanelProps) {
   const selectedSkillId = useCalculatorBuildStore((s) => s.selectedSkillId);
-  const setSelectedSkillId = useCalculatorBuildStore((s) => s.setSelectedSkillId);
-  
+  const setSelectedSkillId = useCalculatorBuildStore(
+    (s) => s.setSelectedSkillId,
+  );
+
   const skillLevel = useCalculatorBuildStore((s) => s.skillLevel);
   const setSkillLevel = useCalculatorBuildStore((s) => s.setSkillLevel);
 
@@ -73,7 +75,7 @@ export function CalculatorAttackPanel({
   const effectiveMultiplierPercent = Math.round(effectiveMultiplierRatio * 100);
 
   const hasPrototypeWarning = resultMeta.precision === "prototype";
-  
+
   const elementMap: Record<string, string> = {
     neutral: "Neutro",
     water: "Água",
@@ -97,11 +99,13 @@ export function CalculatorAttackPanel({
     selectedSkill.damageType === "magical" ? "Mágico" : "Físico";
 
   return (
-    <aside className="flex flex-col gap-4 p-5 rounded-2xl border border-sky-500/15 bg-[#020612]/75 shadow-[0_12px_36px_rgb(0,0,0,0.45)] backdrop-blur-xl">
+    <aside className="flex flex-col gap-4 p-5 rounded-xl border border-sky-500/20 bg-[#020612]/85 shadow-xl backdrop-blur-xl">
       <PanelHeader
-        icon={<Crosshair size={17} className="text-sky-400" />}
+        icon={<Crosshair size={16} className="text-sky-400" />}
         title={copy.attack.title}
-        meta={hasPrototypeWarning ? copy.attack.prototypeMeta : resultMeta.formulaId}
+        meta={
+          hasPrototypeWarning ? copy.attack.prototypeMeta : resultMeta.formulaId
+        }
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_140px] gap-3">
@@ -110,7 +114,6 @@ export function CalculatorAttackPanel({
             value={selectedSkillId}
             onChange={handleSkillChange}
             searchPlaceholder={copy.attack.searchPlaceholder}
-            className="bg-slate-950/60 border-slate-700/50"
             groups={[
               {
                 label: copy.attack.skillGroup,
@@ -140,8 +143,8 @@ export function CalculatorAttackPanel({
         </Field>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-1">
-        <div className="flex flex-col p-3 rounded-xl bg-slate-900/70 border border-slate-800/80">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="flex flex-col p-3 rounded-lg bg-slate-900/70 border border-slate-800/80">
           <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
             {copy.attack.damageTypeLabel}
           </span>
@@ -155,7 +158,7 @@ export function CalculatorAttackPanel({
           </strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-slate-900/70 border border-slate-800/80">
+        <div className="flex flex-col p-3 rounded-lg bg-slate-900/70 border border-slate-800/80">
           <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
             {copy.attack.elementLabel}
           </span>
@@ -164,7 +167,7 @@ export function CalculatorAttackPanel({
           </strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-slate-900/70 border border-slate-800/80">
+        <div className="flex flex-col p-3 rounded-lg bg-slate-900/70 border border-slate-800/80">
           <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
             {copy.attack.hitsLabel}
           </span>
@@ -173,7 +176,7 @@ export function CalculatorAttackPanel({
           </strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-sky-950/30 border border-sky-500/25">
+        <div className="flex flex-col p-3 rounded-lg bg-sky-950/30 border border-sky-500/25">
           <span className="text-[10px] text-sky-300/80 uppercase font-bold tracking-wider">
             {copy.attack.multiplierLabel}
           </span>

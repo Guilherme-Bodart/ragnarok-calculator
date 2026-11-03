@@ -96,28 +96,28 @@ export function CalculatorEquipmentPanel({
   }
 
   return (
-    <section className="flex flex-col gap-5 backdrop-blur-xl bg-[#020612]/75 border border-sky-500/15 rounded-2xl p-5 shadow-2xl relative overflow-hidden">
-      {/* Glow effect */}
-      <div className="absolute top-0 right-1/4 w-1/3 h-px bg-gradient-to-r from-transparent via-sky-400/50 to-transparent" />
-
+    <section className="flex flex-col gap-4 backdrop-blur-xl bg-[#020612]/85 border border-sky-500/20 rounded-xl p-5 shadow-xl relative overflow-hidden">
       <div className="flex items-center justify-between gap-3">
         <PanelHeader
-          icon={<Shield size={17} className="text-sky-400" />}
+          icon={<Shield size={16} className="text-sky-400" />}
           title={copy.equipment.title}
-          meta={`${equipTabCount + specialTabCount} equipados`}
+          meta={
+            <span className="inline-flex items-center gap-3">
+              <span>{equipTabCount + specialTabCount} equipados</span>
+              {activeTabEquippedCount > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClearActiveTab}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-bold text-rose-300 hover:text-rose-200 bg-rose-950/35 hover:bg-rose-950/65 border border-rose-500/30 transition-colors cursor-pointer"
+                  title="Desequipar todos os itens desta aba"
+                >
+                  <Trash2 size={11} />
+                  Limpar Aba
+                </button>
+              )}
+            </span>
+          }
         />
-
-        {activeTabEquippedCount > 0 && (
-          <button
-            type="button"
-            onClick={handleClearActiveTab}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold text-rose-300/90 hover:text-rose-200 bg-rose-950/30 hover:bg-rose-950/60 border border-rose-500/25 transition-colors cursor-pointer"
-            title="Desequipar todos os itens desta aba"
-          >
-            <Trash2 size={12} />
-            Limpar Aba
-          </button>
-        )}
       </div>
 
       <Tabs label={copy.equipment.tabsAria} variant="segmented">
@@ -126,7 +126,7 @@ export function CalculatorEquipmentPanel({
           onClick={() => setActiveTab("equip")}
         >
           <span>{copy.equipment.tabs.equip}</span>
-          <span className="ml-1.5 text-[10px] font-mono opacity-80">
+          <span className="ml-1 text-[10px] font-mono opacity-80">
             ({equipTabCount}/{calculatorEquipSlots.length})
           </span>
         </TabButton>
@@ -135,7 +135,7 @@ export function CalculatorEquipmentPanel({
           onClick={() => setActiveTab("special")}
         >
           <span>{copy.equipment.tabs.special}</span>
-          <span className="ml-1.5 text-[10px] font-mono opacity-80">
+          <span className="ml-1 text-[10px] font-mono opacity-80">
             ({specialTabCount}/{calculatorSpecialSlots.length})
           </span>
         </TabButton>

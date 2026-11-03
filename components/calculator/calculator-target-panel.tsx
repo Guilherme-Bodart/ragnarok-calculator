@@ -195,19 +195,19 @@ export function CalculatorTargetPanel({
     ELEMENT_LABELS[rawAttackElement] ?? rawAttackElement;
 
   return (
-    <aside className="flex flex-col gap-0 p-0 rounded-2xl border border-sky-500/20 bg-[#020612]/85 shadow-[0_12px_40px_rgb(0,0,0,0.6)] backdrop-blur-xl flex-1 overflow-hidden relative min-h-0">
+    <aside className="flex flex-col gap-0 p-0 rounded-xl border border-sky-500/20 bg-[#020612]/85 shadow-xl backdrop-blur-xl flex-1 overflow-hidden relative min-h-0">
       {/* QUICK ACTIVE SKILL BAR (Always accessible from any tab) */}
       {availableSkills.length > 0 && (
-        <div className="flex flex-col gap-2.5 p-3.5 border-b border-sky-500/15 bg-gradient-to-r from-sky-950/35 via-slate-900/60 to-slate-950/60">
+        <div className="flex flex-col gap-3 p-4 border-b border-sky-500/15 bg-slate-950/40">
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5">
-              <Crosshair size={14} className="text-sky-400" />
-              <span className="text-[10.5px] font-black uppercase tracking-widest text-sky-200">
+            <div className="flex items-center gap-2">
+              <Crosshair size={15} className="text-sky-400 shrink-0" />
+              <span className="text-xs font-black uppercase tracking-widest text-sky-100">
                 Habilidade Simulada
               </span>
             </div>
             <div className="flex items-center gap-1.5 text-[10px] font-mono">
-              <span className="px-2 py-0.5 rounded-full bg-slate-900/90 border border-slate-700/70 text-slate-300 flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-md bg-slate-900/90 border border-slate-700/70 text-slate-300 flex items-center gap-1">
                 {activeSkill.damageType === "magical" ? (
                   <Sparkles size={10} className="text-indigo-400" />
                 ) : (
@@ -216,7 +216,7 @@ export function CalculatorTargetPanel({
                 {activeSkill.damageType === "magical" ? "Mágico" : "Físico"} •{" "}
                 {attackElementLabel}
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-300 font-bold">
+              <span className="px-2 py-0.5 rounded-md bg-sky-500/15 border border-sky-400/30 text-sky-300 font-bold">
                 {Math.round(skillMultiplier * 100).toLocaleString()}% ({hits}{" "}
                 {hits === 1 ? "hit" : "hits"})
               </span>
@@ -228,7 +228,6 @@ export function CalculatorTargetPanel({
               value={selectedSkillId}
               onChange={handleQuickSkillChange}
               searchPlaceholder={copy.attack.searchPlaceholder}
-              className="text-xs bg-slate-950/70 border-slate-700/60"
               fit="fill"
               groups={[
                 {
@@ -258,10 +257,10 @@ export function CalculatorTargetPanel({
       )}
 
       {/* MONSTER SECTION */}
-      <div className="flex flex-col p-4 border-b border-sky-500/15 bg-slate-950/40 relative">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3 shrink-0">
+      <div className="flex flex-col p-4 border-b border-sky-500/15 bg-slate-950/20 relative">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 shrink-0">
           <div className="flex items-center gap-2 shrink-0">
-            <Swords size={16} className="text-sky-400" />
+            <Swords size={15} className="text-sky-400 shrink-0" />
             <h2 className="text-xs font-black text-sky-100 uppercase tracking-widest">
               {copy.target.title}
             </h2>
@@ -269,7 +268,6 @@ export function CalculatorTargetPanel({
 
           <div className="flex-1 w-full sm:w-auto sm:min-w-[260px]">
             <RichSelect
-              className="text-xs bg-slate-900/70 border-slate-700/60"
               fit="fill"
               value={String(selectedMonsterId)}
               onChange={(monsterId) => setSelectedMonsterId(Number(monsterId))}
@@ -422,18 +420,18 @@ export function CalculatorTargetPanel({
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-center py-8 text-xs text-slate-500 border border-dashed border-slate-700/50 rounded-xl">
+          <div className="flex items-center justify-center py-4 text-xs text-slate-500 border border-dashed border-slate-800 rounded-lg">
             Selecione um alvo para visualizar os atributos.
           </div>
         )}
       </div>
 
       {/* DAMAGE & SIMULATION SECTION */}
-      <div className="flex flex-col p-4 bg-slate-900/35 relative gap-3.5">
+      <div className="flex flex-col p-4 bg-slate-900/25 relative gap-3.5">
         {/* Primary Damage Cards Grid (Normal vs Critical + DPS) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Normal Damage Box */}
-          <div className="flex flex-col justify-between p-3.5 rounded-xl bg-gradient-to-br from-sky-950/45 via-slate-900/80 to-slate-950/90 border border-sky-500/30 shadow-[inset_0_0_24px_rgba(56,189,248,0.08)]">
+          <div className="flex flex-col justify-between p-3.5 rounded-xl bg-gradient-to-br from-sky-950/45 via-slate-900/80 to-slate-950/90 border border-sky-500/30">
             <div className="flex items-center justify-between gap-2">
               <span className="text-[10px] font-black text-sky-300 uppercase tracking-widest">
                 Dano Total da Skill
@@ -445,7 +443,7 @@ export function CalculatorTargetPanel({
               )}
             </div>
 
-            <strong className="text-2xl sm:text-3xl font-black text-white drop-shadow-[0_0_12px_rgba(56,189,248,0.45)] tabular-nums tracking-tight leading-none my-1.5">
+            <strong className="text-2xl sm:text-3xl font-black text-white tabular-nums tracking-tight leading-none my-2">
               {totalDamage}
             </strong>
 
@@ -481,16 +479,14 @@ export function CalculatorTargetPanel({
             </div>
 
             <strong
-              className={`text-2xl sm:text-3xl font-black tabular-nums tracking-tight leading-none my-1.5 ${
-                criticalChance > 0
-                  ? "text-rose-200 drop-shadow-[0_0_12px_rgba(244,63,94,0.45)]"
-                  : "text-slate-400"
+              className={`text-2xl sm:text-3xl font-black tabular-nums tracking-tight leading-none my-2 ${
+                criticalChance > 0 ? "text-rose-200" : "text-slate-400"
               }`}
             >
               {criticalDamage > 0 ? criticalDamage.toLocaleString() : "—"}
             </strong>
 
-            <div className="flex items-center justify-between gap-2 text-[10.5px] font-mono pt-1 border-t border-slate-800/80">
+            <div className="flex items-center justify-between gap-2 text-[10.5px] font-mono pt-1.5 border-t border-slate-800/80">
               <span className="text-slate-300">
                 Méd. Pond:{" "}
                 <strong className="text-amber-300">
@@ -591,7 +587,7 @@ export function CalculatorTargetPanel({
           <button
             type="button"
             onClick={() => setIsBreakdownOpen((prev) => !prev)}
-            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-950/65 hover:bg-slate-900/90 border border-slate-800/80 text-[11px] font-bold text-sky-200 transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-950/65 hover:bg-slate-900/90 border border-slate-800/80 text-[11px] font-bold text-sky-200 transition-colors cursor-pointer"
           >
             <span className="flex items-center gap-2">
               <span>Detalhamento da Fórmula (Breakdown)</span>
@@ -607,7 +603,7 @@ export function CalculatorTargetPanel({
           </button>
 
           {isBreakdownOpen && (
-            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/90 text-[11px] font-mono animate-in fade-in duration-200">
+            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1.5 p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/90 text-[11px] font-mono">
               <div className="flex justify-between px-2 py-1 rounded bg-slate-900/60">
                 <span className="text-slate-400">Poder Status Base:</span>
                 <strong className="text-slate-100">{basePower}</strong>
@@ -630,7 +626,9 @@ export function CalculatorTargetPanel({
                 </strong>
               </div>
               <div className="flex justify-between px-2 py-1 rounded bg-slate-900/60">
-                <span className="text-slate-400">Mult. Categorias (Raça/Tam/Skill):</span>
+                <span className="text-slate-400">
+                  Mult. Categorias (Raça/Tam/Skill):
+                </span>
                 <strong className="text-emerald-300">
                   {finalRateMultiplier.toFixed(2)}x
                 </strong>
@@ -668,7 +666,7 @@ export function CalculatorTargetPanel({
         </div>
 
         {result.meta.warnings.length > 0 ? (
-          <div className="flex flex-col gap-1 p-2.5 rounded-xl border border-amber-500/30 bg-amber-950/20 text-[10.5px] text-amber-200/90 shrink-0">
+          <div className="flex flex-col gap-1 p-2.5 rounded-lg border border-amber-500/30 bg-amber-950/20 text-[10.5px] text-amber-200/90 shrink-0">
             {result.meta.warnings.map((warning) => (
               <span key={warning} className="flex items-center gap-1.5">
                 <ShieldAlert size={12} className="text-amber-400 shrink-0" />

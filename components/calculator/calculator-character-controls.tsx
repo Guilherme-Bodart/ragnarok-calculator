@@ -6,7 +6,6 @@ import type { CalculatorDictionary } from "./calculator-i18n";
 import { CalculatorClassSelector } from "./calculator-class-selector";
 import { useCalculatorBuildStore } from "./calculator-build-store";
 import { isFourthJobClassId } from "./calculator-class-rules";
-import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { getCalculatorManualBuffSkills } from "./calculator-buff-data";
 import { useMemo } from "react";
 
@@ -14,16 +13,18 @@ type CalculatorCharacterControlsProps = {
   copy: CalculatorDictionary;
 };
 
-export function CalculatorCharacterControls({ copy }: CalculatorCharacterControlsProps) {
+export function CalculatorCharacterControls({
+  copy,
+}: CalculatorCharacterControlsProps) {
   const baseLevel = useCalculatorBuildStore((s) => s.baseLevel);
   const setBaseLevel = useCalculatorBuildStore((s) => s.setBaseLevel);
   const jobLevel = useCalculatorBuildStore((s) => s.jobLevel);
   const setJobLevel = useCalculatorBuildStore((s) => s.setJobLevel);
   const selectedClassId = useCalculatorBuildStore((s) => s.selectedClassId);
   const handleClassChange = useCalculatorBuildStore((s) => s.handleClassChange);
-  
+
   const isFourthJob = isFourthJobClassId(selectedClassId);
-  
+
   const manualBuffSkills = useMemo(
     () => getCalculatorManualBuffSkills(copy.buffs),
     [copy.buffs],
@@ -34,7 +35,7 @@ export function CalculatorCharacterControls({ copy }: CalculatorCharacterControl
   }
 
   return (
-    <div className="grid grid-cols-[1.5fr_1fr_1fr] gap-4 mb-2 p-2">
+    <div className="grid grid-cols-1 sm:grid-cols-[1.6fr_1fr_1fr] gap-3">
       <Field label={copy.character.classLabel}>
         <CalculatorClassSelector
           selectedClassId={selectedClassId}
