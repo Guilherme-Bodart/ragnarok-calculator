@@ -96,7 +96,7 @@ export function CalculatorEquipmentPanel({
   }
 
   return (
-    <section className="flex flex-col gap-4 backdrop-blur-xl bg-[#020612]/85 border border-sky-500/20 rounded-xl p-5 shadow-xl relative overflow-hidden">
+    <section className="flex flex-col gap-4 backdrop-blur-xl bg-[#0d1017]/95 border border-white/10 rounded-xl p-5 shadow-xl relative overflow-hidden">
       <div className="flex items-center justify-between gap-3">
         <PanelHeader
           icon={<Shield size={16} className="text-sky-400" />}

@@ -14,7 +14,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
 import { animateStaggerIn } from "@/components/ui/use-motion-effects";
-import { CalculatorAttackPanel } from "./calculator-attack-panel";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorBuildsModal } from "./calculator-builds-modal";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
@@ -164,7 +163,7 @@ export function CalculatorWorkbench() {
         {/* COLUNA 1: CONFIGURAÇÃO (Lado Esquerdo) */}
         <div className="calculator-config-column flex flex-col gap-3.5 min-w-0">
           <nav
-            className="calculator-tabs-nav grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#040a18]/90 border border-sky-500/20 shadow-md backdrop-blur-md"
+            className="calculator-tabs-nav grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#0d1017]/95 border border-white/10 shadow-md backdrop-blur-md"
             aria-label="Seções da Calculadora"
           >
             <button
@@ -173,7 +172,7 @@ export function CalculatorWorkbench() {
               className={`inline-flex items-center justify-center gap-2 px-3 py-2 h-9 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis border ${
                 activeTab === "character"
                   ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
-                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-slate-800/50"
+                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-white/[0.04]"
               }`}
             >
               <User
@@ -193,7 +192,7 @@ export function CalculatorWorkbench() {
               className={`inline-flex items-center justify-center gap-2 px-3 py-2 h-9 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis border ${
                 activeTab === "equipment"
                   ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
-                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-slate-800/50"
+                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-white/[0.04]"
               }`}
             >
               <Shield
@@ -218,7 +217,7 @@ export function CalculatorWorkbench() {
               className={`inline-flex items-center justify-center gap-2 px-3 py-2 h-9 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis border ${
                 activeTab === "combat"
                   ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
-                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-slate-800/50"
+                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-white/[0.04]"
               }`}
             >
               <Sparkles
@@ -229,7 +228,7 @@ export function CalculatorWorkbench() {
                     : "text-slate-400 shrink-0"
                 }
               />
-              <span className="truncate">Combate & Buffs</span>
+              <span className="truncate">Buffs & Consumíveis</span>
               {activeBuffCount > 0 && (
                 <span className="px-1.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/35 text-[10px] leading-none font-mono text-amber-200 shrink-0">
                   {activeBuffCount}
@@ -293,19 +292,10 @@ export function CalculatorWorkbench() {
             )}
 
             {activeTab === "combat" && (
-              <>
-                <CalculatorAttackPanel
-                  availableSkills={build.selectedClassSkills}
-                  copy={copy}
-                  result={result}
-                  resultMeta={result.meta}
-                  selectedSkill={selectedSkill}
-                />
-                <CalculatorBuffsPanel
-                  buffSkills={build.buffSkills}
-                  copy={copy}
-                />
-              </>
+              <CalculatorBuffsPanel
+                buffSkills={build.buffSkills}
+                copy={copy}
+              />
             )}
           </div>
         </div>

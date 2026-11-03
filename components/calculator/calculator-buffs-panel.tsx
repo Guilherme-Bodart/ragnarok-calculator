@@ -52,7 +52,7 @@ export function CalculatorBuffsPanel({
   }
 
   return (
-    <section className="flex flex-col gap-4 p-5 rounded-xl border border-sky-500/20 bg-[#020612]/85 shadow-xl backdrop-blur-xl">
+    <section className="flex flex-col gap-4 p-5 rounded-xl border border-white/10 bg-[#0d1017]/95 shadow-xl backdrop-blur-xl">
       <PanelHeader
         icon={<Sparkles size={16} className="text-amber-400" />}
         title={copy.buffs.title}
@@ -81,10 +81,10 @@ export function CalculatorBuffsPanel({
           {activeBuffEntries.map((buff) => (
             <div
               key={buff.id}
-              className="group flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg bg-slate-900/75 border border-slate-800/90 hover:border-sky-500/30 transition-colors"
+              className="group flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg bg-[#121620] border border-white/10 hover:border-sky-400/40 transition-colors"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="shrink-0 p-1 rounded-md bg-slate-950/80 border border-slate-800">
+                <div className="shrink-0 p-1 rounded-md bg-[#090b10] border border-white/10">
                   <CalculatorSkillIcon
                     name={buff.name}
                     numericId={buff.numericId}
@@ -121,7 +121,7 @@ export function CalculatorBuffsPanel({
           ))}
         </div>
       ) : (
-        <div className="flex items-center justify-center py-4 px-3 rounded-lg border border-dashed border-slate-800 bg-slate-950/30 text-xs text-slate-400">
+        <div className="flex items-center justify-center py-6 px-3 rounded-xl border border-dashed border-white/10 bg-[#090b10]/60 text-xs text-slate-400">
           Nenhum buff ou consumível ativo no momento.
         </div>
       )}

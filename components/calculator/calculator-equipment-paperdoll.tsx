@@ -47,6 +47,14 @@ const GRADE_LABELS: Record<number, { label: string; className: string }> = {
   },
 };
 
+function formatSocketTagName(rawName: string): string {
+  const short = getShortItemName(rawName)
+    .replace(/^Carta\s+/i, "")
+    .replace(/\s+Card$/i, "")
+    .trim();
+  return short.length > 14 ? `${short.slice(0, 13)}…` : short;
+}
+
 function EquippedSlotIconBox({
   itemId,
   refine,
@@ -68,10 +76,10 @@ function EquippedSlotIconBox({
   return (
     <div
       ref={iconBoxRef}
-      className={`shrink-0 p-1.5 bg-slate-950/80 rounded-lg border ${
+      className={`shrink-0 p-1.5 bg-[#090b10] rounded-lg border ${
         refine >= 10
-          ? "border-amber-400/45 shadow-[0_0_10px_rgba(245,158,11,0.2)]"
-          : "border-sky-500/25"
+          ? "border-amber-400/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]"
+          : "border-white/10"
       }`}
     >
       <CalculatorItemIcon itemId={itemId} size={28} />
@@ -115,18 +123,18 @@ export function CalculatorEquipmentPaperdoll({
     >
       {/* CENTER CHARACTER AVATAR SHOWCASE */}
       <div
-        className="equipment-avatar bg-gradient-to-b from-sky-950/20 via-slate-950/60 to-slate-950/90 border border-sky-500/20 rounded-xl overflow-hidden relative flex flex-col items-center justify-between p-4"
+        className="equipment-avatar bg-gradient-to-b from-[#131822] via-[#0d1017] to-[#090b10] border border-white/10 rounded-xl overflow-hidden relative flex flex-col items-center justify-between p-4"
         aria-hidden="true"
       >
-        <div className="equipment-avatar-ring opacity-50 border-sky-400/25 calc-aura-breathe" />
+        <div className="equipment-avatar-ring opacity-60 calc-aura-breathe" />
 
         {/* Top Class Badge */}
-        <div className="z-10 flex items-center gap-2 px-3 py-1 rounded-md bg-slate-950/85 border border-sky-500/25 text-[10px] font-mono text-sky-200">
+        <div className="z-10 flex items-center gap-2 px-3 py-1 rounded-md bg-[#090b10]/90 border border-white/10 text-[10px] font-mono text-slate-200">
           <span className="font-bold uppercase tracking-wider text-sky-300">
             {currentClassName}
           </span>
-          <span className="text-slate-500">•</span>
-          <span>
+          <span className="text-slate-600">•</span>
+          <span className="text-slate-300">
             Lv.{baseLevel}/{jobLevel}
           </span>
         </div>
@@ -138,7 +146,7 @@ export function CalculatorEquipmentPaperdoll({
             key={canonicalSpriteClassId}
             src={`/sprites/classes/${canonicalSpriteClassId}.png`}
             alt={currentClassName}
-            className="h-[190px] w-auto object-contain [image-rendering:pixelated] drop-shadow-[0_10px_20px_rgba(2,132,199,0.4)] select-none"
+            className="h-[190px] w-auto object-contain [image-rendering:pixelated] drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] select-none"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = "none";
             }}
@@ -146,8 +154,8 @@ export function CalculatorEquipmentPaperdoll({
         </div>
 
         {/* Bottom Arcane Pedestal Glow */}
-        <div className="z-10 w-3/4 h-1.5 rounded-full bg-sky-400/25 blur-sm calc-aura-breathe" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-sky-950/35 pointer-events-none" />
+        <div className="z-10 w-3/4 h-1.5 rounded-full bg-sky-400/20 blur-sm calc-aura-breathe" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-sky-950/20 pointer-events-none" />
       </div>
 
       {slots.map((slot) => {
@@ -198,12 +206,28 @@ export function CalculatorEquipmentPaperdoll({
         const enchantSlotCount = isCostume ? 1 : 3;
         const slotCards = selectedCardsBySlot[slot.id] ?? [];
 
-        const equippedCardCount = Array.from({ length: cardSlotCount }).filter(
-          (_, i) => Boolean(slotCards[i]),
-        ).length;
-        const equippedEnchantCount = Array.from({
-          length: enchantSlotCount,
-        }).filter((_, i) => Boolean(slotCards[cardSlotCount + i])).length;
+        const equippedCardTags = Array.from({ length: cardSlotCount })
+          .map((_, i) => slotCards[i])
+          .filter((id): id is number => Boolean(id))
+          .map((id) => ({
+            id,
+            label: selectedItemDetails[id]
+              ? formatSocketTagName(selectedItemDetails[id].name)
+              : `#${id}`,
+          }));
+
+        const equippedEnchantTags = Array.from({ length: enchantSlotCount })
+          .map((_, i) => slotCards[cardSlotCount + i])
+          .filter((id): id is number => Boolean(id))
+          .map((id) => ({
+            id,
+            label: selectedItemDetails[id]
+              ? formatSocketTagName(selectedItemDetails[id].name)
+              : `#${id}`,
+          }));
+
+        const equippedCardCount = equippedCardTags.length;
+        const equippedEnchantCount = equippedEnchantTags.length;
 
         return (
           <div
@@ -211,8 +235,8 @@ export function CalculatorEquipmentPaperdoll({
             key={slot.id}
             className={`equipment-slot group relative flex flex-col justify-between overflow-hidden min-w-0 transition-colors duration-150 rounded-xl p-2.5 border ${
               item
-                ? "bg-slate-900/80 border-sky-500/35 hover:border-sky-400/55 hover:bg-slate-900"
-                : "bg-slate-900/45 border-slate-800/80 hover:bg-slate-900/75 hover:border-slate-700"
+                ? "bg-[#121620]/95 border-white/15 hover:border-sky-400/50 hover:bg-[#161b26]"
+                : "bg-[#0b0e14]/70 border-white/[0.06] hover:bg-[#11151f] hover:border-white/15"
             } ${isVisualTwoHandedOccupied ? "opacity-55 saturate-50" : ""}`}
           >
             {/* Quick Unequip Button on Hover */}
@@ -225,7 +249,7 @@ export function CalculatorEquipmentPaperdoll({
                   e.stopPropagation();
                   onUnequipSlot(slot.id);
                 }}
-                className="absolute top-1.5 right-1.5 z-20 opacity-0 group-hover:opacity-100 p-1 rounded-md bg-slate-950/90 text-slate-400 hover:text-rose-300 hover:bg-rose-950/70 border border-slate-700/60 transition-opacity cursor-pointer"
+                className="absolute top-1.5 right-1.5 z-20 opacity-0 group-hover:opacity-100 p-1 rounded-md bg-[#090b10]/95 text-slate-400 hover:text-rose-300 hover:bg-rose-950/70 border border-white/10 transition-opacity cursor-pointer"
               >
                 <X size={12} />
               </button>
@@ -245,7 +269,7 @@ export function CalculatorEquipmentPaperdoll({
               {item ? (
                 <EquippedSlotIconBox itemId={item.id} refine={refine} />
               ) : (
-                <div className="shrink-0 p-2 rounded-lg bg-slate-950/45 border border-slate-800/70 opacity-50 text-slate-400 group-hover:opacity-80 transition-opacity">
+                <div className="shrink-0 p-2 rounded-lg bg-[#090b10]/60 border border-white/[0.06] opacity-45 text-slate-400 group-hover:opacity-80 transition-opacity">
                   <Icon size={20} />
                 </div>
               )}
@@ -254,7 +278,7 @@ export function CalculatorEquipmentPaperdoll({
                 <div className="flex items-center gap-1.5 w-full">
                   <span
                     className={`text-[9px] uppercase tracking-wider font-extrabold truncate ${
-                      item ? "text-sky-300/85" : "text-slate-500"
+                      item ? "text-slate-400" : "text-slate-500"
                     }`}
                   >
                     {label}
@@ -296,7 +320,7 @@ export function CalculatorEquipmentPaperdoll({
               </div>
             </button>
 
-            {/* Interactive Cards & Enchantments Bar */}
+            {/* Enka.Network Style Socket & Enchant Bar */}
             {canSocketOrEnchant && item && (
               <button
                 type="button"
@@ -304,54 +328,62 @@ export function CalculatorEquipmentPaperdoll({
                   e.stopPropagation();
                   onEditCardsAndEnchants(slot.id);
                 }}
-                className="mt-2 pt-1.5 border-t border-sky-500/15 flex items-center justify-between gap-2 w-full text-left hover:bg-sky-500/10 rounded px-1 py-0.5 transition-colors cursor-pointer"
+                className="mt-2 pt-1.5 border-t border-white/[0.07] flex items-center justify-between gap-1.5 w-full text-left hover:bg-white/[0.04] rounded px-1 py-0.5 transition-colors cursor-pointer min-w-0"
                 title="Configurar Cartas e Encantamentos"
               >
-                <div className="flex items-center gap-1.5">
-                  {/* Card Indicators */}
-                  {cardSlotCount > 0 && (
-                    <div className="flex items-center gap-1 mr-1">
-                      <Gem size={10} className="text-sky-400 shrink-0" />
-                      {Array.from({ length: cardSlotCount }).map((_, i) => {
-                        const hasCard = Boolean(slotCards[i]);
-                        return (
-                          <span
-                            key={`card-${i}`}
-                            className={`w-2 h-2 rounded-full border transition-colors ${
-                              hasCard
-                                ? "bg-sky-400 border-sky-200"
-                                : "bg-slate-900 border-slate-600"
-                            }`}
-                          />
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Enchant Indicators */}
-                  <div className="flex items-center gap-1">
-                    <Sparkles size={10} className="text-amber-400 shrink-0" />
-                    {Array.from({ length: enchantSlotCount }).map((_, i) => {
-                      const hasEnchant = Boolean(slotCards[cardSlotCount + i]);
-                      return (
-                        <span
-                          key={`enchant-${i}`}
-                          className={`w-2 h-2 rounded-sm border transition-colors ${
-                            hasEnchant
-                              ? "bg-amber-400 border-amber-200"
-                              : "bg-slate-900 border-slate-600"
-                          }`}
-                        />
-                      );
-                    })}
+                {equippedCardCount > 0 || equippedEnchantCount > 0 ? (
+                  <div className="flex items-center gap-1 flex-wrap min-w-0 overflow-hidden">
+                    {equippedCardTags.map((tag, idx) => (
+                      <span
+                        key={`c-${tag.id}-${idx}`}
+                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-sky-500/15 border border-sky-400/30 text-[9px] font-mono font-semibold text-sky-200 truncate max-w-[105px]"
+                      >
+                        <Gem size={8} className="text-sky-400 shrink-0" />
+                        <span className="truncate">{tag.label}</span>
+                      </span>
+                    ))}
+                    {equippedEnchantTags.map((tag, idx) => (
+                      <span
+                        key={`e-${tag.id}-${idx}`}
+                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-500/15 border border-amber-400/30 text-[9px] font-mono font-semibold text-amber-200 truncate max-w-[105px]"
+                      >
+                        <Sparkles size={8} className="text-amber-400 shrink-0" />
+                        <span className="truncate">{tag.label}</span>
+                      </span>
+                    ))}
                   </div>
-                </div>
-
-                <span className="text-[9.5px] font-mono text-slate-400 group-hover:text-sky-300 transition-colors truncate">
-                  {equippedCardCount > 0 || equippedEnchantCount > 0
-                    ? `${equippedCardCount}/${cardSlotCount}C • ${equippedEnchantCount}E`
-                    : "Cartas / Enc."}
-                </span>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-1.5">
+                      {cardSlotCount > 0 && (
+                        <div className="flex items-center gap-1 mr-1">
+                          <Gem size={10} className="text-sky-400/70 shrink-0" />
+                          {Array.from({ length: cardSlotCount }).map((_, i) => (
+                            <span
+                              key={`card-empty-${i}`}
+                              className="w-1.5 h-1.5 rounded-full border border-slate-600 bg-[#090b10]"
+                            />
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-1">
+                        <Sparkles
+                          size={10}
+                          className="text-amber-400/70 shrink-0"
+                        />
+                        {Array.from({ length: enchantSlotCount }).map((_, i) => (
+                          <span
+                            key={`enchant-empty-${i}`}
+                            className="w-1.5 h-1.5 rounded-sm border border-slate-600 bg-[#090b10]"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <span className="text-[9.5px] font-mono text-slate-500 group-hover:text-slate-300 transition-colors truncate">
+                      Cartas / Enc.
+                    </span>
+                  </>
+                )}
               </button>
             )}
           </div>
