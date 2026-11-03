@@ -1141,9 +1141,8 @@
 
 .equipment-avatar-ring {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  margin: auto;
   width: min(82%, 190px);
   aspect-ratio: 1;
   border: 1px solid rgb(125 211 252 / 0.22);

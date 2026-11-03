@@ -95,6 +95,11 @@ export function CalculatorEquipmentPaperdoll({
   const baseLevel = useCalculatorBuildStore((s) => s.baseLevel);
   const jobLevel = useCalculatorBuildStore((s) => s.jobLevel);
 
+  const canonicalSpriteClassId = useMemo(
+    () => selectedClassId.replace(/_T2$/, "").replace(/_T$/, "").replace(/2$/, ""),
+    [selectedClassId],
+  );
+
   const currentClassName = useMemo(() => {
     const allClasses = calculatorSkillTreeClassGroups.flatMap((g) => g.options);
     return (
@@ -130,9 +135,10 @@ export function CalculatorEquipmentPaperdoll({
         <div className="relative z-10 flex-1 flex items-center justify-center w-full my-2 calc-idle-float">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={`/sprites/classes/${selectedClassId}.png`}
+            key={canonicalSpriteClassId}
+            src={`/sprites/classes/${canonicalSpriteClassId}.png`}
             alt={currentClassName}
-            className="max-h-[220px] w-auto object-contain drop-shadow-[0_10px_20px_rgba(2,132,199,0.35)] select-none"
+            className="h-[190px] w-auto object-contain [image-rendering:pixelated] drop-shadow-[0_10px_20px_rgba(2,132,199,0.4)] select-none"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = "none";
             }}

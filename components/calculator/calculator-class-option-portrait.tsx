@@ -9,7 +9,13 @@ export function CalculatorClassOptionPortrait({
   classId: string;
   name: string;
 }) {
-  const [hasError, setHasError] = useState(false);
+  const canonicalClassId = classId
+    .replace(/_T2$/, "")
+    .replace(/_T$/, "")
+    .replace(/2$/, "");
+  const [errorClassId, setErrorClassId] = useState<string | null>(null);
+  const hasError = errorClassId === canonicalClassId;
+
   const initials = name
     .split(" ")
     .map((part) => part[0])
@@ -24,12 +30,13 @@ export function CalculatorClassOptionPortrait({
     <span className="skill-tree-class-fallback">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={`/sprites/classes/${classId}.png`}
+        key={canonicalClassId}
+        src={`/sprites/classes/${canonicalClassId}.png`}
         alt=""
         width={28}
         height={28}
         loading="lazy"
-        onError={() => setHasError(true)}
+        onError={() => setErrorClassId(canonicalClassId)}
       />
       <b>{initials}</b>
     </span>
