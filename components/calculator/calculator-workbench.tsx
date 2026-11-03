@@ -10,9 +10,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { Button } from "@/components/ui/button";
+import { animateStaggerIn } from "@/components/ui/use-motion-effects";
 import { CalculatorAttackPanel } from "./calculator-attack-panel";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
 import { CalculatorBuildsModal } from "./calculator-builds-modal";
@@ -33,6 +34,7 @@ export function CalculatorWorkbench() {
   const [activeTab, setActiveTab] = useState<
     "character" | "equipment" | "combat"
   >("character");
+  const tabContentRef = useRef<HTMLDivElement | null>(null);
 
   // O adapter traz os Derived States complexos e metadados
   const build = useCalculatorBuildState(copy);
@@ -59,6 +61,10 @@ export function CalculatorWorkbench() {
   const activeBuffCount = Object.values(build.activeBuffs).filter(
     (lvl) => lvl > 0,
   ).length;
+
+  useEffect(() => {
+    animateStaggerIn(tabContentRef.current);
+  }, [activeTab]);
 
   const calculatorDataset = useCalculatorDataset({
     selectedCalculatorItems: build.selectedCalculatorItems,
@@ -232,8 +238,8 @@ export function CalculatorWorkbench() {
             </button>
           </nav>
 
-          {activeTab === "character" && (
-            <div className="flex flex-col gap-3.5">
+          <div ref={tabContentRef} className="flex flex-col gap-3.5">
+            {activeTab === "character" && (
               <CalculatorCharacterPanel
                 characterStatus={result.characterStatus}
                 statBonuses={{
@@ -277,33 +283,31 @@ export function CalculatorWorkbench() {
                 copy={copy}
                 skillTreeSlot={<CalculatorSkillTreePanel copy={copy} />}
               />
-            </div>
-          )}
+            )}
 
-          {activeTab === "equipment" && (
-            <div className="flex flex-col gap-3.5">
+            {activeTab === "equipment" && (
               <CalculatorEquipmentPanel
                 copy={copy}
                 selectedItemDetails={build.selectedItemDetails}
               />
-            </div>
-          )}
+            )}
 
-          {activeTab === "combat" && (
-            <div className="flex flex-col gap-3.5">
-              <CalculatorAttackPanel
-                availableSkills={build.selectedClassSkills}
-                copy={copy}
-                result={result}
-                resultMeta={result.meta}
-                selectedSkill={selectedSkill}
-              />
-              <CalculatorBuffsPanel
-                buffSkills={build.buffSkills}
-                copy={copy}
-              />
-            </div>
-          )}
+            {activeTab === "combat" && (
+              <>
+                <CalculatorAttackPanel
+                  availableSkills={build.selectedClassSkills}
+                  copy={copy}
+                  result={result}
+                  resultMeta={result.meta}
+                  selectedSkill={selectedSkill}
+                />
+                <CalculatorBuffsPanel
+                  buffSkills={build.buffSkills}
+                  copy={copy}
+                />
+              </>
+            )}
+          </div>
         </div>
 
         {/* COLUNA 2: SIMULAÇÃO E RESULTADO (Lado Direito - Fixo/Sticky) */}

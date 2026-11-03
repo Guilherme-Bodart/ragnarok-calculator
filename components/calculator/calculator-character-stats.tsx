@@ -64,10 +64,10 @@ export function CalculatorCharacterStats({
     return (
       <div
         key={stat.key}
-        className="flex items-center justify-between gap-2 bg-slate-900/65 border border-slate-800/90 rounded-xl px-3 py-2 shadow-sm hover:border-sky-500/35 hover:bg-slate-900/90 transition-all"
+        className="group flex items-center justify-between gap-2 bg-slate-900/45 border border-slate-800/75 rounded-lg px-3 py-1.5 hover:border-sky-500/30 hover:bg-slate-900/75 transition-colors"
       >
         {/* Stat Label & Tooltip Subtitle */}
-        <div className="flex flex-col min-w-[68px] shrink-0">
+        <div className="flex flex-col min-w-[74px] shrink-0">
           <div className="flex items-center gap-1.5">
             <label
               className={`text-xs font-black uppercase tracking-wider select-none ${
@@ -78,7 +78,7 @@ export function CalculatorCharacterStats({
             </label>
             {statBonus !== 0 && (
               <span
-                className={`text-[11px] font-mono font-bold ${
+                className={`text-[11px] font-mono font-bold tabular-nums ${
                   statBonus > 0 ? "text-emerald-400" : "text-rose-400"
                 }`}
               >
@@ -86,19 +86,19 @@ export function CalculatorCharacterStats({
               </span>
             )}
           </div>
-          <span className="text-[9px] text-slate-500 truncate max-w-[110px]">
+          <span className="text-[9px] text-slate-500 truncate max-w-[115px]">
             {STAT_DESCRIPTIONS[stat.key]}
           </span>
         </div>
 
-        {/* Step Controls (-10, -1, Input, +1, +10) */}
-        <div className="flex items-center gap-1 justify-center">
+        {/* Unified Capsule Stepper (-10 | -1 | Input | +1 | +10) */}
+        <div className="inline-flex items-center rounded-lg bg-slate-950/90 border border-slate-800/90 group-hover:border-slate-700/90 divide-x divide-slate-800/80 overflow-hidden transition-colors">
           <button
             type="button"
             onClick={() => adjustBy(-10)}
             disabled={currentValue <= minVal}
             title="-10"
-            className="h-7 px-1.5 shrink-0 flex items-center justify-center rounded-md bg-slate-950/70 text-[10px] font-mono font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-100 disabled:opacity-30 border border-slate-800 transition-colors cursor-pointer"
+            className="h-7 px-1.5 shrink-0 flex items-center justify-center text-[10px] font-mono font-bold text-slate-500 group-hover:text-slate-300 hover:bg-slate-800/80 hover:text-white disabled:opacity-25 transition-colors cursor-pointer"
           >
             -10
           </button>
@@ -108,9 +108,9 @@ export function CalculatorCharacterStats({
             onClick={() => adjustBy(-1)}
             disabled={currentValue <= minVal}
             title="-1"
-            className="w-7 h-7 shrink-0 flex items-center justify-center rounded-lg bg-slate-800/90 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-30 border border-slate-700 transition-colors cursor-pointer"
+            className="w-7 h-7 shrink-0 flex items-center justify-center text-slate-300 hover:bg-slate-800 hover:text-white disabled:opacity-25 transition-colors cursor-pointer"
           >
-            <Minus size={13} />
+            <Minus size={12} />
           </button>
 
           <input
@@ -119,7 +119,7 @@ export function CalculatorCharacterStats({
             max={maxVal}
             value={currentValue}
             onChange={(event) => onStatChange(stat, Number(event.target.value))}
-            className="w-12 h-8 bg-slate-950/80 border border-slate-700/80 text-center font-mono font-black text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 rounded-lg hide-arrows"
+            className="w-11 h-7 bg-transparent text-center font-mono font-black text-slate-100 text-xs tabular-nums focus:outline-none focus:bg-sky-950/40 hide-arrows"
           />
 
           <button
@@ -127,9 +127,9 @@ export function CalculatorCharacterStats({
             onClick={() => adjustBy(1)}
             disabled={currentValue >= maxVal}
             title="+1"
-            className="w-7 h-7 shrink-0 flex items-center justify-center rounded-lg bg-slate-800/90 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-30 border border-slate-700 transition-colors cursor-pointer"
+            className="w-7 h-7 shrink-0 flex items-center justify-center text-slate-300 hover:bg-slate-800 hover:text-white disabled:opacity-25 transition-colors cursor-pointer"
           >
-            <Plus size={13} />
+            <Plus size={12} />
           </button>
 
           <button
@@ -137,25 +137,25 @@ export function CalculatorCharacterStats({
             onClick={() => adjustBy(10)}
             disabled={currentValue >= maxVal}
             title="+10"
-            className="h-7 px-1.5 shrink-0 flex items-center justify-center rounded-md bg-slate-950/70 text-[10px] font-mono font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-100 disabled:opacity-30 border border-slate-800 transition-colors cursor-pointer"
+            className="h-7 px-1.5 shrink-0 flex items-center justify-center text-[10px] font-mono font-bold text-slate-500 group-hover:text-slate-300 hover:bg-slate-800/80 hover:text-white disabled:opacity-25 transition-colors cursor-pointer"
           >
             +10
           </button>
         </div>
 
         {/* Next Point Cost / Max Badge */}
-        <div className="flex flex-col items-end justify-center min-w-[42px] shrink-0">
+        <div className="flex flex-col items-end justify-center min-w-[38px] shrink-0">
           {currentValue < maxVal ? (
             <>
-              <span className="text-[8.5px] text-slate-500 uppercase font-bold select-none leading-tight">
+              <span className="text-[8px] text-slate-500 uppercase font-bold select-none leading-tight">
                 Custo
               </span>
-              <span className="text-[11px] font-mono text-sky-300 font-bold leading-none mt-0.5">
+              <span className="text-[11px] font-mono text-sky-300/90 font-bold tabular-nums leading-none mt-0.5">
                 {cost}
               </span>
             </>
           ) : (
-            <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-[9.5px] text-emerald-300 font-black select-none tracking-wider">
+            <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-[9px] text-emerald-300 font-black select-none tracking-wider">
               MAX
             </span>
           )}
@@ -183,25 +183,25 @@ export function CalculatorCharacterStats({
       )}
 
       {isFourthJob ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
           {/* Regular Stats Column */}
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] font-black uppercase tracking-widest text-sky-300/85 pl-1">
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] font-black uppercase tracking-widest text-sky-300/85 pl-1 mb-0.5">
               Atributos Primários (STR – LUK)
             </span>
             {calculatorStatRows.map(renderStatRow)}
           </div>
 
           {/* Trait Stats Column */}
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] font-black uppercase tracking-widest text-amber-300/85 pl-1">
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] font-black uppercase tracking-widest text-amber-300/85 pl-1 mb-0.5">
               Traços de 4ª Classe (POW – CRT)
             </span>
             {calculatorTraitStatRows.map(renderStatRow)}
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {calculatorStatRows.map(renderStatRow)}
         </div>
       )}

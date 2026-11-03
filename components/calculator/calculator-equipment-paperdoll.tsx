@@ -1,7 +1,8 @@
 "use client";
 
 import { Gem, Sparkles, X } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { animateSlotPop } from "@/components/ui/use-motion-effects";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import type { CalculatorDictionary } from "./calculator-i18n";
 import type { CalculatorItemDetail } from "./calculator-item-data";
@@ -46,6 +47,38 @@ const GRADE_LABELS: Record<number, { label: string; className: string }> = {
   },
 };
 
+function EquippedSlotIconBox({
+  itemId,
+  refine,
+}: {
+  itemId: number;
+  refine: number;
+}) {
+  const iconBoxRef = useRef<HTMLDivElement | null>(null);
+  const isFirstMountRef = useRef(true);
+
+  useEffect(() => {
+    if (isFirstMountRef.current) {
+      isFirstMountRef.current = false;
+      return;
+    }
+    animateSlotPop(iconBoxRef.current);
+  }, [itemId, refine]);
+
+  return (
+    <div
+      ref={iconBoxRef}
+      className={`shrink-0 p-1.5 bg-slate-950/80 rounded-lg border ${
+        refine >= 10
+          ? "border-amber-400/45 shadow-[0_0_10px_rgba(245,158,11,0.2)]"
+          : "border-sky-500/25"
+      }`}
+    >
+      <CalculatorItemIcon itemId={itemId} size={28} />
+    </div>
+  );
+}
+
 export function CalculatorEquipmentPaperdoll({
   activeTab,
   copy,
@@ -80,7 +113,7 @@ export function CalculatorEquipmentPaperdoll({
         className="equipment-avatar bg-gradient-to-b from-sky-950/20 via-slate-950/60 to-slate-950/90 border border-sky-500/20 rounded-xl overflow-hidden relative flex flex-col items-center justify-between p-4"
         aria-hidden="true"
       >
-        <div className="equipment-avatar-ring opacity-50 border-sky-400/25" />
+        <div className="equipment-avatar-ring opacity-50 border-sky-400/25 calc-aura-breathe" />
 
         {/* Top Class Badge */}
         <div className="z-10 flex items-center gap-2 px-3 py-1 rounded-md bg-slate-950/85 border border-sky-500/25 text-[10px] font-mono text-sky-200">
@@ -94,7 +127,7 @@ export function CalculatorEquipmentPaperdoll({
         </div>
 
         {/* Official Class Sprite / Artwork */}
-        <div className="relative z-10 flex-1 flex items-center justify-center w-full my-2">
+        <div className="relative z-10 flex-1 flex items-center justify-center w-full my-2 calc-idle-float">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`/sprites/classes/${selectedClassId}.png`}
@@ -107,7 +140,7 @@ export function CalculatorEquipmentPaperdoll({
         </div>
 
         {/* Bottom Arcane Pedestal Glow */}
-        <div className="z-10 w-3/4 h-1.5 rounded-full bg-sky-400/20 blur-sm" />
+        <div className="z-10 w-3/4 h-1.5 rounded-full bg-sky-400/25 blur-sm calc-aura-breathe" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-sky-950/35 pointer-events-none" />
       </div>
 
@@ -204,9 +237,7 @@ export function CalculatorEquipmentPaperdoll({
               disabled={isVisualTwoHandedOccupied}
             >
               {item ? (
-                <div className="shrink-0 p-1.5 bg-slate-950/80 rounded-lg border border-sky-500/25">
-                  <CalculatorItemIcon itemId={item.id} size={28} />
-                </div>
+                <EquippedSlotIconBox itemId={item.id} refine={refine} />
               ) : (
                 <div className="shrink-0 p-2 rounded-lg bg-slate-950/45 border border-slate-800/70 opacity-50 text-slate-400 group-hover:opacity-80 transition-opacity">
                   <Icon size={20} />
@@ -231,7 +262,13 @@ export function CalculatorEquipmentPaperdoll({
 
                 <div className="flex items-center gap-1 w-full min-w-0 mt-0.5">
                   {refine > 0 && !isVisualTwoHandedOccupied && (
-                    <span className="shrink-0 px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/40 text-[10px] font-mono font-black text-amber-300 leading-none">
+                    <span
+                      className={`shrink-0 px-1.5 py-0.5 rounded border text-[10px] font-mono font-black leading-none tabular-nums ${
+                        refine >= 10
+                          ? "bg-amber-500/25 border-amber-300/60 text-amber-200 shadow-[0_0_8px_rgba(245,158,11,0.25)]"
+                          : "bg-amber-500/15 border-amber-400/35 text-amber-300"
+                      }`}
+                    >
                       +{refine}
                     </span>
                   )}

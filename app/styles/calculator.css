@@ -1456,3 +1456,44 @@
   overflow-wrap: anywhere;
   text-align: right;
 }
+
+
+/* SUBTLE AMBIENT RPG ANIMATIONS (GPU-ONLY, ZERO LAYOUT SHIFT) */
+@keyframes calcIdleFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -3.5px, 0);
+  }
+}
+
+@keyframes calcAuraBreathe {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.78;
+    transform: scale(1.05);
+  }
+}
+
+.calc-idle-float {
+  animation: calcIdleFloat 3.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.calc-aura-breathe {
+  animation: calcAuraBreathe 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calc-idle-float,
+  .calc-aura-breathe {
+    animation: none;
+  }
+}

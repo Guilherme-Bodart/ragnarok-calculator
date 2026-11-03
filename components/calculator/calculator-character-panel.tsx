@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { Activity } from "lucide-react";
 import { PanelHeader } from "@/components/ui/panel-header";
+import { AnimatedNumber } from "@/components/ui/animated-number";
 import {
   evaluateStatusPointBudget,
   type CharacterStatus,
@@ -135,25 +136,27 @@ export function CalculatorCharacterPanel({
       >
         {/* Status Points Budget Card */}
         <div
-          className="flex flex-col gap-2 p-3 rounded-xl border border-slate-800/90 bg-slate-900/55"
+          className="flex flex-col gap-2 p-3 rounded-xl border border-slate-800/85 bg-slate-950/60"
           aria-live="polite"
         >
           <div className="flex justify-between items-center text-xs">
             <span className="text-slate-300 font-bold tracking-wider uppercase text-[10.5px]">
               {copy.character.statusPoints}
             </span>
-            <div className="flex items-center gap-2 font-mono">
+            <div className="flex items-center gap-2 font-mono tabular-nums">
               <span className="text-[10.5px] text-emerald-400 font-bold">
-                Restam: {regularRemaining}
+                Restam:{" "}
+                <AnimatedNumber value={regularRemaining} duration={220} />
               </span>
               <strong className="text-sky-300 text-xs">
-                ({statusBudget.regular.spent} / {statusBudget.regular.available})
+                (<AnimatedNumber value={statusBudget.regular.spent} duration={220} /> /{" "}
+                {statusBudget.regular.available})
               </strong>
             </div>
           </div>
-          <div className="w-full h-1.5 rounded-full bg-slate-950 overflow-hidden">
+          <div className="w-full h-1.5 rounded-full bg-slate-900 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-sky-500 to-cyan-300 transition-all duration-300"
+              className="h-full bg-gradient-to-r from-sky-500 to-cyan-300 shadow-[0_0_10px_rgba(56,189,248,0.45)] transition-[width] duration-300 ease-out"
               style={{ width: `${regularRatio}%` }}
             />
           </div>
@@ -161,23 +164,25 @@ export function CalculatorCharacterPanel({
 
         {/* Trait Points Budget Card */}
         {isFourthJob ? (
-          <div className="flex flex-col gap-2 p-3 rounded-xl border border-slate-800/90 bg-slate-900/55">
+          <div className="flex flex-col gap-2 p-3 rounded-xl border border-slate-800/85 bg-slate-950/60">
             <div className="flex justify-between items-center text-xs">
               <span className="text-slate-300 font-bold tracking-wider uppercase text-[10.5px]">
                 {copy.character.traitPoints}
               </span>
-              <div className="flex items-center gap-2 font-mono">
+              <div className="flex items-center gap-2 font-mono tabular-nums">
                 <span className="text-[10.5px] text-amber-400 font-bold">
-                  Restam: {traitRemaining}
+                  Restam:{" "}
+                  <AnimatedNumber value={traitRemaining} duration={220} />
                 </span>
                 <strong className="text-amber-200 text-xs">
-                  ({statusBudget.trait.spent} / {statusBudget.trait.available})
+                  (<AnimatedNumber value={statusBudget.trait.spent} duration={220} /> /{" "}
+                  {statusBudget.trait.available})
                 </strong>
               </div>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-slate-950 overflow-hidden">
+            <div className="w-full h-1.5 rounded-full bg-slate-900 overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-300"
+                className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 shadow-[0_0_10px_rgba(245,158,11,0.4)] transition-[width] duration-300 ease-out"
                 style={{ width: `${traitRatio}%` }}
               />
             </div>

@@ -10,9 +10,11 @@ import {
   Swords,
   Zap,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatedNumber } from "@/components/ui/animated-number";
 import { NumberSelect } from "@/components/ui/number-select";
 import { RichSelect } from "@/components/ui/rich-select";
+import { animateTargetHit } from "@/components/ui/use-motion-effects";
 import type { CalculateDamageResult } from "@/packages/calculator-core/src";
 import type { CalculatorAttackSkill } from "./calculator-attack-panel";
 import type { CalculatorDictionary } from "./calculator-i18n";
@@ -48,6 +50,19 @@ const ELEMENT_LABELS: Record<string, string> = {
   weapon: "Arma",
 };
 
+const ELEMENT_AURA_STYLES: Record<string, string> = {
+  fire: "from-rose-500/35 via-amber-500/15 to-transparent border-rose-500/30",
+  water: "from-cyan-400/35 via-sky-500/15 to-transparent border-cyan-400/30",
+  wind: "from-teal-400/35 via-emerald-500/15 to-transparent border-teal-400/30",
+  earth: "from-amber-500/35 via-lime-500/15 to-transparent border-amber-500/30",
+  poison: "from-emerald-500/35 via-teal-500/15 to-transparent border-emerald-500/30",
+  holy: "from-yellow-300/35 via-amber-400/15 to-transparent border-yellow-300/35",
+  dark: "from-purple-500/35 via-indigo-500/15 to-transparent border-purple-500/30",
+  ghost: "from-violet-400/35 via-fuchsia-500/15 to-transparent border-violet-400/30",
+  undead: "from-fuchsia-500/35 via-purple-600/15 to-transparent border-fuchsia-500/30",
+  neutral: "from-sky-400/25 via-slate-500/10 to-transparent border-slate-700/80",
+};
+
 const SIZE_LABELS: Record<string, string> = {
   small: "Pequeno (S)",
   medium: "Médio (M)",
@@ -78,6 +93,9 @@ export function CalculatorTargetPanel({
   >([]);
   const [isBreakdownOpen, setIsBreakdownOpen] = useState(false);
 
+  const portraitContainerRef = useRef<HTMLDivElement | null>(null);
+  const isFirstRenderRef = useRef(true);
+
   const activeSkill = selectedSkill ?? (result.skill as CalculatorAttackSkill);
   const effectiveSkillLevel = Math.min(skillLevel, activeSkill.maxLevel || 1);
 
@@ -88,12 +106,21 @@ export function CalculatorTargetPanel({
     setSkillLevel(Math.min(skillLevel, nextSkill.maxLevel));
   }
 
-  const totalDamage = result.damage.total.toLocaleString();
+  const totalDamageNumeric = result.damage.total;
   const averageDamage = result.damage.average.toLocaleString();
   const criticalDamage = result.damage.criticalDamage ?? 0;
   const criticalChance = result.damage.criticalChance ?? 0;
   const weightedAverage =
     result.damage.weightedAverage ?? result.damage.average;
+
+  // Trigger subtle impact shake on the target portrait when damage or skill changes
+  useEffect(() => {
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false;
+      return;
+    }
+    animateTargetHit(portraitContainerRef.current);
+  }, [totalDamageNumeric, selectedSkillId, selectedMonsterId]);
 
   const basePower = Number(getBreakdownValue(result.breakdown, "basePower")) || 0;
   const equipmentPower =
@@ -171,10 +198,8 @@ export function CalculatorTargetPanel({
     Number(getBreakdownValue(result.breakdown, "afterCastDelayMs")) || 0;
   const cd = Number(getBreakdownValue(result.breakdown, "cooldownMs")) || 0;
   const hits = Number(getBreakdownValue(result.breakdown, "hits")) || 1;
-  const damagePerHit =
-    hits > 1
-      ? Math.max(1, Math.floor(result.damage.total / hits)).toLocaleString()
-      : null;
+  const damagePerHitNumeric =
+    hits > 1 ? Math.max(1, Math.floor(result.damage.total / hits)) : null;
 
   const skillPerSec =
     cycleTimeMs > 0 ? (1000 / cycleTimeMs).toFixed(2) : "0.00";
@@ -194,6 +219,10 @@ export function CalculatorTargetPanel({
   const attackElementLabel =
     ELEMENT_LABELS[rawAttackElement] ?? rawAttackElement;
 
+  const monsterElementKey = selectedMonster?.element?.toLowerCase() ?? "neutral";
+  const monsterAuraStyle =
+    ELEMENT_AURA_STYLES[monsterElementKey] ?? ELEMENT_AURA_STYLES.neutral;
+
   return (
     <aside className="flex flex-col gap-0 p-0 rounded-xl border border-sky-500/20 bg-[#020612]/85 shadow-xl backdrop-blur-xl flex-1 overflow-hidden relative min-h-0">
       {/* QUICK ACTIVE SKILL BAR (Always accessible from any tab) */}
@@ -206,7 +235,7 @@ export function CalculatorTargetPanel({
                 Habilidade Simulada
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-mono">
+            <div className="flex items-center gap-1.5 text-[10px] font-mono tabular-nums">
               <span className="px-2 py-0.5 rounded-md bg-slate-900/90 border border-slate-700/70 text-slate-300 flex items-center gap-1">
                 {activeSkill.damageType === "magical" ? (
                   <Sparkles size={10} className="text-indigo-400" />
@@ -217,8 +246,12 @@ export function CalculatorTargetPanel({
                 {attackElementLabel}
               </span>
               <span className="px-2 py-0.5 rounded-md bg-sky-500/15 border border-sky-400/30 text-sky-300 font-bold">
-                {Math.round(skillMultiplier * 100).toLocaleString()}% ({hits}{" "}
-                {hits === 1 ? "hit" : "hits"})
+                <AnimatedNumber
+                  value={Math.round(skillMultiplier * 100)}
+                  suffix="%"
+                  duration={220}
+                />{" "}
+                ({hits} {hits === 1 ? "hit" : "hits"})
               </span>
             </div>
           </div>
@@ -304,25 +337,38 @@ export function CalculatorTargetPanel({
 
         {selectedMonster ? (
           <div className="flex items-center gap-4 pt-1">
-            {/* Left side: Monster Portrait */}
-            <div className="flex flex-col items-center gap-1.5 shrink-0 w-24 sm:w-28 p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
-              <CalculatorMonsterIcon
-                monsterId={selectedMonster.id}
-                size={96}
-                className="w-full h-auto max-h-24 object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+            {/* Left side: Elemental Pedestal + Monster Portrait with Idle Breathing & Click Hit */}
+            <div
+              ref={portraitContainerRef}
+              onClick={() => animateTargetHit(portraitContainerRef.current)}
+              title="Clique para testar impacto no alvo"
+              className={`relative flex flex-col items-center gap-1.5 shrink-0 w-24 sm:w-28 p-2.5 rounded-xl bg-slate-950/85 border overflow-hidden cursor-pointer select-none ${monsterAuraStyle.split(" ").pop()}`}
+            >
+              {/* Ambient Elemental Radial Aura */}
+              <div
+                className={`pointer-events-none absolute inset-0 bg-radial ${monsterAuraStyle} calc-aura-breathe`}
               />
+
+              <div className="relative z-10 calc-idle-float flex items-center justify-center w-full min-h-[76px]">
+                <CalculatorMonsterIcon
+                  monsterId={selectedMonster.id}
+                  size={96}
+                  className="w-full h-auto max-h-20 object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.75)]"
+                />
+              </div>
+
               <span
-                className={`text-[9.5px] font-black uppercase text-center tracking-widest rounded px-2 py-0.5 w-full border ${
+                className={`relative z-10 text-[9px] font-black uppercase text-center tracking-widest rounded px-2 py-0.5 w-full border ${
                   selectedMonster.classType === "boss"
-                    ? "text-rose-300 bg-rose-950/50 border-rose-500/35"
-                    : "text-slate-300 bg-slate-900/80 border-slate-700/60"
+                    ? "text-rose-300 bg-rose-950/60 border-rose-500/40"
+                    : "text-slate-300 bg-slate-900/90 border-slate-700/60"
                 }`}
               >
                 {selectedMonster.classType === "boss" ? "MVP / Boss" : "Normal"}
               </span>
             </div>
 
-            {/* Right side: Structured Monster Badges & Stats */}
+            {/* Right side: Structured Monster Badges & Unified Stats */}
             <div className="flex-1 min-w-0 flex flex-col gap-2">
               <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-slate-800/80">
                 <strong className="text-sm font-black text-sky-50 truncate">
@@ -348,72 +394,68 @@ export function CalculatorTargetPanel({
                 </span>
               </div>
 
-              {/* Defensive & HP Row */}
-              <div className="grid grid-cols-4 gap-1.5 text-[10.5px] font-mono">
-                <div className="flex flex-col px-2 py-1 rounded bg-slate-900/80 border border-slate-800">
-                  <span className="text-[9px] text-slate-400 uppercase">HP</span>
+              {/* Unified Defensive & HP Strip */}
+              <div className="grid grid-cols-4 gap-px rounded-lg border border-slate-800/85 bg-slate-800/55 overflow-hidden text-[10.5px] font-mono tabular-nums">
+                <div className="flex flex-col px-2.5 py-1 bg-slate-950/85">
+                  <span className="text-[8.5px] text-slate-400 uppercase">
+                    HP
+                  </span>
                   <strong className="text-rose-400 truncate">
-                    {selectedMonster.hp.toLocaleString()}
+                    <AnimatedNumber value={selectedMonster.hp} duration={220} />
                   </strong>
                 </div>
-                <div className="flex flex-col px-2 py-1 rounded bg-slate-900/80 border border-slate-800">
-                  <span className="text-[9px] text-slate-400 uppercase">DEF</span>
+                <div className="flex flex-col px-2.5 py-1 bg-slate-950/85">
+                  <span className="text-[8.5px] text-slate-400 uppercase">
+                    DEF
+                  </span>
                   <strong className="text-slate-100">
-                    {selectedMonster.defense}
+                    <AnimatedNumber
+                      value={selectedMonster.defense}
+                      duration={200}
+                    />
                   </strong>
                 </div>
-                <div className="flex flex-col px-2 py-1 rounded bg-slate-900/80 border border-slate-800">
-                  <span className="text-[9px] text-slate-400 uppercase">MDEF</span>
+                <div className="flex flex-col px-2.5 py-1 bg-slate-950/85">
+                  <span className="text-[8.5px] text-slate-400 uppercase">
+                    MDEF
+                  </span>
                   <strong className="text-slate-100">
-                    {selectedMonster.magicDefense}
+                    <AnimatedNumber
+                      value={selectedMonster.magicDefense}
+                      duration={200}
+                    />
                   </strong>
                 </div>
-                <div className="flex flex-col px-2 py-1 rounded bg-slate-900/80 border border-slate-800">
-                  <span className="text-[9px] text-slate-400 uppercase">
+                <div className="flex flex-col px-2.5 py-1 bg-slate-950/85">
+                  <span className="text-[8.5px] text-slate-400 uppercase">
                     100% Hit
                   </span>
-                  <strong className="text-amber-200">{reqHit}</strong>
+                  <strong className="text-amber-200">
+                    <AnimatedNumber value={reqHit} duration={200} />
+                  </strong>
                 </div>
               </div>
 
-              {/* Monster Base Stats */}
-              <div className="grid grid-cols-6 gap-1 text-[9.5px] font-mono text-center pt-1 opacity-90">
-                <div className="rounded bg-slate-900/50 py-0.5 border border-slate-800/60">
-                  <span className="text-slate-500 mr-1">STR</span>
-                  <span className="text-slate-200">
-                    {selectedMonster.str ?? 0}
-                  </span>
-                </div>
-                <div className="rounded bg-slate-900/50 py-0.5 border border-slate-800/60">
-                  <span className="text-slate-500 mr-1">AGI</span>
-                  <span className="text-slate-200">
-                    {selectedMonster.agi ?? 0}
-                  </span>
-                </div>
-                <div className="rounded bg-slate-900/50 py-0.5 border border-slate-800/60">
-                  <span className="text-slate-500 mr-1">VIT</span>
-                  <span className="text-slate-200">
-                    {selectedMonster.vit ?? 0}
-                  </span>
-                </div>
-                <div className="rounded bg-slate-900/50 py-0.5 border border-slate-800/60">
-                  <span className="text-slate-500 mr-1">INT</span>
-                  <span className="text-slate-200">
-                    {selectedMonster.int ?? 0}
-                  </span>
-                </div>
-                <div className="rounded bg-slate-900/50 py-0.5 border border-slate-800/60">
-                  <span className="text-slate-500 mr-1">DEX</span>
-                  <span className="text-slate-200">
-                    {selectedMonster.dex ?? 0}
-                  </span>
-                </div>
-                <div className="rounded bg-slate-900/50 py-0.5 border border-slate-800/60">
-                  <span className="text-slate-500 mr-1">LUK</span>
-                  <span className="text-slate-200">
-                    {selectedMonster.luk ?? 0}
-                  </span>
-                </div>
+              {/* Unified Monster Base Stats Bar (STR – LUK) */}
+              <div className="grid grid-cols-6 gap-px rounded-md border border-slate-800/70 bg-slate-800/45 overflow-hidden text-[9.5px] font-mono tabular-nums text-center">
+                {(
+                  [
+                    ["STR", selectedMonster.str ?? 0],
+                    ["AGI", selectedMonster.agi ?? 0],
+                    ["VIT", selectedMonster.vit ?? 0],
+                    ["INT", selectedMonster.int ?? 0],
+                    ["DEX", selectedMonster.dex ?? 0],
+                    ["LUK", selectedMonster.luk ?? 0],
+                  ] as const
+                ).map(([statLabel, statVal]) => (
+                  <div
+                    key={statLabel}
+                    className="bg-slate-950/75 py-0.5 px-1 flex items-center justify-center gap-1"
+                  >
+                    <span className="text-slate-500">{statLabel}</span>
+                    <span className="text-slate-200 font-bold">{statVal}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -435,24 +477,29 @@ export function CalculatorTargetPanel({
                 Dano Total da Skill
               </span>
               {hits > 1 && (
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-200 border border-sky-400/25">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-200 border border-sky-400/25 tabular-nums">
                   {hits} hits
                 </span>
               )}
             </div>
 
-            <strong className="text-2xl sm:text-3xl font-black text-white tabular-nums tracking-tight leading-none my-2">
-              {totalDamage}
+            <strong className="text-2xl sm:text-3xl font-black text-white tabular-nums tracking-tight leading-none my-2 drop-shadow-[0_2px_10px_rgba(56,189,248,0.22)]">
+              <AnimatedNumber
+                value={totalDamageNumeric}
+                duration={300}
+                flashOnChange
+              />
             </strong>
 
-            <div className="flex flex-col gap-0.5 text-[10.5px] font-mono text-slate-300">
+            <div className="flex flex-col gap-0.5 text-[10.5px] font-mono text-slate-300 tabular-nums">
               <span>
                 Faixa: {result.damage.minimum.toLocaleString()} ~{" "}
                 {result.damage.maximum.toLocaleString()} (méd: {averageDamage})
               </span>
-              {damagePerHit && (
+              {damagePerHitNumeric !== null && (
                 <span className="text-sky-300 font-semibold">
-                  Por Hit: {damagePerHit}
+                  Por Hit:{" "}
+                  <AnimatedNumber value={damagePerHitNumeric} duration={260} />
                 </span>
               )}
             </div>
@@ -466,7 +513,7 @@ export function CalculatorTargetPanel({
                 Dano Crítico
               </span>
               <span
-                className={`text-[10px] font-mono px-1.5 py-0.5 rounded border ${
+                className={`text-[10px] font-mono px-1.5 py-0.5 rounded border tabular-nums ${
                   criticalChance > 0
                     ? "bg-rose-500/20 text-rose-200 border-rose-400/35 font-bold"
                     : "bg-slate-800/80 text-slate-400 border-slate-700"
@@ -478,21 +525,31 @@ export function CalculatorTargetPanel({
 
             <strong
               className={`text-2xl sm:text-3xl font-black tabular-nums tracking-tight leading-none my-2 ${
-                criticalChance > 0 ? "text-rose-200" : "text-slate-400"
+                criticalChance > 0
+                  ? "text-rose-200 drop-shadow-[0_2px_10px_rgba(244,63,94,0.22)]"
+                  : "text-slate-400"
               }`}
             >
-              {criticalDamage > 0 ? criticalDamage.toLocaleString() : "—"}
+              {criticalDamage > 0 ? (
+                <AnimatedNumber
+                  value={criticalDamage}
+                  duration={300}
+                  flashOnChange
+                />
+              ) : (
+                "—"
+              )}
             </strong>
 
-            <div className="flex items-center justify-between gap-2 text-[10.5px] font-mono pt-1.5 border-t border-slate-800/80">
+            <div className="flex items-center justify-between gap-2 text-[10.5px] font-mono tabular-nums pt-1.5 border-t border-slate-800/80">
               <span className="text-slate-300">
                 Méd. Pond:{" "}
                 <strong className="text-amber-300">
-                  {weightedAverage.toLocaleString()}
+                  <AnimatedNumber value={weightedAverage} duration={280} />
                 </strong>
               </span>
               <span className="text-amber-400 font-bold">
-                DPS: {dps.toLocaleString()}
+                DPS: <AnimatedNumber value={dps} duration={280} />
                 {selectedMonster && dps > 0
                   ? ` (${formatTime(selectedMonster.hp / dps)})`
                   : ""}
@@ -502,7 +559,7 @@ export function CalculatorTargetPanel({
         </div>
 
         {/* Combat Telemetry Strip */}
-        <div className="grid grid-cols-3 gap-x-4 gap-y-1.5 border-t border-sky-500/15 pt-3 text-[10.5px] font-mono">
+        <div className="grid grid-cols-3 gap-x-4 gap-y-1.5 border-t border-sky-500/15 pt-3 text-[10.5px] font-mono tabular-nums">
           {/* Column 1: Core Combat Stats */}
           <div className="flex flex-col gap-1.5 border-r border-sky-500/10 pr-3">
             <div className="flex justify-between">
@@ -601,7 +658,7 @@ export function CalculatorTargetPanel({
           </button>
 
           {isBreakdownOpen && (
-            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1.5 p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/90 text-[11px] font-mono">
+            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1.5 p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/90 text-[11px] font-mono tabular-nums">
               <div className="flex justify-between px-2 py-1 rounded bg-slate-900/60">
                 <span className="text-slate-400">Poder Status Base:</span>
                 <strong className="text-slate-100">{basePower}</strong>
