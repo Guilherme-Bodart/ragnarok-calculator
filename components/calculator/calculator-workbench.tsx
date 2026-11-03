@@ -2,20 +2,24 @@
 
 import {
   Boxes,
-  FlaskConical,
+  Check,
   RotateCcw,
+  Save,
   Shield,
-  Sparkles,
+  Swords,
   User,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { AppNavbar } from "@/components/site/app-navbar";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
-import { Button } from "@/components/ui/button";
-import { animateStaggerIn } from "@/components/ui/use-motion-effects";
+import {
+  readLocalGalleryBuilds,
+  writeLocalGalleryBuilds,
+  type GalleryBuildEntry,
+} from "@/components/builds/builds-hub-page";
+import { saveCalculatorAccountBuild } from "./calculator-build-api";
 import { CalculatorBuffsPanel } from "./calculator-buffs-panel";
-import { CalculatorBuildsModal } from "./calculator-builds-modal";
 import { CalculatorCharacterPanel } from "./calculator-character-panel";
 import { CalculatorDerivedStats } from "./calculator-derived-stats";
 import { CalculatorEquipmentPanel } from "./calculator-equipment-panel";
@@ -29,16 +33,15 @@ import { useCalculatorBuildStore } from "./calculator-build-store";
 export function CalculatorWorkbench() {
   const { dictionary } = useNightmareLocale();
   const copy = dictionary.calculator;
-  const [isBuildsModalOpen, setIsBuildsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<
-    "character" | "equipment" | "combat"
-  >("character");
-  const tabContentRef = useRef<HTMLDivElement | null>(null);
 
-  // O adapter traz os Derived States complexos e metadados
+  // Responsive tab state for screens < 1280px (on desktop xl, all 3 columns are visible simultaneously)
+  const [mobileSection, setMobileSection] = useState<
+    "character" | "equipment" | "simulation"
+  >("character");
+  const [justSaved, setJustSaved] = useState(false);
+
   const build = useCalculatorBuildState(copy);
 
-  // Acesso direto à Store para estados primitivos que orquestram a interface no top-level
   const selectedSkillId = useCalculatorBuildStore((s) => s.selectedSkillId);
   const skillLevel = useCalculatorBuildStore((s) => s.skillLevel);
   const setSelectedSkillId = useCalculatorBuildStore(
@@ -60,10 +63,6 @@ export function CalculatorWorkbench() {
   const activeBuffCount = Object.values(build.activeBuffs).filter(
     (lvl) => lvl > 0,
   ).length;
-
-  useEffect(() => {
-    animateStaggerIn(tabContentRef.current);
-  }, [activeTab]);
 
   const calculatorDataset = useCalculatorDataset({
     selectedCalculatorItems: build.selectedCalculatorItems,
@@ -116,197 +115,223 @@ export function CalculatorWorkbench() {
     skillLevel,
   ]);
 
+  async function handleQuickSaveBuild() {
+    const trimmedName =
+      build.buildName?.trim() || `${build.selectedClassName} Lv.${baseLevel}`;
+    const payloadToSave = {
+      ...build.currentBuild,
+      name: trimmedName,
+    };
+
+    // Always save to local gallery immediately
+    const existingLocal = readLocalGalleryBuilds();
+    const newEntry: GalleryBuildEntry = {
+      id: `local-${Date.now()}`,
+      name: trimmedName,
+      classId: selectedClassId,
+      source: "local",
+      updatedAt: new Date().toLocaleDateString("pt-BR"),
+      payload: payloadToSave,
+    };
+    writeLocalGalleryBuilds([newEntry, ...existingLocal]);
+    build.renameBuild(trimmedName);
+    build.markAsSaved();
+
+    // Best-effort save to Account API if authenticated
+    try {
+      await saveCalculatorAccountBuild(payloadToSave);
+    } catch {
+      // Unauthenticated or offline — local save already succeeded
+    }
+
+    setJustSaved(true);
+    window.setTimeout(() => setJustSaved(false), 2200);
+  }
+
   return (
-    <main className="calculator-page">
+    <div className="min-h-screen bg-[#090b10] text-slate-100 flex flex-col">
       <div className="calculator-grid-bg" />
-      <header className="calculator-topbar">
-        <Link
-          href="/"
-          className="calculator-brand"
-          aria-label={copy.backHomeAria}
-        >
-          <Image src="/nightmare-reaper.png" alt="" width={38} height={38} />
-          <span>
-            <strong>Nightmare</strong>
-            <small>{copy.brandSubtitle}</small>
-          </span>
-        </Link>
 
-        <nav className="calculator-actions" aria-label={copy.actionsAria}>
-          <Button
-            icon={<Boxes size={15} />}
-            type="button"
-            variant="ghost"
-            onClick={() => setIsBuildsModalOpen(true)}
-          >
-            {copy.buildsAction}
-          </Button>
-          <Button
-            icon={<FlaskConical size={15} />}
-            type="button"
-            variant="ghost"
-          >
-            {copy.syncAction}
-          </Button>
-          <Button
-            icon={<RotateCcw size={15} />}
-            type="button"
-            variant="ghost"
-            onClick={build.resetBuild}
-          >
-            {copy.resetAction}
-          </Button>
-        </nav>
-      </header>
+      {/* UNIFIED APP NAVBAR WITH PLANNER CONTROLS */}
+      <AppNavbar
+        rightSlot={
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Active Build Name Input */}
+            <div className="hidden sm:flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#0d1017] px-2.5 py-1">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
+                Build:
+              </span>
+              <input
+                type="text"
+                value={build.buildName}
+                onChange={(e) => build.renameBuild(e.target.value)}
+                placeholder="Nome da build..."
+                maxLength={60}
+                className="w-36 bg-transparent text-xs font-bold text-slate-100 focus:outline-none focus:text-sky-300"
+              />
+            </div>
 
-      <section className="calculator-workspace" aria-label={copy.workspaceAria}>
-        {/* COLUNA 1: CONFIGURAÇÃO (Lado Esquerdo) */}
-        <div className="calculator-config-column flex flex-col gap-3.5 min-w-0">
-          <nav
-            className="calculator-tabs-nav grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#0d1017]/95 border border-white/10 shadow-md backdrop-blur-md"
-            aria-label="Seções da Calculadora"
-          >
+            {/* Quick Save to Builds Hub */}
             <button
               type="button"
-              onClick={() => setActiveTab("character")}
-              className={`inline-flex items-center justify-center gap-2 px-3 py-2 h-9 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis border ${
-                activeTab === "character"
-                  ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
-                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-white/[0.04]"
+              onClick={handleQuickSaveBuild}
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold border transition-all cursor-pointer ${
+                justSaved
+                  ? "bg-emerald-500/20 text-emerald-200 border-emerald-400/40"
+                  : "bg-sky-500/20 hover:bg-sky-500/30 text-sky-100 border-sky-400/35"
               }`}
+              title="Salvar build atual na Galeria de Builds"
             >
-              <User
-                size={14}
-                className={
-                  activeTab === "character"
-                    ? "text-sky-400 shrink-0"
-                    : "text-slate-400 shrink-0"
-                }
-              />
-              <span className="truncate">Personagem & Skills</span>
+              {justSaved ? <Check size={14} /> : <Save size={14} />}
+              <span>{justSaved ? "Build Salva!" : "Salvar Build"}</span>
             </button>
 
+            {/* Open Full Builds Page */}
+            <Link
+              href="/builds"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#121620] hover:bg-white/10 px-3 py-1.5 text-xs font-bold text-slate-200 transition-colors no-underline"
+            >
+              <Boxes size={14} className="text-sky-400" />
+              <span>Galeria de Builds</span>
+            </Link>
+
+            {/* Reset Build */}
             <button
               type="button"
-              onClick={() => setActiveTab("equipment")}
-              className={`inline-flex items-center justify-center gap-2 px-3 py-2 h-9 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis border ${
-                activeTab === "equipment"
-                  ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
-                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-white/[0.04]"
-              }`}
+              onClick={build.resetBuild}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#121620] hover:bg-rose-950/60 hover:border-rose-500/30 px-2.5 py-1.5 text-xs font-bold text-slate-300 hover:text-rose-200 transition-colors cursor-pointer"
+              title={copy.resetAction}
             >
-              <Shield
-                size={14}
-                className={
-                  activeTab === "equipment"
-                    ? "text-sky-400 shrink-0"
-                    : "text-slate-400 shrink-0"
-                }
-              />
-              <span className="truncate">Equipamentos</span>
-              {equippedCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded-md bg-sky-500/20 border border-sky-400/30 text-[10px] leading-none font-mono text-sky-200 shrink-0">
-                  {equippedCount}
-                </span>
-              )}
+              <RotateCcw size={13} />
+              <span className="hidden md:inline">{copy.resetAction}</span>
             </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("combat")}
-              className={`inline-flex items-center justify-center gap-2 px-3 py-2 h-9 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis border ${
-                activeTab === "combat"
-                  ? "bg-sky-500/18 text-sky-100 border-sky-400/35"
-                  : "bg-transparent text-slate-400 border-transparent hover:text-slate-200 hover:bg-white/[0.04]"
-              }`}
-            >
-              <Sparkles
-                size={14}
-                className={
-                  activeTab === "combat"
-                    ? "text-sky-400 shrink-0"
-                    : "text-slate-400 shrink-0"
-                }
-              />
-              <span className="truncate">Buffs & Consumíveis</span>
-              {activeBuffCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/35 text-[10px] leading-none font-mono text-amber-200 shrink-0">
-                  {activeBuffCount}
-                </span>
-              )}
-            </button>
-          </nav>
-
-          <div ref={tabContentRef} className="flex flex-col gap-3.5">
-            {activeTab === "character" && (
-              <CalculatorCharacterPanel
-                characterStatus={result.characterStatus}
-                statBonuses={{
-                  str:
-                    result.characterStatus.effectiveStats.str -
-                    result.characterStatus.baseStats.str,
-                  agi:
-                    result.characterStatus.effectiveStats.agi -
-                    result.characterStatus.baseStats.agi,
-                  vit:
-                    result.characterStatus.effectiveStats.vit -
-                    result.characterStatus.baseStats.vit,
-                  int:
-                    result.characterStatus.effectiveStats.int -
-                    result.characterStatus.baseStats.int,
-                  dex:
-                    result.characterStatus.effectiveStats.dex -
-                    result.characterStatus.baseStats.dex,
-                  luk:
-                    result.characterStatus.effectiveStats.luk -
-                    result.characterStatus.baseStats.luk,
-                  pow:
-                    result.characterStatus.effectiveStats.pow -
-                    result.characterStatus.baseStats.pow,
-                  sta:
-                    result.characterStatus.effectiveStats.sta -
-                    result.characterStatus.baseStats.sta,
-                  wis:
-                    result.characterStatus.effectiveStats.wis -
-                    result.characterStatus.baseStats.wis,
-                  spl:
-                    result.characterStatus.effectiveStats.spl -
-                    result.characterStatus.baseStats.spl,
-                  con:
-                    result.characterStatus.effectiveStats.con -
-                    result.characterStatus.baseStats.con,
-                  crt:
-                    result.characterStatus.effectiveStats.crt -
-                    result.characterStatus.baseStats.crt,
-                }}
-                copy={copy}
-                skillTreeSlot={<CalculatorSkillTreePanel copy={copy} />}
-              />
-            )}
-
-            {activeTab === "equipment" && (
-              <CalculatorEquipmentPanel
-                copy={copy}
-                selectedItemDetails={build.selectedItemDetails}
-              />
-            )}
-
-            {activeTab === "combat" && (
-              <CalculatorBuffsPanel
-                buffSkills={build.buffSkills}
-                copy={copy}
-              />
-            )}
           </div>
+        }
+      />
+
+      {/* MOBILE / TABLET SECTION SWITCHER (Hidden on Desktop XL 3-Column Cockpit) */}
+      <div className="xl:hidden mx-auto w-full max-w-[1760px] px-4 pt-4">
+        <div className="grid grid-cols-3 gap-1 rounded-xl border border-white/10 bg-[#0d1017] p-1">
+          <button
+            type="button"
+            onClick={() => setMobileSection("character")}
+            className={`inline-flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+              mobileSection === "character"
+                ? "bg-sky-500/20 text-sky-100 border border-sky-400/35"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <User size={14} />
+            <span className="truncate">Personagem</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileSection("equipment")}
+            className={`inline-flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+              mobileSection === "equipment"
+                ? "bg-sky-500/20 text-sky-100 border border-sky-400/35"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Shield size={14} />
+            <span className="truncate">
+              Equips ({equippedCount + activeBuffCount})
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileSection("simulation")}
+            className={`inline-flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+              mobileSection === "simulation"
+                ? "bg-sky-500/20 text-sky-100 border border-sky-400/35"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Swords size={14} />
+            <span className="truncate">Dano & Alvo</span>
+          </button>
+        </div>
+      </div>
+
+      {/* MAXROLL D4 STYLE 3-COLUMN PLANNER COCKPIT */}
+      <main
+        className="mx-auto w-full max-w-[1760px] flex-1 px-4 py-5 sm:px-6 grid grid-cols-1 xl:grid-cols-12 gap-4 items-start"
+        aria-label={copy.workspaceAria}
+      >
+        {/* COLUNA 1 (ESQUERDA - 4 COLS): PERSONAGEM, ATRIBUTOS, TRAITS & SKILL TREE */}
+        <div
+          className={`xl:col-span-4 flex-col gap-4 min-w-0 ${
+            mobileSection === "character" ? "flex" : "hidden xl:flex"
+          }`}
+        >
+          <CalculatorCharacterPanel
+            characterStatus={result.characterStatus}
+            statBonuses={{
+              str:
+                result.characterStatus.effectiveStats.str -
+                result.characterStatus.baseStats.str,
+              agi:
+                result.characterStatus.effectiveStats.agi -
+                result.characterStatus.baseStats.agi,
+              vit:
+                result.characterStatus.effectiveStats.vit -
+                result.characterStatus.baseStats.vit,
+              int:
+                result.characterStatus.effectiveStats.int -
+                result.characterStatus.baseStats.int,
+              dex:
+                result.characterStatus.effectiveStats.dex -
+                result.characterStatus.baseStats.dex,
+              luk:
+                result.characterStatus.effectiveStats.luk -
+                result.characterStatus.baseStats.luk,
+              pow:
+                result.characterStatus.effectiveStats.pow -
+                result.characterStatus.baseStats.pow,
+              sta:
+                result.characterStatus.effectiveStats.sta -
+                result.characterStatus.baseStats.sta,
+              wis:
+                result.characterStatus.effectiveStats.wis -
+                result.characterStatus.baseStats.wis,
+              spl:
+                result.characterStatus.effectiveStats.spl -
+                result.characterStatus.baseStats.spl,
+              con:
+                result.characterStatus.effectiveStats.con -
+                result.characterStatus.baseStats.con,
+              crt:
+                result.characterStatus.effectiveStats.crt -
+                result.characterStatus.baseStats.crt,
+            }}
+            copy={copy}
+            skillTreeSlot={<CalculatorSkillTreePanel copy={copy} />}
+          />
         </div>
 
-        {/* COLUNA 2: SIMULAÇÃO E RESULTADO (Lado Direito - Fixo/Sticky) */}
-        <div className="calculator-result-column flex flex-col gap-3.5 min-w-0 sticky top-6 self-start">
-          <CalculatorDerivedStats
-            status={result.characterStatus}
-            modifierEffects={result.modifierEffects}
+        {/* COLUNA 2 (CENTRO - 4 COLS): PAPERDOLL DE EQUIPAMENTOS, CARTAS, ENCANTAMENTOS & BUFFS */}
+        <div
+          className={`xl:col-span-4 flex-col gap-4 min-w-0 ${
+            mobileSection === "equipment" ? "flex" : "hidden xl:flex"
+          }`}
+        >
+          <CalculatorEquipmentPanel
+            copy={copy}
+            selectedItemDetails={build.selectedItemDetails}
           />
 
+          <CalculatorBuffsPanel
+            buffSkills={build.buffSkills}
+            copy={copy}
+          />
+        </div>
+
+        {/* COLUNA 3 (DIREITA - 4 COLS, STICKY): DANO EM TEMPO REAL, ALVO & STATUS ALT+Q */}
+        <div
+          className={`xl:col-span-4 flex-col gap-4 min-w-0 xl:sticky xl:top-16 ${
+            mobileSection === "simulation" ? "flex" : "hidden xl:flex"
+          }`}
+        >
           <CalculatorTargetPanel
             availableSkills={build.selectedClassSkills}
             copy={copy}
@@ -314,19 +339,13 @@ export function CalculatorWorkbench() {
             selectedMonster={build.selectedMonsterDetail}
             selectedSkill={selectedSkill}
           />
-        </div>
-      </section>
 
-      {isBuildsModalOpen ? (
-        <CalculatorBuildsModal
-          copy={copy}
-          currentBuild={build.currentBuild}
-          onClose={() => setIsBuildsModalOpen(false)}
-          onLoadBuild={build.loadBuild}
-          onMarkAsSaved={build.markAsSaved}
-          onRenameBuild={build.renameBuild}
-        />
-      ) : null}
-    </main>
+          <CalculatorDerivedStats
+            status={result.characterStatus}
+            modifierEffects={result.modifierEffects}
+          />
+        </div>
+      </main>
+    </div>
   );
 }
