@@ -3,7 +3,7 @@ import {
   type CalculatorBuildPayload,
 } from "./calculator-build-payload";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+import { getApiBaseUrl } from "@/lib/api-url"; const apiBaseUrl = getApiBaseUrl();
 
 export type CalculatorAccountBuild = {
   id: string;

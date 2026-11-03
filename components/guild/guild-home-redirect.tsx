@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import type { CurrentGuildContext } from "./guild-types";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+import { getApiBaseUrl } from "@/lib/api-url"; const apiBaseUrl = getApiBaseUrl();
 
 export function GuildHomeRedirect() {
   const router = useRouter();

@@ -8,7 +8,7 @@ import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { GuildAppShell } from "./guild-app-shell";
 import type { GuildDashboard as GuildDashboardData, MvpKillEntry } from "./guild-types";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+import { getApiBaseUrl } from "@/lib/api-url"; const apiBaseUrl = getApiBaseUrl();
 
 export function GuildDashboard({ slug }: { slug: string }) {
   const router = useRouter();

@@ -35,7 +35,7 @@ type AuthUser = {
   createdAt: string;
 };
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+import { getApiBaseUrl } from "@/lib/api-url"; const apiBaseUrl = getApiBaseUrl();
 const localeStorageKey = "nightmare-locale";
 
 export function LoginPanel() {
@@ -143,7 +143,7 @@ export function LoginPanel() {
   }
 
   function handleGoogleSignIn() {
-    const params = new URLSearchParams({ next: nextPath });
+    const params = new URLSearchParams({ next: nextPath, origin: window.location.origin });
     window.location.assign(`${apiBaseUrl}/auth/google?${params.toString()}`);
   }
 

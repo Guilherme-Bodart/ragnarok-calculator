@@ -10,7 +10,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Select } from "@/components/ui/select";
 import type { GuildSummary } from "./guild-types";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+import { getApiBaseUrl } from "@/lib/api-url"; const apiBaseUrl = getApiBaseUrl();
 
 type GuildCreatePanelProps = {
   compact?: boolean;

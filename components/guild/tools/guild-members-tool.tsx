@@ -12,7 +12,7 @@ import { getRoleRank } from "../guild-role-access";
 import type { GuildRole } from "../guild-types";
 import type { GuildToolComponentProps } from "../guild-tool-types";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+import { getApiBaseUrl } from "@/lib/api-url"; const apiBaseUrl = getApiBaseUrl();
 
 export function GuildMembersTool({
   dashboard,

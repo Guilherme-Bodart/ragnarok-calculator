@@ -23,7 +23,7 @@ import { GuildCreatePanel } from "./guild-create-panel";
 import { formatGuildRole } from "./guild-role-access";
 import type { CurrentGuildContext } from "./guild-types";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+import { getApiBaseUrl } from "@/lib/api-url"; const apiBaseUrl = getApiBaseUrl();
 
 export function GuildProfilePage() {
   const router = useRouter();
