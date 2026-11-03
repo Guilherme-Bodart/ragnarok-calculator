@@ -3,13 +3,28 @@ import { NestFactory } from "@nestjs/core";
 import cookieParser from "cookie-parser";
 import { AppModule } from "./app.module";
 
+function resolveAllowedOrigins(): (string | RegExp)[] {
+  const raw = process.env.WEB_ORIGIN || process.env.FRONTEND_URL || "";
+  const configured = raw
+    .split(",")
+    .map((item) => item.trim().replace(/\/+$/, ""))
+    .filter(Boolean);
+
+  return [
+    ...configured,
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    /\.vercel\.app$/,
+  ];
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
   app.enableCors({
     credentials: true,
-    origin: process.env.WEB_ORIGIN || "http://localhost:3000",
+    origin: resolveAllowedOrigins(),
   });
   app.setGlobalPrefix("api");
 

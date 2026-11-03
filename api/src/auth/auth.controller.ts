@@ -22,9 +22,16 @@ export class AuthController {
   @Get("google")
   google(
     @Query("next") nextPath: string | undefined,
+    @Query("origin") originParam: string | undefined,
+    @Req() request: Request,
     @Res() response: Response,
   ) {
-    const authorization = this.authService.createGoogleAuthorization(nextPath);
+    const apiPublicOrigin = resolveApiPublicOrigin(request);
+    const clientWebOrigin = resolveClientWebOrigin(request, originParam);
+    const authorization = this.authService.createGoogleAuthorization(nextPath, {
+      apiPublicOrigin,
+      webOrigin: clientWebOrigin,
+    });
 
     setOAuthStateCookie(response, authorization.nonce);
     response.redirect(authorization.url);
@@ -37,19 +44,26 @@ export class AuthController {
     @Req() request: Request,
     @Res() response: Response,
   ) {
+    const apiPublicOrigin = resolveApiPublicOrigin(request);
+
     try {
-      const { nextPath, session } = await this.authService.signInWithGoogle({
-        code,
-        state,
-        stateNonce: getOAuthStateNonce(request),
-      });
+      const { nextPath, session, webOrigin } =
+        await this.authService.signInWithGoogle({
+          code,
+          state,
+          stateNonce: getOAuthStateNonce(request),
+          apiPublicOrigin,
+        });
 
       setSessionCookie(response, session.token, session.expiresAt);
       clearOAuthStateCookie(response);
-      response.redirect(createWebRedirectUrl(nextPath));
+      response.redirect(createWebRedirectUrl(nextPath, webOrigin));
     } catch {
       clearOAuthStateCookie(response);
-      response.redirect(createWebRedirectUrl("/login?authError=google"));
+      const fallbackWebOrigin = this.authService.extractWebOriginFromState(state);
+      response.redirect(
+        createWebRedirectUrl("/login?authError=google", fallbackWebOrigin),
+      );
     }
   }
 
@@ -94,6 +108,13 @@ export class AuthController {
   }
 }
 
+function isProductionEnv() {
+  return (
+    process.env.NODE_ENV === "production" ||
+    Boolean(process.env.RENDER || process.env.RENDER_EXTERNAL_URL)
+  );
+}
+
 function getSessionToken(request: Request) {
   return request.cookies?.[SESSION_COOKIE_NAME] as string | undefined;
 }
@@ -109,7 +130,7 @@ function setSessionCookie(response: Response, token: string, expiresAt: Date) {
     maxAge: SESSION_TTL_MS,
     path: "/",
     sameSite: getCookieSameSite(),
-    secure: process.env.NODE_ENV === "production",
+    secure: isProductionEnv(),
   });
 }
 
@@ -118,7 +139,7 @@ function clearSessionCookie(response: Response) {
     httpOnly: true,
     path: "/",
     sameSite: getCookieSameSite(),
-    secure: process.env.NODE_ENV === "production",
+    secure: isProductionEnv(),
   });
 }
 
@@ -128,7 +149,7 @@ function setOAuthStateCookie(response: Response, nonce: string) {
     maxAge: OAUTH_STATE_TTL_MS,
     path: "/api/auth/google/callback",
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: isProductionEnv(),
   });
 }
 
@@ -137,16 +158,110 @@ function clearOAuthStateCookie(response: Response) {
     httpOnly: true,
     path: "/api/auth/google/callback",
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: isProductionEnv(),
   });
 }
 
 function getCookieSameSite() {
-  return process.env.NODE_ENV === "production" ? "none" : "lax";
+  return isProductionEnv() ? "none" : "lax";
 }
 
-function createWebRedirectUrl(path: string) {
-  const webOrigin = process.env.WEB_ORIGIN || "http://localhost:3000";
+function resolveApiPublicOrigin(request: Request): string | undefined {
+  if (process.env.RENDER_EXTERNAL_URL) {
+    return process.env.RENDER_EXTERNAL_URL.trim().replace(/\/+$/, "");
+  }
+
+  const host = (
+    request.get("x-forwarded-host") ||
+    request.get("host") ||
+    ""
+  )
+    .split(",")[0]
+    .trim();
+
+  if (!host) {
+    return undefined;
+  }
+
+  const forwardedProto = (request.get("x-forwarded-proto") || "")
+    .split(",")[0]
+    .trim();
+  const proto =
+    forwardedProto ||
+    (host.includes("localhost") || host.startsWith("127.0.0.1")
+      ? "http"
+      : "https");
+
+  return `${proto}://${host}`;
+}
+
+function resolveClientWebOrigin(
+  request: Request,
+  originParam?: string,
+): string | undefined {
+  const candidates = [
+    originParam,
+    request.get("origin"),
+    extractOriginFromUrl(request.get("referer")),
+    process.env.WEB_ORIGIN,
+    process.env.FRONTEND_URL,
+  ];
+
+  for (const candidate of candidates) {
+    const valid = sanitizeWebOrigin(candidate);
+    if (valid && !isLocalhostOrigin(valid)) {
+      return valid;
+    }
+  }
+
+  for (const candidate of candidates) {
+    const valid = sanitizeWebOrigin(candidate);
+    if (valid) {
+      return valid;
+    }
+  }
+
+  return undefined;
+}
+
+function extractOriginFromUrl(urlStr?: string): string | undefined {
+  if (!urlStr) return undefined;
+  try {
+    return new URL(urlStr).origin;
+  } catch {
+    return undefined;
+  }
+}
+
+function sanitizeWebOrigin(raw?: string): string | undefined {
+  if (!raw) return undefined;
+  try {
+    const parsed = new URL(raw.trim());
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return undefined;
+    }
+    return parsed.origin;
+  } catch {
+    return undefined;
+  }
+}
+
+function isLocalhostOrigin(origin: string): boolean {
+  return origin.includes("localhost") || origin.includes("127.0.0.1");
+}
+
+function createWebRedirectUrl(path: string, preferredOrigin?: string) {
+  const configuredOrigin = sanitizeWebOrigin(
+    process.env.WEB_ORIGIN || process.env.FRONTEND_URL,
+  );
+  const candidateOrigin = sanitizeWebOrigin(preferredOrigin);
+
+  const webOrigin =
+    (configuredOrigin && !isLocalhostOrigin(configuredOrigin)
+      ? configuredOrigin
+      : candidateOrigin) ||
+    configuredOrigin ||
+    "http://localhost:3000";
 
   return new URL(path, webOrigin).toString();
 }

@@ -4,7 +4,12 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import bcrypt from "bcryptjs";
-import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import {
+  createHash,
+  createHmac,
+  randomBytes,
+  timingSafeEqual,
+} from "node:crypto";
 import { OAUTH_STATE_TTL_MS, SESSION_TTL_MS } from "./auth.constants";
 import type { LoginRequest, RegisterRequest } from "./auth.schemas";
 import { PrismaService } from "../prisma/prisma.service";
@@ -12,7 +17,8 @@ import { PrismaService } from "../prisma/prisma.service";
 const googleProvider = "google";
 const googleAuthEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
 const googleTokenEndpoint = "https://oauth2.googleapis.com/token";
-const googleUserInfoEndpoint = "https://openidconnect.googleapis.com/v1/userinfo";
+const googleUserInfoEndpoint =
+  "https://openidconnect.googleapis.com/v1/userinfo";
 
 const publicUserSelect = {
   id: true,
@@ -25,13 +31,18 @@ const publicUserSelect = {
 export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
 
-  createGoogleAuthorization(nextPath: string | undefined) {
-    const config = getGoogleConfig();
+  createGoogleAuthorization(
+    nextPath: string | undefined,
+    context?: { apiPublicOrigin?: string; webOrigin?: string },
+  ) {
+    const config = getGoogleConfig(context?.apiPublicOrigin);
     const nonce = randomBytes(16).toString("base64url");
     const state = signOAuthState({
       issuedAt: Date.now(),
       nextPath: sanitizeNextPath(nextPath),
       nonce,
+      redirectUri: config.redirectUri,
+      webOrigin: context?.webOrigin,
     });
     const authorizationUrl = new URL(googleAuthEndpoint);
 
@@ -52,13 +63,18 @@ export class AuthService {
     code: string | undefined;
     state: string | undefined;
     stateNonce: string | undefined;
+    apiPublicOrigin?: string;
   }) {
     if (!payload.code) {
       throw new UnauthorizedException("Missing Google authorization code");
     }
 
     const oauthState = verifyOAuthState(payload.state, payload.stateNonce);
-    const tokens = await exchangeGoogleCode(payload.code);
+    const tokens = await exchangeGoogleCode(
+      payload.code,
+      oauthState.redirectUri,
+      payload.apiPublicOrigin,
+    );
     const profile = await fetchGoogleProfile(tokens.access_token);
 
     if (!profile.email_verified) {
@@ -70,9 +86,24 @@ export class AuthService {
 
     return {
       nextPath: oauthState.nextPath,
+      webOrigin: oauthState.webOrigin,
       session,
       user,
     };
+  }
+
+  extractWebOriginFromState(state: string | undefined): string | undefined {
+    if (!state) return undefined;
+    const [encodedPayload] = state.split(".");
+    if (!encodedPayload) return undefined;
+    try {
+      const parsed = JSON.parse(
+        Buffer.from(encodedPayload, "base64url").toString("utf8"),
+      ) as Partial<OAuthStatePayload>;
+      return parsed.webOrigin;
+    } catch {
+      return undefined;
+    }
   }
 
   async register(payload: RegisterRequest) {
@@ -271,6 +302,8 @@ type OAuthStatePayload = {
   issuedAt: number;
   nextPath: string;
   nonce: string;
+  redirectUri?: string;
+  webOrigin?: string;
 };
 
 type GoogleTokenResponse = {
@@ -285,12 +318,39 @@ type GoogleProfile = {
   name?: string;
 };
 
-function getGoogleConfig() {
+function getGoogleConfig(apiPublicOrigin?: string) {
   return {
     clientId: getRequiredEnv("GOOGLE_CLIENT_ID"),
     clientSecret: getRequiredEnv("GOOGLE_CLIENT_SECRET"),
-    redirectUri: getRequiredEnv("GOOGLE_REDIRECT_URI"),
+    redirectUri: resolveGoogleRedirectUri(apiPublicOrigin),
   };
+}
+
+function resolveGoogleRedirectUri(apiPublicOrigin?: string): string {
+  const configured = process.env.GOOGLE_REDIRECT_URI?.trim();
+  const isProdOrigin =
+    Boolean(apiPublicOrigin) &&
+    !apiPublicOrigin!.includes("localhost") &&
+    !apiPublicOrigin!.includes("127.0.0.1");
+
+  if (
+    isProdOrigin &&
+    (!configured ||
+      configured.includes("localhost") ||
+      configured.includes("127.0.0.1"))
+  ) {
+    return `${apiPublicOrigin!.replace(/\/+$/, "")}/api/auth/google/callback`;
+  }
+
+  if (configured) {
+    return configured;
+  }
+
+  if (apiPublicOrigin) {
+    return `${apiPublicOrigin.replace(/\/+$/, "")}/api/auth/google/callback`;
+  }
+
+  return getRequiredEnv("GOOGLE_REDIRECT_URI");
 }
 
 function getRequiredEnv(key: string) {
@@ -304,7 +364,9 @@ function getRequiredEnv(key: string) {
 }
 
 function signOAuthState(payload: OAuthStatePayload) {
-  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString(
+    "base64url",
+  );
   const signature = createOAuthStateSignature(encodedPayload);
 
   return `${encodedPayload}.${signature}`;
@@ -350,6 +412,8 @@ function verifyOAuthState(
     issuedAt: payload.issuedAt,
     nextPath: sanitizeNextPath(payload.nextPath),
     nonce: payload.nonce,
+    redirectUri: payload.redirectUri,
+    webOrigin: payload.webOrigin,
   };
 }
 
@@ -359,8 +423,13 @@ function createOAuthStateSignature(encodedPayload: string) {
     .digest("base64url");
 }
 
-async function exchangeGoogleCode(code: string): Promise<GoogleTokenResponse> {
-  const config = getGoogleConfig();
+async function exchangeGoogleCode(
+  code: string,
+  redirectUriOverride?: string,
+  apiPublicOrigin?: string,
+): Promise<GoogleTokenResponse> {
+  const config = getGoogleConfig(apiPublicOrigin);
+  const redirectUri = redirectUriOverride || config.redirectUri;
   const response = await fetch(googleTokenEndpoint, {
     method: "POST",
     headers: {
@@ -371,7 +440,7 @@ async function exchangeGoogleCode(code: string): Promise<GoogleTokenResponse> {
       client_secret: config.clientSecret,
       code,
       grant_type: "authorization_code",
-      redirect_uri: config.redirectUri,
+      redirect_uri: redirectUri,
     }),
   });
 
@@ -396,7 +465,9 @@ async function fetchGoogleProfile(accessToken: string): Promise<GoogleProfile> {
   const profile = (await response.json()) as GoogleProfile;
 
   if (!profile.sub || !profile.email) {
-    throw new UnauthorizedException("Google profile is missing required fields");
+    throw new UnauthorizedException(
+      "Google profile is missing required fields",
+    );
   }
 
   return profile;
