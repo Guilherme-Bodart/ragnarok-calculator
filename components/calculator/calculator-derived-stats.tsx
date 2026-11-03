@@ -77,7 +77,7 @@ export function CalculatorDerivedStats({
             HP Máximo
           </span>
           <strong className="text-xs font-black text-rose-300 tabular-nums mt-0.5">
-            <AnimatedNumber value={status.maxHp} duration={240} />
+            <AnimatedNumber value={status.maxHp} />
           </strong>
         </div>
 
@@ -86,7 +86,7 @@ export function CalculatorDerivedStats({
             SP Máximo
           </span>
           <strong className="text-xs font-black text-cyan-300 tabular-nums mt-0.5">
-            <AnimatedNumber value={status.maxSp} duration={240} />
+            <AnimatedNumber value={status.maxSp} />
           </strong>
         </div>
 
@@ -95,9 +95,9 @@ export function CalculatorDerivedStats({
             Alt+Q ATK
           </span>
           <strong className="text-xs font-black text-amber-300 tabular-nums mt-0.5">
-            <AnimatedNumber value={status.statusAtk} duration={220} />{" "}
+            <AnimatedNumber value={status.statusAtk} />{" "}
             <span className="text-amber-200/90">
-              + <AnimatedNumber value={equipAtk} duration={220} />
+              + <AnimatedNumber value={equipAtk} />
             </span>
           </strong>
         </div>
@@ -107,9 +107,9 @@ export function CalculatorDerivedStats({
             Alt+Q MATK
           </span>
           <strong className="text-xs font-black text-sky-300 tabular-nums mt-0.5">
-            <AnimatedNumber value={status.statusMatk} duration={220} />{" "}
+            <AnimatedNumber value={status.statusMatk} />{" "}
             <span className="text-sky-200/90">
-              + <AnimatedNumber value={equipMatk} duration={220} />
+              + <AnimatedNumber value={equipMatk} />
             </span>
           </strong>
         </div>
@@ -328,7 +328,6 @@ function StatCell({
           decimals={decimals}
           suffix={suffix}
           formatLocale={formatLocale}
-          duration={220}
         />
       </strong>
     </div>

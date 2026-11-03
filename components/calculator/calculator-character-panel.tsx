@@ -146,10 +146,10 @@ export function CalculatorCharacterPanel({
             <div className="flex items-center gap-2 font-mono tabular-nums">
               <span className="text-[10.5px] text-emerald-400 font-bold">
                 Restam:{" "}
-                <AnimatedNumber value={regularRemaining} duration={220} />
+                <AnimatedNumber value={regularRemaining} />
               </span>
               <strong className="text-sky-300 text-xs">
-                (<AnimatedNumber value={statusBudget.regular.spent} duration={220} /> /{" "}
+                (<AnimatedNumber value={statusBudget.regular.spent} showDelta={false} /> /{" "}
                 {statusBudget.regular.available})
               </strong>
             </div>
@@ -172,10 +172,10 @@ export function CalculatorCharacterPanel({
               <div className="flex items-center gap-2 font-mono tabular-nums">
                 <span className="text-[10.5px] text-amber-400 font-bold">
                   Restam:{" "}
-                  <AnimatedNumber value={traitRemaining} duration={220} />
+                  <AnimatedNumber value={traitRemaining} />
                 </span>
                 <strong className="text-amber-200 text-xs">
-                  (<AnimatedNumber value={statusBudget.trait.spent} duration={220} /> /{" "}
+                  (<AnimatedNumber value={statusBudget.trait.spent} showDelta={false} /> /{" "}
                   {statusBudget.trait.available})
                 </strong>
               </div>

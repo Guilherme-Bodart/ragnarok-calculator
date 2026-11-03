@@ -486,7 +486,7 @@ export function CalculatorTargetPanel({
             <strong className="text-2xl sm:text-3xl font-black text-white tabular-nums tracking-tight leading-none my-2 drop-shadow-[0_2px_10px_rgba(56,189,248,0.22)]">
               <AnimatedNumber
                 value={totalDamageNumeric}
-                duration={300}
+                duration={560}
                 flashOnChange
               />
             </strong>
@@ -499,7 +499,7 @@ export function CalculatorTargetPanel({
               {damagePerHitNumeric !== null && (
                 <span className="text-sky-300 font-semibold">
                   Por Hit:{" "}
-                  <AnimatedNumber value={damagePerHitNumeric} duration={260} />
+                  <AnimatedNumber value={damagePerHitNumeric} duration={500} />
                 </span>
               )}
             </div>
@@ -533,7 +533,7 @@ export function CalculatorTargetPanel({
               {criticalDamage > 0 ? (
                 <AnimatedNumber
                   value={criticalDamage}
-                  duration={300}
+                  duration={560}
                   flashOnChange
                 />
               ) : (
@@ -545,11 +545,11 @@ export function CalculatorTargetPanel({
               <span className="text-slate-300">
                 Méd. Pond:{" "}
                 <strong className="text-amber-300">
-                  <AnimatedNumber value={weightedAverage} duration={280} />
+                  <AnimatedNumber value={weightedAverage} duration={500} />
                 </strong>
               </span>
               <span className="text-amber-400 font-bold">
-                DPS: <AnimatedNumber value={dps} duration={280} />
+                DPS: <AnimatedNumber value={dps} duration={500} />
                 {selectedMonster && dps > 0
                   ? ` (${formatTime(selectedMonster.hp / dps)})`
                   : ""}
