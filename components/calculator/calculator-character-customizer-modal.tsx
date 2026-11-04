@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Check,
+  ChevronLeft,
+  ChevronRight,
   Palette,
   RotateCcw,
   Search,
@@ -11,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
+import { useNightmareLocale } from "@/components/site/use-nightmare-locale";
 import { fetchItemCategory, type CalculatorItemIndexOption } from "./calculator-item-data";
 import { CalculatorItemIcon } from "./calculator-item-icon";
 import { getShortItemName } from "./calculator-item-picker-utils";
@@ -22,6 +25,7 @@ export type CharacterAppearanceConfig = {
   bodyPalette: number;
   outfit: 0 | 1;
   headdir: 0 | 1 | 2;
+  bodyDirection?: number;
   isWalking: boolean;
   // Optional visual item IDs chosen in the dressing room (override or preview)
   visualTopItemId: number | null;
@@ -80,6 +84,117 @@ const CLOTHES_PALETTES: Array<{ id: number; label: string }> = [
   { id: 7, label: "Cor 8" },
 ];
 
+const I18N_CUSTOMIZER = {
+  pt: {
+    modalTitle: "Provador Visual",
+    cancel: "Cancelar",
+    save: "Salvar",
+    reset: "Restaurar Padrão",
+    alsoEquipCostume: "Equipar na aba Especial (Costumes)",
+    genderMasc: "♂ Masc",
+    genderFem: "♀ Fem",
+    outfitAlt: "Traje: Alternativo (jRO)",
+    outfitDefault: "Traje: Padrão (kRO)",
+    rotateLeft: "Girar para esquerda",
+    rotateRight: "Girar para direita",
+    dirFront: "Frente",
+    dirLeft: "Esq.",
+    dirBack: "Costas",
+    dirRight: "Dir.",
+    headLookLeft: "Olhar para esquerda",
+    headLookFront: "Olhar para frente",
+    headLookRight: "Olhar para direita",
+    poseIdle: "Parado",
+    poseWalk: "Andando",
+    poseSit: "Sentado",
+    poseCombat: "Combate",
+    tabCostumes: "Visuais & Costumes",
+    tabHairAndColors: "Cabelo & Cores",
+    searchPlaceholder: "Buscar visual por nome ou ID...",
+    hairStyle: "Estilo de Cabelo",
+    hairColor: "Cor do Cabelo",
+    clothesColor: "Cor da Roupa (Paleta do Corpo)",
+    slotTop: "Topo",
+    slotMid: "Meio",
+    slotLow: "Baixo",
+    slotGarment: "Capa",
+    equippedSlotsHeader: "Visuais Equipados",
+    noItemFound: "Nenhum visual encontrado com este termo.",
+  },
+  en: {
+    modalTitle: "Dressing Room",
+    cancel: "Cancel",
+    save: "Save",
+    reset: "Reset to Default",
+    alsoEquipCostume: "Equip in Special (Costume) tab",
+    genderMasc: "♂ Male",
+    genderFem: "♀ Female",
+    outfitAlt: "Outfit: Alternate (jRO)",
+    outfitDefault: "Outfit: Default (kRO)",
+    rotateLeft: "Rotate left",
+    rotateRight: "Rotate right",
+    dirFront: "Front",
+    dirLeft: "Left",
+    dirBack: "Back",
+    dirRight: "Right",
+    headLookLeft: "Look left",
+    headLookFront: "Look forward",
+    headLookRight: "Look right",
+    poseIdle: "Idle",
+    poseWalk: "Walking",
+    poseSit: "Sitting",
+    poseCombat: "Combat",
+    tabCostumes: "Costume Items",
+    tabHairAndColors: "Hair & Colors",
+    searchPlaceholder: "Search costume by name or ID...",
+    hairStyle: "Hair Style",
+    hairColor: "Hair Color",
+    clothesColor: "Outfit Color (Body Palette)",
+    slotTop: "Top",
+    slotMid: "Mid",
+    slotLow: "Low",
+    slotGarment: "Garment",
+    equippedSlotsHeader: "Equipped Costumes",
+    noItemFound: "No costume item found.",
+  },
+  es: {
+    modalTitle: "Probador Visual",
+    cancel: "Cancelar",
+    save: "Guardar",
+    reset: "Restaurar por Defecto",
+    alsoEquipCostume: "Equipar en pestaña Especial (Costumes)",
+    genderMasc: "♂ Masc",
+    genderFem: "♀ Fem",
+    outfitAlt: "Traje: Alternativo (jRO)",
+    outfitDefault: "Traje: Estándar (kRO)",
+    rotateLeft: "Girar a la izquierda",
+    rotateRight: "Girar a la derecha",
+    dirFront: "Frente",
+    dirLeft: "Izq.",
+    dirBack: "Espalda",
+    dirRight: "Der.",
+    headLookLeft: "Mirar a la izquierda",
+    headLookFront: "Mirar al frente",
+    headLookRight: "Mirar a la derecha",
+    poseIdle: "Parado",
+    poseWalk: "Caminando",
+    poseSit: "Sentado",
+    poseCombat: "Combate",
+    tabCostumes: "Visuales & Costumes",
+    tabHairAndColors: "Cabello & Colores",
+    searchPlaceholder: "Buscar visual por nombre o ID...",
+    hairStyle: "Estilo de Cabello",
+    hairColor: "Color del Cabello",
+    clothesColor: "Color de la Ropa (Paleta del Cuerpo)",
+    slotTop: "Cabeza Arriba",
+    slotMid: "Cabeza Medio",
+    slotLow: "Cabeza Abajo",
+    slotGarment: "Capa",
+    equippedSlotsHeader: "Visuales en el Maniquí",
+    noItemFound: "No se encontraron visuales.",
+  },
+} as const;
+
 export function CalculatorCharacterCustomizerModal({
   classNameLabel,
   canonicalSpriteClassId,
@@ -90,9 +205,13 @@ export function CalculatorCharacterCustomizerModal({
   onClose,
   onSave,
 }: CalculatorCharacterCustomizerModalProps) {
-  // Draft state — isolated until the user clicks "Salvar Visual"
+  const { locale } = useNightmareLocale();
+  const t = I18N_CUSTOMIZER[locale] ?? I18N_CUSTOMIZER.pt;
+
+  // Draft state — isolated until the user clicks "Salvar"
   const [draft, setDraft] = useState<CharacterAppearanceConfig>(() => ({
     ...initialConfig,
+    bodyDirection: initialConfig.bodyDirection ?? 0,
     visualTopItemId:
       initialConfig.visualTopItemId ?? (equippedVisualItemIds.top || null),
     visualMidItemId:
@@ -195,6 +314,9 @@ export function CalculatorCharacterCustomizerModal({
   ]);
 
   const previewSpriteUrl = useMemo(() => {
+    const baseAction = previewAction;
+    const bodyDir = draft.bodyDirection ?? 0;
+
     const params = new URLSearchParams({
       job: defaultSpec.jobId,
       gender: String(effectiveGender),
@@ -202,7 +324,7 @@ export function CalculatorCharacterCustomizerModal({
       headPalette: String(draft.headPalette),
       bodyPalette: String(draft.bodyPalette),
       headdir: String(draft.headdir),
-      action: String(previewAction),
+      action: String(baseAction + bodyDir),
       outfit: String(draft.outfit),
       top: String(previewViewIds.top),
       mid: String(previewViewIds.mid),
@@ -213,6 +335,15 @@ export function CalculatorCharacterCustomizerModal({
   }, [
     defaultSpec.jobId,
     effectiveGender,
+    effectiveHead,
+    draft.headPalette,
+    draft.bodyPalette,
+    draft.headdir,
+    draft.bodyDirection,
+    previewAction,
+    draft.outfit,
+    previewViewIds,
+  ]);
     effectiveHead,
     draft.headPalette,
     draft.bodyPalette,
@@ -257,6 +388,7 @@ export function CalculatorCharacterCustomizerModal({
       bodyPalette: -1,
       outfit: 0,
       headdir: 0,
+      bodyDirection: 0,
       isWalking: false,
       visualTopItemId: equippedVisualItemIds.top || null,
       visualMidItemId: equippedVisualItemIds.mid || null,
@@ -277,12 +409,12 @@ export function CalculatorCharacterCustomizerModal({
 
   return (
     <Modal
-      ariaLabel="Personalizar Visual do Personagem"
+      ariaLabel={t.modalTitle}
       icon={<Palette size={17} className="text-sky-400" />}
-      title="Provador Visual & Aparência do Personagem"
+      title={t.modalTitle}
       meta={
         <span className="text-xs font-mono text-sky-300 font-bold">
-          {classNameLabel} • Modo Teste (Só aplica ao salvar)
+          {classNameLabel}
         </span>
       }
       size="lg"
@@ -304,7 +436,7 @@ export function CalculatorCharacterCustomizerModal({
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  ♂ Masc
+                  {t.genderMasc}
                 </button>
                 <button
                   type="button"
@@ -315,7 +447,7 @@ export function CalculatorCharacterCustomizerModal({
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  ♀ Fem
+                  {t.genderFem}
                 </button>
               </div>
 
@@ -332,19 +464,48 @@ export function CalculatorCharacterCustomizerModal({
               >
                 <Shirt size={13} />
                 <span>
-                  Traje: {draft.outfit === 1 ? "jRO (Alternativo)" : "kRO (Padrão)"}
+                  {draft.outfit === 1 ? t.outfitAlt : t.outfitDefault}
                 </span>
               </button>
             </div>
 
-            {/* Big Character Render Stage */}
-            <div className="relative flex-1 min-h-[250px] flex items-center justify-center rounded-xl border border-white/[0.06] bg-[#090b10]/60 overflow-hidden">
+            {/* Big Character Render Stage with 360° Body Rotation & Head Controls */}
+            <div className="relative flex-1 min-h-[270px] flex items-center justify-center rounded-xl border border-white/[0.06] bg-[#090b10]/60 overflow-hidden">
+              {/* Floating Full Body Rotation Arrows (360°) */}
+              <button
+                type="button"
+                onClick={() =>
+                  setDraft((d) => ({
+                    ...d,
+                    bodyDirection: (((d.bodyDirection ?? 0) + 1) % 8),
+                  }))
+                }
+                title={t.rotateLeft}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-[#090b10]/85 hover:bg-[#090b10] border border-white/20 hover:border-sky-400 text-slate-300 hover:text-sky-200 flex items-center justify-center transition-all cursor-pointer shadow-lg backdrop-blur-sm"
+              >
+                <ChevronLeft size={17} />
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setDraft((d) => ({
+                    ...d,
+                    bodyDirection: (((d.bodyDirection ?? 0) - 1 + 8) % 8),
+                  }))
+                }
+                title={t.rotateRight}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-[#090b10]/85 hover:bg-[#090b10] border border-white/20 hover:border-sky-400 text-slate-300 hover:text-sky-200 flex items-center justify-center transition-all cursor-pointer shadow-lg backdrop-blur-sm"
+              >
+                <ChevronRight size={17} />
+              </button>
+
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 key={previewSpriteUrl}
                 src={previewSpriteUrl}
                 alt={classNameLabel}
-                className="h-[220px] w-auto object-contain scale-[1.55] -translate-y-3 [image-rendering:pixelated] drop-shadow-[0_16px_28px_rgba(0,0,0,0.85)] select-none"
+                className="h-[220px] w-auto object-contain scale-[1.55] -translate-y-4 [image-rendering:pixelated] drop-shadow-[0_16px_28px_rgba(0,0,0,0.85)] select-none"
                 onError={(e) => {
                   const img = e.target as HTMLImageElement;
                   const fallback = `/sprites/classes/${canonicalSpriteClassId}.png`;
@@ -354,15 +515,16 @@ export function CalculatorCharacterCustomizerModal({
                 }}
               />
 
-              {/* Pose & Direction Controls Overlay at Bottom of Stage */}
-              <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between gap-1.5">
-                <div className="inline-flex items-center gap-1 rounded-lg bg-[#0d1017]/95 border border-white/10 p-1">
+              {/* Bottom Controls Overlay: Poses & Direction Shortcuts */}
+              <div className="absolute bottom-2 inset-x-2 flex flex-col gap-1.5 z-20">
+                {/* Pose Selector Row */}
+                <div className="flex items-center justify-center gap-1 rounded-lg bg-[#0d1017]/95 border border-white/10 p-1">
                   {(
                     [
-                      { action: 0, label: "Parado" },
-                      { action: 8, label: "Andando" },
-                      { action: 16, label: "Sentado" },
-                      { action: 40, label: "Combate" },
+                      { action: 0, label: t.poseIdle },
+                      { action: 8, label: t.poseWalk },
+                      { action: 16, label: t.poseSit },
+                      { action: 40, label: t.poseCombat },
                     ] as const
                   ).map((pose) => {
                     const active = previewAction === pose.action;
@@ -377,7 +539,7 @@ export function CalculatorCharacterCustomizerModal({
                             isWalking: pose.action === 8,
                           }));
                         }}
-                        className={`px-2 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
+                        className={`flex-1 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
                           active
                             ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
                             : "text-slate-400 hover:text-slate-200"
@@ -389,30 +551,64 @@ export function CalculatorCharacterCustomizerModal({
                   })}
                 </div>
 
-                <div className="inline-flex items-center gap-1 rounded-lg bg-[#0d1017]/95 border border-white/10 p-1">
-                  {(
-                    [
-                      { dir: 1, label: "↖" },
-                      { dir: 0, label: "⬇" },
-                      { dir: 2, label: "↗" },
-                    ] as const
-                  ).map((d) => (
-                    <button
-                      key={d.dir}
-                      type="button"
-                      onClick={() =>
-                        setDraft((prev) => ({ ...prev, headdir: d.dir }))
-                      }
-                      title="Direção da cabeça"
-                      className={`w-6 h-6 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
-                        draft.headdir === d.dir
-                          ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
-                          : "text-slate-400 hover:text-slate-200"
-                      }`}
-                    >
-                      {d.label}
-                    </button>
-                  ))}
+                {/* Body Direction Shortcuts + Head Turn Controls */}
+                <div className="flex items-center justify-between gap-1.5">
+                  {/* Body Directions */}
+                  <div className="inline-flex items-center gap-1 rounded-lg bg-[#0d1017]/95 border border-white/10 p-1 flex-1">
+                    {(
+                      [
+                        { dir: 0, label: t.dirFront },
+                        { dir: 2, label: t.dirLeft },
+                        { dir: 4, label: t.dirBack },
+                        { dir: 6, label: t.dirRight },
+                      ] as const
+                    ).map((bd) => {
+                      const isSelected = (draft.bodyDirection ?? 0) === bd.dir;
+                      return (
+                        <button
+                          key={bd.dir}
+                          type="button"
+                          onClick={() =>
+                            setDraft((d) => ({ ...d, bodyDirection: bd.dir }))
+                          }
+                          className={`flex-1 py-1 rounded text-[9.5px] font-mono font-bold transition-colors cursor-pointer ${
+                            isSelected
+                              ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
+                              : "text-slate-400 hover:text-slate-200"
+                          }`}
+                        >
+                          {bd.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Head Direction: Left = 2, Center = 0, Right = 1 */}
+                  <div className="inline-flex items-center gap-1 rounded-lg bg-[#0d1017]/95 border border-white/10 p-1 shrink-0">
+                    {(
+                      [
+                        { dir: 2, label: "↰", title: t.headLookLeft },
+                        { dir: 0, label: "↓", title: t.headLookFront },
+                        { dir: 1, label: "↱", title: t.headLookRight },
+                      ] as const
+                    ).map((d) => (
+                      <button
+                        key={d.dir}
+                        type="button"
+                        onClick={() =>
+                          setDraft((prev) => ({ ...prev, headdir: d.dir }))
+                        }
+                        title={d.title}
+                        className={`w-6 h-6 rounded text-[11px] font-mono font-bold transition-colors cursor-pointer ${
+                          draft.headdir === d.dir
+                            ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        {d.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -420,14 +616,40 @@ export function CalculatorCharacterCustomizerModal({
             {/* Currently Previewed Visual Slots Strip */}
             <div className="flex flex-col gap-1.5">
               <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">
-                Itens Visuais no Manequim (Clique para editar ou limpar)
+                {t.equippedSlotsHeader}
               </span>
               <div className="grid grid-cols-4 gap-2">
                 {(
                   [
                     {
                       key: "top" as const,
-                      label: "Topo",
+                      label: t.slotTop,
+                      itemId: draft.visualTopItemId,
+                      clear: () =>
+                        setDraft((d) => ({ ...d, visualTopItemId: 0 })),
+                    },
+                    {
+                      key: "mid" as const,
+                      label: t.slotMid,
+                      itemId: draft.visualMidItemId,
+                      clear: () =>
+                        setDraft((d) => ({ ...d, visualMidItemId: 0 })),
+                    },
+                    {
+                      key: "low" as const,
+                      label: t.slotLow,
+                      itemId: draft.visualLowItemId,
+                      clear: () =>
+                        setDraft((d) => ({ ...d, visualLowItemId: 0 })),
+                    },
+                    {
+                      key: "garment" as const,
+                      label: t.slotGarment,
+                      itemId: draft.visualGarmentItemId,
+                      clear: () =>
+                        setDraft((d) => ({ ...d, visualGarmentItemId: 0 })),
+                    },
+                  ] as const
                       itemId: draft.visualTopItemId,
                       clear: () =>
                         setDraft((d) => ({ ...d, visualTopItemId: 0 })),
@@ -520,7 +742,7 @@ export function CalculatorCharacterCustomizerModal({
                   }`}
                 >
                   <Sparkles size={14} className="text-amber-400" />
-                  <span>Equipamentos & Costumes Visuais</span>
+                  <span>{t.tabCostumes}</span>
                 </button>
                 <button
                   type="button"
@@ -532,7 +754,9 @@ export function CalculatorCharacterCustomizerModal({
                   }`}
                 >
                   <Palette size={14} className="text-sky-400" />
-                  <span>Cabelo & Cores ({effectiveHead})</span>
+                  <span>
+                    {t.tabHairAndColors} (#{effectiveHead})
+                  </span>
                 </button>
               </div>
 
@@ -543,10 +767,10 @@ export function CalculatorCharacterCustomizerModal({
                     <div className="inline-flex items-center gap-1 rounded-lg bg-[#090b10] border border-white/[0.08] p-1">
                       {(
                         [
-                          { id: "top" as const, label: "Topo" },
-                          { id: "mid" as const, label: "Meio" },
-                          { id: "low" as const, label: "Baixo" },
-                          { id: "garment" as const, label: "Capa / Asas" },
+                          { id: "top" as const, label: t.slotTop },
+                          { id: "mid" as const, label: t.slotMid },
+                          { id: "low" as const, label: t.slotLow },
+                          { id: "garment" as const, label: t.slotGarment },
                         ] as const
                       ).map((tab) => (
                         <button
@@ -573,7 +797,7 @@ export function CalculatorCharacterCustomizerModal({
                         type="search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Buscar item ou costume pelo nome ou ID..."
+                        placeholder={t.searchPlaceholder}
                         className="w-full h-8 pl-8 pr-3 rounded-lg bg-[#090b10] border border-white/10 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-400/50"
                       />
                     </div>
@@ -583,11 +807,11 @@ export function CalculatorCharacterCustomizerModal({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
                     {isLoadingItems ? (
                       <div className="col-span-2 py-12 text-center text-xs text-slate-400 font-mono">
-                        Carregando catálogo visual...
+                        ...
                       </div>
                     ) : filteredItems.length === 0 ? (
                       <div className="col-span-2 py-12 text-center text-xs text-slate-500">
-                        Nenhum item visual encontrado para &ldquo;{searchQuery}&rdquo;.
+                        {t.noItemFound}
                       </div>
                     ) : (
                       filteredItems.map((item) => {
@@ -632,7 +856,7 @@ export function CalculatorCharacterCustomizerModal({
                   {/* Hair Styles Grid (#1..#32) */}
                   <div className="flex flex-col gap-2">
                     <span className="text-xs font-bold text-slate-300">
-                      Estilo de Cabelo (#1 a #32)
+                      {t.hairStyle} (#1 a #32)
                     </span>
                     <div className="grid grid-cols-8 gap-1.5">
                       {Array.from({ length: 32 }, (_, i) => i + 1).map(
@@ -662,7 +886,7 @@ export function CalculatorCharacterCustomizerModal({
                   {/* Hair Color Swatches */}
                   <div className="flex flex-col gap-2">
                     <span className="text-xs font-bold text-slate-300">
-                      Cor do Cabelo
+                      {t.hairColor}
                     </span>
                     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                       {HAIR_COLOR_SWATCHES.map((swatch) => {
@@ -697,7 +921,7 @@ export function CalculatorCharacterCustomizerModal({
                   {/* Body Clothes Palette */}
                   <div className="flex flex-col gap-2">
                     <span className="text-xs font-bold text-slate-300">
-                      Cor da Roupa (Paleta do Corpo)
+                      {t.clothesColor}
                     </span>
                     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                       {CLOTHES_PALETTES.map((pal) => {
@@ -734,7 +958,7 @@ export function CalculatorCharacterCustomizerModal({
                 className="rounded border-white/20 bg-[#090b10] text-sky-500 focus:ring-0"
               />
               <span>
-                Equipar também nos slots de Costume (aba Especial) quando o item escolhido for um Costume
+                {t.alsoEquipCostume}
               </span>
             </label>
           </div>
@@ -748,7 +972,7 @@ export function CalculatorCharacterCustomizerModal({
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-white/10 bg-[#121620] hover:bg-white/10 text-xs font-bold text-slate-300 transition-colors cursor-pointer"
           >
             <RotateCcw size={13} />
-            <span>Restaurar Padrão da Classe</span>
+            <span>{t.reset}</span>
           </button>
 
           <div className="flex items-center gap-2.5">
@@ -757,7 +981,7 @@ export function CalculatorCharacterCustomizerModal({
               onClick={onClose}
               className="px-4 py-2 rounded-xl border border-white/10 bg-[#121620] hover:bg-white/10 text-xs font-bold text-slate-300 transition-colors cursor-pointer"
             >
-              Cancelar (Não Alterar)
+              {t.cancel}
             </button>
 
             <button
@@ -766,7 +990,7 @@ export function CalculatorCharacterCustomizerModal({
               className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-[#090b10] text-xs font-black shadow-[0_0_20px_rgba(14,165,233,0.3)] transition-all cursor-pointer"
             >
               <Check size={15} />
-              <span>Salvar Visual no Personagem</span>
+              <span>{t.save}</span>
             </button>
           </div>
         </div>

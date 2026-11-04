@@ -112,6 +112,7 @@ const DEFAULT_APPEARANCE: CharacterAppearanceConfig = {
   bodyPalette: -1,
   outfit: 0,
   headdir: 0,
+  bodyDirection: 0,
   isWalking: false,
   visualTopItemId: null,
   visualMidItemId: null,
@@ -313,6 +314,7 @@ export function CalculatorEquipmentPaperdoll({
     visualEquip.low > 0 ||
     visualEquip.garment > 0 ||
     isWalking ||
+    (appearance.bodyDirection ?? 0) !== 0 ||
     appearance.gender !== null ||
     appearance.head !== null ||
     appearance.headPalette !== 1 ||
@@ -325,6 +327,9 @@ export function CalculatorEquipmentPaperdoll({
       return `/sprites/classes/${canonicalSpriteClassId}.png`;
     }
 
+    const baseAction = isWalking ? 8 : 0;
+    const bodyDir = appearance.bodyDirection ?? 0;
+
     const params = new URLSearchParams({
       job: defaultSpec.jobId,
       gender: String(effectiveGender),
@@ -332,7 +337,7 @@ export function CalculatorEquipmentPaperdoll({
       headPalette: String(appearance.headPalette),
       bodyPalette: String(appearance.bodyPalette),
       headdir: String(appearance.headdir),
-      action: String(isWalking ? 8 : 0),
+      action: String(baseAction + bodyDir),
       outfit: String(appearance.outfit),
       top: String(visualEquip.top),
       mid: String(visualEquip.mid),
