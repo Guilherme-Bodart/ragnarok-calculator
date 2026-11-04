@@ -7,7 +7,12 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  CalculatorCharacterCustomizerModal,
+  type CharacterAppearanceConfig,
+} from "./calculator-character-customizer-modal";
+import { fetchItemCategory } from "./calculator-item-data";
 import { animateSlotPop } from "@/components/ui/use-motion-effects";
 import type { EquipmentSlot } from "@/packages/calculator-core/src";
 import type { CalculatorDictionary } from "./calculator-i18n";
@@ -97,6 +102,46 @@ const CLASS_RENDER_SPECS: Record<
   Death_Knight: { jobId: "4044", gender: 1, head: 1 },
   Dark_Collector: { jobId: "4045", gender: 1, head: 1 },
 };
+
+const APPEARANCE_STORAGE_KEY = "nightmare-character-appearance-v1";
+
+const DEFAULT_APPEARANCE: CharacterAppearanceConfig = {
+  gender: null,
+  head: null,
+  headPalette: 1,
+  bodyPalette: -1,
+  outfit: 0,
+  headdir: 0,
+  isWalking: false,
+  visualTopItemId: null,
+  visualMidItemId: null,
+  visualLowItemId: null,
+  visualGarmentItemId: null,
+};
+
+// Appearance is saved per class so switching class keeps each look independent.
+function readAppearanceMap(): Record<string, CharacterAppearanceConfig> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(APPEARANCE_STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Record<string, CharacterAppearanceConfig>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeAppearanceMap(map: Record<string, CharacterAppearanceConfig>) {
+  try {
+    window.localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(map));
+  } catch {
+    // Ignore quota errors
+  }
+}
+
+// Picks the dressing-room override when set (0 = explicitly empty), otherwise the equipped item.
+function resolveVisualItemId(override: number | null, equipped: number): number {
+  return override !== null ? override : equipped;
+}
 
 const GRADE_LABELS: Record<number, { label: string; className: string }> = {
   1: {
@@ -188,18 +233,17 @@ export function CalculatorEquipmentPaperdoll({
     head: 15,
   };
 
-  // Interactive Character Appearance Customizer state
+  // Saved appearance (per class). Only changes when the user clicks "Salvar" in the dressing-room modal.
   const [viewMap, setViewMap] = useState<ItemViewMap>({
     headgear: {},
     garment: {},
   });
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
-  const [isWalking, setIsWalking] = useState(false);
-  const [customGender, setCustomGender] = useState<0 | 1 | null>(null);
-  const [customHead, setCustomHead] = useState<number | null>(null);
-  const [headPalette, setHeadPalette] = useState<number>(1);
-  const [bodyPalette, setBodyPalette] = useState<number>(-1);
-  const [outfit, setOutfit] = useState<0 | 1>(0);
+  const [appearance, setAppearance] =
+    useState<CharacterAppearanceConfig>(DEFAULT_APPEARANCE);
+  const setSelectedItemsBySlot = useCalculatorBuildStore(
+    (s) => s.setSelectedItemsBySlot,
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -211,38 +255,57 @@ export function CalculatorEquipmentPaperdoll({
     };
   }, []);
 
-  // Reset gender/head overrides when switching classes so default matches the new class
+  // Load the saved look for the current class
   useEffect(() => {
-    setCustomGender(null);
-    setCustomHead(null);
+    const saved = readAppearanceMap()[canonicalSpriteClassId];
+    setAppearance(saved ? { ...DEFAULT_APPEARANCE, ...saved } : DEFAULT_APPEARANCE);
   }, [canonicalSpriteClassId]);
 
-  const effectiveGender = customGender ?? defaultSpec.gender;
+  const persistAppearance = useCallback(
+    (next: CharacterAppearanceConfig) => {
+      setAppearance(next);
+      const map = readAppearanceMap();
+      map[canonicalSpriteClassId] = next;
+      writeAppearanceMap(map);
+    },
+    [canonicalSpriteClassId],
+  );
+
+  const effectiveGender = appearance.gender ?? defaultSpec.gender;
   const effectiveHead =
     canonicalSpriteClassId === "Spirit_Handler"
       ? 1
-      : (customHead ?? defaultSpec.head);
+      : (appearance.head ?? defaultSpec.head);
+  const isWalking = appearance.isWalking;
 
-  // Resolve visual equipment viewIds (Costumes take visual priority over regular gear, just like in RO!)
+  // Equipped visual items (Costumes take visual priority over regular gear, like in RO)
+  const equippedVisualItemIds = useMemo(
+    () => ({
+      top: selectedItemsBySlot.costumeHeadTop || selectedItemsBySlot.headTop || 0,
+      mid: selectedItemsBySlot.costumeHeadMid || selectedItemsBySlot.headMid || 0,
+      low: selectedItemsBySlot.costumeHeadLow || selectedItemsBySlot.headLow || 0,
+      garment:
+        selectedItemsBySlot.costumeGarment || selectedItemsBySlot.garment || 0,
+    }),
+    [selectedItemsBySlot],
+  );
+
   const visualEquip = useMemo(() => {
-    const topItemId =
-      selectedItemsBySlot.costumeHeadTop || selectedItemsBySlot.headTop || 0;
-    const midItemId =
-      selectedItemsBySlot.costumeHeadMid || selectedItemsBySlot.headMid || 0;
-    const lowItemId =
-      selectedItemsBySlot.costumeHeadLow || selectedItemsBySlot.headLow || 0;
-    const garmentItemId =
-      selectedItemsBySlot.costumeGarment || selectedItemsBySlot.garment || 0;
+    const top = resolveVisualItemId(appearance.visualTopItemId, equippedVisualItemIds.top);
+    const mid = resolveVisualItemId(appearance.visualMidItemId, equippedVisualItemIds.mid);
+    const low = resolveVisualItemId(appearance.visualLowItemId, equippedVisualItemIds.low);
+    const garment = resolveVisualItemId(
+      appearance.visualGarmentItemId,
+      equippedVisualItemIds.garment,
+    );
 
     return {
-      top: topItemId ? (viewMap.headgear[String(topItemId)] ?? 0) : 0,
-      mid: midItemId ? (viewMap.headgear[String(midItemId)] ?? 0) : 0,
-      low: lowItemId ? (viewMap.headgear[String(lowItemId)] ?? 0) : 0,
-      garment: garmentItemId
-        ? (viewMap.garment[String(garmentItemId)] ?? 0)
-        : 0,
+      top: top ? (viewMap.headgear[String(top)] ?? 0) : 0,
+      mid: mid ? (viewMap.headgear[String(mid)] ?? 0) : 0,
+      low: low ? (viewMap.headgear[String(low)] ?? 0) : 0,
+      garment: garment ? (viewMap.garment[String(garment)] ?? 0) : 0,
     };
-  }, [selectedItemsBySlot, viewMap]);
+  }, [appearance, equippedVisualItemIds, viewMap]);
 
   const hasDynamicCustomization =
     visualEquip.top > 0 ||
@@ -250,11 +313,12 @@ export function CalculatorEquipmentPaperdoll({
     visualEquip.low > 0 ||
     visualEquip.garment > 0 ||
     isWalking ||
-    customGender !== null ||
-    customHead !== null ||
-    headPalette !== 1 ||
-    bodyPalette !== -1 ||
-    outfit !== 0;
+    appearance.gender !== null ||
+    appearance.head !== null ||
+    appearance.headPalette !== 1 ||
+    appearance.bodyPalette !== -1 ||
+    appearance.outfit !== 0 ||
+    appearance.headdir !== 0;
 
   const characterSpriteSrc = useMemo(() => {
     if (!hasDynamicCustomization) {
@@ -265,10 +329,11 @@ export function CalculatorEquipmentPaperdoll({
       job: defaultSpec.jobId,
       gender: String(effectiveGender),
       head: String(effectiveHead),
-      headPalette: String(headPalette),
-      bodyPalette: String(bodyPalette),
+      headPalette: String(appearance.headPalette),
+      bodyPalette: String(appearance.bodyPalette),
+      headdir: String(appearance.headdir),
       action: String(isWalking ? 8 : 0),
-      outfit: String(outfit),
+      outfit: String(appearance.outfit),
       top: String(visualEquip.top),
       mid: String(visualEquip.mid),
       low: String(visualEquip.low),
@@ -282,12 +347,58 @@ export function CalculatorEquipmentPaperdoll({
     defaultSpec.jobId,
     effectiveGender,
     effectiveHead,
-    headPalette,
-    bodyPalette,
+    appearance,
     isWalking,
-    outfit,
     visualEquip,
   ]);
+
+  // Applies the dressing-room draft. Optionally equips chosen Costume items in the Special tab slots.
+  async function handleSaveAppearance(
+    next: CharacterAppearanceConfig,
+    equipInCostumeSlots: boolean,
+  ) {
+    if (equipInCostumeSlots) {
+      const slotPairs: Array<{
+        slot: EquipmentSlot;
+        category: string;
+        itemId: number | null;
+      }> = [
+        { slot: "costumeHeadTop" as EquipmentSlot, category: "costumeHeadTop", itemId: next.visualTopItemId },
+        { slot: "costumeHeadMid" as EquipmentSlot, category: "costumeHeadMid", itemId: next.visualMidItemId },
+        { slot: "costumeHeadLow" as EquipmentSlot, category: "costumeHeadLow", itemId: next.visualLowItemId },
+        { slot: "costumeGarment" as EquipmentSlot, category: "costumeGarment", itemId: next.visualGarmentItemId },
+      ];
+
+      const updates: Partial<Record<EquipmentSlot, number>> = {};
+      for (const pair of slotPairs) {
+        if (!pair.itemId) continue;
+        const costumeList = await fetchItemCategory(pair.category);
+        if (costumeList.some((item) => item.id === pair.itemId)) {
+          updates[pair.slot] = pair.itemId;
+        }
+      }
+
+      if (Object.keys(updates).length > 0) {
+        setSelectedItemsBySlot((prev) => ({ ...prev, ...updates }));
+      }
+    }
+
+    // Slots left equal to the equipped item stay "linked" (null) so future gear changes still show up.
+    const linkOrOverride = (draftId: number | null, equipped: number) =>
+      draftId === null || draftId === equipped ? null : draftId;
+
+    persistAppearance({
+      ...next,
+      visualTopItemId: linkOrOverride(next.visualTopItemId, equippedVisualItemIds.top),
+      visualMidItemId: linkOrOverride(next.visualMidItemId, equippedVisualItemIds.mid),
+      visualLowItemId: linkOrOverride(next.visualLowItemId, equippedVisualItemIds.low),
+      visualGarmentItemId: linkOrOverride(
+        next.visualGarmentItemId,
+        equippedVisualItemIds.garment,
+      ),
+    });
+    setIsCustomizerOpen(false);
+  }
 
   const currentClassName = useMemo(() => {
     const allClasses = calculatorSkillTreeClassGroups.flatMap((g) => g.options);
@@ -302,7 +413,7 @@ export function CalculatorEquipmentPaperdoll({
       data-equipment-tab={activeTab}
       aria-label={copy.equipment.aria}
     >
-      {/* CENTER CHARACTER AVATAR SHOWCASE (LIVE EQUIPPED + CUSTOMIZABLE) */}
+      {/* CENTER CHARACTER AVATAR SHOWCASE (LIVE EQUIPPED, CUSTOMIZED VIA MODAL) */}
       <div className="equipment-avatar bg-gradient-to-b from-[#131822] via-[#0d1017] to-[#090b10] border border-white/10 rounded-xl overflow-hidden relative flex flex-col items-center justify-between p-3">
         {/* Top Class Badge */}
         <div className="z-10 flex items-center justify-between gap-1.5 w-full px-2 py-1 rounded-lg bg-[#090b10]/90 border border-white/10 text-[9.5px] font-mono text-slate-200">
@@ -314,9 +425,12 @@ export function CalculatorEquipmentPaperdoll({
           </span>
         </div>
 
-        {/* Large Character Sprite / Live Equipped Render (No distracting circle!) */}
-        <div
-          className={`relative z-10 flex-1 flex items-center justify-center w-full my-1 ${
+        {/* Large Character Sprite — click opens the dressing room */}
+        <button
+          type="button"
+          onClick={() => setIsCustomizerOpen(true)}
+          title="Abrir Provador Visual"
+          className={`relative z-10 flex-1 flex items-center justify-center w-full my-1 bg-transparent border-0 p-0 cursor-pointer ${
             isWalking ? "" : "calc-idle-float"
           }`}
         >
@@ -334,152 +448,32 @@ export function CalculatorEquipmentPaperdoll({
               }
             }}
           />
-        </div>
+        </button>
 
-        {/* Customizer Popover Drawer (Inside Center Card) */}
-        {isCustomizerOpen && (
-          <div className="absolute inset-x-2 bottom-11 z-30 flex flex-col gap-2 rounded-xl border border-white/15 bg-[#090b10]/95 p-2.5 shadow-2xl backdrop-blur-md text-[10px] font-mono">
-            <div className="flex items-center justify-between border-b border-white/10 pb-1">
-              <strong className="text-sky-300 uppercase tracking-wider">
-                Aparência
-              </strong>
-              <button
-                type="button"
-                onClick={() => setIsCustomizerOpen(false)}
-                className="text-slate-400 hover:text-white cursor-pointer"
-              >
-                <X size={12} />
-              </button>
-            </div>
-
-            {/* Hair Style Stepper */}
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-slate-400">Cabelo</span>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setCustomHead(Math.max(1, effectiveHead - 1))
-                  }
-                  className="px-1.5 py-0.5 rounded bg-[#121620] border border-white/10 text-slate-200 hover:border-sky-400/40 cursor-pointer"
-                >
-                  -
-                </button>
-                <span className="w-7 text-center text-slate-100 font-bold">
-                  #{effectiveHead}
-                </span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setCustomHead(Math.min(32, effectiveHead + 1))
-                  }
-                  className="px-1.5 py-0.5 rounded bg-[#121620] border border-white/10 text-slate-200 hover:border-sky-400/40 cursor-pointer"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Hair Color Stepper */}
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-slate-400">Cor Cabelo</span>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setHeadPalette((p) => (p <= 0 ? 8 : p - 1))}
-                  className="px-1.5 py-0.5 rounded bg-[#121620] border border-white/10 text-slate-200 hover:border-sky-400/40 cursor-pointer"
-                >
-                  -
-                </button>
-                <span className="w-7 text-center text-slate-100 font-bold">
-                  {headPalette}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setHeadPalette((p) => (p >= 8 ? 0 : p + 1))}
-                  className="px-1.5 py-0.5 rounded bg-[#121620] border border-white/10 text-slate-200 hover:border-sky-400/40 cursor-pointer"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Clothes Color Stepper */}
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-slate-400">Cor Roupa</span>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setBodyPalette((p) => (p <= -1 ? 7 : p - 1))}
-                  className="px-1.5 py-0.5 rounded bg-[#121620] border border-white/10 text-slate-200 hover:border-sky-400/40 cursor-pointer"
-                >
-                  -
-                </button>
-                <span className="w-7 text-center text-slate-100 font-bold">
-                  {bodyPalette === -1 ? "Pad" : bodyPalette}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setBodyPalette((p) => (p >= 7 ? -1 : p + 1))}
-                  className="px-1.5 py-0.5 rounded bg-[#121620] border border-white/10 text-slate-200 hover:border-sky-400/40 cursor-pointer"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* kRO vs jRO Outfit Switch */}
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-slate-400">Traje</span>
-              <button
-                type="button"
-                onClick={() => setOutfit((o) => (o === 0 ? 1 : 0))}
-                className="px-2 py-0.5 rounded bg-sky-500/15 border border-sky-400/35 text-sky-200 font-bold cursor-pointer"
-              >
-                {outfit === 1 ? "jRO (Alt)" : "kRO (Padrão)"}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Bottom Interactive Character Controls Strip */}
+        {/* Bottom Controls: quick walk toggle + open dressing room */}
         <div className="z-20 flex items-center justify-between gap-1 w-full pt-1">
           <button
             type="button"
-            onClick={() => setIsWalking((w) => !w)}
-            title={isWalking ? "Pausar caminhada" : "Animar caminhada (APNG)"}
-            className={`flex-1 inline-flex items-center justify-center gap-1 py-1 px-1.5 rounded-md border text-[9.5px] font-mono font-bold transition-colors cursor-pointer ${
+            onClick={() =>
+              persistAppearance({ ...appearance, isWalking: !appearance.isWalking })
+            }
+            title={isWalking ? "Pausar caminhada" : "Animar caminhada"}
+            className={`inline-flex items-center justify-center gap-1 py-1 px-2 rounded-md border text-[9.5px] font-mono font-bold transition-colors cursor-pointer ${
               isWalking
                 ? "bg-sky-500/20 border-sky-400/40 text-sky-200"
                 : "bg-[#090b10]/85 border-white/10 text-slate-400 hover:text-slate-200"
             }`}
           >
             <Footprints size={10} />
-            <span>{isWalking ? "Andando" : "Andar"}</span>
           </button>
 
           <button
             type="button"
-            onClick={() =>
-              setCustomGender(effectiveGender === 1 ? 0 : 1)
-            }
-            title="Alternar sexo do personagem"
-            className="px-2 py-1 rounded-md bg-[#090b10]/85 border border-white/10 text-[9.5px] font-mono font-bold text-slate-300 hover:text-sky-300 hover:border-sky-400/35 transition-colors cursor-pointer"
-          >
-            {effectiveGender === 1 ? "♂" : "♀"}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsCustomizerOpen((o) => !o)}
-            title="Personalizar cabelo, cores e traje"
-            className={`px-2 py-1 rounded-md border text-[9.5px] font-mono font-bold transition-colors cursor-pointer ${
-              isCustomizerOpen
-                ? "bg-sky-500/20 border-sky-400/40 text-sky-200"
-                : "bg-[#090b10]/85 border-white/10 text-slate-400 hover:text-slate-200"
-            }`}
+            onClick={() => setIsCustomizerOpen(true)}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 py-1 px-2 rounded-md bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/35 text-[10px] font-bold text-sky-200 transition-colors cursor-pointer"
           >
             <Palette size={11} />
+            <span>Provador Visual</span>
           </button>
         </div>
 
@@ -717,6 +711,19 @@ export function CalculatorEquipmentPaperdoll({
           </div>
         );
       })}
+
+      {isCustomizerOpen && (
+        <CalculatorCharacterCustomizerModal
+          classNameLabel={currentClassName}
+          canonicalSpriteClassId={canonicalSpriteClassId}
+          defaultSpec={defaultSpec}
+          initialConfig={appearance}
+          equippedVisualItemIds={equippedVisualItemIds}
+          viewMap={viewMap}
+          onClose={() => setIsCustomizerOpen(false)}
+          onSave={handleSaveAppearance}
+        />
+      )}
     </div>
   );
 }
