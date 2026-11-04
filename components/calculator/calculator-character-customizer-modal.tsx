@@ -276,7 +276,7 @@ export function CalculatorCharacterCustomizerModal({
 
   const filteredItems = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return slotItems.slice(0, 120);
+    if (!q) return slotItems.slice(0, 360);
     return slotItems
       .filter(
         (item) =>
@@ -284,7 +284,7 @@ export function CalculatorCharacterCustomizerModal({
           (item.sourceName?.toLowerCase().includes(q) ?? false) ||
           String(item.id).includes(q),
       )
-      .slice(0, 120);
+      .slice(0, 360);
   }, [slotItems, searchQuery]);
 
   const effectiveGender = draft.gender ?? defaultSpec.gender;
@@ -784,56 +784,46 @@ export function CalculatorCharacterCustomizerModal({
                     </div>
                   </div>
 
-                  {/* Items Visual Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
+                  {/* Items Visual Grid — Compact Visual-Only Icon Matrix that fills the full vertical space */}
+                  <div className="flex-1 min-h-[380px] max-h-[460px] overflow-y-auto custom-scrollbar pr-1">
                     {isLoadingItems ? (
-                      <div className="col-span-2 py-12 text-center text-xs text-slate-400 font-mono">
+                      <div className="py-24 text-center text-xs text-slate-400 font-mono">
                         ...
                       </div>
                     ) : filteredItems.length === 0 ? (
-                      <div className="col-span-2 py-12 text-center text-xs text-slate-500">
+                      <div className="py-24 text-center text-xs text-slate-500">
                         {t.noItemFound}
                       </div>
                     ) : (
-                      filteredItems.map((item) => {
-                        const isSelected = activeDraftItemIdForTab === item.id;
-                        return (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => handleSelectVisualItem(item.id)}
-                            className={`flex items-center gap-2.5 p-2 rounded-xl border text-left transition-all cursor-pointer min-w-0 ${
-                              isSelected
-                                ? "bg-sky-500/20 border-sky-400/50 text-sky-100 shadow-[0_0_14px_rgba(14,165,233,0.18)]"
-                                : "bg-[#121620] border-white/[0.08] hover:border-white/20 hover:bg-[#171c28] text-slate-200"
-                            }`}
-                          >
-                            <div className="shrink-0 p-1 rounded-lg bg-[#090b10] border border-white/10">
-                              <CalculatorItemIcon itemId={item.id} size={26} />
-                            </div>
-                            <div className="flex flex-col min-w-0 flex-1">
-                              <strong className="text-xs font-bold truncate">
-                                {getShortItemName(item.name)}
-                              </strong>
-                              <span className="text-[10px] font-mono text-slate-400 truncate">
-                                ID #{item.id}
-                              </span>
-                            </div>
-                            {isSelected && (
-                              <Check
-                                size={14}
-                                className="text-sky-300 shrink-0"
-                              />
-                            )}
-                          </button>
-                        );
-                      })
+                      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
+                        {filteredItems.map((item) => {
+                          const isSelected = activeDraftItemIdForTab === item.id;
+                          return (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => handleSelectVisualItem(item.id)}
+                              title={`${item.name} (ID #${item.id})`}
+                              className={`group relative flex flex-col items-center justify-center p-2 rounded-xl border transition-all cursor-pointer aspect-square ${
+                                isSelected
+                                  ? "bg-sky-500/25 border-sky-400 text-sky-100 shadow-[0_0_16px_rgba(14,165,233,0.3)] ring-1 ring-sky-400"
+                                  : "bg-[#090b10] border-white/10 hover:border-white/25 hover:bg-[#121620] text-slate-300"
+                              }`}
+                            >
+                              <CalculatorItemIcon itemId={item.id} size={32} />
+                              {isSelected && (
+                                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_6px_#38bdf8]" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
                     )}
                   </div>
                 </div>
               ) : (
                 /* STYLE TAB: HAIR STYLE, HAIR COLOR & CLOTHES COLOR */
-                <div className="flex flex-col gap-4 max-h-[340px] overflow-y-auto custom-scrollbar pr-1">
+                <div className="flex-1 min-h-[380px] max-h-[460px] flex flex-col gap-4 overflow-y-auto custom-scrollbar pr-1">
                   {/* Hair Styles Grid (#1..#32) */}
                   <div className="flex flex-col gap-2">
                     <span className="text-xs font-bold text-slate-300">

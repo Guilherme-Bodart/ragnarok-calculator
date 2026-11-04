@@ -64,7 +64,9 @@ export function Modal({
         role="dialog"
         aria-label={ariaLabel}
       >
-        <PanelHeader icon={icon} title={title} meta={meta} />
+        <div className="pr-10">
+          <PanelHeader icon={icon} title={title} meta={meta} />
+        </div>
         <IconButton
           className="ui-modal-close"
           label={closeLabel}
