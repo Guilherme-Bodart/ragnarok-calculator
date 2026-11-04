@@ -345,6 +345,24 @@ export function CalculatorCharacterCustomizerModal({
     previewViewIds,
   ]);
 
+  // Smooth image swap: keeps previous sprite on screen until the new sprite finishes loading in background
+  const [displayedSpriteUrl, setDisplayedSpriteUrl] = useState(previewSpriteUrl);
+
+  useEffect(() => {
+    let active = true;
+    const img = new Image();
+    img.src = previewSpriteUrl;
+    img.onload = () => {
+      if (active) setDisplayedSpriteUrl(previewSpriteUrl);
+    };
+    img.onerror = () => {
+      if (active) setDisplayedSpriteUrl(previewSpriteUrl);
+    };
+    return () => {
+      active = false;
+    };
+  }, [previewSpriteUrl]);
+
   function handleSelectVisualItem(itemId: number) {
     setDraft((prev) => {
       if (activeSlotTab === "top") {
@@ -415,54 +433,148 @@ export function CalculatorCharacterCustomizerModal({
       <div className="flex flex-col gap-5 pt-2">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
           {/* LEFT COLUMN (5 COLS): LARGE LIVE MANNEQUIN PREVIEW STAGE */}
-          <div className="lg:col-span-5 flex flex-col justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141926] via-[#0d1017] to-[#090b10] p-4 relative overflow-hidden">
-            {/* Top Stage Bar: Gender & Outfit */}
-            <div className="flex items-center justify-between gap-2 z-10">
-              <div className="inline-flex items-center gap-1 rounded-lg bg-[#090b10] border border-white/10 p-1">
+          <div className="lg:col-span-5 flex flex-col justify-between gap-3.5 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141926] via-[#0d1017] to-[#090b10] p-4 relative overflow-hidden">
+            {/* Top Stage Controls: Gender, Outfit, Head Look & Actions (Placed ABOVE the character) */}
+            <div className="flex flex-col gap-2 z-10 w-full">
+              {/* Row 1: Gender, Outfit & Head Turn */}
+              <div className="flex items-center justify-between gap-1.5 w-full">
+                <div className="inline-flex items-center gap-1 rounded-lg bg-[#090b10] border border-white/10 p-1">
+                  <button
+                    type="button"
+                    onClick={() => setDraft((d) => ({ ...d, gender: 1 }))}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer ${
+                      effectiveGender === 1
+                        ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    {t.genderMasc}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDraft((d) => ({ ...d, gender: 0 }))}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer ${
+                      effectiveGender === 0
+                        ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    {t.genderFem}
+                  </button>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => setDraft((d) => ({ ...d, gender: 1 }))}
-                  className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer ${
-                    effectiveGender === 1
-                      ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
-                      : "text-slate-400 hover:text-slate-200"
+                  onClick={() =>
+                    setDraft((d) => ({ ...d, outfit: d.outfit === 0 ? 1 : 0 }))
+                  }
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
+                    draft.outfit === 1
+                      ? "bg-amber-500/20 text-amber-200 border-amber-400/40"
+                      : "bg-[#090b10] text-slate-300 border-white/10 hover:border-white/25"
                   }`}
                 >
-                  {t.genderMasc}
+                  <Shirt size={13} />
+                  <span>
+                    {draft.outfit === 1 ? t.outfitAlt : t.outfitDefault}
+                  </span>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setDraft((d) => ({ ...d, gender: 0 }))}
-                  className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer ${
-                    effectiveGender === 0
-                      ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
-                      : "text-slate-400 hover:text-slate-200"
-                  }`}
-                >
-                  {t.genderFem}
-                </button>
+
+                {/* Head Direction: Left = 2, Center = 0, Right = 1 */}
+                <div className="inline-flex items-center gap-0.5 rounded-lg bg-[#090b10] border border-white/10 p-1 shrink-0">
+                  {(
+                    [
+                      { dir: 2, label: "↰", title: t.headLookLeft },
+                      { dir: 0, label: "↓", title: t.headLookFront },
+                      { dir: 1, label: "↱", title: t.headLookRight },
+                    ] as const
+                  ).map((d) => (
+                    <button
+                      key={d.dir}
+                      type="button"
+                      onClick={() =>
+                        setDraft((prev) => ({ ...prev, headdir: d.dir }))
+                      }
+                      title={d.title}
+                      className={`w-6 h-6 rounded text-[11px] font-mono font-bold transition-colors cursor-pointer ${
+                        draft.headdir === d.dir
+                          ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
+                          : "text-slate-400 hover:text-slate-200"
+                      }`}
+                    >
+                      {d.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() =>
-                  setDraft((d) => ({ ...d, outfit: d.outfit === 0 ? 1 : 0 }))
-                }
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
-                  draft.outfit === 1
-                    ? "bg-amber-500/20 text-amber-200 border-amber-400/40"
-                    : "bg-[#090b10] text-slate-300 border-white/10 hover:border-white/25"
-                }`}
-              >
-                <Shirt size={13} />
-                <span>
-                  {draft.outfit === 1 ? t.outfitAlt : t.outfitDefault}
-                </span>
-              </button>
+              {/* Row 2: Action Poses (Parado, Andando, Sentado, Combate) */}
+              <div className="grid grid-cols-4 gap-1 rounded-lg bg-[#090b10] border border-white/10 p-1 w-full">
+                {(
+                  [
+                    { action: 0, label: t.poseIdle },
+                    { action: 8, label: t.poseWalk },
+                    { action: 16, label: t.poseSit },
+                    { action: 40, label: t.poseCombat },
+                  ] as const
+                ).map((pose) => {
+                  const active = previewAction === pose.action;
+                  return (
+                    <button
+                      key={pose.action}
+                      type="button"
+                      onClick={() => {
+                        setPreviewAction(pose.action);
+                        setDraft((d) => ({
+                          ...d,
+                          isWalking: pose.action === 8,
+                        }));
+                      }}
+                      className={`py-1 rounded text-[10.5px] font-mono font-bold transition-colors cursor-pointer text-center ${
+                        active
+                          ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
+                          : "text-slate-400 hover:text-slate-200"
+                      }`}
+                    >
+                      {pose.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Row 3: Body Direction Angles (Frente, Esq., Costas, Dir.) */}
+              <div className="grid grid-cols-4 gap-1 rounded-lg bg-[#090b10] border border-white/10 p-1 w-full">
+                {(
+                  [
+                    { dir: 0, label: t.dirFront },
+                    { dir: 2, label: t.dirLeft },
+                    { dir: 4, label: t.dirBack },
+                    { dir: 6, label: t.dirRight },
+                  ] as const
+                ).map((bd) => {
+                  const isSelected = (draft.bodyDirection ?? 0) === bd.dir;
+                  return (
+                    <button
+                      key={bd.dir}
+                      type="button"
+                      onClick={() =>
+                        setDraft((d) => ({ ...d, bodyDirection: bd.dir }))
+                      }
+                      className={`py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer text-center ${
+                        isSelected
+                          ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
+                          : "text-slate-400 hover:text-slate-200"
+                      }`}
+                    >
+                      {bd.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* Big Character Render Stage with 360° Body Rotation & Head Controls */}
-            <div className="relative flex-1 min-h-[270px] flex items-center justify-center rounded-xl border border-white/[0.06] bg-[#090b10]/60 overflow-hidden">
+            {/* Big Character Render Stage: 100% UNCLUTTERED, NO BUTTONS OVER THE SPRITE */}
+            <div className="relative flex-1 min-h-[300px] flex items-center justify-center rounded-xl border border-white/[0.06] bg-[#090b10]/60 overflow-hidden my-1">
               {/* Floating Full Body Rotation Arrows (360°) */}
               <button
                 type="button"
@@ -492,12 +604,12 @@ export function CalculatorCharacterCustomizerModal({
                 <ChevronRight size={17} />
               </button>
 
+              {/* Character Sprite — smooth swap without screen blink */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                key={previewSpriteUrl}
-                src={previewSpriteUrl}
+                src={displayedSpriteUrl}
                 alt={classNameLabel}
-                className="h-[220px] w-auto object-contain scale-[1.55] -translate-y-4 [image-rendering:pixelated] drop-shadow-[0_16px_28px_rgba(0,0,0,0.85)] select-none"
+                className="h-[250px] w-auto object-contain scale-[1.5] origin-center [image-rendering:pixelated] drop-shadow-[0_16px_28px_rgba(0,0,0,0.85)] select-none pointer-events-none transition-opacity duration-150"
                 onError={(e) => {
                   const img = e.target as HTMLImageElement;
                   const fallback = `/sprites/classes/${canonicalSpriteClassId}.png`;
@@ -506,103 +618,6 @@ export function CalculatorCharacterCustomizerModal({
                   }
                 }}
               />
-
-              {/* Bottom Controls Overlay: Poses & Direction Shortcuts */}
-              <div className="absolute bottom-2 inset-x-2 flex flex-col gap-1.5 z-20">
-                {/* Pose Selector Row */}
-                <div className="flex items-center justify-center gap-1 rounded-lg bg-[#0d1017]/95 border border-white/10 p-1">
-                  {(
-                    [
-                      { action: 0, label: t.poseIdle },
-                      { action: 8, label: t.poseWalk },
-                      { action: 16, label: t.poseSit },
-                      { action: 40, label: t.poseCombat },
-                    ] as const
-                  ).map((pose) => {
-                    const active = previewAction === pose.action;
-                    return (
-                      <button
-                        key={pose.action}
-                        type="button"
-                        onClick={() => {
-                          setPreviewAction(pose.action);
-                          setDraft((d) => ({
-                            ...d,
-                            isWalking: pose.action === 8,
-                          }));
-                        }}
-                        className={`flex-1 py-1 rounded text-[10px] font-mono font-bold transition-colors cursor-pointer ${
-                          active
-                            ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
-                            : "text-slate-400 hover:text-slate-200"
-                        }`}
-                      >
-                        {pose.label}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Body Direction Shortcuts + Head Turn Controls */}
-                <div className="flex items-center justify-between gap-1.5">
-                  {/* Body Directions */}
-                  <div className="inline-flex items-center gap-1 rounded-lg bg-[#0d1017]/95 border border-white/10 p-1 flex-1">
-                    {(
-                      [
-                        { dir: 0, label: t.dirFront },
-                        { dir: 2, label: t.dirLeft },
-                        { dir: 4, label: t.dirBack },
-                        { dir: 6, label: t.dirRight },
-                      ] as const
-                    ).map((bd) => {
-                      const isSelected = (draft.bodyDirection ?? 0) === bd.dir;
-                      return (
-                        <button
-                          key={bd.dir}
-                          type="button"
-                          onClick={() =>
-                            setDraft((d) => ({ ...d, bodyDirection: bd.dir }))
-                          }
-                          className={`flex-1 py-1 rounded text-[9.5px] font-mono font-bold transition-colors cursor-pointer ${
-                            isSelected
-                              ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
-                              : "text-slate-400 hover:text-slate-200"
-                          }`}
-                        >
-                          {bd.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Head Direction: Left = 2, Center = 0, Right = 1 */}
-                  <div className="inline-flex items-center gap-1 rounded-lg bg-[#0d1017]/95 border border-white/10 p-1 shrink-0">
-                    {(
-                      [
-                        { dir: 2, label: "↰", title: t.headLookLeft },
-                        { dir: 0, label: "↓", title: t.headLookFront },
-                        { dir: 1, label: "↱", title: t.headLookRight },
-                      ] as const
-                    ).map((d) => (
-                      <button
-                        key={d.dir}
-                        type="button"
-                        onClick={() =>
-                          setDraft((prev) => ({ ...prev, headdir: d.dir }))
-                        }
-                        title={d.title}
-                        className={`w-6 h-6 rounded text-[11px] font-mono font-bold transition-colors cursor-pointer ${
-                          draft.headdir === d.dir
-                            ? "bg-sky-500/20 text-sky-200 border border-sky-400/35"
-                            : "text-slate-400 hover:text-slate-200"
-                        }`}
-                      >
-                        {d.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Currently Previewed Visual Slots Strip */}

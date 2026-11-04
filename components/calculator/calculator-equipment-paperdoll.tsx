@@ -357,6 +357,24 @@ export function CalculatorEquipmentPaperdoll({
     visualEquip,
   ]);
 
+  // Smooth image swap: keeps previous sprite on screen until the new sprite finishes loading in background
+  const [displayedSpriteSrc, setDisplayedSpriteSrc] = useState(characterSpriteSrc);
+
+  useEffect(() => {
+    let active = true;
+    const img = new Image();
+    img.src = characterSpriteSrc;
+    img.onload = () => {
+      if (active) setDisplayedSpriteSrc(characterSpriteSrc);
+    };
+    img.onerror = () => {
+      if (active) setDisplayedSpriteSrc(characterSpriteSrc);
+    };
+    return () => {
+      active = false;
+    };
+  }, [characterSpriteSrc]);
+
   // Applies the dressing-room draft. Optionally equips chosen Costume items in the Special tab slots.
   async function handleSaveAppearance(
     next: CharacterAppearanceConfig,
@@ -441,10 +459,9 @@ export function CalculatorEquipmentPaperdoll({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            key={characterSpriteSrc}
-            src={characterSpriteSrc}
+            src={displayedSpriteSrc}
             alt={currentClassName}
-            className="h-[230px] w-auto object-contain scale-[1.35] origin-center [image-rendering:pixelated] drop-shadow-[0_14px_24px_rgba(0,0,0,0.75)] select-none pointer-events-none"
+            className="h-[230px] w-auto object-contain scale-[1.35] origin-center [image-rendering:pixelated] drop-shadow-[0_14px_24px_rgba(0,0,0,0.75)] select-none pointer-events-none transition-opacity duration-150"
             onError={(e) => {
               const img = e.target as HTMLImageElement;
               const fallback = `/sprites/classes/${canonicalSpriteClassId}.png`;
