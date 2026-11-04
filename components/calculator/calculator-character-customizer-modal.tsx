@@ -344,14 +344,6 @@ export function CalculatorCharacterCustomizerModal({
     draft.outfit,
     previewViewIds,
   ]);
-    effectiveHead,
-    draft.headPalette,
-    draft.bodyPalette,
-    draft.headdir,
-    previewAction,
-    draft.outfit,
-    previewViewIds,
-  ]);
 
   function handleSelectVisualItem(itemId: number) {
     setDraft((prev) => {
@@ -645,32 +637,6 @@ export function CalculatorCharacterCustomizerModal({
                     {
                       key: "garment" as const,
                       label: t.slotGarment,
-                      itemId: draft.visualGarmentItemId,
-                      clear: () =>
-                        setDraft((d) => ({ ...d, visualGarmentItemId: 0 })),
-                    },
-                  ] as const
-                      itemId: draft.visualTopItemId,
-                      clear: () =>
-                        setDraft((d) => ({ ...d, visualTopItemId: 0 })),
-                    },
-                    {
-                      key: "mid" as const,
-                      label: "Meio",
-                      itemId: draft.visualMidItemId,
-                      clear: () =>
-                        setDraft((d) => ({ ...d, visualMidItemId: 0 })),
-                    },
-                    {
-                      key: "low" as const,
-                      label: "Baixo",
-                      itemId: draft.visualLowItemId,
-                      clear: () =>
-                        setDraft((d) => ({ ...d, visualLowItemId: 0 })),
-                    },
-                    {
-                      key: "garment" as const,
-                      label: "Capa",
                       itemId: draft.visualGarmentItemId,
                       clear: () =>
                         setDraft((d) => ({ ...d, visualGarmentItemId: 0 })),
